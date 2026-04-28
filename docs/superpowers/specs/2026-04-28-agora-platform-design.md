@@ -29,8 +29,11 @@ A clickable, fully-populated **maqueta** (sales prototype) of Agora — a B2B Sa
 | Animations | Framer Motion (sparingly) |
 | State | React state + URL params. No Redux/Zustand. |
 | Dates | date-fns |
+| i18n | **next-intl** (cookie-based locale, no URL prefix) |
 
 **Globe decision rationale:** The design handoff shows a 2D equirectangular SVG map with animated arcs. The spec originally called for react-globe.gl but the design handoff supersedes it as the high-fidelity visual reference. react-simple-maps with Natural Earth TopoJSON gives proper coastlines with full control over design tokens, no API key required, and SVG arc animations matching the design.
+
+**i18n decision rationale:** Cookie-based locale (no URL prefix) keeps URLs clean and is appropriate for a sales prototype. Language preference persists in a cookie (`AGORA_LOCALE`). next-intl is the canonical i18n library for Next.js 14 App Router — it supports both route-based and cookie-based locale resolution; we use cookie-based.
 
 ---
 
@@ -67,7 +70,7 @@ Trace:      #7DD3FC
 
 ## 3. Information Architecture
 
-7 primary surfaces + 1 reserved slot:
+7 primary surfaces + 1 settings page + 1 reserved slot:
 
 | # | Route | Surface |
 |---|---|---|
@@ -78,7 +81,10 @@ Trace:      #7DD3FC
 | 5 | `/producers` | Producer list + `[id]` fiche |
 | 6 | `/compliance` | Compliance & Master Data |
 | 7 | `/performance` | Performance & ROI |
+| 8 | `/settings` | Settings — language toggle + future preferences |
 | — | (greyed, no route) | Approval Queue — disabled sidebar link only, tooltip "Available in V3", no stub page |
+
+**Settings page access:** User avatar dropdown in the header contains a "Settings" link → `/settings`. The settings page is not listed in the primary sidebar nav (it's a user-level preference, not an operational surface).
 
 **Core principle:** Container is the primary unit. Every path leads to container detail.
 
@@ -203,11 +209,115 @@ All container ETDs re-anchored per Patch 01 §1 table to preserve T-day position
 
 ---
 
-## 5. File Structure
+## 5. Internationalization (i18n)
+
+### Overview
+
+- **Library:** next-intl
+- **Supported locales:** `es` (Spanish, default) + `en` (English)
+- **Locale resolution:** Cookie `AGORA_LOCALE`. If absent, default to `es`. No URL prefix.
+- **Extensibility:** Adding a new locale requires only a new `messages/{locale}.json` file and registering the locale in next-intl config — zero code changes.
+
+### Rules
+
+- **No hardcoded UI strings anywhere.** Every label, heading, placeholder, tooltip, error message, status pill text, agent description, alert message, and microcopy string must come from translation keys.
+- **Document content is exempt.** The bodies of mock documents (invoices, phyto certificates, etc.) are data, not UI — they stay in their source language.
+- **Numbers and dates are locale-formatted.** Use `Intl.NumberFormat` and `Intl.DateTimeFormat` with the active locale. The `currency.ts` and `dates.ts` utils accept a `locale` param.
+  - ES: thousands separator `.`, decimal `,`, date format DD/MM/AAAA
+  - EN: thousands separator `,`, decimal `.`, date format MM/DD/YYYY
+  - JetBrains Mono still applies to all numeric output regardless of locale.
+
+### Translation file structure
 
 ```
+/messages
+  es.json    # Spanish (default)
+  en.json    # English
+```
+
+Keys are namespaced by surface/component:
+
+```json
+{
+  "nav": {
+    "operations": "Operaciones",
+    "containers": "Contenedores",
+    "purchaseOrders": "Órdenes de Compra",
+    "importers": "Importadores",
+    "producers": "Productores",
+    "compliance": "Cumplimiento",
+    "performance": "Rendimiento",
+    "approvalQueue": "Cola de Aprobación",
+    "approvalQueueSoon": "Disponible en V3"
+  },
+  "dashboard": { ... },
+  "containers": { ... },
+  "coldChain": { ... },
+  "agents": { ... },
+  "settings": {
+    "title": "Configuración",
+    "language": "Idioma",
+    "languageEs": "Español",
+    "languageEn": "English"
+  },
+  "common": {
+    "costAtRisk": "Costo en riesgo",
+    "dueIn": "Vence en",
+    "viewAll": "Ver todos",
+    ...
+  }
+}
+```
+
+### Settings page (`/settings`)
+
+Minimal page. Initial content is the language selector only — designed so new settings rows can be added later without restructuring.
+
+Layout:
+- Page header: "Configuración" / "Settings"
+- Section: "Idioma / Language"
+  - Toggle/select between Español and English
+  - On change: sets `AGORA_LOCALE` cookie, triggers locale context update (no full page reload — next-intl supports live switching via context)
+- Section placeholder text: "Más ajustes próximamente" / "More settings coming soon" — shows the page has room to grow
+
+The settings page **does not** appear in the sidebar nav. It is reachable only from the user avatar dropdown ("Configuración" / "Settings" link).
+
+### Header user avatar dropdown
+
+The avatar dropdown (currently just user info) expands to include:
+- User name + role
+- Divider
+- "Configuración" / "Settings" → `/settings`
+- (future: "Cerrar sesión" / "Log out" — stub, no action)
+
+### next-intl wiring
+
+```
+/i18n
+  request.ts          # next-intl locale resolution from AGORA_LOCALE cookie
+  routing.ts          # locales: ['es', 'en'], defaultLocale: 'es'
+/middleware.ts         # next-intl middleware for cookie-based resolution
+```
+
+`useTranslations('nav')`, `useTranslations('dashboard')` etc. used in components. `useFormatter()` for locale-aware number/date formatting.
+
+---
+
+## 6. File Structure
+
+```
+/messages
+  es.json                         # Spanish translations (default)
+  en.json                         # English translations
+
+/i18n
+  request.ts                      # next-intl locale resolution from AGORA_LOCALE cookie
+  routing.ts                      # locales config: ['es', 'en'], defaultLocale: 'es'
+
+/middleware.ts                     # next-intl cookie-based locale middleware
+
 /app
-  /layout.tsx                     # Root layout: Sidebar + Header
+  /layout.tsx                     # Root layout: Sidebar + Header + NextIntlClientProvider
   /page.tsx                       # Operations Dashboard
   /containers/page.tsx            # Container list
   /containers/[id]/page.tsx       # Container detail (7 or 8 tabs)
@@ -217,6 +327,7 @@ All container ETDs re-anchored per Patch 01 §1 table to preserve T-day position
   /producers/page.tsx + /[id]/page.tsx
   /compliance/page.tsx
   /performance/page.tsx
+  /settings/page.tsx              # Language toggle + future preferences
 
 /components
   /ui                             # shadcn primitives
@@ -325,10 +436,11 @@ Cold-chain agents appear with a `Cold Chain` badge in the Performance grid. No L
 
 ### Phase 1 — Foundation + Container Detail
 - Next.js init, Tailwind config (all design tokens), shadcn/ui
+- **next-intl setup**: middleware, `i18n/request.ts`, `i18n/routing.ts`, `messages/es.json` + `messages/en.json` scaffolded with all keys (values filled as surfaces are built)
 - `types/index.ts` — all interfaces including Patch 01 additions
 - All mock data files (both hero containers, all 25 agents, all new lane profile files)
-- `getTodayDemo()` utility anchored to `2027-01-09`
-- Layout chrome: Sidebar + Header
+- `getTodayDemo()` utility anchored to `2027-01-09`; `currency.ts` and `dates.ts` locale-aware
+- Layout chrome: Sidebar + Header (avatar dropdown with Settings link)
 - Container Detail — all 7+1 tabs for both hero containers:
   - `MSCU-7842156`: 7 tabs, no Cold Chain tab (dry cargo)
   - `MAEU-9182734`: 8 tabs including fully populated Cold Chain tab with live telemetry chart
@@ -349,9 +461,11 @@ Cold-chain agents appear with a `Cold Chain` badge in the Performance grid. No L
 
 ### Phase 4 — Performance + Polish
 - Performance page (25 agents, cold-chain heatmap rows, cold-chain insights, cold incidents KPI)
+- Settings page (`/settings`) — language toggle, cookie persistence, live locale switch
 - Cmd+K command palette
 - Framer Motion transitions, count-up animations, alert pulses
 - Conditional rendering audit: pure-walnuts mode must look identical to original spec
+- i18n audit: verify no hardcoded strings remain in any component; both locales render without layout breaks
 
 ---
 
@@ -362,7 +476,7 @@ Cold-chain agents appear with a `Cold Chain` badge in the Performance grid. No L
 - **Walnuts hero is the regression test.** After any patch work, `MSCU-7842156` must work exactly as before (7 tabs, no Cold Chain tab, 15 docs in Readiness Matrix).
 - **Numbers are sacred.** USD values, weights, temps, IDs always in JetBrains Mono with thousand separators and currency codes.
 - **No AI tone.** Agents are infrastructure. Users see outcomes (alerts, validations, KPIs), not "AI is thinking."
-- **English UI only.** Document content in source language is fine; UI chrome is English.
+- **Bilingual UI: Spanish (default) + English.** The original spec said "English UI only" — this is superseded. All UI strings are in translation files (`messages/es.json`, `messages/en.json`). Document content (invoices, certificates, etc.) stays in source language regardless of UI locale. Adding a third language requires only a new `messages/{locale}.json` file.
 - **No emojis.** Anywhere.
 
 ---
