@@ -269,6 +269,17 @@
     "portCongestion": "Recargo por congestión portuaria",
     "documentRejection": "Rechazo y reenvío de documentos"
   },
+  "lane": {
+    "timeline": {
+      "bookingConfirmed": "Reserva confirmada",
+      "docsCollected": "Documentos recopilados",
+      "dusFiled": "DUS presentado",
+      "cutoff": "Cierre de carga",
+      "etd": "Salida estimada",
+      "midTransit": "Mitad del tránsito",
+      "eta": "Llegada estimada"
+    }
+  },
   "settings": {
     "title": "Configuración",
     "language": "Idioma",

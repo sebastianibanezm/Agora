@@ -269,6 +269,17 @@
     "portCongestion": "Port congestion surcharge",
     "documentRejection": "Document rejection and resubmission"
   },
+  "lane": {
+    "timeline": {
+      "bookingConfirmed": "Booking confirmed",
+      "docsCollected": "Documents collected",
+      "dusFiled": "DUS filed",
+      "cutoff": "Cargo cutoff",
+      "etd": "Estimated departure",
+      "midTransit": "Mid-transit",
+      "eta": "Estimated arrival"
+    }
+  },
   "settings": {
     "title": "Settings",
     "language": "Language",
