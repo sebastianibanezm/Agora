@@ -1,0 +1,285 @@
+// ===== Enums =====
+export type Market = 'US' | 'EU' | 'IN' | 'CN' | 'MENA';
+
+export type ProductId =
+  | 'walnuts_in_shell' | 'walnut_kernels' | 'almonds_in_shell'
+  | 'fresh_cherries' | 'fresh_blueberries'
+  | 'table_grapes_red' | 'table_grapes_white';
+
+export type IncotermPaymentId =
+  | 'cif_cad_at_sight' | 'cif_lc_at_sight' | 'cif_lc_60'
+  | 'cif_open_account_30' | 'fob_open_account_30' | 'dap_open_account';
+
+export type DocumentType =
+  | 'commercial_invoice' | 'packing_list' | 'bill_of_lading' | 'certificate_of_origin'
+  | 'phyto_certificate' | 'fumigation_cert' | 'cold_treatment_cert' | 'health_cert'
+  | 'gacc_registration' | 'lc_compliance_letter' | 'insurance_certificate'
+  | 'dus' | 'sag_export_auth' | 'transport_document' | 'pti_certificate'
+  | 'pre_cooling_log' | 'logger_report' | 'ca_atmosphere_log';
+
+export type DocStatus = 'missing' | 'draft' | 'pending_review' | 'approved' | 'rejected' | 'in_transit' | 'delivered';
+
+export type Severity = 'ok' | 'info' | 'watch' | 'risk' | 'crit';
+
+// ===== Document Requirement =====
+export interface DocumentRequirement {
+  type: DocumentType;
+  label: string;
+  requiredBy: string;
+  issuingAuthority?: string;
+  notes?: string;
+}
+
+// ===== Validation =====
+export interface ValidationSummary {
+  passed: number;
+  failed: number;
+  warnings: number;
+}
+
+export interface Validation {
+  id: string;
+  containerId: string;
+  documentType?: DocumentType;
+  checkId: string;
+  severity: Severity;
+  status: 'passed' | 'failed' | 'warning';
+  message: string;
+  detectedAt: string;
+}
+
+// ===== Cold chain =====
+export interface DataLogger {
+  id: string;
+  position: 'top' | 'middle' | 'bottom';
+  serial: string;
+  readings: Array<{ t: string; tempC: number }>;
+}
+
+export interface CaReading {
+  t: string;
+  o2Pct: number;
+  co2Pct: number;
+  n2Pct: number;
+}
+
+export interface ExcursionEvent {
+  id: string;
+  startAt: string;
+  endAt: string;
+  durationMin: number;
+  loggerId: string;
+  peakTempC: number;
+  severity: Severity;
+  brokeCompliance: boolean;
+}
+
+export interface PreCoolingRecord {
+  facility: string;
+  startedAt: string;
+  completedAt: string;
+  targetTempC: number;
+  pulpTempCurve: Array<{ t: string; tempC: number }>;
+}
+
+export interface ReeferPtiRecord {
+  performedAt: string;
+  technician: string;
+  passed: boolean;
+  notes?: string;
+}
+
+export interface ColdTreatmentProtocol {
+  id: string;
+  label: string;
+  market: Market;
+  durationDays: number;
+  setpointC: number;
+  toleranceC: number;
+  description: string;
+}
+
+export interface ColdChainTrace {
+  required: boolean;
+  protocol: string | null;
+  setpointC: number;
+  toleranceC: number;
+  caGasMix?: { o2Pct: number; co2Pct: number; n2Pct: number };
+  rhTargetPct: [number, number];
+  preCooling?: PreCoolingRecord;
+  reeferPti?: ReeferPtiRecord;
+  loggers: DataLogger[];
+  caReadings?: CaReading[];
+  treatmentRequiredMinutes: number;
+  treatmentMinutesCompliant: number;
+  treatmentMinutesViolation: number;
+  excursionEvents: ExcursionEvent[];
+  status: 'pre_load' | 'in_treatment' | 'completed' | 'breached';
+  lastReadingAt: string;
+  loggerDownloadReportUrl?: string;
+  arrivalTransferStatus?: 'pending' | 'in_progress' | 'completed';
+}
+
+// ===== Profiles =====
+export interface ProductProfile {
+  id: ProductId;
+  label: string;
+  requiresColdChain: boolean;
+  defaultProtocols: string[];
+  seasonality?: string;
+  hsCode: string;
+  requiredDocs: DocumentType[];
+  activeAgents: AgentId[];
+}
+
+export interface MarketProfile {
+  id: Market;
+  label: string;
+  inspectionAuthority: string;
+}
+
+export interface MarketProfileExtended extends MarketProfile {
+  coldTreatmentOptions?: ColdTreatmentProtocol[];
+  registrationsRequired: string[];
+  labelLanguageRequired: string[];
+  digitalPhytoSystem?: string;
+  activeAgents: AgentId[];
+  requiredDocs: DocumentType[];
+}
+
+export interface CommercialProfile {
+  id: IncotermPaymentId;
+  label: string;
+  incoterm: 'CIF' | 'FOB' | 'DAP';
+  paymentMethod: 'CAD' | 'L/C' | 'open_account';
+  paymentTerms: string;
+  requiredDocs: DocumentType[];
+  validationChecks: string[];
+  activeAgents: AgentId[];
+}
+
+// ===== Lane profile =====
+export interface LaneTimelineEvent {
+  tDay: string;
+  label: string;
+  actor: 'producer' | 'exporter' | 'importer' | 'agent' | 'authority';
+}
+
+export interface LaneProfile {
+  id: string;
+  product: ProductProfile;
+  market: MarketProfileExtended;
+  commercial: CommercialProfile;
+  documentSet: DocumentRequirement[];
+  agentsActive: AgentId[];
+  validationChecks: string[];
+  timeline: LaneTimelineEvent[];
+}
+
+// ===== Container =====
+export interface Container {
+  id: string;
+  productId: ProductId;
+  productLabel: string;
+  commercialId: IncotermPaymentId;
+  laneProfileId: string;
+  market: Market;
+  polCode: string;
+  polLabel: string;
+  podCode: string;
+  podLabel: string;
+  importerId: string;
+  producerId: string;
+  purchaseOrderId: string;
+  weightKg: number;
+  valueUsd: number;
+  etd: string;
+  eta: string;
+  cutoffAt?: string;
+  status: 'planning' | 'docs_in_progress' | 'in_treatment' | 'at_sea' | 'arrived' | 'cleared';
+  coldChain?: ColdChainTrace;
+  costAtRiskUsd?: number;
+}
+
+// ===== Other entities =====
+export type AgentId = string;
+
+export interface Agent {
+  id: AgentId;
+  label: string;
+  description: string;
+  category: 'collect' | 'validate' | 'monitor' | 'orchestrate' | 'reconcile';
+  tags: string[];
+  activeOnLanes: string[];
+}
+
+export interface Alert {
+  id: string;
+  containerId?: string;
+  severity: Severity;
+  titleKey: string;
+  bodyKey: string;
+  raisedAt: string;
+  raisedBy: AgentId;
+  actionLabelKey?: string;
+  dismissed?: boolean;
+}
+
+export interface PurchaseOrder {
+  id: string;
+  importerId: string;
+  productId: ProductId;
+  quantityKg: number;
+  incotermPaymentId: IncotermPaymentId;
+  valueUsd: number;
+  issuedAt: string;
+  deliveryWindow: { from: string; to: string };
+  containerIds: string[];
+}
+
+export interface Importer {
+  id: string;
+  name: string;
+  country: string;
+  market: Market;
+  activeContainers: number;
+  annualVolumeKg: number;
+  creditRating?: string;
+}
+
+export interface Producer {
+  id: string;
+  name: string;
+  region: string;
+  products: ProductId[];
+  sagId: string;
+  activeContainers: number;
+}
+
+export interface KPI {
+  id: string;
+  labelKey: string;
+  value: number;
+  unit: 'usd' | 'pct' | 'count' | 'days' | 'minutes';
+  deltaPct?: number;
+  severity?: Severity;
+}
+
+export interface PenaltyEvent {
+  id: string;
+  containerId: string;
+  week: string;
+  amountUsd: number;
+  reason: string;
+}
+
+export interface DocumentInstance {
+  id: string;
+  type: DocumentType;
+  containerId: string;
+  status: DocStatus;
+  issuedAt?: string;
+  fileUrl?: string;
+  issuer?: string;
+  number?: string;
+}
