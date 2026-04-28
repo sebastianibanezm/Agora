@@ -26,3 +26,9 @@ export function formatDate(iso: string, locale: 'es' | 'en'): string {
 export function hoursUntil(iso: string, now: Date = getTodayDemo()): number {
   return (new Date(iso).getTime() - now.getTime()) / 3_600_000;
 }
+
+export function formatTs(iso: string): string {
+  const d = new Date(iso);
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}

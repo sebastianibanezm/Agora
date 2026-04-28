@@ -2,6 +2,7 @@
 import clsx from 'clsx';
 import { useTranslations } from 'next-intl';
 import type { Validation, Severity } from '@/types';
+import { formatTs } from '@/lib/utils/dates';
 
 const SEV_BORDER: Record<Severity, string> = {
   ok: 'border-l-severity-ok',
@@ -16,12 +17,6 @@ const STATUS_STYLE: Record<Validation['status'], string> = {
   failed: 'bg-severity-crit/10 text-severity-crit border-severity-crit/30',
   warning: 'bg-severity-watch/10 text-severity-watch border-severity-watch/30',
 };
-
-function formatTs(iso: string): string {
-  const d = new Date(iso);
-  const pad = (n: number) => String(n).padStart(2, '0');
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
-}
 
 export function ValidationFeed({ validations }: { validations: Validation[] }) {
   const t = useTranslations();

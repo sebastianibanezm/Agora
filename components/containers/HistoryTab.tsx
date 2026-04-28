@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import type { Container, Severity } from '@/types';
 import { validations as allValidations } from '@/lib/mock-data/validations';
 import { alerts as allAlerts } from '@/lib/mock-data/alerts';
+import { formatTs } from '@/lib/utils/dates';
 
 type EventKind = 'validation' | 'alert' | 'status';
 
@@ -24,12 +25,6 @@ const SEV_DOT: Record<Severity, string> = {
   risk: 'bg-severity-risk',
   crit: 'bg-severity-crit',
 };
-
-function formatTs(iso: string): string {
-  const d = new Date(iso);
-  const pad = (n: number) => String(n).padStart(2, '0');
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
-}
 
 // Synthesize one status-change event per container at ETD.
 function statusEvent(container: Container): HistoryEvent {
