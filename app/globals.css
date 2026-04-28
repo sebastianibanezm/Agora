@@ -4,12 +4,46 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@theme inline {
+/* ── Agora design tokens ───────────────────────────────────────────────── */
+@theme {
+  /* Surfaces */
+  --color-bg-0: #070A12;
+  --color-bg-1: #0E1320;
+  --color-bg-2: #141A29;
+  --color-bg-3: #1B2235;
+
+  /* Text / Ink */
+  --color-ink-1: #F4F6FA;
+  --color-ink-2: #A8B3C7;
+  --color-ink-3: #6B7689;
+  --color-ink-4: #475063;
+
+  /* Mint scale */
+  --color-mint-300: #4DFFB8;
+  --color-mint-500: #00E696;
+  --color-mint-600: #00B377;
+  --color-mint-700: #008055;
+
+  /* Severity */
+  --color-severity-ok:    #00E696;
+  --color-severity-info:  #3B82F6;
+  --color-severity-watch: #F59E0B;
+  --color-severity-risk:  #F97316;
+  --color-severity-crit:  #EF4444;
+
+  /* Trace */
+  --color-trace: #7DD3FC;
+
+  /* Fonts */
+  --font-family-sans: var(--font-inter), Inter, system-ui, sans-serif;
+  --font-family-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* Shadcn / Tailwind inline tokens (kept for component compatibility) */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
+  --font-sans: var(--font-inter), Inter, system-ui, sans-serif;
+  --font-mono: var(--font-mono-var);
+  --font-heading: var(--font-inter), Inter, system-ui, sans-serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -49,6 +83,7 @@
 }
 
 :root {
+  /* Shadcn base tokens */
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -81,6 +116,12 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  /* Glass + line tokens (not Tailwind utilities — used via var()) */
+  --glass: rgba(17, 24, 39, 0.55);
+  --line-soft: rgba(255, 255, 255, 0.07);
+  --line-mid:  rgba(255, 255, 255, 0.14);
+  --line-mint: rgba(0, 230, 150, 0.32);
 }
 
 .dark {
@@ -115,6 +156,47 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+}
+
+/* ── Base styles ─────────────────────────────────────────────────────────── */
+html, body {
+  background-color: #070A12;
+  color: #F4F6FA;
+}
+
+body {
+  font-family: var(--font-inter), Inter, system-ui, sans-serif;
+  font-size: 13px;
+}
+
+/* ── Ambient glows ───────────────────────────────────────────────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(60% 40% at 90% 0%, rgba(0, 230, 150, 0.05), transparent 60%),
+    radial-gradient(50% 40% at 10% 100%, rgba(125, 211, 252, 0.05), transparent 60%);
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 3px 3px;
+  mix-blend-mode: screen;
+}
+
+/* ── Glass utility ───────────────────────────────────────────────────────── */
+.glass {
+  background: var(--glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 @layer base {
