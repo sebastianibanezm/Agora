@@ -1,0 +1,141 @@
+{
+  "nav": {
+    "operations": "Operaciones",
+    "containers": "Contenedores",
+    "purchaseOrders": "Órdenes de Compra",
+    "importers": "Importadores",
+    "producers": "Productores",
+    "compliance": "Cumplimiento",
+    "performance": "Rendimiento",
+    "approvalQueue": "Cola de Aprobación",
+    "approvalQueueSoon": "Disponible en V3",
+    "userMenu": "Menú de usuario"
+  },
+  "common": {
+    "costAtRisk": "Costo en riesgo",
+    "dueIn": "Vence en",
+    "viewAll": "Ver todos",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "loading": "Cargando",
+    "empty": "Sin datos",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "back": "Volver"
+  },
+  "tabs": {
+    "overview": "Resumen",
+    "documents": "Documentos",
+    "readiness": "Preparación",
+    "coldChain": "Cadena de frío",
+    "validations": "Validaciones",
+    "financial": "Financiero",
+    "reconciliation": "Conciliación",
+    "history": "Historial"
+  },
+  "containers": {
+    "title": "Contenedores",
+    "id": "ID",
+    "product": "Producto",
+    "route": "Ruta",
+    "etd": "ETD",
+    "eta": "ETA",
+    "status": "Estado",
+    "value": "Valor",
+    "cutoff": "Cierre",
+    "buyer": "Comprador",
+    "producer": "Productor",
+    "weight": "Peso",
+    "incoterm": "Incoterm",
+    "paymentTerms": "Términos de pago",
+    "statuses": {
+      "planning": "Planificación",
+      "docs_in_progress": "Documentos en curso",
+      "in_treatment": "En tratamiento",
+      "at_sea": "En tránsito",
+      "arrived": "Arribado",
+      "cleared": "Liberado"
+    }
+  },
+  "dashboard": {
+    "title": "Operaciones",
+    "kpiActiveContainers": "Contenedores activos",
+    "kpiCostAtRisk": "Costo en riesgo",
+    "kpiOnTimeDocs": "Documentos a tiempo",
+    "kpiAlertsOpen": "Alertas abiertas",
+    "kpiCutoffNext24h": "Cortes próximos 24h",
+    "kpiColdTreatmentCompliance": "Cumplimiento de tratamiento en frío",
+    "actionQueue": "Cola de acción",
+    "alertsRail": "Alertas",
+    "coldChainStatus": "Estado de cadena de frío",
+    "weekReadiness": "Preparación de la semana",
+    "closedLastWeek": "Cerrados la semana pasada",
+    "penaltyHeatmap": "Penalizaciones"
+  },
+  "coldChain": {
+    "title": "Cadena de frío",
+    "statusBanner": "Estado del tratamiento",
+    "telemetry": "Telemetría",
+    "ca": "Atmósfera CA",
+    "lifecycle": "Ciclo de vida",
+    "preCooling": "Pre-enfriamiento",
+    "excursions": "Excursiones",
+    "compliance": "Proyección de cumplimiento",
+    "loggerTop": "Sensor superior",
+    "loggerMiddle": "Sensor medio",
+    "loggerBottom": "Sensor inferior",
+    "minutesCompliant": "Minutos cumplidos",
+    "minutesRequired": "Minutos requeridos",
+    "setpoint": "Setpoint",
+    "tolerance": "Tolerancia",
+    "satisfiesAt": "Cumple en",
+    "breached": "Incumplido",
+    "noExcursions": "Sin excursiones",
+    "protocols": {
+      "china_15d_0_5c": "China 15 días a 0.5°C",
+      "us_jh_24d_neg_1c": "EE.UU. JH 24 días a -1.1°C",
+      "in_cold_disinfestation": "India desinfestación en frío"
+    }
+  },
+  "agents": {
+    "categoryCollect": "Recolección",
+    "categoryValidate": "Validación",
+    "categoryMonitor": "Monitoreo",
+    "categoryOrchestrate": "Orquestación",
+    "categoryReconcile": "Conciliación",
+    "tagColdChain": "Cadena de frío"
+  },
+  "docs": {
+    "commercial_invoice": "Factura comercial",
+    "packing_list": "Packing list",
+    "bill_of_lading": "Conocimiento de embarque",
+    "certificate_of_origin": "Certificado de origen",
+    "phyto_certificate": "Certificado fitosanitario",
+    "fumigation_cert": "Certificado de fumigación",
+    "cold_treatment_cert": "Certificado de tratamiento en frío",
+    "health_cert": "Certificado sanitario",
+    "gacc_registration": "Registro GACC",
+    "lc_compliance_letter": "Carta de cumplimiento L/C",
+    "insurance_certificate": "Certificado de seguro",
+    "dus": "DUS",
+    "sag_export_auth": "Autorización SAG",
+    "transport_document": "Documento de transporte",
+    "pti_certificate": "Certificado PTI",
+    "pre_cooling_log": "Bitácora de pre-enfriamiento",
+    "logger_report": "Reporte de loggers",
+    "ca_atmosphere_log": "Bitácora atmósfera CA"
+  },
+  "validations": {
+    "passed": "Aprobado",
+    "failed": "Falló",
+    "warning": "Advertencia",
+    "feedTitle": "Validaciones recientes"
+  },
+  "settings": {
+    "title": "Configuración",
+    "language": "Idioma",
+    "languageEs": "Español",
+    "languageEn": "English",
+    "moreSoon": "Más ajustes próximamente"
+  }
+}
