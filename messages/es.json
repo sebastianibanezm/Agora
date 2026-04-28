@@ -205,6 +205,15 @@
       "desc": "Señala ventanas de entrega que se superponen con cierres portuarios y bancarios del Año Nuevo Lunar chino"
     }
   },
+  "docStatuses": {
+    "missing": "Faltante",
+    "draft": "Borrador",
+    "pending_review": "En revisión",
+    "approved": "Aprobado",
+    "rejected": "Rechazado",
+    "in_transit": "En tránsito",
+    "delivered": "Entregado"
+  },
   "docs": {
     "commercial_invoice": "Factura comercial",
     "packing_list": "Packing list",
@@ -223,7 +232,11 @@
     "pti_certificate": "Certificado PTI",
     "pre_cooling_log": "Bitácora de pre-enfriamiento",
     "logger_report": "Reporte de loggers",
-    "ca_atmosphere_log": "Bitácora atmósfera CA"
+    "ca_atmosphere_log": "Bitácora atmósfera CA",
+    "colDocument": "Documento",
+    "colNumber": "Número",
+    "colIssuer": "Emisor",
+    "colIssued": "Emitido"
   },
   "validations": {
     "passed": "Aprobado",

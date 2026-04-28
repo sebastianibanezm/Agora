@@ -205,6 +205,15 @@
       "desc": "Flags delivery windows that overlap Chinese Lunar New Year port and bank closures"
     }
   },
+  "docStatuses": {
+    "missing": "Missing",
+    "draft": "Draft",
+    "pending_review": "Pending review",
+    "approved": "Approved",
+    "rejected": "Rejected",
+    "in_transit": "In transit",
+    "delivered": "Delivered"
+  },
   "docs": {
     "commercial_invoice": "Commercial invoice",
     "packing_list": "Packing list",
@@ -223,7 +232,11 @@
     "pti_certificate": "PTI certificate",
     "pre_cooling_log": "Pre-cooling log",
     "logger_report": "Logger report",
-    "ca_atmosphere_log": "CA atmosphere log"
+    "ca_atmosphere_log": "CA atmosphere log",
+    "colDocument": "Document",
+    "colNumber": "Number",
+    "colIssuer": "Issuer",
+    "colIssued": "Issued"
   },
   "validations": {
     "passed": "Passed",
