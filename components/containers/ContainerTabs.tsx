@@ -5,6 +5,7 @@ import type { Container } from '@/types';
 import { OverviewTab } from './OverviewTab';
 import { DocumentsTab } from './DocumentsTab';
 import { ReadinessTab } from './ReadinessTab';
+import { ColdChainTab } from '@/components/cold-chain/ColdChainTab';
 
 interface Props { container: Container }
 
@@ -47,7 +48,7 @@ export function ContainerTabs({ container }: Props) {
       </TabsContent>
       {hasColdChain && (
         <TabsContent value="coldChain">
-          <div className="text-ink-3 text-sm">Cold Chain — coming in Task 15</div>
+          <ColdChainTab container={container} />
         </TabsContent>
       )}
       <TabsContent value="validations">
