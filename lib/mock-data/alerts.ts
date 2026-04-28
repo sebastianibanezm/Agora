@@ -1,0 +1,41 @@
+import type { Alert } from '@/types';
+
+export const alerts: Alert[] = [
+  {
+    id: 'ALT-001',
+    containerId: 'MSCU-7842156',
+    severity: 'crit',
+    titleKey: 'alerts.dusMissingTitle',
+    bodyKey: 'alerts.dusMissingBody',
+    raisedAt: '2027-01-09T08:00:00-04:00',
+    raisedBy: 'doc_deadline_guardian',
+    actionLabelKey: 'alerts.fileDusNow',
+  },
+  {
+    id: 'ALT-002',
+    containerId: 'MAEU-9182734',
+    severity: 'info',
+    titleKey: 'alerts.coldTreatmentDay10Title',
+    bodyKey: 'alerts.coldTreatmentDay10Body',
+    raisedAt: '2027-01-09T10:00:00-04:00',
+    raisedBy: 'cold_treatment_auditor',
+  },
+  {
+    id: 'ALT-003',
+    containerId: 'MAEU-9182734',
+    severity: 'watch',
+    titleKey: 'alerts.excursionResolvedTitle',
+    bodyKey: 'alerts.excursionResolvedBody',
+    raisedAt: '2027-01-05T15:00:00Z',
+    raisedBy: 'in_transit_telemetry_watcher',
+  },
+  {
+    id: 'ALT-004',
+    containerId: 'MSCU-7842156',
+    severity: 'watch',
+    titleKey: 'alerts.lcDiscrepancyTitle',
+    bodyKey: 'alerts.lcDiscrepancyBody',
+    raisedAt: '2027-01-08T14:00:00-04:00',
+    raisedBy: 'lc_discrepancy_catcher',
+  },
+];

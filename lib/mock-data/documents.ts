@@ -1,0 +1,53 @@
+import type { DocumentInstance } from '@/types';
+
+export const documents: DocumentInstance[] = [
+  // Walnuts (MSCU-7842156) — 15 documents
+  { id: 'DOC-001', type: 'commercial_invoice', containerId: 'MSCU-7842156', status: 'approved', issuedAt: '2027-01-05T10:00:00-04:00', issuer: 'Valle Fresco — Maule', number: 'INV-2027-0142' },
+  { id: 'DOC-002', type: 'packing_list', containerId: 'MSCU-7842156', status: 'approved', issuedAt: '2027-01-05T11:00:00-04:00', issuer: 'Valle Fresco — Maule', number: 'PL-2027-0142' },
+  { id: 'DOC-003', type: 'bill_of_lading', containerId: 'MSCU-7842156', status: 'pending_review', issuedAt: '2027-01-08T14:00:00-04:00', issuer: 'MSC', number: 'MSCUCLSAI7842156' },
+  { id: 'DOC-004', type: 'certificate_of_origin', containerId: 'MSCU-7842156', status: 'approved', issuedAt: '2027-01-06T09:00:00-04:00', issuer: 'SAG', number: 'CO-2027-00412-018' },
+  { id: 'DOC-005', type: 'phyto_certificate', containerId: 'MSCU-7842156', status: 'approved', issuedAt: '2027-01-06T10:00:00-04:00', issuer: 'SAG', number: 'PHY-2027-00412-042' },
+  { id: 'DOC-006', type: 'fumigation_cert', containerId: 'MSCU-7842156', status: 'approved', issuedAt: '2027-01-04T08:00:00-04:00', issuer: 'Fumisan Chile', number: 'FUM-2027-1142' },
+  { id: 'DOC-007', type: 'health_cert', containerId: 'MSCU-7842156', status: 'approved', issuedAt: '2027-01-05T14:00:00-04:00', issuer: 'SAG', number: 'HC-2027-00412-009' },
+  { id: 'DOC-008', type: 'dus', containerId: 'MSCU-7842156', status: 'missing' },
+  { id: 'DOC-009', type: 'sag_export_auth', containerId: 'MSCU-7842156', status: 'approved', issuedAt: '2027-01-03T09:00:00-04:00', issuer: 'SAG', number: 'SEA-2027-00412-003' },
+  { id: 'DOC-010', type: 'transport_document', containerId: 'MSCU-7842156', status: 'approved', issuedAt: '2027-01-07T16:00:00-04:00', issuer: 'Transchile SA', number: 'TD-2027-7842156' },
+  { id: 'DOC-011', type: 'insurance_certificate', containerId: 'MSCU-7842156', status: 'approved', issuedAt: '2027-01-05T15:00:00-04:00', issuer: 'Mapfre Chile', number: 'INS-2027-0142-A' },
+  { id: 'DOC-012', type: 'lc_compliance_letter', containerId: 'MSCU-7842156', status: 'pending_review', issuedAt: '2027-01-08T09:00:00-04:00', issuer: 'Banco de Chile', number: 'LCL-2027-0142' },
+  { id: 'DOC-013', type: 'gacc_registration', containerId: 'MSCU-7842156', status: 'approved', issuedAt: '2026-08-01T00:00:00-04:00', issuer: 'GACC', number: 'GACC-CHL-00412' },
+  { id: 'DOC-014', type: 'logger_report', containerId: 'MSCU-7842156', status: 'approved', issuedAt: '2027-01-04T17:00:00-04:00', issuer: 'Valle Fresco — Maule', number: 'LR-2027-7842156' },
+  { id: 'DOC-015', type: 'pre_cooling_log', containerId: 'MSCU-7842156', status: 'approved', issuedAt: '2027-01-03T20:00:00-04:00', issuer: 'Frigorífico Puerto', number: 'PCL-2027-7842156' },
+
+  // Cherries (MAEU-9182734) — 17 documents
+  { id: 'DOC-016', type: 'commercial_invoice', containerId: 'MAEU-9182734', status: 'approved', issuedAt: '2026-12-29T09:00:00-04:00', issuer: 'Valle Fresco — Curicó', number: 'INV-2026-0157' },
+  { id: 'DOC-017', type: 'packing_list', containerId: 'MAEU-9182734', status: 'approved', issuedAt: '2026-12-29T10:00:00-04:00', issuer: 'Valle Fresco — Curicó', number: 'PL-2026-0157' },
+  { id: 'DOC-018', type: 'bill_of_lading', containerId: 'MAEU-9182734', status: 'approved', issuedAt: '2026-12-30T20:00:00-04:00', issuer: 'Maersk', number: 'MAEU9182734' },
+  { id: 'DOC-019', type: 'certificate_of_origin', containerId: 'MAEU-9182734', status: 'approved', issuedAt: '2026-12-28T09:00:00-04:00', issuer: 'SAG', number: 'CO-2026-00288-007' },
+  { id: 'DOC-020', type: 'phyto_certificate', containerId: 'MAEU-9182734', status: 'approved', issuedAt: '2026-12-28T14:00:00-04:00', issuer: 'SAG', number: 'PHY-2026-00288-031' },
+  { id: 'DOC-021', type: 'fumigation_cert', containerId: 'MAEU-9182734', status: 'approved', issuedAt: '2026-12-27T08:00:00-04:00', issuer: 'Fumisan Chile', number: 'FUM-2026-0157' },
+  { id: 'DOC-022', type: 'health_cert', containerId: 'MAEU-9182734', status: 'approved', issuedAt: '2026-12-28T15:00:00-04:00', issuer: 'SAG', number: 'HC-2026-00288-014' },
+  { id: 'DOC-023', type: 'gacc_registration', containerId: 'MAEU-9182734', status: 'approved', issuedAt: '2026-06-15T00:00:00-04:00', issuer: 'GACC', number: 'GACC-CHL-00288' },
+  { id: 'DOC-024', type: 'cold_treatment_cert', containerId: 'MAEU-9182734', status: 'in_transit', issuedAt: '2026-12-30T00:00:00-04:00', issuer: 'SENASAG', number: 'CT-2026-9182734' },
+  { id: 'DOC-025', type: 'pre_cooling_log', containerId: 'MAEU-9182734', status: 'approved', issuedAt: '2026-12-27T18:00:00-04:00', issuer: 'Frigorífico Puerto', number: 'PCL-2026-9182734' },
+  { id: 'DOC-026', type: 'logger_report', containerId: 'MAEU-9182734', status: 'in_transit', issuer: 'Emerson', number: 'LR-2026-9182734' },
+  { id: 'DOC-027', type: 'ca_atmosphere_log', containerId: 'MAEU-9182734', status: 'in_transit', issuer: 'Maersk CA System', number: 'CAL-2026-9182734' },
+  { id: 'DOC-028', type: 'pti_certificate', containerId: 'MAEU-9182734', status: 'approved', issuedAt: '2026-12-29T18:00:00-04:00', issuer: 'Maersk Tech', number: 'PTI-2026-9182734' },
+  { id: 'DOC-029', type: 'lc_compliance_letter', containerId: 'MAEU-9182734', status: 'approved', issuedAt: '2026-12-28T10:00:00-04:00', issuer: 'Banco de Chile', number: 'LCL-2026-0157' },
+  { id: 'DOC-030', type: 'insurance_certificate', containerId: 'MAEU-9182734', status: 'approved', issuedAt: '2026-12-29T11:00:00-04:00', issuer: 'Mapfre Chile', number: 'INS-2026-0157-A' },
+  { id: 'DOC-031', type: 'sag_export_auth', containerId: 'MAEU-9182734', status: 'approved', issuedAt: '2026-12-26T09:00:00-04:00', issuer: 'SAG', number: 'SEA-2026-00288-002' },
+  { id: 'DOC-032', type: 'transport_document', containerId: 'MAEU-9182734', status: 'approved', issuedAt: '2026-12-29T16:00:00-04:00', issuer: 'Transchile SA', number: 'TD-2026-9182734' },
+
+  // Grapes (CMAU-9281744) — 12 documents
+  { id: 'DOC-033', type: 'commercial_invoice', containerId: 'CMAU-9281744', status: 'approved', issuedAt: '2027-01-07T09:00:00-04:00', issuer: "Valle Fresco — O'Higgins", number: 'INV-2026-0163' },
+  { id: 'DOC-034', type: 'packing_list', containerId: 'CMAU-9281744', status: 'approved', issuedAt: '2027-01-07T10:00:00-04:00', issuer: "Valle Fresco — O'Higgins", number: 'PL-2026-0163' },
+  { id: 'DOC-035', type: 'bill_of_lading', containerId: 'CMAU-9281744', status: 'approved', issuedAt: '2027-01-08T18:00:00-04:00', issuer: 'CMA CGM', number: 'CMAU9281744' },
+  { id: 'DOC-036', type: 'certificate_of_origin', containerId: 'CMAU-9281744', status: 'approved', issuedAt: '2027-01-06T09:00:00-04:00', issuer: 'SAG', number: 'CO-2027-00331-003' },
+  { id: 'DOC-037', type: 'phyto_certificate', containerId: 'CMAU-9281744', status: 'approved', issuedAt: '2027-01-06T14:00:00-04:00', issuer: 'SAG', number: 'PHY-2027-00331-018' },
+  { id: 'DOC-038', type: 'fumigation_cert', containerId: 'CMAU-9281744', status: 'approved', issuedAt: '2027-01-05T08:00:00-04:00', issuer: 'Fumisan Chile', number: 'FUM-2027-0163' },
+  { id: 'DOC-039', type: 'gacc_registration', containerId: 'CMAU-9281744', status: 'approved', issuedAt: '2026-09-01T00:00:00-04:00', issuer: 'GACC', number: 'GACC-CHL-00331' },
+  { id: 'DOC-040', type: 'pti_certificate', containerId: 'CMAU-9281744', status: 'approved', issuedAt: '2027-01-07T18:00:00-04:00', issuer: 'CMA CGM Tech', number: 'PTI-2027-9281744' },
+  { id: 'DOC-041', type: 'insurance_certificate', containerId: 'CMAU-9281744', status: 'approved', issuedAt: '2027-01-07T11:00:00-04:00', issuer: 'Mapfre Chile', number: 'INS-2027-0163-A' },
+  { id: 'DOC-042', type: 'lc_compliance_letter', containerId: 'CMAU-9281744', status: 'approved', issuedAt: '2027-01-06T10:00:00-04:00', issuer: 'Banco de Chile', number: 'LCL-2026-0163' },
+  { id: 'DOC-043', type: 'sag_export_auth', containerId: 'CMAU-9281744', status: 'approved', issuedAt: '2027-01-04T09:00:00-04:00', issuer: 'SAG', number: 'SEA-2027-00331-001' },
+  { id: 'DOC-044', type: 'transport_document', containerId: 'CMAU-9281744', status: 'approved', issuedAt: '2027-01-08T11:00:00-04:00', issuer: 'Transchile SA', number: 'TD-2027-9281744' },
+];

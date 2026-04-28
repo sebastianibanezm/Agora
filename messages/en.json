@@ -103,7 +103,107 @@
     "categoryMonitor": "Monitor",
     "categoryOrchestrate": "Orchestrate",
     "categoryReconcile": "Reconcile",
-    "tagColdChain": "Cold chain"
+    "tagColdChain": "Cold chain",
+    "booking_confirmation_collector": {
+      "label": "Booking Confirmation Collector",
+      "desc": "Collects and tracks shipping booking confirmations from carriers"
+    },
+    "doc_deadline_guardian": {
+      "label": "Document Deadline Guardian",
+      "desc": "Monitors document submission deadlines and raises alerts when cutoffs approach"
+    },
+    "invoice_fetcher": {
+      "label": "Invoice Fetcher",
+      "desc": "Retrieves commercial invoices from producers and ERP systems"
+    },
+    "bl_tracker": {
+      "label": "B/L Tracker",
+      "desc": "Tracks bill of lading issuance and delivery status from carriers"
+    },
+    "invoice_validator": {
+      "label": "Invoice Validator",
+      "desc": "Validates invoice amounts, currency, and terms against the purchase order"
+    },
+    "phyto_validator": {
+      "label": "Phytosanitary Validator",
+      "desc": "Verifies phytosanitary certificates are properly signed and within validity period"
+    },
+    "weight_reconciler": {
+      "label": "Weight Reconciler",
+      "desc": "Reconciles weight discrepancies between packing list, B/L, and purchase order"
+    },
+    "customs_check": {
+      "label": "Customs Check",
+      "desc": "Validates all documents required for customs clearance are in order"
+    },
+    "vessel_tracker": {
+      "label": "Vessel Tracker",
+      "desc": "Tracks vessel position and port calls in real time"
+    },
+    "port_congestion_watcher": {
+      "label": "Port Congestion Watcher",
+      "desc": "Monitors destination port congestion and adjusts ETA estimates"
+    },
+    "cutoff_sentinel": {
+      "label": "Cutoff Sentinel",
+      "desc": "Watches cargo and documentation cutoffs and escalates approaching deadlines"
+    },
+    "eta_monitor": {
+      "label": "ETA Monitor",
+      "desc": "Tracks vessel ETA changes and notifies affected parties"
+    },
+    "export_workflow_orchestrator": {
+      "label": "Export Workflow Orchestrator",
+      "desc": "Coordinates the end-to-end export workflow across agents and stakeholders"
+    },
+    "approval_router": {
+      "label": "Approval Router",
+      "desc": "Routes documents to the correct approvers based on lane and document type"
+    },
+    "document_assembler": {
+      "label": "Document Assembler",
+      "desc": "Assembles the complete document package for submission to customs and banks"
+    },
+    "po_invoice_reconciler": {
+      "label": "PO–Invoice Reconciler",
+      "desc": "Reconciles purchase order values against received invoices"
+    },
+    "freight_cost_reconciler": {
+      "label": "Freight Cost Reconciler",
+      "desc": "Reconciles freight invoices against booked rates and surcharges"
+    },
+    "pre_cooling_tracker": {
+      "label": "Pre-Cooling Tracker",
+      "desc": "Monitors pre-cooling facility temperatures and confirms target pulp temp achieved"
+    },
+    "cold_storage_monitor": {
+      "label": "Cold Storage Monitor",
+      "desc": "Continuously monitors reefer container temperature during cold storage"
+    },
+    "reefer_pti_validator": {
+      "label": "Reefer PTI Validator",
+      "desc": "Verifies pre-trip inspection results before container is loaded"
+    },
+    "in_transit_telemetry_watcher": {
+      "label": "In-Transit Telemetry Watcher",
+      "desc": "Monitors logger telemetry during transit and flags temperature excursions"
+    },
+    "cold_treatment_auditor": {
+      "label": "Cold Treatment Auditor",
+      "desc": "Audits cold treatment protocol compliance day by day against USDA/GACC requirements"
+    },
+    "arrival_cold_chain_coordinator": {
+      "label": "Arrival Cold Chain Coordinator",
+      "desc": "Coordinates reefer handover at destination port to maintain cold chain integrity"
+    },
+    "lc_discrepancy_catcher": {
+      "label": "L/C Discrepancy Catcher",
+      "desc": "Detects discrepancies between document set and letter of credit terms"
+    },
+    "lunar_new_year_window_watcher": {
+      "label": "Lunar New Year Window Watcher",
+      "desc": "Flags delivery windows that overlap Chinese Lunar New Year port and bank closures"
+    }
   },
   "docs": {
     "commercial_invoice": "Commercial invoice",
@@ -129,7 +229,45 @@
     "passed": "Passed",
     "failed": "Failed",
     "warning": "Warning",
-    "feedTitle": "Recent validations"
+    "feedTitle": "Recent validations",
+    "dusMissing": "DUS not filed before cutoff",
+    "invoiceMatchesPO": "Invoice amount matches PO",
+    "blConsigneeOk": "B/L consignee matches L/C",
+    "phytoSigned": "Phytosanitary certificate signed by SAG",
+    "weightDiscrepancy": "Weight discrepancy between packing list and B/L",
+    "fumigationOk": "Fumigation date valid",
+    "healthCertOk": "Health certificate valid",
+    "originCertOk": "Certificate of origin signed by SAG",
+    "transportDocOk": "Transport document matches shipment",
+    "cutoffApproaching": "Cutoff in less than 18 hours",
+    "coldTreatmentOk": "Cold treatment within compliance",
+    "lcTermsOk": "L/C terms match purchase order",
+    "phytoGaccOk": "Phytosanitary certificate GACC-registered",
+    "ptiOk": "Reefer PTI passed",
+    "loggerDataOk": "Logger data transmitted successfully",
+    "caGasWatch": "CA gas mix near lower bound — monitoring",
+    "lunarNewYearWindow": "Delivery window overlaps Lunar New Year",
+    "insuranceOk": "Insurance coverage adequate",
+    "coldStorageOk": "Cold storage compliant",
+    "gaccOk": "GACC registration valid"
+  },
+  "alerts": {
+    "dusMissingTitle": "DUS not filed",
+    "dusMissingBody": "18 hours remaining to customs document cutoff",
+    "fileDusNow": "File DUS now",
+    "coldTreatmentDay10Title": "Cold treatment: day 10/15",
+    "coldTreatmentDay10Body": "Treatment ongoing within tolerance",
+    "excursionResolvedTitle": "Temperature excursion resolved",
+    "excursionResolvedBody": "Top logger reached +0.4°C for 18 min — within tolerance",
+    "lcDiscrepancyTitle": "Potential L/C discrepancy",
+    "lcDiscrepancyBody": "Review L/C terms with importer"
+  },
+  "penalties": {
+    "lateDocSubmission": "Late document submission",
+    "customsDelay": "Customs processing delay",
+    "none": "No penalty",
+    "portCongestion": "Port congestion surcharge",
+    "documentRejection": "Document rejection and resubmission"
   },
   "settings": {
     "title": "Settings",

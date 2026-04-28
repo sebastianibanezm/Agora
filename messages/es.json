@@ -103,7 +103,107 @@
     "categoryMonitor": "Monitoreo",
     "categoryOrchestrate": "Orquestación",
     "categoryReconcile": "Conciliación",
-    "tagColdChain": "Cadena de frío"
+    "tagColdChain": "Cadena de frío",
+    "booking_confirmation_collector": {
+      "label": "Recolector de Confirmaciones de Reserva",
+      "desc": "Recopila y rastrea confirmaciones de reservas de embarque de los transportistas"
+    },
+    "doc_deadline_guardian": {
+      "label": "Guardián de Plazos Documentales",
+      "desc": "Monitorea los plazos de presentación de documentos y emite alertas cuando se acercan los cierres"
+    },
+    "invoice_fetcher": {
+      "label": "Recolector de Facturas",
+      "desc": "Recupera facturas comerciales de productores y sistemas ERP"
+    },
+    "bl_tracker": {
+      "label": "Rastreador de Conocimiento de Embarque",
+      "desc": "Rastrea la emisión y entrega de conocimientos de embarque de los transportistas"
+    },
+    "invoice_validator": {
+      "label": "Validador de Facturas",
+      "desc": "Valida montos, moneda y condiciones de facturas contra la orden de compra"
+    },
+    "phyto_validator": {
+      "label": "Validador Fitosanitario",
+      "desc": "Verifica que los certificados fitosanitarios estén correctamente firmados y dentro del período de validez"
+    },
+    "weight_reconciler": {
+      "label": "Conciliador de Pesos",
+      "desc": "Concilia discrepancias de peso entre packing list, BL y orden de compra"
+    },
+    "customs_check": {
+      "label": "Verificación Aduanera",
+      "desc": "Valida que todos los documentos requeridos para el despacho aduanero estén en orden"
+    },
+    "vessel_tracker": {
+      "label": "Rastreador de Buques",
+      "desc": "Rastrea la posición del buque y escalas portuarias en tiempo real"
+    },
+    "port_congestion_watcher": {
+      "label": "Monitor de Congestión Portuaria",
+      "desc": "Monitorea la congestión en el puerto de destino y ajusta estimaciones de ETA"
+    },
+    "cutoff_sentinel": {
+      "label": "Centinela de Plazos",
+      "desc": "Vigila los cierres de carga y documentación, y escala plazos que se acercan"
+    },
+    "eta_monitor": {
+      "label": "Monitor de ETA",
+      "desc": "Rastrea cambios en el ETA del buque y notifica a las partes afectadas"
+    },
+    "export_workflow_orchestrator": {
+      "label": "Orquestador de Flujo de Exportación",
+      "desc": "Coordina el flujo de trabajo de exportación de extremo a extremo entre agentes y partes interesadas"
+    },
+    "approval_router": {
+      "label": "Enrutador de Aprobaciones",
+      "desc": "Envía documentos a los aprobadores correctos según la ruta y el tipo de documento"
+    },
+    "document_assembler": {
+      "label": "Ensamblador de Documentos",
+      "desc": "Ensambla el paquete documental completo para presentación a aduana y bancos"
+    },
+    "po_invoice_reconciler": {
+      "label": "Conciliador OC–Factura",
+      "desc": "Concilia los valores de la orden de compra con las facturas recibidas"
+    },
+    "freight_cost_reconciler": {
+      "label": "Conciliador de Costos de Flete",
+      "desc": "Concilia facturas de flete con tarifas acordadas y recargos"
+    },
+    "pre_cooling_tracker": {
+      "label": "Rastreador de Pre-Enfriamiento",
+      "desc": "Monitorea temperaturas en la instalación de pre-enfriamiento y confirma que se alcanzó la temperatura objetivo de pulpa"
+    },
+    "cold_storage_monitor": {
+      "label": "Monitor de Almacenamiento en Frío",
+      "desc": "Monitorea continuamente la temperatura del contenedor reefer durante el almacenamiento en frío"
+    },
+    "reefer_pti_validator": {
+      "label": "Validador de PTI Reefer",
+      "desc": "Verifica los resultados de la inspección pre-viaje antes de que el contenedor sea cargado"
+    },
+    "in_transit_telemetry_watcher": {
+      "label": "Monitor de Telemetría en Tránsito",
+      "desc": "Monitorea la telemetría de loggers durante el tránsito y señala excursiones de temperatura"
+    },
+    "cold_treatment_auditor": {
+      "label": "Auditor de Tratamiento en Frío",
+      "desc": "Audita el cumplimiento del protocolo de tratamiento en frío día a día según requisitos USDA/GACC"
+    },
+    "arrival_cold_chain_coordinator": {
+      "label": "Coordinador de Cadena de Frío en Destino",
+      "desc": "Coordina la entrega del reefer en el puerto de destino para mantener la integridad de la cadena de frío"
+    },
+    "lc_discrepancy_catcher": {
+      "label": "Detector de Discrepancias L/C",
+      "desc": "Detecta discrepancias entre el set documental y los términos de la carta de crédito"
+    },
+    "lunar_new_year_window_watcher": {
+      "label": "Monitor de Ventana Año Nuevo Lunar",
+      "desc": "Señala ventanas de entrega que se superponen con cierres portuarios y bancarios del Año Nuevo Lunar chino"
+    }
   },
   "docs": {
     "commercial_invoice": "Factura comercial",
@@ -129,7 +229,45 @@
     "passed": "Aprobado",
     "failed": "Falló",
     "warning": "Advertencia",
-    "feedTitle": "Validaciones recientes"
+    "feedTitle": "Validaciones recientes",
+    "dusMissing": "DUS no presentado antes del cierre",
+    "invoiceMatchesPO": "Monto de factura coincide con la OC",
+    "blConsigneeOk": "Consignatario en BL coincide con L/C",
+    "phytoSigned": "Certificado fitosanitario firmado por SAG",
+    "weightDiscrepancy": "Discrepancia de peso entre packing list y BL",
+    "fumigationOk": "Fecha de fumigación válida",
+    "healthCertOk": "Certificado sanitario válido",
+    "originCertOk": "Certificado de origen firmado por SAG",
+    "transportDocOk": "Documento de transporte coincide con embarque",
+    "cutoffApproaching": "Cierre en menos de 18 horas",
+    "coldTreatmentOk": "Tratamiento en frío dentro del cumplimiento",
+    "lcTermsOk": "Términos de L/C coinciden con la orden de compra",
+    "phytoGaccOk": "Certificado fitosanitario registrado en GACC",
+    "ptiOk": "PTI del reefer aprobado",
+    "loggerDataOk": "Datos de loggers transmitidos correctamente",
+    "caGasWatch": "Mezcla de gas CA cerca del límite inferior — monitoreando",
+    "lunarNewYearWindow": "Ventana de entrega se superpone con Año Nuevo Lunar",
+    "insuranceOk": "Cobertura de seguro adecuada",
+    "coldStorageOk": "Almacenamiento en frío conforme",
+    "gaccOk": "Registro GACC válido"
+  },
+  "alerts": {
+    "dusMissingTitle": "DUS no presentado",
+    "dusMissingBody": "Faltan 18 horas para el cierre del documento aduanero",
+    "fileDusNow": "Presentar DUS ahora",
+    "coldTreatmentDay10Title": "Tratamiento en frío: día 10/15",
+    "coldTreatmentDay10Body": "El tratamiento continúa dentro de tolerancia",
+    "excursionResolvedTitle": "Excursión de temperatura resuelta",
+    "excursionResolvedBody": "Logger superior registró +0.4°C por 18 min — dentro de tolerancia",
+    "lcDiscrepancyTitle": "Posible discrepancia en carta de crédito",
+    "lcDiscrepancyBody": "Revisar términos de L/C con el importador"
+  },
+  "penalties": {
+    "lateDocSubmission": "Presentación tardía de documentos",
+    "customsDelay": "Demora en procesamiento aduanero",
+    "none": "Sin penalización",
+    "portCongestion": "Recargo por congestión portuaria",
+    "documentRejection": "Rechazo y reenvío de documentos"
   },
   "settings": {
     "title": "Configuración",
