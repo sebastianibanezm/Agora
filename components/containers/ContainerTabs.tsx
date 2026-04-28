@@ -6,6 +6,11 @@ import { OverviewTab } from './OverviewTab';
 import { DocumentsTab } from './DocumentsTab';
 import { ReadinessTab } from './ReadinessTab';
 import { ColdChainTab } from '@/components/cold-chain/ColdChainTab';
+import { ValidationFeed } from '@/components/alerts/ValidationFeed';
+import { FinancialTab } from './FinancialTab';
+import { ReconciliationTab } from './ReconciliationTab';
+import { HistoryTab } from './HistoryTab';
+import { validations as allValidations } from '@/lib/mock-data/validations';
 
 interface Props { container: Container }
 
@@ -52,16 +57,16 @@ export function ContainerTabs({ container }: Props) {
         </TabsContent>
       )}
       <TabsContent value="validations">
-        <div className="text-ink-3 text-sm">Validations — coming in Task 16</div>
+        <ValidationFeed validations={allValidations.filter(v => v.containerId === container.id)} />
       </TabsContent>
       <TabsContent value="financial">
-        <div className="text-ink-3 text-sm">Financial — coming in Task 16</div>
+        <FinancialTab container={container} />
       </TabsContent>
       <TabsContent value="reconciliation">
-        <div className="text-ink-3 text-sm">Reconciliation — coming in Task 16</div>
+        <ReconciliationTab container={container} />
       </TabsContent>
       <TabsContent value="history">
-        <div className="text-ink-3 text-sm">History — coming in Task 16</div>
+        <HistoryTab container={container} />
       </TabsContent>
     </Tabs>
   );

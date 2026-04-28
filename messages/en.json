@@ -296,6 +296,33 @@
       "eta": "Estimated arrival"
     }
   },
+  "financial": {
+    "poValue": "PO value",
+    "incoterm": "Incoterm",
+    "paymentTerms": "Payment terms",
+    "paymentStatus": "Payment status",
+    "paymentStatusOnTrack": "On track",
+    "paymentStatusAtRisk": "At risk",
+    "costAtRisk": "Cost at risk",
+    "projectedMargin": "Projected margin"
+  },
+  "reconciliation": {
+    "pair": "Pair",
+    "matched": "Matched",
+    "mismatched": "Mismatched",
+    "pairs": {
+      "po_invoice": "PO ↔ Invoice",
+      "invoice_packing": "Invoice ↔ Packing List",
+      "packing_bl": "Packing List ↔ B/L"
+    }
+  },
+  "history": {
+    "kinds": {
+      "validation": "Validation",
+      "alert": "Alert",
+      "status": "Status"
+    }
+  },
   "settings": {
     "title": "Settings",
     "language": "Language",

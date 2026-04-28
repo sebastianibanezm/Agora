@@ -296,6 +296,33 @@
       "eta": "Llegada estimada"
     }
   },
+  "financial": {
+    "poValue": "Valor de OC",
+    "incoterm": "Incoterm",
+    "paymentTerms": "Términos de pago",
+    "paymentStatus": "Estado de pago",
+    "paymentStatusOnTrack": "En curso",
+    "paymentStatusAtRisk": "En riesgo",
+    "costAtRisk": "Costo en riesgo",
+    "projectedMargin": "Margen proyectado"
+  },
+  "reconciliation": {
+    "pair": "Par",
+    "matched": "Coinciden",
+    "mismatched": "No coinciden",
+    "pairs": {
+      "po_invoice": "OC ↔ Factura",
+      "invoice_packing": "Factura ↔ Packing List",
+      "packing_bl": "Packing List ↔ BL"
+    }
+  },
+  "history": {
+    "kinds": {
+      "validation": "Validación",
+      "alert": "Alerta",
+      "status": "Estado"
+    }
+  },
   "settings": {
     "title": "Configuración",
     "language": "Idioma",
