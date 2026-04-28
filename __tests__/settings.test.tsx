@@ -6,7 +6,7 @@ import es from '../messages/es.json';
 import { LanguageToggle } from '@/components/settings/LanguageToggle';
 
 vi.mock('next/navigation', () => ({
-  useRouter: () => ({ refresh: vi.fn(), push: vi.fn() }),
+  useRouter: () => ({ refresh: vi.fn() }),
 }));
 
 vi.mock('next-intl/server', async () => {
@@ -41,6 +41,19 @@ describe('LanguageToggle', () => {
       expect.objectContaining({
         method: 'POST',
         body: JSON.stringify({ locale: 'en' }),
+      }),
+    );
+  });
+
+  it('clicking Español POSTs to /api/locale with locale=es', async () => {
+    const user = userEvent.setup();
+    render(wrap(<LanguageToggle currentLocale="en" />));
+    await user.click(screen.getByRole('button', { name: /Español/i }));
+    expect(global.fetch).toHaveBeenCalledWith(
+      '/api/locale',
+      expect.objectContaining({
+        method: 'POST',
+        body: JSON.stringify({ locale: 'es' }),
       }),
     );
   });

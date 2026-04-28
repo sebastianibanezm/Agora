@@ -2,7 +2,12 @@ import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 
 export async function POST(req: Request) {
-  const { locale } = await req.json();
+  let locale: string;
+  try {
+    ({ locale } = await req.json());
+  } catch {
+    return NextResponse.json({ ok: false }, { status: 400 });
+  }
   if (!['es', 'en'].includes(locale)) {
     return NextResponse.json({ ok: false }, { status: 400 });
   }

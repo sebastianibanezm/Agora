@@ -13,14 +13,16 @@ export function LanguageToggle({ currentLocale }: { currentLocale: Locale }) {
   const [isPending, startTransition] = useTransition();
 
   async function setLocale(locale: Locale) {
-    await fetch('/api/locale', {
+    const response = await fetch('/api/locale', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ locale }),
     });
-    startTransition(() => {
-      router.refresh();
-    });
+    if (response.ok) {
+      startTransition(() => {
+        router.refresh();
+      });
+    }
   }
 
   const baseClass =
