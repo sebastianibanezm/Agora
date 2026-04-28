@@ -1,4 +1,5 @@
 import type { Container } from '@/types';
+import { cherriesTrace, grapesTrace } from './cold-chain-traces';
 
 export const containers: Container[] = [
   {
@@ -42,6 +43,7 @@ export const containers: Container[] = [
     etd: '2026-12-30T22:00:00-04:00',
     eta: '2027-01-25T08:00:00+08:00',
     status: 'in_treatment',
+    coldChain: cherriesTrace,
     costAtRiskUsd: 0,
   },
   {
@@ -63,6 +65,7 @@ export const containers: Container[] = [
     etd: '2027-01-08T20:00:00-04:00',
     eta: '2027-02-02T08:00:00+08:00',
     status: 'at_sea',
+    coldChain: grapesTrace,
     costAtRiskUsd: 0,
   },
 ];
