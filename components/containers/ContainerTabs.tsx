@@ -2,6 +2,7 @@
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { useTranslations } from 'next-intl';
 import type { Container } from '@/types';
+import { OverviewTab } from './OverviewTab';
 
 interface Props { container: Container }
 
@@ -34,7 +35,7 @@ export function ContainerTabs({ container }: Props) {
         ))}
       </TabsList>
       <TabsContent value="overview">
-        <div className="text-ink-3 text-sm">Overview — coming in Task 12</div>
+        <OverviewTab container={container} />
       </TabsContent>
       <TabsContent value="documents">
         <div className="text-ink-3 text-sm">Documents — coming in Task 13</div>
