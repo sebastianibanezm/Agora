@@ -78,7 +78,7 @@ Trace:      #7DD3FC
 | 5 | `/producers` | Producer list + `[id]` fiche |
 | 6 | `/compliance` | Compliance & Master Data |
 | 7 | `/performance` | Performance & ROI |
-| — | (greyed) | Approval Queue — "Available in V3" |
+| — | (greyed, no route) | Approval Queue — disabled sidebar link only, tooltip "Available in V3", no stub page |
 
 **Core principle:** Container is the primary unit. Every path leads to container detail.
 
@@ -95,13 +95,52 @@ Trace:      #7DD3FC
 
 ### Lane Profile architecture (Patch 01 addition)
 
-Platform behavior is derived from `Product × Market × CommercialTerms` at runtime via `computeLaneProfile(productId, marketId, commercialId): LaneProfile`. This function pulls from three data files and composes:
-- Required document set
-- Active agents list
-- Validation checks
-- Timeline events
+Platform behavior is derived from `Product × Market × CommercialTerms` at runtime via `computeLaneProfile(productId, marketId, commercialId): LaneProfile`. This function lives in **`/lib/mock-data/lane-profiles.ts`** (canonical home — no second implementation file). It pulls from `product-profiles.ts`, `market-rules.ts`, and `commercial-profiles.ts` and composes:
+
+```typescript
+// LaneProfile — return type of computeLaneProfile()
+export interface LaneProfile {
+  id: string;                        // dot-delimited key: '{productId}.{marketId}.{commercialId}'
+                                     // e.g. 'fresh_cherries.CN.cif_lc_at_sight'
+                                     // marketId uses Market type: 'US'|'EU'|'IN'|'CN'|'MENA'
+  product: ProductProfile;
+  market: MarketProfileExtended;
+  commercial: CommercialProfile;
+  documentSet: DocumentRequirement[];  // ordered, required docs for this lane
+  agentsActive: AgentId[];             // union of agents from all three sub-profiles
+  validationChecks: string[];          // identifiers of L2 checks that apply
+  timeline: LaneTimelineEvent[];       // composed T-day calendar for this lane
+}
+```
+
+**`laneProfileId` key format:** `'{productId}.{marketId}.{commercialId}'` — e.g. `'fresh_cherries.CN.cif_lc_at_sight'`. Built by joining the three string values with `.`.
 
 **Hard constraint:** `computeLaneProfile()` must contain zero hardcoded conditionals per product/market combination. It must compose from data files only.
+
+### Key enum values (Patch 01 additions)
+
+```typescript
+export type ProductId =
+  | 'walnuts_in_shell' | 'walnut_kernels' | 'almonds_in_shell'
+  | 'fresh_cherries' | 'fresh_blueberries'
+  | 'table_grapes_red' | 'table_grapes_white';
+
+export type IncotermPaymentId =
+  | 'cif_cad_at_sight' | 'cif_lc_at_sight' | 'cif_lc_60'
+  | 'cif_open_account_30' | 'fob_open_account_30' | 'dap_open_account';
+```
+
+### MarketProfileExtended (extends existing MarketProfile)
+
+```typescript
+export interface MarketProfileExtended extends MarketProfile {
+  coldTreatmentOptions?: ColdTreatmentProtocol[];
+  registrationsRequired: string[];     // e.g. ['GACC Decree 280 facility', 'orchard reg']
+  labelLanguageRequired: string[];     // e.g. ['Mandarin', 'English']
+  inspectionAuthority: string;         // 'GACC + CIQ', 'FDA + USDA APHIS', 'BIP', 'PQ India'
+  digitalPhytoSystem?: string;         // 'SAG-GACC' for China, null for others
+}
+```
 
 ### Container interface additions (Patch 01)
 
@@ -109,16 +148,50 @@ Platform behavior is derived from `Product × Market × CommercialTerms` at runt
 // Added to existing Container interface:
 productId: ProductId;
 commercialId: IncotermPaymentId;
-laneProfileId: string;          // computed key e.g. 'fresh_cherries.china_gacc.cif_lc_at_sight'
-coldChain?: ColdChainTrace;     // replaces optional reeferLog/setpointC
+laneProfileId: string;               // '{productId}.{marketId}.{commercialId}'
+coldChain?: ColdChainTrace;          // undefined for dry cargo; present + required=true for reefers
+```
+
+### ColdChainTrace interface
+
+```typescript
+export interface ColdChainTrace {
+  required: boolean;                  // true for reefers; dry containers omit coldChain entirely
+  protocol: string | null;            // ColdTreatmentProtocol.id, e.g. 'china_15d_0_5c'
+  setpointC: number;
+  toleranceC: number;
+  caGasMix?: { o2Pct: number; co2Pct: number; n2Pct: number };
+  rhTargetPct: [number, number];
+
+  // Pre-vessel
+  preCooling?: PreCoolingRecord;
+  reeferPti?: ReeferPtiRecord;
+
+  // In-transit
+  loggers: DataLogger[];              // 3 for cherries; 1-2 for grapes/blueberries
+  caReadings?: CaReading[];           // CA gas mix telemetry — source for CA atmosphere mini-chart
+
+  // Computed live
+  treatmentRequiredMinutes: number;   // e.g. 21600 for 15 days
+  treatmentMinutesCompliant: number;  // minutes where all loggers ≤ setpointC+tolerance
+  treatmentMinutesViolation: number;
+  excursionEvents: ExcursionEvent[];
+  status: 'pre_load' | 'in_treatment' | 'completed' | 'breached';
+  lastReadingAt: string;              // ISO
+
+  // Post-arrival
+  loggerDownloadReportUrl?: string;
+  arrivalTransferStatus?: 'pending' | 'in_progress' | 'completed';
+}
 ```
 
 ### Cold chain data (Patch 01)
 
-For `MAEU-9182734`: 3 loggers × 2,880 readings (15-min interval × 24h × 10 days = T+1 to TODAY T+10). One minor excursion at T+6 day 14:32 UTC: top logger spiked to +0.4°C for 18 min — within tolerance, did not break compliance.
+For `MAEU-9182734`: 3 loggers × 2,880 readings (15-min interval × 24h × 10 days = T+1 to TODAY T+10). One minor excursion at T+6 day 14:32 UTC: top logger spiked to +0.4°C for 18 min — within tolerance, did not break compliance. `treatmentMinutesCompliant ≈ 13,800` (≈9d 14h), `status: 'in_treatment'`.
 
-For other refrigerated containers in transit: ~50–100 readings sampled across the trace.  
-For dry containers (walnuts, almonds): `coldChain.required = false`, no telemetry.
+For `CMAU-9281744` (table grapes → CN, in transit at T+1): refrigerated, `coldChain.required = true`, ~50 sampled readings, `status: 'in_treatment'`. This is the second refrigerated container needed by the dashboard DoD (≥2 in Cold Chain Status section).
+
+For dry containers (walnuts, almonds): `coldChain` field is **absent** (`undefined`). The condition `container.coldChain?.required === true` evaluates to false and all cold-chain UI is suppressed.
 
 ### Anchor date
 
@@ -175,14 +248,13 @@ All container ETDs re-anchored per Patch 01 §1 table to preserve T-day position
   product-profiles.ts             # (Patch 01) 7 products
   commercial-profiles.ts          # (Patch 01) 6 commercial profiles
   cold-treatment-protocols.ts     # (Patch 01) 3 protocols
-  lane-profiles.ts                # (Patch 01) computeLaneProfile() + pre-computed cache
+  lane-profiles.ts                # (Patch 01) computeLaneProfile() + pre-computed cache (ONLY home for this function)
   cold-chain-traces.ts            # (Patch 01) full trace for cherries hero + light for others
 
 /lib/utils
   dates.ts                        # getTodayDemo(), T-day calculations
   currency.ts
   risk.ts
-  lane-profile.ts                 # computeLaneProfile() implementation
 
 /types/index.ts                   # All TypeScript interfaces (original + Patch 01 additions)
 ```
@@ -206,7 +278,7 @@ react-simple-maps equirectangular projection + Natural Earth TopoJSON 110m. Laye
 
 ### ReadinessMatrix (dynamic — Patch 01 update)
 
-Props: `documents: DocumentRequirement[]`, `documentStates`, `validationResults`. Renders N×3 cells where N = `documents.length`. Walnuts hero = 15 rows, cherries hero = 18 rows.
+Props: `documents: DocumentRequirement[]`, `documentStates: Record<DocumentType, DocStatus>`, `validationResults: Record<DocumentType, ValidationSummary>`. Renders N×3 cells where N = `documents.length`. The matrix is purely driven by props — the caller passes the lane profile's `documentSet`. Expected outputs to verify: walnuts hero → 15 rows, cherries hero → 18 rows.
 
 ### ColdChainTab (Patch 01 — conditional)
 
@@ -219,7 +291,7 @@ Only renders when `container.coldChain?.required === true`. Seven sections:
 6. **Excursion events table** — timestamp, logger, peak temp, duration, severity, broke compliance?
 7. **Compliance projection** — "Treatment satisfies at T+16" or "BREACHED — fallback recommended"
 
-The cold treatment counter is the primary demo showpiece — smooth count-up animation on render.
+The cold treatment counter is the primary demo showpiece — smooth count-up animation on render. Count-up runs from 0 to `treatmentMinutesCompliant`, formatted as `"Xd Yh Zm"`, 1.5s duration, ease-out easing.
 
 ### Container Detail — tab order (Patch 01 update)
 
@@ -231,11 +303,11 @@ Cold Chain tab inserts between Readiness and Validations. For dry containers, th
 
 Hero globe → KPI strip (5 tiles + conditional 6th "Cold treatment compliance") → Action queue + Alerts rail → **Cold Chain Status** (ColdChainSummaryCard — conditional) → This week readiness strip → Closed last week → Penalty heatmap mini
 
-### Compliance page — 3-section layout (Patch 01 update)
+### Compliance page — 4-section layout (Patch 01 update)
 
-Section 1: Market Rule Packs (5 cards, uses MarketProfileExtended)  
-Section 2: Product Profiles (7 ProductProfileCard, NEW)  
-Section 3: Commercial Profiles (6 CommercialProfileCard, NEW)  
+Section 1: Market Rule Packs (5 cards, uses MarketProfileExtended fields for cold treatment options, registration requirements, label languages)  
+Section 2: Product Profiles (7 ProductProfileCard, NEW — Patch 01)  
+Section 3: Commercial Profiles (6 CommercialProfileCard, NEW — Patch 01)  
 Section 4: Master Data Sentinel Queue (unchanged)
 
 ### Agent catalog — 25 agents total
