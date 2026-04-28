@@ -236,7 +236,10 @@
     "colDocument": "Documento",
     "colNumber": "Número",
     "colIssuer": "Emisor",
-    "colIssued": "Emitido"
+    "colIssued": "Emitido",
+    "colStatus": "Estado",
+    "colValidations": "Validaciones",
+    "colDue": "Vence"
   },
   "validations": {
     "passed": "Aprobado",

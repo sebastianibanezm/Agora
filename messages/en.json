@@ -236,7 +236,10 @@
     "colDocument": "Document",
     "colNumber": "Number",
     "colIssuer": "Issuer",
-    "colIssued": "Issued"
+    "colIssued": "Issued",
+    "colStatus": "Status",
+    "colValidations": "Validations",
+    "colDue": "Due"
   },
   "validations": {
     "passed": "Passed",

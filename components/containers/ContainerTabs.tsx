@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import type { Container } from '@/types';
 import { OverviewTab } from './OverviewTab';
 import { DocumentsTab } from './DocumentsTab';
+import { ReadinessTab } from './ReadinessTab';
 
 interface Props { container: Container }
 
@@ -42,7 +43,7 @@ export function ContainerTabs({ container }: Props) {
         <DocumentsTab container={container} />
       </TabsContent>
       <TabsContent value="readiness">
-        <div className="text-ink-3 text-sm">Readiness — coming in Task 14</div>
+        <ReadinessTab container={container} />
       </TabsContent>
       {hasColdChain && (
         <TabsContent value="coldChain">
