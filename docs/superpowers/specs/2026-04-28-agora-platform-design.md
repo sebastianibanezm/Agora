@@ -1,0 +1,312 @@
+# Agora Platform — Design Document
+
+**Date:** 2026-04-28  
+**Sources:** `AGORA_PLATFORM_BUILD_SPEC.md` + `AGORA_PATCH_01_LANE_PROFILES_COLD_CHAIN.md`  
+**Status:** Approved — ready for implementation planning
+
+---
+
+## 0. What We Are Building
+
+A clickable, fully-populated **maqueta** (sales prototype) of Agora — a B2B SaaS platform for Chilean fruit/nut exporters providing an "AI digital team" for export operations. No real backend, no real auth, no real connectors. All data is static TypeScript mock data.
+
+**Demo customer:** Valle Fresco S.A. (Santiago, Chile)  
+**Demo user:** María José Soto, Logistics Manager  
+**Demo "today":** `2027-01-09T10:00:00-04:00` (peak cherry season, per Patch 01)
+
+---
+
+## 1. Tech Stack (locked)
+
+| Concern | Choice |
+|---|---|
+| Framework | Next.js 14+ App Router |
+| Language | TypeScript strict mode |
+| Styling | Tailwind CSS + shadcn/ui |
+| Icons | lucide-react |
+| Charts | Recharts |
+| Map | **react-simple-maps + Natural Earth TopoJSON** (2D SVG flat map — not react-globe.gl; matches design handoff visual direction) |
+| Animations | Framer Motion (sparingly) |
+| State | React state + URL params. No Redux/Zustand. |
+| Dates | date-fns |
+
+**Globe decision rationale:** The design handoff shows a 2D equirectangular SVG map with animated arcs. The spec originally called for react-globe.gl but the design handoff supersedes it as the high-fidelity visual reference. react-simple-maps with Natural Earth TopoJSON gives proper coastlines with full control over design tokens, no API key required, and SVG arc animations matching the design.
+
+---
+
+## 2. Design System
+
+### Color tokens (CSS variables in Tailwind config)
+
+```
+Surfaces:   --bg-0 #070A12 / --bg-1 #0E1320 / --bg-2 #141A29 / --bg-3 #1B2235
+Glass:      rgba(17, 24, 39, 0.55) + backdrop-blur
+Lines:      rgba(255,255,255,0.07) / 0.14 / mint@0.32
+Text:       --ink-1 #F4F6FA / --ink-2 #A8B3C7 / --ink-3 #6B7689 / --ink-4 #475063
+Mint:       #00E696 (500) / #4DFFB8 (300) / #00B377 (600) / #008055 (700)
+Severity:   ok #00E696 / info #3B82F6 / watch #F59E0B / risk #F97316 / crit #EF4444
+Trace:      #7DD3FC
+```
+
+### Typography
+- **UI:** Inter 400/500/600/700, 13px base
+- **Numbers/IDs/codes:** JetBrains Mono — ALL numbers, container IDs, USD values, timestamps, document numbers
+
+### Ambient chrome
+- `body::before`: two radial gradient glows (mint top-right, sky bottom-left, ~5% opacity)
+- `body::after`: 3px micro-dot grid overlay (terminal texture)
+
+### Motion
+- Sidebar collapse: 0.22s cubic-bezier
+- Alert critical border: 1.5s pulse
+- Arc draw: SVG dasharray animation 2–4s
+- Cold treatment counter: smooth count-up on first render (most visually arresting element per patch §17)
+- Page transitions: 200ms fade + Y translation
+
+---
+
+## 3. Information Architecture
+
+7 primary surfaces + 1 reserved slot:
+
+| # | Route | Surface |
+|---|---|---|
+| 1 | `/` | Operations Dashboard |
+| 2 | `/containers` | Container list + `[id]` detail |
+| 3 | `/purchase-orders` | PO list + `[id]` detail |
+| 4 | `/importers` | Importer list + `[id]` fiche |
+| 5 | `/producers` | Producer list + `[id]` fiche |
+| 6 | `/compliance` | Compliance & Master Data |
+| 7 | `/performance` | Performance & ROI |
+| — | (greyed) | Approval Queue — "Available in V3" |
+
+**Core principle:** Container is the primary unit. Every path leads to container detail.
+
+---
+
+## 4. Data Model
+
+### Hero containers (two — from spec + patch)
+
+| Container | Product | Route | Payment | Today's T-day | Active state |
+|---|---|---|---|---|---|
+| `MSCU-7842156` | Walnuts in shell | San Antonio → Nhava Sheva (IN) | CAD at sight | T-2 | DUS not yet filed, 18h to cut-off |
+| `MAEU-9182734` | Fresh cherries | San Antonio → Yangshan (CN) | L/C at sight | T+10 | Cold treatment day 10 of 15 in progress |
+
+### Lane Profile architecture (Patch 01 addition)
+
+Platform behavior is derived from `Product × Market × CommercialTerms` at runtime via `computeLaneProfile(productId, marketId, commercialId): LaneProfile`. This function pulls from three data files and composes:
+- Required document set
+- Active agents list
+- Validation checks
+- Timeline events
+
+**Hard constraint:** `computeLaneProfile()` must contain zero hardcoded conditionals per product/market combination. It must compose from data files only.
+
+### Container interface additions (Patch 01)
+
+```typescript
+// Added to existing Container interface:
+productId: ProductId;
+commercialId: IncotermPaymentId;
+laneProfileId: string;          // computed key e.g. 'fresh_cherries.china_gacc.cif_lc_at_sight'
+coldChain?: ColdChainTrace;     // replaces optional reeferLog/setpointC
+```
+
+### Cold chain data (Patch 01)
+
+For `MAEU-9182734`: 3 loggers × 2,880 readings (15-min interval × 24h × 10 days = T+1 to TODAY T+10). One minor excursion at T+6 day 14:32 UTC: top logger spiked to +0.4°C for 18 min — within tolerance, did not break compliance.
+
+For other refrigerated containers in transit: ~50–100 readings sampled across the trace.  
+For dry containers (walnuts, almonds): `coldChain.required = false`, no telemetry.
+
+### Anchor date
+
+```typescript
+export const getTodayDemo = () => new Date('2027-01-09T10:00:00-04:00');
+```
+
+All container ETDs re-anchored per Patch 01 §1 table to preserve T-day positions.
+
+---
+
+## 5. File Structure
+
+```
+/app
+  /layout.tsx                     # Root layout: Sidebar + Header
+  /page.tsx                       # Operations Dashboard
+  /containers/page.tsx            # Container list
+  /containers/[id]/page.tsx       # Container detail (7 or 8 tabs)
+  /purchase-orders/page.tsx
+  /purchase-orders/[id]/page.tsx
+  /importers/page.tsx + /[id]/page.tsx
+  /producers/page.tsx + /[id]/page.tsx
+  /compliance/page.tsx
+  /performance/page.tsx
+
+/components
+  /ui                             # shadcn primitives
+  /layout/Sidebar.tsx + Header.tsx
+  /containers/ContainerCard.tsx + ContainerTimeline.tsx
+                ReadinessMatrix.tsx + DocumentStatusPill.tsx
+  /alerts/AlertCard.tsx + AlertFeed.tsx + ValidationFeed.tsx
+  /map/ShipmentMap.tsx            # react-simple-maps 2D flat map
+  /kpi/KPITile.tsx + KPIStrip.tsx
+  /entity/EntityFiche.tsx
+  /cold-chain/ColdChainTab.tsx    # (Patch 01)
+              ColdChainTimeline.tsx
+              ColdChainSummaryCard.tsx
+  /compliance/ProductProfileCard.tsx   # (Patch 01)
+              CommercialProfileCard.tsx
+
+/lib/mock-data
+  containers.ts                   # 8 containers (7 original + cherries hero)
+  purchase-orders.ts
+  importers.ts
+  producers.ts
+  documents.ts
+  alerts.ts
+  validations.ts
+  agents.ts                       # 25 agents (17 original + 8 patch additions)
+  market-rules.ts
+  penalty-events.ts
+  kpis.ts
+  product-profiles.ts             # (Patch 01) 7 products
+  commercial-profiles.ts          # (Patch 01) 6 commercial profiles
+  cold-treatment-protocols.ts     # (Patch 01) 3 protocols
+  lane-profiles.ts                # (Patch 01) computeLaneProfile() + pre-computed cache
+  cold-chain-traces.ts            # (Patch 01) full trace for cherries hero + light for others
+
+/lib/utils
+  dates.ts                        # getTodayDemo(), T-day calculations
+  currency.ts
+  risk.ts
+  lane-profile.ts                 # computeLaneProfile() implementation
+
+/types/index.ts                   # All TypeScript interfaces (original + Patch 01 additions)
+```
+
+---
+
+## 6. Component Specifications
+
+### ShipmentMap (replaces globe)
+
+react-simple-maps equirectangular projection + Natural Earth TopoJSON 110m. Layers back-to-front:
+1. Background gradient radial
+2. Graticule lines (every 20°, dashed, low opacity)
+3. Country polygons (dark navy fill `#0F1A2E`, 1px sky-tinted stroke)
+4. Shipping arcs: quadratic Bezier POL→POD, colored by severity, SVG dasharray draw animation on mount
+5. Dry arcs: 1.6px stroke; Refrigerated arcs (Patch 01): thicker + subtle pulse, colored by cold-chain status (mint=compliant, amber=watch, red=breach)
+6. Origin pins: filled circle + pulsing halo
+7. Destination markers: 8×8 rotated diamond
+8. In-transit pips: animateMotion along arc path (in-transit only)
+9. Hover tooltip: container ID, buyer, product, POL→POD, ETA, cost-at-risk
+
+### ReadinessMatrix (dynamic — Patch 01 update)
+
+Props: `documents: DocumentRequirement[]`, `documentStates`, `validationResults`. Renders N×3 cells where N = `documents.length`. Walnuts hero = 15 rows, cherries hero = 18 rows.
+
+### ColdChainTab (Patch 01 — conditional)
+
+Only renders when `container.coldChain?.required === true`. Seven sections:
+1. **Status banner** — compliance progress bar (mint fill, day tick marks, animated glow in treatment), current logger readings strip (top/middle/bottom temps in mono), USD-at-risk if breached
+2. **Telemetry chart** (ColdChainTimeline) — Recharts LineChart, 3 logger lines (mint/cyan/blue), threshold band at 0.5°C (light red fill above), excursion markers (vertical dashed lines), setpoint reference line (-0.5°C faint dotted)
+3. **CA atmosphere mini-chart** — stacked area O₂/CO₂/N₂ over time with target bands
+4. **Lifecycle stepper** — Pre-cooling → PTI → Loading → Cold Treatment → Arrival → Transfer, with status + timestamps + doc links
+5. **Pre-cooling section** — pulp temp curve from harvest to loading, annotated milestones
+6. **Excursion events table** — timestamp, logger, peak temp, duration, severity, broke compliance?
+7. **Compliance projection** — "Treatment satisfies at T+16" or "BREACHED — fallback recommended"
+
+The cold treatment counter is the primary demo showpiece — smooth count-up animation on render.
+
+### Container Detail — tab order (Patch 01 update)
+
+Overview → Documents → Readiness → **Cold Chain** (conditional) → Validations → Financial → Reconciliation → History
+
+Cold Chain tab inserts between Readiness and Validations. For dry containers, the tab is entirely absent (not disabled — not rendered).
+
+### Operations Dashboard — section order
+
+Hero globe → KPI strip (5 tiles + conditional 6th "Cold treatment compliance") → Action queue + Alerts rail → **Cold Chain Status** (ColdChainSummaryCard — conditional) → This week readiness strip → Closed last week → Penalty heatmap mini
+
+### Compliance page — 3-section layout (Patch 01 update)
+
+Section 1: Market Rule Packs (5 cards, uses MarketProfileExtended)  
+Section 2: Product Profiles (7 ProductProfileCard, NEW)  
+Section 3: Commercial Profiles (6 CommercialProfileCard, NEW)  
+Section 4: Master Data Sentinel Queue (unchanged)
+
+### Agent catalog — 25 agents total
+
+Original 17 + 8 from Patch 01:
+- 6 Cold Chain Sentinels (category: monitor, tag: cold_chain): `pre_cooling_tracker`, `cold_storage_monitor`, `reefer_pti_validator`, `in_transit_telemetry_watcher`, `cold_treatment_auditor`, `arrival_cold_chain_coordinator`
+- `lc_discrepancy_catcher` (category: validate) — L/C lanes only
+- `lunar_new_year_window_watcher` (category: monitor) — China cherries/grapes seasonal
+
+Cold-chain agents appear with a `Cold Chain` badge in the Performance grid. No L0/L1/L2/L3/L4 labels anywhere in the UI.
+
+---
+
+## 7. Implementation Phases
+
+### Phase 1 — Foundation + Container Detail
+- Next.js init, Tailwind config (all design tokens), shadcn/ui
+- `types/index.ts` — all interfaces including Patch 01 additions
+- All mock data files (both hero containers, all 25 agents, all new lane profile files)
+- `getTodayDemo()` utility anchored to `2027-01-09`
+- Layout chrome: Sidebar + Header
+- Container Detail — all 7+1 tabs for both hero containers:
+  - `MSCU-7842156`: 7 tabs, no Cold Chain tab (dry cargo)
+  - `MAEU-9182734`: 8 tabs including fully populated Cold Chain tab with live telemetry chart
+- Components: ContainerTimeline, ReadinessMatrix (dynamic), AlertCard, ValidationFeed, DocumentStatusPill, ColdChainTab, ColdChainTimeline
+
+### Phase 2 — Operations Dashboard
+- ShipmentMap (react-simple-maps, Natural Earth TopoJSON, styled to design tokens)
+- KPIStrip with conditional cold-chain tile
+- Action queue (ContainerCard with mini timelines) + Alerts rail
+- ColdChainSummaryCard + Cold Chain Status section
+- Readiness strip, closed last week table, penalty heatmap mini
+
+### Phase 3 — Remaining surfaces
+- Containers list (filterable table, URL params)
+- Purchase Orders list + detail
+- Importers + Producers (EntityFiche template)
+- Compliance page (3 new sections: ProductProfileCard, CommercialProfileCard, existing Market Rule Packs updated to MarketProfileExtended)
+
+### Phase 4 — Performance + Polish
+- Performance page (25 agents, cold-chain heatmap rows, cold-chain insights, cold incidents KPI)
+- Cmd+K command palette
+- Framer Motion transitions, count-up animations, alert pulses
+- Conditional rendering audit: pure-walnuts mode must look identical to original spec
+
+---
+
+## 8. Key Constraints
+
+- **No cold-chain UI without refrigerated containers.** Every cold-chain element (tab, KPI tile, dashboard section, heatmap rows) must render conditionally. A pure-walnuts demo shows nothing cold-chain-related.
+- **`computeLaneProfile()` must be data-only.** No hardcoded per-product/market conditionals. Failure here means the Lane Profile abstraction failed.
+- **Walnuts hero is the regression test.** After any patch work, `MSCU-7842156` must work exactly as before (7 tabs, no Cold Chain tab, 15 docs in Readiness Matrix).
+- **Numbers are sacred.** USD values, weights, temps, IDs always in JetBrains Mono with thousand separators and currency codes.
+- **No AI tone.** Agents are infrastructure. Users see outcomes (alerts, validations, KPIs), not "AI is thinking."
+- **English UI only.** Document content in source language is fine; UI chrome is English.
+- **No emojis.** Anywhere.
+
+---
+
+## 9. Definition of Done
+
+Original spec §17 + Patch 01 §16:
+
+1. Both hero containers richly populated at their respective detail pages
+2. `MAEU-9182734` Cold Chain tab: live telemetry chart (3 loggers, 10 days), compliance counter animated, 1 excursion event shown
+3. `MSCU-7842156` unchanged: 7 tabs, no Cold Chain tab, 15-document Readiness Matrix
+4. Operations Dashboard: globe with ≥7 arcs (refrigerated arcs styled distinctly), KPI strip, action queue ≥5 cards, Cold Chain Status section with ≥2 refrigerated containers
+5. Compliance page: 3 sections (Market Rules, Product Profiles ≥7 cards, Commercial Profiles ≥6 cards)
+6. Performance page: 25 agents in Digital Team grid with cold-chain badge, cold-chain penalty rows, 3 cold-chain insights
+7. Readiness Matrix dynamic: walnuts hero = 15 rows, cherries hero = 18 rows
+8. Cmd+K opens command palette
+9. Visual design matches tokens: dark navy + mint, glassmorphism, mono numbers
+10. No L0/L1/L2/L3/L4 layer language anywhere in UI copy
+11. Lighthouse Performance ≥80 on home page
