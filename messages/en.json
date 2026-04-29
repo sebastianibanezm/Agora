@@ -6,6 +6,7 @@
     "importers": "Importers",
     "producers": "Producers",
     "compliance": "Compliance",
+    "documents": "Documents",
     "performance": "Performance",
     "approvalQueue": "Approval Queue",
     "approvalQueueSoon": "Available in V3",
@@ -360,5 +361,85 @@
     "languageEs": "Español",
     "languageEn": "English",
     "moreSoon": "More settings coming soon"
+  },
+  "documents": {
+    "title": "Documents",
+    "all": "All",
+    "noDocumentsOfType": "No documents of this type",
+    "uploadFirst": "Upload your first document",
+    "categories": {
+      "commercial": "Commercial",
+      "transport": "Transport",
+      "phytosanitary": "Phytosanitary",
+      "customs": "Customs"
+    },
+    "types": {
+      "commercial_invoice": "Commercial Invoice",
+      "packing_list": "Packing List",
+      "lc_compliance_letter": "Letter of Credit",
+      "bill_of_lading": "Bill of Lading",
+      "dus": "DUS",
+      "sag_export_auth": "SAG Export Auth",
+      "cold_treatment_cert": "Cold Treatment Cert",
+      "certificate_of_origin": "Certificate of Origin"
+    },
+    "statuses": {
+      "draft": "Draft",
+      "submitted": "Submitted",
+      "validating": "Validating",
+      "under_review": "Under Review",
+      "approved": "Approved",
+      "rejected": "Rejected"
+    },
+    "modal": {
+      "overview": "Overview",
+      "flags": "Validation Flags",
+      "document": "Document",
+      "activity": "Activity & Workflow",
+      "approve": "Approve",
+      "reject": "Reject — send back to draft",
+      "reopen": "Reopen as draft",
+      "addComment": "Add comment",
+      "submit": "Submit for validation",
+      "download": "Download PDF",
+      "replace": "Replace file",
+      "processing": "Processing…"
+    },
+    "provenance": {
+      "fromPo": "from {{id}}",
+      "fromContainer": "from {{id}}"
+    },
+    "section": {
+      "poDocuments": "PO documents",
+      "containerDocuments": "Container documents",
+      "summaryApproved": "{n} approved",
+      "summaryValidating": "{n} validating",
+      "summaryRejected": "{n} rejected",
+      "summaryDraft": "{n} draft"
+    },
+    "table": {
+      "document": "Document",
+      "type": "Type",
+      "status": "Status",
+      "issued": "Issued",
+      "due": "Due"
+    },
+    "upload": {
+      "trigger": "Upload document",
+      "stepFile": "Select file",
+      "stepType": "Document type",
+      "stepOwner": "Belongs to",
+      "stepLinks": "Also visible in",
+      "stepLinksHint": "Optional — select entities where this document should also appear.",
+      "next": "Next",
+      "back": "← Back",
+      "ownerPo": "Purchase Order",
+      "ownerContainer": "Container",
+      "placeholderFile": "Select file…",
+      "placeholderType": "Select type…",
+      "placeholderOwner": "Select…",
+      "confirm": "Confirm",
+      "cancel": "Cancel"
+    }
   }
 }

@@ -6,6 +6,7 @@
     "importers": "Importadores",
     "producers": "Productores",
     "compliance": "Cumplimiento",
+    "documents": "Documentos",
     "performance": "Rendimiento",
     "approvalQueue": "Cola de Aprobación",
     "approvalQueueSoon": "Disponible en V3",
@@ -360,5 +361,85 @@
     "languageEs": "Español",
     "languageEn": "English",
     "moreSoon": "Más ajustes próximamente"
+  },
+  "documents": {
+    "title": "Documentos",
+    "all": "Todo",
+    "noDocumentsOfType": "No hay documentos de este tipo",
+    "uploadFirst": "Sube tu primer documento",
+    "categories": {
+      "commercial": "Comercial",
+      "transport": "Transporte",
+      "phytosanitary": "Fitosanitario",
+      "customs": "Aduanas"
+    },
+    "types": {
+      "commercial_invoice": "Factura Comercial",
+      "packing_list": "Packing List",
+      "lc_compliance_letter": "Carta de Crédito",
+      "bill_of_lading": "Conocimiento de Embarque",
+      "dus": "DUS",
+      "sag_export_auth": "Autorización SAG",
+      "cold_treatment_cert": "Cert. Tratamiento Frío",
+      "certificate_of_origin": "Certificado de Origen"
+    },
+    "statuses": {
+      "draft": "Borrador",
+      "submitted": "Enviado",
+      "validating": "Validando",
+      "under_review": "En Revisión",
+      "approved": "Aprobado",
+      "rejected": "Rechazado"
+    },
+    "modal": {
+      "overview": "Resumen",
+      "flags": "Alertas de Validación",
+      "document": "Documento",
+      "activity": "Actividad y Flujo",
+      "approve": "Aprobar",
+      "reject": "Rechazar — volver a borrador",
+      "reopen": "Volver a borrador",
+      "addComment": "Agregar comentario",
+      "submit": "Enviar para validación",
+      "download": "Descargar PDF",
+      "replace": "Reemplazar archivo",
+      "processing": "Procesando…"
+    },
+    "provenance": {
+      "fromPo": "de {{id}}",
+      "fromContainer": "de {{id}}"
+    },
+    "section": {
+      "poDocuments": "Documentos del pedido",
+      "containerDocuments": "Documentos del contenedor",
+      "summaryApproved": "{n} aprobados",
+      "summaryValidating": "{n} validando",
+      "summaryRejected": "{n} rechazados",
+      "summaryDraft": "{n} borradores"
+    },
+    "table": {
+      "document": "Documento",
+      "type": "Tipo",
+      "status": "Estado",
+      "issued": "Creado",
+      "due": "Vence"
+    },
+    "upload": {
+      "trigger": "Subir documento",
+      "stepFile": "Seleccionar archivo",
+      "stepType": "Tipo de documento",
+      "stepOwner": "Asignar a",
+      "stepLinks": "También visible en",
+      "stepLinksHint": "Opcional — selecciona las entidades donde también debe aparecer este documento.",
+      "next": "Siguiente",
+      "back": "← Volver",
+      "ownerPo": "Orden de Compra",
+      "ownerContainer": "Contenedor",
+      "placeholderFile": "Seleccionar archivo…",
+      "placeholderType": "Seleccionar tipo…",
+      "placeholderOwner": "Seleccionar…",
+      "confirm": "Confirmar",
+      "cancel": "Cancelar"
+    }
   }
 }
