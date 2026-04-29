@@ -65,7 +65,7 @@ Full-width panel, `background: #080E1A`, 320px tall.
 - Right: severity count row computed from containers: `IN TRANSIT {n} · WATCH {n} · ACTION {n} · CRITICAL {n}` (10px mono)
 
 ### Map Body
-`react-simple-maps` `ComposableMap` with `Mercator` or equirectangular projection + Natural Earth TopoJSON 110m from `react-simple-maps` package. Layers back-to-front:
+`react-simple-maps` `ComposableMap` with `Mercator` or equirectangular projection. Map data via CDN (see §3 Package note above). Layers back-to-front:
 
 1. Background fill `#080E1A`
 2. Graticule lines — every 20°, `rgba(255,255,255,0.04)`, 0.5px
@@ -457,7 +457,7 @@ CSS variable note: use Tailwind utility classes (e.g., `text-severity-crit`, `te
 
 ## 11. Definition of Done
 
-- [ ] `pnpm add react-simple-maps` completed — package ships its own types, no separate `@types/` install needed
+- [ ] `pnpm add react-simple-maps && pnpm add -D @types/react-simple-maps` completed
 - [ ] Map renders ≥7 animated arcs; reefer arcs pulse; motion pips animate; hover tooltip works
 - [ ] KPI strip: exactly 5 tiles, sparklines span full tile width
 - [ ] Action queue: 5 cards ordered by urgency, each with T-day timeline + cost-at-risk + due badge
