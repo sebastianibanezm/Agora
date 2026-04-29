@@ -43,7 +43,10 @@ export function AlertsRail({ alerts }: Props) {
           const pillCls = SEV_PILL_CLASSES[alert.severity] ?? SEV_PILL_CLASSES['info']!;
           const sevLabel = SEV_LABELS[alert.severity] ?? alert.severity.toUpperCase();
           return (
-            <div key={alert.id} data-testid="alert-row" className="px-4 py-3 flex flex-col gap-1">
+            <div key={alert.id} data-testid="alert-row" className="px-4 py-3 flex flex-col gap-1" style={alert.severity === 'crit' ? {
+              animation: 'pulse-crit 1.5s ease-in-out infinite',
+              border: '1px solid',
+            } : undefined}>
               <div className="flex items-center justify-between">
                 <span className="font-mono text-[9px] text-ink-3 tracking-wider uppercase">
                   {alert.category.replace(/_/g, ' ')}

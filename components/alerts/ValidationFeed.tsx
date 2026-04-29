@@ -42,6 +42,7 @@ export function ValidationFeed({ validations }: { validations: Validation[] }) {
             'rounded-md border border-white/10 bg-bg-2/50 border-l-4 px-4 py-3 flex items-start gap-3',
             SEV_BORDER[v.severity],
           )}
+          style={v.severity === 'crit' ? { animation: 'pulse-crit 1.5s ease-in-out infinite' } : undefined}
         >
           <div className="font-mono text-xs text-ink-3 shrink-0 pt-0.5">{formatTs(v.detectedAt)}</div>
           <div className="flex-1 text-sm text-ink-1">{t(v.message)}</div>

@@ -199,6 +199,11 @@ body::after {
   -webkit-backdrop-filter: blur(12px);
 }
 
+@keyframes pulse-crit {
+  0%, 100% { border-color: var(--color-severity-crit); }
+  50%       { border-color: transparent; }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
