@@ -80,13 +80,15 @@ New file `lib/mock-data/agent-statuses.ts` provides a static last-action string 
 export type AgentStatus = 'active' | 'idle' | 'alert';
 
 export interface AgentStatusEntry {
-  agentId: string;
+  agentId: string;   // must match an id in lib/mock-data/agents.ts exactly
   status: AgentStatus;
-  lastAction: string; // short, already-translated display string key
+  lastAction: string; // pre-resolved display string (not an i18n key) — bilingual phrasing not required for mock data
 }
 ```
 
-The `lastAction` field is an i18n key resolved via the `performance` namespace. Each of the 25 agents gets an entry.
+`lastAction` is a **raw display string stored in mock data**, not an i18n key. It is rendered directly in `AgentCard` without a translation call. This keeps mock data self-contained and avoids requiring 25 translation keys per locale. The strings may be in Spanish (matching the default locale).
+
+Each of the 25 agents gets an entry. The `agentId` values must exactly match the `id` fields in `lib/mock-data/agents.ts` (the canonical source of agent IDs).
 
 ### 2.3 New KPI — `cold_incidents`
 
@@ -133,19 +135,30 @@ The bottom split uses `display: grid; grid-template-columns: 1fr 300px; align-it
 
 Reuses existing `KPIStrip` / `KPITile` components. Five tiles on this page:
 
-| KPI | Value | Unit |
-|---|---|---|
-| `avoided_penalties` | $14,200 | usd |
-| `active_agents` | 25 | count |
-| `cold_incidents` | 2 | count (warning color, `deltaPositiveIsGood: false`) |
-| `doc_auto_gen_rate` | 87% | pct |
-| `avg_cycle_time` | 58 | days |
+| KPI | Value | Unit | Label key source |
+|---|---|---|---|
+| `avoided_penalties` | $14,200 | usd | `dashboard.kpiAvoidedPenalties` (existing — no change) |
+| `active_agents` | 25 | count | `performance.kpiActiveAgents` (new) |
+| `cold_incidents` | 2 | count | `performance.kpiColdIncidents` (new) |
+| `doc_auto_gen_rate` | 87% | pct | `dashboard.kpiDocAutoGenRate` (existing — no change) |
+| `avg_cycle_time` | 58 | days | `dashboard.kpiAvgCycleTime` (existing — no change) |
+
+The performance page reuses the **same KPI objects** from `lib/mock-data/kpis.ts` — no duplication. Existing KPI `labelKey` values point to the `dashboard.*` namespace and render correctly on both the ops dashboard and the performance page. Only `active_agents` and `cold_incidents` are new and require `performance.*` keys.
 
 `cold_incidents` renders its value in `--color-severity-risk` (orange) instead of mint when value > 0.
 
 ### 3.4 Agent grid (`AgentGrid` + `AgentCard`)
 
 **Grid:** `display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px`
+
+**`AgentGrid` props:**
+```typescript
+interface AgentGridProps {
+  agents: Agent[];
+  statuses: AgentStatusEntry[];
+  reefers: Container[]; // containers.filter(c => c.coldChain?.required === true)
+}
+```
 
 **`AgentCard` props:**
 ```typescript
@@ -155,9 +168,11 @@ interface AgentCardProps {
 }
 ```
 
+`AgentCard` does not receive `reefers` — it has no visibility logic. **Hiding cold-sentinel cards is the responsibility of `AgentGrid`**, which filters out agents where `agent.tags.includes('cold_chain')` when `reefers.length === 0` before rendering. The remaining cards reflow naturally in the grid.
+
 **Card anatomy:**
 - Top row: status dot (6px circle) + agent name + optional ❄ badge (cold-chain agents only)
-- Bottom: `lastAction` string in monospace, ink-4 color
+- Bottom: `lastAction` raw string in monospace, ink-4 color
 
 **Status dot colors:**
 - `active` → `--color-mint-500` (#00E696)
@@ -171,8 +186,6 @@ interface AgentCardProps {
 - Agent name color: `#7DD3FC`
 - Status dot color when active: `#7DD3FC`
 - ❄ badge visible
-
-**Conditional rendering:** Cold-chain sentinel cards are hidden entirely when no reefer containers are active (i.e., `containers.filter(c => c.coldChain?.required).length === 0`). The grid reflows naturally.
 
 ### 3.5 Penalty heatmap (bottom left)
 
@@ -218,6 +231,8 @@ function fmtSaved(usd: number): string {
 ```
 
 Legend below heatmap: `$0 ░▒▓█ $3k+`
+
+**Footer "OPEN PERFORMANCE →" link:** The existing `PenaltyHeatmap` component renders a footer link to `/performance`. Add a `hidePerformanceLink?: boolean` prop (default `false`). Pass `hidePerformanceLink={true}` when rendering the heatmap on the `/performance` page itself to prevent a self-referencing anchor. The dashboard usage passes no prop (link remains visible).
 
 ---
 
@@ -267,7 +282,7 @@ function useCountUp(target: number, duration = 1200): number {
 }
 ```
 
-Applied inside `KPITile` to the displayed value. Dollar formatting and unit suffixes applied after animation completes. Works for all unit types (`count`, `usd`, `pct`, `days`).
+Applied inside `KPITile` to the displayed value. The same formatting function that produces the final display string is applied at every animation frame — intermediate values are formatted identically to the final value. For example, a USD value of $14,200 counts up through `$0`, `$1,420`, `$7,100`, `$14,200` using the same `toLocaleString()` call already in `KPITile`. Works for all unit types (`count`, `usd`, `pct`, `days`).
 
 ### 4.3 Alert pulse
 
@@ -299,7 +314,7 @@ Cold-chain UI must be invisible when no reefer containers are active (pure-walnu
 | Agent grid cold-sentinel cards (`AgentCard`) | `reefers.length > 0` | New — must implement |
 | `ColdChainPanel` in `/performance` | `reefers.length > 0` | New — must implement |
 
-The `reefers` array is derived as `containers.filter(c => c.coldChain?.required === true)` and passed as a prop. No global state — prop drilling is sufficient.
+The `reefers` array is derived consistently everywhere as `containers.filter(c => c.coldChain?.required === true)` and passed as a prop. No global state — prop drilling is sufficient. The `=== true` explicit check is used throughout (not a loose truthy check) to be consistent with existing usage in `app/page.tsx`.
 
 ### 5.2 i18n audit
 
@@ -307,9 +322,10 @@ The `reefers` array is derived as `containers.filter(c => c.coldChain?.required 
 
 Keys needed:
 - `performance.title`
+- `performance.kpiActiveAgents`
 - `performance.kpiColdIncidents`
 - `performance.digitalTeam` (section title)
-- `performance.agentsCount` (meta: "25 agents · 6 cold-chain sentinels")
+- `performance.agentsCount` (meta: "{count} agents · {coldCount} cold-chain sentinels")
 - `performance.dollarsSaved` (heatmap section title)
 - `performance.seasonMeta`
 - `performance.coldChainTitle`
@@ -317,7 +333,8 @@ Keys needed:
 - `performance.sentinelStatus`
 - `performance.excursions` / `performance.incidents` / `performance.compliance`
 - `performance.onTrack`
-- 25 × `performance.agentLastAction.<agentId>` keys
+
+Note: agent `lastAction` strings are raw display strings in mock data, not i18n keys — no translation keys needed for them.
 
 **Audit pass:** After all new components are built, grep for hardcoded Spanish and English strings in:
 - `app/performance/`
