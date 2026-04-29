@@ -10,6 +10,8 @@ export const alerts: Alert[] = [
     raisedAt: '2027-01-09T08:00:00-04:00',
     raisedBy: 'doc_deadline_guardian',
     actionLabelKey: 'alerts.fileDusNow',
+    category: 'shipment_doc',
+    amountUsd: 0,
   },
   {
     id: 'ALT-002',
@@ -19,6 +21,7 @@ export const alerts: Alert[] = [
     bodyKey: 'alerts.coldTreatmentDay10Body',
     raisedAt: '2027-01-09T10:00:00-04:00',
     raisedBy: 'cold_treatment_auditor',
+    category: 'market_compliance',
   },
   {
     id: 'ALT-003',
@@ -28,6 +31,7 @@ export const alerts: Alert[] = [
     bodyKey: 'alerts.excursionResolvedBody',
     raisedAt: '2027-01-05T15:00:00Z',
     raisedBy: 'in_transit_telemetry_watcher',
+    category: 'market_compliance',
   },
   {
     id: 'ALT-004',
@@ -37,5 +41,7 @@ export const alerts: Alert[] = [
     bodyKey: 'alerts.lcDiscrepancyBody',
     raisedAt: '2027-01-08T14:00:00-04:00',
     raisedBy: 'lc_discrepancy_catcher',
+    category: 'payment_aging',
+    amountUsd: 5000,
   },
 ];

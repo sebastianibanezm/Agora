@@ -199,6 +199,10 @@ export interface Container {
   status: 'planning' | 'docs_in_progress' | 'in_treatment' | 'at_sea' | 'arrived' | 'cleared';
   coldChain?: ColdChainTrace;
   costAtRiskUsd?: number;
+  carrier: string;
+  polCoords: [number, number];
+  podCoords: [number, number];
+  timelineNodes?: Array<{ tDay: number; status: 'done' | 'crit' | 'warn' | 'future' }>;
 }
 
 // ===== Other entities =====
@@ -213,6 +217,10 @@ export interface Agent {
   activeOnLanes: string[];
 }
 
+export type AlertCategory =
+  | 'shipment_doc' | 'market_compliance' | 'bl_switch_window'
+  | 'payment_aging' | 'free_time_tracker';
+
 export interface Alert {
   id: string;
   containerId?: string;
@@ -223,6 +231,8 @@ export interface Alert {
   raisedBy: AgentId;
   actionLabelKey?: string;
   dismissed?: boolean;
+  category: AlertCategory;
+  amountUsd?: number;
 }
 
 export interface PurchaseOrder {
@@ -263,6 +273,8 @@ export interface KPI {
   unit: 'usd' | 'pct' | 'count' | 'days' | 'minutes';
   deltaPct?: number;
   severity?: Severity;
+  sparkline: number[];
+  deltaPositiveIsGood?: boolean;
 }
 
 export interface PenaltyEvent {
@@ -282,4 +294,21 @@ export interface DocumentInstance {
   fileUrl?: string;
   issuer?: string;
   number?: string;
+}
+
+export interface ClosedContainer {
+  id: string;
+  buyerName: string;
+  cycledays: number;
+  deltaAvgDays: number;
+  penaltyUsd: number;
+}
+
+export type PenaltyEventType =
+  | 'refumigation' | 'phyto_reissue' | 'vgm_late' | 'dus_error'
+  | 'bl_correction' | 'demurrage' | 'detention' | 'bank_discrepancy';
+
+export interface PenaltyAvoidedRow {
+  buyerName: string;
+  counts: Record<PenaltyEventType, number>;
 }

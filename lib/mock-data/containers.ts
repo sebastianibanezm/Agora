@@ -23,6 +23,9 @@ export const containers: Container[] = [
     cutoffAt: '2027-01-10T04:00:00-04:00',
     status: 'docs_in_progress',
     costAtRiskUsd: 8_500,
+    carrier: 'Schiber Lines',
+    polCoords: [-33.3489, -70.6693],
+    podCoords: [19.0176, 72.8479],
   },
   {
     id: 'MAEU-9182734',
@@ -45,6 +48,9 @@ export const containers: Container[] = [
     status: 'in_treatment',
     coldChain: cherriesTrace,
     costAtRiskUsd: 0,
+    carrier: 'Maersk',
+    polCoords: [-33.3489, -70.6693],
+    podCoords: [30.4789, 121.9957],
   },
   {
     id: 'CMAU-9281744',
@@ -67,5 +73,8 @@ export const containers: Container[] = [
     status: 'at_sea',
     coldChain: grapesTrace,
     costAtRiskUsd: 0,
+    carrier: 'Cosco',
+    polCoords: [-33.3489, -70.6693],
+    podCoords: [30.4789, 121.9957],
   },
 ];

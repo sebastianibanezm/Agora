@@ -2,8 +2,9 @@ import { describe, it, expect, expectTypeOf } from 'vitest';
 import type {
   Container, ColdChainTrace, LaneProfile, ProductId, IncotermPaymentId,
   ProductProfile, MarketProfileExtended, CommercialProfile, DocumentRequirement,
-  Agent, Alert, Validation, PurchaseOrder, Importer, Producer, KPI, PenaltyEvent,
+  Agent, Alert, AlertCategory, Validation, PurchaseOrder, Importer, Producer, KPI, PenaltyEvent,
   DataLogger, CaReading, ExcursionEvent, PreCoolingRecord, ReeferPtiRecord, ColdTreatmentProtocol,
+  ClosedContainer, PenaltyAvoidedRow, PenaltyEventType,
 } from '@/types';
 
 describe('types', () => {
@@ -32,5 +33,42 @@ describe('types', () => {
   });
   it('LaneProfile has documentSet array and composed fields', () => {
     expectTypeOf<LaneProfile['documentSet']>().toEqualTypeOf<DocumentRequirement[]>();
+  });
+
+  it('Container has Phase 2 map fields', () => {
+    expectTypeOf<Container['carrier']>().toEqualTypeOf<string>();
+    expectTypeOf<Container['polCoords']>().toEqualTypeOf<[number, number]>();
+    expectTypeOf<Container['podCoords']>().toEqualTypeOf<[number, number]>();
+  });
+
+  it('Container has optional timelineNodes', () => {
+    expectTypeOf<Container['timelineNodes']>().toEqualTypeOf<
+      Array<{ tDay: number; status: 'done' | 'crit' | 'warn' | 'future' }> | undefined
+    >();
+  });
+
+  it('KPI has sparkline field', () => {
+    expectTypeOf<KPI['sparkline']>().toEqualTypeOf<number[]>();
+  });
+
+  it('KPI has optional deltaPositiveIsGood field', () => {
+    expectTypeOf<KPI['deltaPositiveIsGood']>().toEqualTypeOf<boolean | undefined>();
+  });
+
+  it('Alert has category and optional amountUsd', () => {
+    expectTypeOf<Alert['category']>().toEqualTypeOf<AlertCategory>();
+    expectTypeOf<Alert['amountUsd']>().toEqualTypeOf<number | undefined>();
+  });
+
+  it('ClosedContainer has all required fields', () => {
+    expectTypeOf<ClosedContainer['id']>().toEqualTypeOf<string>();
+    expectTypeOf<ClosedContainer['cycledays']>().toEqualTypeOf<number>();
+    expectTypeOf<ClosedContainer['deltaAvgDays']>().toEqualTypeOf<number>();
+    expectTypeOf<ClosedContainer['penaltyUsd']>().toEqualTypeOf<number>();
+  });
+
+  it('PenaltyAvoidedRow has buyerName and counts map', () => {
+    expectTypeOf<PenaltyAvoidedRow['buyerName']>().toEqualTypeOf<string>();
+    expectTypeOf<PenaltyAvoidedRow['counts']>().toEqualTypeOf<Record<PenaltyEventType, number>>();
   });
 });
