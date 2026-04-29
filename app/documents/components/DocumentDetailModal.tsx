@@ -8,6 +8,8 @@ import { DocumentOverview } from './DocumentOverview'
 import { DocumentFlags } from './DocumentFlags'
 import { DocumentTimeline } from './DocumentTimeline'
 
+const SKELETON_WIDTHS = ['72%', '88%', '65%', '80%']
+
 interface Props {
   doc: ShipmentDocument
   onClose: () => void
@@ -43,6 +45,7 @@ export function DocumentDetailModal({ doc, onClose }: Props) {
         className="flex w-full max-w-4xl max-h-[90vh] rounded-xl overflow-hidden"
         style={{ background: 'var(--color-bg-1)', border: '1px solid var(--line-soft)' }}
         role="dialog"
+        aria-modal="true"
         aria-label={doc.name}
       >
         {/* LEFT COLUMN */}
@@ -108,8 +111,8 @@ export function DocumentDetailModal({ doc, onClose }: Props) {
               <div className="text-[11px] font-semibold text-ink-1 mb-1">{doc.name.toUpperCase()}</div>
               <div className="font-mono text-[9px] text-ink-4 mb-4">{doc.id}</div>
               <div className="space-y-2 mb-4">
-                {Object.entries(doc.overview).slice(0, 4).map(([k]) => (
-                  <div key={k} className="h-2 rounded" style={{ background: 'var(--color-bg-3)', width: `${60 + Math.random() * 30}%` }} />
+                {Object.entries(doc.overview).slice(0, 4).map(([k], i) => (
+                  <div key={k} className="h-2 rounded" style={{ background: 'var(--color-bg-3)', width: SKELETON_WIDTHS[i % SKELETON_WIDTHS.length] }} />
                 ))}
               </div>
               <div className="flex gap-2 mt-4">
@@ -206,7 +209,7 @@ function ActionStrip({
         </button>
       )}
       {(status === 'approved' || status === 'rejected') && (
-        <button className="text-center text-[10px] text-ink-4 hover:text-ink-2">
+        <button type="button" onClick={() => {}} className="text-center text-[10px] text-ink-4 hover:text-ink-2">
           {t('modal.addComment')}
         </button>
       )}
