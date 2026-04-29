@@ -73,7 +73,7 @@ export function DocumentsSection({ ownerId, ownerType, perspective }: Props) {
       {[...linkedGroups.entries()].map(([groupId, docs]) => (
         <div key={groupId} className="mb-4 ml-4">
           <div className="text-[9px] uppercase tracking-wider text-ink-4 mb-2">
-            ↳ {groupId} · {docs[0]?.name}
+            ↳ {groupId}
           </div>
           <DocTable
             docs={docs}
