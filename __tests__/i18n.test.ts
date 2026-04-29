@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 describe('i18n', () => {
   const es = JSON.parse(readFileSync('messages/es.json', 'utf8'));
   const en = JSON.parse(readFileSync('messages/en.json', 'utf8'));
-  const requiredNamespaces = ['nav','dashboard','containers','coldChain','agents','settings','common','docs','validations','tabs'];
+  const requiredNamespaces = ['nav','dashboard','containers','coldChain','agents','settings','common','docs','validations','tabs','performance'];
   it('both locales have all required namespaces', () => {
     for (const ns of requiredNamespaces) {
       expect(es, `es missing namespace: ${ns}`).toHaveProperty(ns);

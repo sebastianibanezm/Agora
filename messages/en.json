@@ -441,5 +441,21 @@
       "confirm": "Confirm",
       "cancel": "Cancel"
     }
+  },
+  "performance": {
+    "title": "Performance",
+    "kpiActiveAgents": "Active Agents",
+    "kpiColdIncidents": "Cold Chain Incidents",
+    "digitalTeam": "Digital Team",
+    "agentsCount": "{count} agents · {coldCount} cold-chain sentinels",
+    "dollarsSaved": "Dollars Saved — Penalties Avoided",
+    "seasonMeta": "Season 2026–27 · USD · by buyer × type",
+    "coldChainTitle": "Cold Chain",
+    "coldChainActive": "{count} active",
+    "sentinelStatus": "Sentinel Status",
+    "excursions": "Excursions",
+    "incidents": "Incidents",
+    "compliance": "Compliance",
+    "onTrack": "ON TRACK"
   }
 }

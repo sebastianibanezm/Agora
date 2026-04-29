@@ -441,5 +441,21 @@
       "confirm": "Confirmar",
       "cancel": "Cancelar"
     }
+  },
+  "performance": {
+    "title": "Rendimiento",
+    "kpiActiveAgents": "Agentes Activos",
+    "kpiColdIncidents": "Incidentes Cadena de Frío",
+    "digitalTeam": "Equipo Digital",
+    "agentsCount": "{count} agentes · {coldCount} centinelas cadena de frío",
+    "dollarsSaved": "Dólares Ahorrados — Penalidades Evitadas",
+    "seasonMeta": "Temporada 2026–27 · USD · por comprador × tipo",
+    "coldChainTitle": "Cadena de Frío",
+    "coldChainActive": "{count} activa",
+    "sentinelStatus": "Estado de Centinelas",
+    "excursions": "Excursiones",
+    "incidents": "Incidentes",
+    "compliance": "Cumplimiento",
+    "onTrack": "EN CURSO"
   }
 }
