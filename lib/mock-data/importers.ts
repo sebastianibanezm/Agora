@@ -60,7 +60,7 @@ export const importers: Importer[] = [
     activeContainers: 1,
     annualVolumeKg: 310_000,
     creditRating: 'B+',
-    avgPaymentDays: 65,
+    avgPaymentDays: 45,
     volumeHistory: [
       { season: '2023/24', volumeKg: 220_000 },
       { season: '2024/25', volumeKg: 260_000 },

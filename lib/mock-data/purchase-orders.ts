@@ -113,6 +113,7 @@ export const purchaseOrders: PurchaseOrder[] = [
     events: [
       { date: '2026-11-05', type: 'confirmed', note: 'Open account 30 days agreed' },
       { date: '2026-12-20', type: 'container_assigned', note: 'HLXU-4427109 assigned' },
+      { date: '2027-01-06', type: 'bl_issued', note: 'BL HLXU-4427109 issued' },
     ],
   },
   {
