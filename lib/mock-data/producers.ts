@@ -5,7 +5,7 @@ export const producers: Producer[] = [
     id: 'PRD-VF-MAULE',
     name: 'Valle Fresco — Maule',
     region: 'Maule',
-    products: ['walnuts_in_shell', 'walnut_kernels'],
+    products: ['walnuts_in_shell', 'walnut_kernels', 'almonds_in_shell'],
     sagId: 'SAG-MAU-00412',
     activeContainers: 2,
     avgPaymentDays: 30,
@@ -34,6 +34,15 @@ export const producers: Producer[] = [
         requiresColdChain: false,
         enabledMarkets: ['US', 'EU'],
       },
+      {
+        productId: 'almonds_in_shell',
+        name: 'Almonds in Shell',
+        hsCode: '0802.11',
+        seasonStart: 'Feb',
+        seasonEnd: 'Apr',
+        requiresColdChain: false,
+        enabledMarkets: ['IN', 'EU'],
+      },
     ],
     sagCertifications: [
       {
@@ -57,7 +66,7 @@ export const producers: Producer[] = [
     region: 'Curicó',
     products: ['fresh_cherries', 'fresh_blueberries'],
     sagId: 'SAG-CUR-00288',
-    activeContainers: 1,
+    activeContainers: 2,
     avgPaymentDays: 28,
     volumeHistory: [
       { season: '2023/24', volumeKg: 18_500 },
@@ -109,7 +118,7 @@ export const producers: Producer[] = [
     region: "O'Higgins",
     products: ['table_grapes_red', 'table_grapes_white'],
     sagId: 'SAG-OHI-00331',
-    activeContainers: 1,
+    activeContainers: 3,
     avgPaymentDays: 32,
     volumeHistory: [
       { season: '2023/24', volumeKg: 22_000 },

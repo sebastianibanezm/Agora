@@ -119,7 +119,7 @@ export const purchaseOrders: PurchaseOrder[] = [
   {
     id: 'PO-2026-0938',
     importerId: 'IMP-US-PACIFIC',
-    producerId: 'PRD-VF-MAULE',
+    producerId: 'PRD-VF-OHIGGINS',
     productId: 'table_grapes_white',
     market: 'US',
     quantityKg: 24_000,

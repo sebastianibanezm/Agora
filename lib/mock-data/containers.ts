@@ -212,7 +212,7 @@ export const containers: Container[] = [
     podCode: 'USLAX',
     podLabel: 'Los Angeles',
     importerId: 'IMP-US-PACIFIC',
-    producerId: 'PRD-VF-MAULE',
+    producerId: 'PRD-VF-OHIGGINS',
     purchaseOrderId: 'PO-2026-0938',
     weightKg: 24_000,
     valueUsd: 184_500,
