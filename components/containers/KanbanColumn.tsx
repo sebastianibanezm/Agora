@@ -13,7 +13,7 @@ interface Props {
   defaultCollapsed?: boolean;
 }
 
-export function KanbanColumn({ status: _status, label, color, containers, importers, defaultCollapsed = false }: Props) {
+export function KanbanColumn({ label, color, containers, importers, defaultCollapsed = false }: Props) {
   const [collapsed, setCollapsed] = useState(defaultCollapsed);
   const imp = (id: string) => importers.find(i => i.id === id);
 

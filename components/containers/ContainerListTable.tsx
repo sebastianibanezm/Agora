@@ -7,7 +7,7 @@ import type { Container, ContainerStatus, Importer } from '@/types';
 import { STAGES } from '@/lib/containers';
 import { formatUsd } from '@/lib/utils/currency';
 
-export function ContainerListTable({ containers, importers: _importers }: { containers: Container[]; importers: Importer[] }) {
+export function ContainerListTable({ containers, importers }: { containers: Container[]; importers: Importer[] }) {
   const t = useTranslations('containers');
   const [collapsedStages, setCollapsedStages] = useState<Set<ContainerStatus>>(new Set());
 
@@ -25,6 +25,7 @@ export function ContainerListTable({ containers, importers: _importers }: { cont
             <th className="text-left px-4 py-3 text-ink-3 font-medium">{t('id')}</th>
             <th className="text-left px-4 py-3 text-ink-3 font-medium">{t('product')}</th>
             <th className="text-left px-4 py-3 text-ink-3 font-medium">{t('route')}</th>
+            <th className="text-left px-4 py-3 text-ink-3 font-medium">Importer</th>
             <th className="text-right px-4 py-3 text-ink-3 font-medium">{t('value')}</th>
           </tr>
         </thead>
@@ -40,7 +41,7 @@ export function ContainerListTable({ containers, importers: _importers }: { cont
                   className="border-b border-white/10 bg-bg-2/30 cursor-pointer hover:bg-white/5 transition-colors"
                   onClick={() => toggle(stage.status)}
                 >
-                  <td colSpan={4} className="px-4 py-2">
+                  <td colSpan={5} className="px-4 py-2">
                     <span className="flex items-center gap-2 text-xs font-semibold text-ink-3">
                       <span
                         style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: stage.color, display: 'inline-block', flexShrink: 0 }}
@@ -64,6 +65,7 @@ export function ContainerListTable({ containers, importers: _importers }: { cont
                     </td>
                     <td className="px-4 py-3 text-ink-2">{c.productLabel}</td>
                     <td className="px-4 py-3 text-ink-3 font-mono text-xs">{c.polLabel} → {c.podLabel}</td>
+                    <td className="px-4 py-3 text-ink-3 text-xs">{importers.find(i => i.id === c.importerId)?.name ?? '—'}</td>
                     <td className="px-4 py-3 text-right font-mono text-xs text-ink-2">
                       {formatUsd(c.valueUsd, 'es')}
                     </td>

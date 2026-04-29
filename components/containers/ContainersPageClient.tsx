@@ -30,10 +30,10 @@ export function ContainersPageClient({ containers, importers }: Props) {
     const matchSearch = !q ||
       c.id.toLowerCase().includes(q) ||
       c.productLabel.toLowerCase().includes(q) ||
-      importers.find(i => i.id === c.importerId)?.name.toLowerCase().includes(q);
+      (importers.find(i => i.id === c.importerId)?.name.toLowerCase().includes(q) ?? false);
     const matchProduct = selectedProducts.length === 0 || selectedProducts.includes(c.productId);
     const matchMarket = selectedMarkets.length === 0 || selectedMarkets.includes(c.market);
-    return Boolean(matchSearch) && matchProduct && matchMarket;
+    return matchSearch && matchProduct && matchMarket;
   }), [containers, importers, search, selectedProducts, selectedMarkets]);
 
   const toggleProduct = (p: string) =>
