@@ -382,6 +382,14 @@ export interface PenaltyAvoidedRow {
   savedUsd: Record<PenaltyEventType, number>;
 }
 
+export type AgentStatus = 'active' | 'idle' | 'alert';
+
+export interface AgentStatusEntry {
+  agentId: string;
+  status: AgentStatus;
+  lastAction: string; // raw display string in Spanish — not an i18n key
+}
+
 // ===== Phase 4: Workflow Document System =====
 
 export type DocumentCategory =
