@@ -50,7 +50,7 @@ Three changes to the existing header:
 ## 3. Shipment Map
 
 **Component:** `components/map/ShipmentMap.tsx` (new — `'use client'` required)
-**Package:** `react-simple-maps` — must be added to `package.json` (`pnpm add react-simple-maps`)
+**Package:** `react-simple-maps` — must be added (`pnpm add react-simple-maps`). The package does **not** bundle map data. Use the CDN URL approach: pass `geography="https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json"` directly to `<Geographies>`. This requires no extra install and no `tsconfig.json` changes.
 
 ### Layout
 Full-width panel, `background: #080E1A`, 320px tall.
