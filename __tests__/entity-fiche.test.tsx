@@ -3,6 +3,8 @@ import { describe, it, expect } from 'vitest';
 import { NextIntlClientProvider } from 'next-intl';
 import en from '../messages/en.json';
 import { EntityFiche } from '@/components/entity-fiche/EntityFiche';
+import { ProducerSpecificSections } from '@/components/entity-fiche/ProducerSpecificSections';
+import { producers } from '@/lib/mock-data/producers';
 
 const wrap = (ui: React.ReactNode) => (
   <NextIntlClientProvider locale="en" messages={en as any}>{ui}</NextIntlClientProvider>
@@ -42,5 +44,30 @@ describe('EntityFiche shell', () => {
     ));
     expect(screen.getByText('Volume')).toBeInTheDocument();
     expect(screen.getByText('Avg Payment')).toBeInTheDocument();
+  });
+});
+
+describe('EntityFiche with ProducerSpecificSections', () => {
+  it('renders without errors with producer children', () => {
+    const prod = producers[0]!;
+    render(wrap(
+      <EntityFiche name={prod.name} pills={[]} kpis={[
+        { label: 'A', value: '1', sub: '' },
+        { label: 'B', value: '2', sub: '' },
+        { label: 'C', value: '3', sub: '' },
+        { label: 'D', value: '4', sub: '' },
+      ]} pos={[]} containers={[]} poColumns={[]} containerColumns={[]}>
+        <ProducerSpecificSections producer={prod} />
+      </EntityFiche>
+    ));
+    expect(screen.getByText(prod.name)).toBeInTheDocument();
+  });
+
+  it('renders SAG certifications list', () => {
+    const prod = producers[0]!;
+    render(wrap(<ProducerSpecificSections producer={prod} />));
+    prod.sagCertifications.forEach(cert => {
+      expect(screen.getByText(cert.name)).toBeInTheDocument();
+    });
   });
 });
