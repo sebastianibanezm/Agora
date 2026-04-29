@@ -95,6 +95,10 @@ it('KPI has sparkline field', () => {
   expectTypeOf<KPI['sparkline']>().toEqualTypeOf<number[]>();
 });
 
+it('KPI has optional deltaPositiveIsGood field', () => {
+  expectTypeOf<KPI['deltaPositiveIsGood']>().toEqualTypeOf<boolean | undefined>();
+});
+
 it('Alert has category and optional amountUsd', () => {
   expectTypeOf<Alert['category']>().toEqualTypeOf<AlertCategory>();
   expectTypeOf<Alert['amountUsd']>().toEqualTypeOf<number | undefined>();
@@ -133,6 +137,7 @@ timelineNodes?: Array<{ tDay: number; status: 'done' | 'crit' | 'warn' | 'future
 In the `KPI` interface add:
 ```typescript
 sparkline: number[];
+deltaPositiveIsGood?: boolean; // default true; set false for KPIs where decrease is good (demurrage, cycle time)
 ```
 
 Add `AlertCategory` type before `Alert`:
@@ -477,8 +482,8 @@ import type { KPI } from '@/types';
 export const kpis: KPI[] = [
   { id: 'active_shipments',   labelKey: 'dashboard.kpiActiveShipments',   value: 12,     unit: 'count', deltaPct:  2,  sparkline: [4,6,5,8,7,9,10,12] },  // 12 matches design handoff (not spec's early placeholder value of 3)
   { id: 'avoided_penalties',  labelKey: 'dashboard.kpiAvoidedPenalties',  value: 14_200, unit: 'usd',   deltaPct:  18, sparkline: [3,5,4,7,6,9,8,14] },
-  { id: 'demurrage_incurred', labelKey: 'dashboard.kpiDemurrageIncurred', value: 1_080,  unit: 'usd',   deltaPct: -55, sparkline: [9,8,7,6,5,4,3,1] },
-  { id: 'avg_cycle_time',     labelKey: 'dashboard.kpiAvgCycleTime',      value: 58,     unit: 'days',  deltaPct: -5,  sparkline: [62,61,60,61,60,59,58,58] },
+  { id: 'demurrage_incurred', labelKey: 'dashboard.kpiDemurrageIncurred', value: 1_080,  unit: 'usd',   deltaPct: -55, sparkline: [9,8,7,6,5,4,3,1], deltaPositiveIsGood: false },
+  { id: 'avg_cycle_time',     labelKey: 'dashboard.kpiAvgCycleTime',      value: 58,     unit: 'days',  deltaPct: -5,  sparkline: [62,61,60,61,60,59,58,58], deltaPositiveIsGood: false },
   { id: 'doc_auto_gen_rate',  labelKey: 'dashboard.kpiDocAutoGenRate',     value: 87,     unit: 'pct',   deltaPct:  5,  sparkline: [78,80,79,82,84,85,86,87] },
 ];
 ```
@@ -864,12 +869,21 @@ git commit -m "feat(map): add ShipmentMap with animated severity arcs"
 ```typescript
 // __tests__/kpi-strip.test.tsx
 import { render, screen } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { NextIntlClientProvider } from 'next-intl';
 import en from '../messages/en.json';
 import { KPITile } from '@/components/kpi/KPITile';
 import { KPIStrip } from '@/components/kpi/KPIStrip';
 import { kpis } from '@/lib/mock-data/kpis';
+
+// KPIStrip is an async RSC that calls getTranslations — mock it for tests
+vi.mock('next-intl/server', async () => {
+  const messages = (await import('../messages/en.json')).default as any;
+  return {
+    getTranslations: async () => (key: string) =>
+      key.split('.').reduce((obj: any, k) => obj?.[k], messages) ?? key,
+  };
+});
 
 const wrap = (ui: React.ReactNode) => (
   <NextIntlClientProvider locale="en" messages={en as any}>{ui}</NextIntlClientProvider>
@@ -892,11 +906,20 @@ describe('KPITile', () => {
     expect(screen.getByTestId('kpi-sparkline')).toBeInTheDocument();
   });
 
-  it('renders positive delta in mint color class', () => {
-    const kpi = kpis.find(k => (k.deltaPct ?? 0) > 0)!;
-    render(<KPITile kpi={kpi} label="Test KPI" />);
+  it('renders good-direction delta in mint color class', () => {
+    // avoided_penalties: deltaPct +18%, deltaPositiveIsGood: true (default) → mint
+    const kpi = kpis.find(k => k.id === 'avoided_penalties')!;
+    render(<KPITile kpi={kpi} label="Avoided Penalties" />);
     const delta = screen.getByTestId('kpi-delta');
-    expect(delta.className).toMatch(/mint|ok/);
+    expect(delta.className).toMatch(/mint/);
+  });
+
+  it('renders good-direction negative delta in mint color class', () => {
+    // demurrage_incurred: deltaPct -55%, deltaPositiveIsGood: false → mint (decrease is good)
+    const kpi = kpis.find(k => k.id === 'demurrage_incurred')!;
+    render(<KPITile kpi={kpi} label="Demurrage Incurred" />);
+    const delta = screen.getByTestId('kpi-delta');
+    expect(delta.className).toMatch(/mint/);
   });
 });
 
@@ -959,8 +982,10 @@ function Sparkline({ points, id }: { points: number[]; id: string }) {
 }
 
 export function KPITile({ kpi, label }: Props) {
-  const deltaPos = (kpi.deltaPct ?? 0) > 0;
-  const deltaNeg = (kpi.deltaPct ?? 0) < 0;
+  const deltaPct = kpi.deltaPct ?? 0;
+  const positiveIsGood = kpi.deltaPositiveIsGood !== false; // default true
+  const isGoodChange = deltaPct === 0 ? null : (deltaPct > 0) === positiveIsGood;
+  const deltaColorClass = isGoodChange === null ? 'text-ink-3' : isGoodChange ? 'text-mint-500' : 'text-severity-risk';
   const unitLabels: Record<string, string> = { usd: 'USD', pct: '%', count: 'FCL', days: 'DAYS', minutes: 'MIN' };
   const valueDisplay = kpi.unit === 'usd' ? kpi.value.toLocaleString() : String(kpi.value);
 
@@ -982,9 +1007,7 @@ export function KPITile({ kpi, label }: Props) {
       {kpi.deltaPct !== undefined && (
         <div
           data-testid="kpi-delta"
-          className={`mt-2 font-mono text-[11px] flex items-center gap-1.5 ${
-            deltaPos ? 'text-mint-500' : deltaNeg ? 'text-severity-risk' : 'text-ink-3'
-          }`}
+          className={`mt-2 font-mono text-[11px] flex items-center gap-1.5 ${deltaColorClass}`}
         >
           <span>{kpi.deltaPct > 0 ? '↑' : '↓'} {Math.abs(kpi.deltaPct)}%</span>
         </div>
@@ -1778,6 +1801,19 @@ import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { NextIntlClientProvider } from 'next-intl';
 import en from '../messages/en.json';
+
+// Mock next-intl/server — page and KPIStrip call getTranslations which needs a Next.js context
+vi.mock('next-intl/server', async () => {
+  const messages = (await import('../messages/en.json')).default as any;
+  return {
+    getTranslations: async (ns?: string) => {
+      return (key: string) => {
+        const fullKey = ns ? `${ns}.${key}` : key;
+        return fullKey.split('.').reduce((obj: any, k) => obj?.[k], messages) ?? key;
+      };
+    },
+  };
+});
 
 // Mock the 'use client' components to avoid jsdom SVG issues
 vi.mock('@/components/map/ShipmentMap', () => ({
