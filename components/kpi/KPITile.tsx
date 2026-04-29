@@ -1,5 +1,6 @@
 'use client';
 import type { KPI } from '@/types';
+import { useCountUp } from '@/lib/hooks/useCountUp';
 
 interface Props { kpi: KPI; label: string }
 
@@ -36,12 +37,13 @@ function Sparkline({ points, id }: { points: number[]; id: string }) {
 }
 
 export function KPITile({ kpi, label }: Props) {
+  const animatedValue = useCountUp(kpi.value);
   const deltaPct = kpi.deltaPct ?? 0;
   const positiveIsGood = kpi.deltaPositiveIsGood !== false;
   const isGoodChange = deltaPct === 0 ? null : (deltaPct > 0) === positiveIsGood;
   const deltaColorClass = isGoodChange === null ? 'text-ink-3' : isGoodChange ? 'text-mint-500' : 'text-severity-risk';
   const unitLabels: Record<string, string> = { usd: 'USD', pct: '%', count: 'FCL', days: 'DAYS', minutes: 'MIN' };
-  const valueDisplay = kpi.unit === 'usd' ? kpi.value.toLocaleString() : String(kpi.value);
+  const valueDisplay = kpi.unit === 'usd' ? animatedValue.toLocaleString() : String(animatedValue);
 
   return (
     <div className="relative overflow-hidden rounded-[10px] border border-[var(--line-soft)] bg-bg-1 px-4 py-3.5 cursor-pointer hover:border-[var(--line-mid)] transition-colors">

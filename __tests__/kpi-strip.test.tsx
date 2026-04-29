@@ -6,6 +6,11 @@ import { KPITile } from '@/components/kpi/KPITile';
 import { KPIStrip } from '@/components/kpi/KPIStrip';
 import { kpis } from '@/lib/mock-data/kpis';
 
+vi.mock('@/lib/hooks/useCountUp', () => ({
+  useCountUp: (target: number) => target,
+  easeOutCubic: (p: number) => p,
+}));
+
 // KPIStrip is an async RSC that calls getTranslations — mock it for tests
 vi.mock('next-intl/server', async () => {
   const messages = (await import('../messages/en.json')).default as any;
