@@ -71,6 +71,38 @@ const wrap = (ui: React.ReactNode) => (
   <NextIntlClientProvider locale="en" messages={en as any}>{ui}</NextIntlClientProvider>
 );
 
+import { SentinelQueue } from '@/components/compliance/SentinelQueue';
+import type { Alert } from '@/types';
+
+const makeAlert = (severity: Alert['severity'], id = 'a1'): Alert => ({
+  id,
+  severity,
+  titleKey: 'alerts.test_title',
+  bodyKey: 'alerts.test_body',
+  raisedAt: '2027-01-09',
+  raisedBy: 'agent',
+  category: 'market_compliance',
+});
+
+describe('SentinelQueue', () => {
+  it('renders watch, crit, and info severity items', () => {
+    const alerts = [
+      makeAlert('watch', 'a1'),
+      makeAlert('crit', 'a2'),
+      makeAlert('info', 'a3'),
+    ];
+    render(wrap(<SentinelQueue alerts={alerts} />));
+    expect(screen.getByTestId('sentinel-item-a1')).toBeInTheDocument();
+    expect(screen.getByTestId('sentinel-item-a2')).toBeInTheDocument();
+    expect(screen.getByTestId('sentinel-item-a3')).toBeInTheDocument();
+  });
+
+  it('renders empty state when no alerts', () => {
+    render(wrap(<SentinelQueue alerts={[]} />));
+    expect(screen.getByText(/no alerts/i)).toBeInTheDocument();
+  });
+});
+
 describe('ContainerCard', () => {
   it('renders container ID', () => {
     const c = containers[0]!;
