@@ -20,7 +20,7 @@ Phase 2 builds the Operations Dashboard — the root route `/` — currently a N
 | `lib/mock-data/importers.ts` | Add importers for the 5 new containers; update `IMP-IN-MUMBAI` name to `"Mumbai Dry Fruits Pvt. Ltd."` and `IMP-CN-EAST` name to `"Shenzhen Imports Ltd."` to match design handoff display names |
 | `lib/mock-data/containers.ts` (coords) | Add `polCoords: [number, number]` and `podCoords: [number, number]` to all 8 container records for map arc rendering |
 | `lib/mock-data/penalty-events.ts` | Add `penaltyAvoidedMatrix` export (buyer × event-type count matrix) |
-| `types/index.ts` | Add `sparkline: number[]` to `KPI`; add `AlertCategory` type + `category` + `amountUsd?` to `Alert`; add `PenaltyAvoidedRow` + `PenaltyEventType` types; add `ClosedContainer` interface; add `polCoords: [number, number]` and `podCoords: [number, number]` to `Container` interface |
+| `types/index.ts` | Add `sparkline: number[]` to `KPI`; add `AlertCategory` type + `category` + `amountUsd?` to `Alert`; add `PenaltyAvoidedRow` + `PenaltyEventType` types; add `ClosedContainer` interface; add `polCoords: [number, number]`, `podCoords: [number, number]`, and `carrier: string` to `Container` interface |
 
 ---
 
@@ -150,7 +150,7 @@ Sparkline: `<polyline>` with `stroke="#00E696"`, `stroke-width="2"`. Scale point
 
 #### New containers required in `containers.ts`
 
-Add these 5 containers (in addition to the existing 3). Full container records per the existing `Container` interface:
+Add these 5 containers (in addition to the **existing 3**: `MSCU-7842156`, `MAEU-9182734`, `CMAU-9281744`). `CMAU-9281744` is NOT in this table — it is an existing Phase 1 reefer container and appears in the action queue as card 4. Full container records per the existing `Container` interface:
 
 | ID | Buyer | Market | Product | Route POL→POD | Carrier | Active alert |
 |---|---|---|---|---|---|---|
@@ -173,7 +173,7 @@ Assign realistic T-day values anchored to `getTodayDemo()` (2027-01-09).
 - Buyer name — 12px `--color-ink-2` — derived by looking up `importers.find(i => i.id === container.importerId)?.name`. The `Container` interface has no `buyerName` field; always resolve via importers lookup.
 - Market badge (colored pill) + product line (11px `--color-ink-3`)
   - CN: red-tint bg/border/text; IN: blue-tint; EU: blue-tint; MENA: amber-tint; US: green-tint
-- Route — `{POL} → {POD} · {carrier}` — 10px mono `--color-ink-4`
+- Route — `{polCode} → {podCode} · {carrier}` — 10px mono `--color-ink-4`. Add `carrier: string` to the `Container` interface and populate all 8 container records (e.g., `"MSC"`, `"CMA CGM"`, `"MAERSK"`, `"HAPAG-LLOYD"`, `"OOCL"`).
 
 **Center column**
 - T-day timeline: horizontal line `T–` to `T+45`, milestone dots (done=mint, alert=red, future=dim border), current position = 12px green circle with mint glow
@@ -341,7 +341,7 @@ CONTAINER · BUYER · CYCLE · Δ AVG · PENALTY
 | MSCU-1102934 | Pacific Produce Inc. | 54d | -4d | — |
 | CMAU-7741209 | Heritage European Fruits BV | 61d | +3d | — |
 | MAEU-3398172 | Costco FreshCo | 58d | 0d | — |
-| HLXU-2298110 | Mumbai Dry Fruits | 55d | -3d | — |
+| HLXU-2298110 | Mumbai Dry Fruits Pvt. Ltd. | 55d | -3d | — |
 | MSCU-9920183 | Frutimar SL | 67d | +9d | $1,320 |
 | OOLU-4419220 | Shenzhen Imports | 59d | +1d | — |
 
@@ -457,7 +457,7 @@ CSS variable note: use Tailwind utility classes (e.g., `text-severity-crit`, `te
 
 ## 11. Definition of Done
 
-- [ ] `pnpm add react-simple-maps` completed, types resolve
+- [ ] `pnpm add react-simple-maps` completed — package ships its own types, no separate `@types/` install needed
 - [ ] Map renders ≥7 animated arcs; reefer arcs pulse; motion pips animate; hover tooltip works
 - [ ] KPI strip: exactly 5 tiles, sparklines span full tile width
 - [ ] Action queue: 5 cards ordered by urgency, each with T-day timeline + cost-at-risk + due badge
