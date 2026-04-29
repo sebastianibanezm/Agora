@@ -61,7 +61,7 @@ export interface PenaltyAvoidedRow {
 
 The field rename from `counts` to `savedUsd` is a breaking change. All consumers (`PenaltyHeatmap`, any tests) must be updated.
 
-**Exact change required in `types/index.ts`** (the current type still has `counts` — update it):
+**Exact change required in `types/index.ts`** — not yet applied; must be the first implementation step, as all subsequent changes depend on it:
 ```typescript
 // Before:
 export interface PenaltyAvoidedRow {
@@ -107,7 +107,7 @@ Each of the 25 agents gets an entry. The `agentId` values must exactly match the
 
 ### 2.3 New KPIs — `active_agents` and `cold_incidents`
 
-Add both to `lib/mock-data/kpis.ts`:
+Add both to `lib/mock-data/kpis.ts` (neither entry exists yet — not yet applied):
 
 ```typescript
 { id: 'active_agents',  labelKey: 'performance.kpiActiveAgents',  value: 25, unit: 'count', deltaPct: 9,   sparkline: [21,22,22,23,23,24,25,25] },
