@@ -61,6 +61,21 @@ export interface PenaltyAvoidedRow {
 
 The field rename from `counts` to `savedUsd` is a breaking change. All consumers (`PenaltyHeatmap`, any tests) must be updated.
 
+**Exact change required in `types/index.ts`** (the current type still has `counts` — update it):
+```typescript
+// Before:
+export interface PenaltyAvoidedRow {
+  buyerName: string;
+  counts: Record<PenaltyEventType, number>;
+}
+
+// After:
+export interface PenaltyAvoidedRow {
+  buyerName: string;
+  savedUsd: Record<PenaltyEventType, number>;
+}
+```
+
 **Representative values** (dollar amounts saved per buyer × penalty type):
 
 | Buyer | Refumig. | Phyto | VGM | DUS | BL | Demurrage | Detention | Bank |
@@ -90,13 +105,16 @@ export interface AgentStatusEntry {
 
 Each of the 25 agents gets an entry. The `agentId` values must exactly match the `id` fields in `lib/mock-data/agents.ts` (the canonical source of agent IDs).
 
-### 2.3 New KPI — `cold_incidents`
+### 2.3 New KPIs — `active_agents` and `cold_incidents`
 
-Add to `lib/mock-data/kpis.ts`:
+Add both to `lib/mock-data/kpis.ts`:
 
 ```typescript
-{ id: 'cold_incidents', labelKey: 'performance.kpiColdIncidents', value: 2, unit: 'count', deltaPct: 100, sparkline: [0,0,1,0,0,1,1,2], deltaPositiveIsGood: false }
+{ id: 'active_agents',  labelKey: 'performance.kpiActiveAgents',  value: 25, unit: 'count', deltaPct: 9,   sparkline: [21,22,22,23,23,24,25,25] },
+{ id: 'cold_incidents', labelKey: 'performance.kpiColdIncidents', value: 2,  unit: 'count', deltaPct: 100, sparkline: [0,0,1,0,0,1,1,2], deltaPositiveIsGood: false },
 ```
+
+`active_agents` and `cold_incidents` are only used on the `/performance` page — they are not shown on the ops dashboard `KPIStrip`.
 
 ---
 
