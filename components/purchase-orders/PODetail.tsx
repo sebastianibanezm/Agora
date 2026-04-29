@@ -1,19 +1,18 @@
-import type { PurchaseOrder, Importer, DocumentInstance, Container } from '@/types';
+import type { PurchaseOrder, Importer, Container } from '@/types';
 import { POKpiStrip } from './POKpiStrip';
 import { POResumenEjecutivo } from './POResumenEjecutivo';
 import { POLifecycleTimeline } from './POLifecycleTimeline';
-import { PODocumentSection } from './PODocumentSection';
+import { DocumentsSection } from '@/components/documents/DocumentsSection';
 import { differenceInDays } from 'date-fns';
 import { getTodayDemo } from '@/lib/utils/dates';
 
 interface Props {
   po: PurchaseOrder;
   importer: Importer;
-  documents: DocumentInstance[];
   linkedContainers: Container[];
 }
 
-export function PODetail({ po, importer, documents, linkedContainers }: Props) {
+export function PODetail({ po, importer, linkedContainers }: Props) {
   const today = getTodayDemo();
   const pills = [
     { key: 'status',   label: po.status,                                    color: '#3B82F6' },
@@ -42,7 +41,7 @@ export function PODetail({ po, importer, documents, linkedContainers }: Props) {
           <h2 style={{ fontSize: '15px', fontWeight: 600, color: '#e2e8f0', marginBottom: '12px' }}>Ciclo de Vida</h2>
           <POLifecycleTimeline events={po.events} />
         </section>
-        <PODocumentSection documents={documents} />
+        <DocumentsSection ownerId={po.id} ownerType="po" perspective="po" />
         <section>
           <h2 style={{ fontSize: '15px', fontWeight: 600, color: '#e2e8f0', marginBottom: '12px' }}>Fulfillment & Contraparte</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '24px', alignItems: 'start' }}>
