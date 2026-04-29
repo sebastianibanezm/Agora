@@ -381,3 +381,75 @@ export interface PenaltyAvoidedRow {
   buyerName: string;
   counts: Record<PenaltyEventType, number>;
 }
+
+// ===== Phase 4: Workflow Document System =====
+
+export type DocumentCategory =
+  | 'commercial'
+  | 'transport'
+  | 'phytosanitary'
+  | 'customs'
+
+// Subset of existing DocumentType used in the workflow system.
+// Extends existing DocumentType — does not replace it.
+export type WorkflowDocType = Extract<
+  DocumentType,
+  | 'commercial_invoice'
+  | 'packing_list'
+  | 'lc_compliance_letter'
+  | 'bill_of_lading'
+  | 'dus'
+  | 'sag_export_auth'
+  | 'cold_treatment_cert'
+  | 'certificate_of_origin'
+>
+
+export type WorkflowDocStatus =
+  | 'draft'
+  | 'submitted'
+  | 'validating'
+  | 'under_review'
+  | 'approved'
+  | 'rejected'
+
+export type ShipmentDocOwner =
+  | { type: 'po'; id: string }
+  | { type: 'container'; id: string }
+
+export type ShipmentDocLink = {
+  type: 'po' | 'container'
+  id: string
+  label: string
+}
+
+export type ValidationFlag = {
+  severity: 'error' | 'warning'
+  conflictingDocId: string
+  conflictingDocType: WorkflowDocType
+  message: string
+  detectedAt: string
+}
+
+export type ShipmentDocEvent = {
+  status: WorkflowDocStatus | 'comment'
+  actor: 'user' | 'system'
+  actorName: string
+  timestamp: string
+  note?: string
+}
+
+export interface ShipmentDocument {
+  id: string
+  name: string
+  category: DocumentCategory
+  type: WorkflowDocType
+  status: WorkflowDocStatus
+  owner: ShipmentDocOwner
+  links: ShipmentDocLink[]
+  flags: ValidationFlag[]
+  events: ShipmentDocEvent[]
+  createdAt: string
+  dueDate?: string
+  fileUrl?: string
+  overview: Record<string, string>
+}
