@@ -1,13 +1,14 @@
 import { containers } from '@/lib/mock-data/containers';
-import { ContainerListTable } from '@/components/containers/ContainerListTable';
-import { getTranslations } from 'next-intl/server';
+import { importers } from '@/lib/mock-data/importers';
+import { ContainersPageClient } from '@/components/containers/ContainersPageClient';
 
-export default async function ContainersPage() {
-  const t = await getTranslations('containers');
+export default function ContainersPage() {
   return (
-    <section>
-      <h1 className="text-xl font-semibold mb-6 text-ink-1">{t('title')}</h1>
-      <ContainerListTable containers={containers} />
-    </section>
+    <div style={{ padding: '24px' }}>
+      <h1 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '24px', color: '#e2e8f0' }}>
+        Containers
+      </h1>
+      <ContainersPageClient containers={containers} importers={importers} />
+    </div>
   );
 }

@@ -40,3 +40,35 @@ describe('MiniSeasonBar', () => {
     expect(segments[1]?.style.backgroundColor).not.toBe('rgb(0, 230, 150)');
   });
 });
+
+import { NextIntlClientProvider } from 'next-intl';
+import en from '../messages/en.json';
+import { ContainerCard } from '@/components/containers/ContainerCard';
+import { containers } from '@/lib/mock-data/containers';
+import { importers } from '@/lib/mock-data/importers';
+
+const wrap = (ui: React.ReactNode) => (
+  <NextIntlClientProvider locale="en" messages={en as any}>{ui}</NextIntlClientProvider>
+);
+
+describe('ContainerCard', () => {
+  it('renders container ID', () => {
+    const c = containers[0]!;
+    const imp = importers.find(i => i.id === c.importerId)!;
+    render(wrap(<ContainerCard container={c} importer={imp} />));
+    expect(screen.getByText(c.id)).toBeInTheDocument();
+  });
+
+  it('renders cold chain badge only when coldChain.required is true', () => {
+    const cold = containers.find(c => c.coldChain?.required === true)!;
+    const noCold = containers.find(c => !c.coldChain || c.coldChain.required === false)!;
+    const impCold = importers.find(i => i.id === cold.importerId)!;
+    const impNoCold = importers.find(i => i.id === noCold.importerId)!;
+
+    const { rerender } = render(wrap(<ContainerCard container={cold} importer={impCold} />));
+    expect(screen.getByTestId('cold-chain-badge')).toBeInTheDocument();
+
+    rerender(wrap(<ContainerCard container={noCold} importer={impNoCold} />));
+    expect(screen.queryByTestId('cold-chain-badge')).not.toBeInTheDocument();
+  });
+});
