@@ -17,9 +17,10 @@ Phase 2 builds the Operations Dashboard — the root route `/` — currently a N
 | `lib/mock-data/containers.ts` | Add 5 new active containers + export a separate `closedContainers` array (6 items) |
 | `lib/mock-data/kpis.ts` | Replace all 6 existing KPIs with 5 new ones matching the design handoff |
 | `lib/mock-data/alerts.ts` | Add `category: AlertCategory` + `amountUsd?: number` to existing alerts; add alerts for the 5 new containers |
-| `lib/mock-data/importers.ts` | Add importers for the 5 new containers (or reuse existing ones where market matches) |
+| `lib/mock-data/importers.ts` | Add importers for the 5 new containers; update `IMP-IN-MUMBAI` name to `"Mumbai Dry Fruits Pvt. Ltd."` and `IMP-CN-EAST` name to `"Shenzhen Imports Ltd."` to match design handoff display names |
+| `lib/mock-data/containers.ts` (coords) | Add `polCoords: [number, number]` and `podCoords: [number, number]` to all 8 container records for map arc rendering |
 | `lib/mock-data/penalty-events.ts` | Add `penaltyAvoidedMatrix` export (buyer × event-type count matrix) |
-| `types/index.ts` | Add `sparkline: number[]` to `KPI`; add `AlertCategory` type + `category` + `amountUsd?` to `Alert`; add `PenaltyAvoidedRow` + `PenaltyEventType` types; add `ClosedContainer` interface |
+| `types/index.ts` | Add `sparkline: number[]` to `KPI`; add `AlertCategory` type + `category` + `amountUsd?` to `Alert`; add `PenaltyAvoidedRow` + `PenaltyEventType` types; add `ClosedContainer` interface; add `polCoords: [number, number]` and `podCoords: [number, number]` to `Container` interface |
 
 ---
 
@@ -100,7 +101,7 @@ A container's severity = worst alert severity across its active alerts. Explicit
 | `'ok'` | on-track | `#00E696` |
 | `'info'` | on-track | `#00E696` |
 
-Worst = highest in the order: crit > risk > watch > info > ok. All 8 containers need `pol` and `pod` coordinate fields populated for the map to render their arcs. Ensure all containers (including the 5 new ones) have `pol` and `pod` set.
+Worst = highest in the order: crit > risk > watch > info > ok. All 8 containers need `pol` and `pod` coordinate fields populated for the map to render their arcs. Add `polCoords: [lng, lat]` and `podCoords: [lng, lat]` to the `Container` interface and populate all 8 container records. Reference coordinates: San Antonio, Chile `[-71.62, -33.59]`, Nhava Sheva `[72.95, 18.95]`, Yangshan `[122.05, 30.63]`, Rotterdam `[4.05, 51.90]`, JAFZA/Dubai `[55.13, 25.01]`, Valencia `[-0.33, 39.46]`, Shenzhen `[114.05, 22.52]`, Los Angeles `[-118.27, 33.74]`.
 
 ---
 
@@ -189,9 +190,9 @@ Assign realistic T-day values anchored to `getTodayDemo()` (2027-01-09).
 
 #### Cards (ordered by urgency, top to bottom)
 1. OOLU-7710443 · Sun Yang Foods · CN · USD 1,080 · Due NOW
-2. MSCU-7842156 · Mumbai Dry Fruits · IN · USD 1,200 · Due in 18h
+2. MSCU-7842156 · Mumbai Dry Fruits Pvt. Ltd. · IN · USD 1,200 · Due in 18h
 3. MSKU-3401827 · Frutimar SL · EU · USD 8,000 · (no due date — compliance check)
-4. CMAU-9281744 · Shenzhen Imports · CN · USD 1,500 · Due in 36h
+4. CMAU-9281744 · Shenzhen Imports Ltd. · CN · USD 1,500 · Due in 36h
 5. HLXU-4427109 · Al Madina Trading · MENA · USD 540 · Due in 3d
 
 #### Footer
@@ -249,7 +250,7 @@ Severity pills use colored background + border tokens matching `--color-severity
 
 **Component:** `components/cold-chain/ColdChainDashboardSection.tsx` (new — distinct from the existing `ColdChainSummaryCard` used in container detail tabs)
 
-Renders only when `containers.some(c => c.coldChain?.required === true)`. Panel border: `rgba(0,230,150,0.25)`.
+The **5 new containers added in §5a are all dry cargo** — none have `coldChain`. The 2 existing reefers (`MAEU-9182734` cherries and `CMAU-9281744` grapes) provide the cold chain section data. The section renders via `containers.filter(c => c.coldChain?.required === true)`, which yields exactly these 2 containers. Panel border: `rgba(0,230,150,0.25)`.
 
 ### Section header
 - Left: snowflake icon (lucide `Snowflake`, 14px mint) + `Cold Chain Status`
@@ -282,7 +283,7 @@ Containers shown: those whose ETD falls within T-7 → T0 window (relative to `g
 - Right: `T-7 → T0 WINDOW · {n} CONTAINERS` — mono `--color-ink-3`
 
 ### Mini-cards
-6-column grid, `border-right: 1px solid --color-line` between cards.
+6-column grid, `border-right: 1px solid var(--line-soft)` between cards.
 
 Each card:
 ```
@@ -421,10 +422,13 @@ All strings use `useTranslations`. Add the following keys to both `messages/es.j
   "kpiAvgCycleTime": "Avg Cycle Time",
   "kpiDocAutoGenRate": "Doc Auto-Gen Rate",
   "costAtRisk": "COST AT RISK",
-  "dueNow": "Due NOW",
-  "dueIn": "Due in {time}"
+  "dueNow": "Due NOW"
 }
 ```
+
+**Due badge:** Use `common.dueIn` (already exists as `"Vence en"` / `"Due in"`) as a label prefix, then append the time string — do not add a new `dashboard.dueIn` key. This avoids conflicting with the existing `common.dueIn` label used on container detail pages.
+
+**Stale keys to remove from `dashboard.*`:** `title`, `kpiActiveContainers`, `kpiCostAtRisk`, `kpiOnTimeDocs`, `kpiAlertsOpen`, `kpiCutoffNext24h`, `kpiColdTreatmentCompliance`, `actionQueue`, `alertsRail`, `weekReadiness`, `closedLastWeek`, `penaltyHeatmap`. **Keep:** `coldChainStatus` (value reused as-is).
 
 CSS variable note: use Tailwind utility classes (e.g., `text-severity-crit`, `text-mint-500`, `text-ink-3`) rather than raw CSS custom properties in component code. These map to the tokens defined in `app/globals.css` under `@theme {}`.
 
