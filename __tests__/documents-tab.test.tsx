@@ -28,8 +28,8 @@ describe('DocumentsTab', () => {
   it('renders documents for walnuts container (DUS must appear as missing)', () => {
     const c = containers.find(x => x.id === 'MSCU-7842156')!;
     render(wrap(<DocumentsTab container={c} />));
-    // There should be a "DUS" row
-    expect(screen.getByText('DUS')).toBeInTheDocument();
+    // There should be at least one "DUS" row (legacy doc + workflow doc)
+    expect(screen.getAllByText('DUS').length).toBeGreaterThan(0);
   });
   it('shows doc type labels via i18n', () => {
     const c = containers.find(x => x.id === 'MSCU-7842156')!;
