@@ -1,6 +1,46 @@
 // ===== Enums =====
 export type Market = 'US' | 'EU' | 'IN' | 'CN' | 'MENA';
 
+export type ContainerStatus =
+  | 'planning'
+  | 'preparation'
+  | 'documentation'
+  | 'in_transit'
+  | 'customs_release'
+  | 'delivery_payment'
+  | 'closed'
+
+export type POStatus = 'draft' | 'confirmed' | 'in_fulfillment' | 'delivered' | 'cancelled'
+
+export type POEvent = {
+  date: string
+  type: 'confirmed' | 'container_assigned' | 'bl_issued' | 'docs_submitted' | 'delivered' | 'payment_received'
+  note?: string
+}
+
+export type VolumeHistoryEntry = {
+  season: string
+  volumeKg: number
+}
+
+export type CertifiedProduct = {
+  productId: string
+  name: string
+  hsCode: string
+  seasonStart: string
+  seasonEnd: string
+  requiresColdChain: boolean
+  coldProtocol?: string
+  enabledMarkets: Market[]
+}
+
+export type SAGCertification = {
+  id: string
+  name: string
+  expiryDate: string
+  daysUntilExpiry: number
+}
+
 export type ProductId =
   | 'walnuts_in_shell' | 'walnut_kernels' | 'almonds_in_shell'
   | 'fresh_cherries' | 'fresh_blueberries'
@@ -156,6 +196,10 @@ export interface CommercialProfile {
   requiredDocs: DocumentType[];
   validationChecks: string[];
   activeAgents: AgentId[];
+  bank?: string;
+  avgCollectionDays?: number;
+  currency?: string;
+  isDraft?: boolean;
 }
 
 // ===== Lane profile =====
@@ -196,7 +240,7 @@ export interface Container {
   etd: string;
   eta: string;
   cutoffAt?: string;
-  status: 'planning' | 'docs_in_progress' | 'in_treatment' | 'at_sea' | 'arrived' | 'cleared';
+  status: ContainerStatus;
   coldChain?: ColdChainTrace;
   costAtRiskUsd?: number;
   carrier: string;
@@ -238,13 +282,17 @@ export interface Alert {
 export interface PurchaseOrder {
   id: string;
   importerId: string;
+  producerId: string;
   productId: ProductId;
+  market: Market;
   quantityKg: number;
   incotermPaymentId: IncotermPaymentId;
   valueUsd: number;
   issuedAt: string;
   deliveryWindow: { from: string; to: string };
   containerIds: string[];
+  status: POStatus;
+  events: POEvent[];
 }
 
 export interface Importer {
@@ -255,6 +303,23 @@ export interface Importer {
   activeContainers: number;
   annualVolumeKg: number;
   creditRating?: string;
+  avgPaymentDays: number;
+  volumeHistory: VolumeHistoryEntry[];
+  paymentHistory: Array<{
+    poId: string;
+    method: string;
+    bank: string;
+    amount: number;
+    daysToCollect?: number;
+    status: 'paid' | 'pending';
+  }>;
+  marketProfile: {
+    inspectionAuthority: string[];
+    digitalSystem: string;
+    requiredRegistrations: string[];
+    labelLanguages: string[];
+    coldTreatmentOptions?: string[];
+  };
 }
 
 export interface Producer {
@@ -264,6 +329,10 @@ export interface Producer {
   products: ProductId[];
   sagId: string;
   activeContainers: number;
+  avgPaymentDays?: number;
+  volumeHistory: VolumeHistoryEntry[];
+  certifiedProducts: CertifiedProduct[];
+  sagCertifications: SAGCertification[];
 }
 
 export interface KPI {
