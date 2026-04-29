@@ -381,10 +381,10 @@ Add `carrier`, `polCoords`, `podCoords`, and `timelineNodes` to the 3 existing c
 },
 {
   id: 'MSCU-6128390',
-  productId: 'walnut_kernels',
-  productLabel: 'Walnut kernels',
+  productId: 'table_grapes_white',
+  productLabel: 'Table grapes (white)',
   commercialId: 'cif_cad_at_sight',
-  laneProfileId: 'walnut_kernels.US.cif_cad_at_sight',
+  laneProfileId: 'table_grapes_white.US.cif_cad_at_sight',
   market: 'US',
   polCode: 'CLSAI', polLabel: 'San Antonio',
   podCode: 'USLAX', podLabel: 'Los Angeles',
@@ -765,8 +765,8 @@ describe('containerSeverity', () => {
     expect(sev).toBe('ok');
   });
 
-  it('returns worst severity across multiple alerts (watch + crit = crit)', () => {
-    // MSCU-7842156 has ALT-001 (crit) and ALT-004 (watch)
+  it('returns crit when container has crit alert (other alerts dismissed)', () => {
+    // MSCU-7842156 has ALT-001 (crit, active); ALT-004 (watch) is dismissed: true after Task 3
     const sev = containerSeverity('MSCU-7842156', alerts);
     expect(sev).toBe('crit');
   });
@@ -901,8 +901,9 @@ describe('KPITile', () => {
 });
 
 describe('KPIStrip', () => {
-  it('renders exactly 5 tiles', () => {
-    render(wrap(<KPIStrip kpis={kpis} />));
+  it('renders exactly 5 tiles', async () => {
+    // KPIStrip is an async RSC — invoke directly and await, then wrap result for rendering
+    render(wrap(await KPIStrip({ kpis })));
     expect(screen.getAllByTestId('kpi-value').length).toBe(5);
   });
 });
