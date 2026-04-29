@@ -2614,7 +2614,7 @@ interface Props {
 }
 
 export function ProductProfileCard({ product }: Props) {
-  const [seasonStart, seasonEnd] = (product.seasonality ?? 'Jan–Dec').split('–');
+  const [seasonStart, seasonEnd] = (product.seasonality ?? 'Jan-Dec').split(/[–\-]/);
 
   return (
     <div style={{ background: '#1a1f2e', border: '1px solid #ffffff12', borderRadius: '8px', padding: '14px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -2652,14 +2652,6 @@ isDraft?: boolean;
 
 Also add these fields to the mock data entries in `commercial-profiles.ts`. Mark one entry with `isDraft: true` (e.g., `dap_open_account` or a new 6th profile). Add `bank`, `avgCollectionDays`, and `currency` values for at least 4 of the 6 profiles so the card renders them.
 
-Then use them in the card with threshold coloring:
-
-```tsx
-const avgDaysOk = profile.avgCollectionDays == null ? true
-  : profile.paymentMethod === 'L/C' ? profile.avgCollectionDays <= 7
-  : profile.avgCollectionDays <= 45;
-```
-
 ```tsx
 import type { CommercialProfile } from '@/types';
 
@@ -2670,6 +2662,10 @@ interface Props {
 }
 
 export function CommercialProfileCard({ profile, isDraft = false, activePOCount = 0 }: Props) {
+  const avgDaysOk = profile.avgCollectionDays == null ? true
+    : profile.paymentMethod === 'L/C' ? profile.avgCollectionDays <= 7
+    : profile.avgCollectionDays <= 45;
+
   return (
     <div style={{
       background: '#1a1f2e',
