@@ -589,7 +589,7 @@ Target readiness %:
 - `MSCU-2873561`: ~80% (10/13 approved, some missing)
 - `MSCU-7842156`: already ~80% (existing)
 
-For the 3 arrived containers (`OOLU-7710443`, `HLXU-4427109`, `MSCU-6128390`), all docs can be `approved` or `in_transit`.
+For the 2 arrived containers (`OOLU-7710443`, `MSCU-6128390`), all docs can be `approved` or `in_transit`. For `HLXU-4427109` (status: `docs_in_progress`, ETD Jan 16), give it a mixed-status set targeting ~73% readiness (9–10 approved out of 13–14 docs), with several `missing` or `pending_review` items — matching the pre-departure `docs_in_progress` state.
 
 - [ ] **Step 6: Restore skipped integrity test and run all mock-data tests**
 
@@ -1140,7 +1140,7 @@ Structure:
 **Left column:**
 - Container ID: `font-mono font-semibold text-[14px] text-ink-1`
 - Buyer name: resolved via `importers.find(i => i.id === container.importerId)?.name ?? '—'`. 12px, `text-ink-2`, truncated.
-- Market chip: small pill with market-specific colors (IN=amber-tint, EU=blue-tint, CN=red-tint, MENA=amber-tint, US=purple-tint).
+- Market chip: small pill with market-specific colors (IN=blue-tint, EU=blue-tint, CN=red-tint, MENA=amber-tint, US=purple-tint).
 - Route: `data-testid="card-route"`, `{polCode} → {podCode} · {carrier}`, 10px mono `text-ink-4`.
 
 **Center column:**
@@ -1649,7 +1649,7 @@ Column header keys (in order): `['refumigation', 'phyto_reissue', 'vgm_late', 'd
 
 Grid: `grid-template-columns: 110px repeat(8, 1fr)`, gap 3px.
 
-Column headers `data-testid="heatmap-col-header"`: rotated `-38deg`, 9px mono, `text-ink-3`.
+Column headers `data-testid="heatmap-col-header"`: `style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}`, 9px mono, `text-ink-3`. This renders text bottom-to-top in a vertical column cell.
 
 Each buyer row `data-testid="heatmap-row"`:
 - Row label: `text-ink-2`, 10.5px, right-padded.
