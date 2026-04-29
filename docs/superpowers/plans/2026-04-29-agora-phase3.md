@@ -246,6 +246,16 @@ export const isActiveContainer = (c: Container): boolean =>
 
 export const stageLabelKey = (status: ContainerStatus): string =>
   `containers.statuses.${status}`;
+
+export const STAGES: Array<{ status: ContainerStatus; label: string; color: string }> = [
+  { status: 'planning',          label: 'Planning',           color: '#8B5CF6' },
+  { status: 'preparation',       label: 'Preparation',        color: '#00E696' },
+  { status: 'documentation',     label: 'Documentation',      color: '#F59E0B' },
+  { status: 'in_transit',        label: 'In Transit',         color: '#7DD3FC' },
+  { status: 'customs_release',   label: 'Customs & Release',  color: '#F97316' },
+  { status: 'delivery_payment',  label: 'Delivery & Payment', color: '#3B82F6' },
+  { status: 'closed',            label: 'Closed',             color: '#64748B' },
+];
 ```
 
 - [ ] **Step 5: Run tests**
@@ -645,7 +655,7 @@ export function MiniSeasonBar({ start, end }: Props) {
 Add to `agora-app/__tests__/phase3-components.test.tsx` (create the file if it doesn't exist yet):
 
 ```tsx
-import { render, screen, container as domContainer } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import { VolumeTimeSeries } from '@/components/shared/VolumeTimeSeries';
 import { MiniSeasonBar } from '@/components/shared/MiniSeasonBar';
@@ -844,6 +854,8 @@ export function ContainerCard({ container, importer }: Props) {
 - [ ] **Step 4: Create `KanbanColumn.tsx`**
 
 ```tsx
+'use client';
+
 import type { Container, ContainerStatus, Importer } from '@/types';
 import { ContainerCard } from './ContainerCard';
 import { useState } from 'react';
@@ -915,18 +927,9 @@ export function KanbanColumn({ status, label, color, containers, importers, defa
 ```tsx
 'use client';
 
-import type { Container, ContainerStatus, Importer } from '@/types';
+import type { Container, Importer } from '@/types';
+import { STAGES } from '@/lib/containers';
 import { KanbanColumn } from './KanbanColumn';
-
-const STAGES: Array<{ status: ContainerStatus; label: string; color: string }> = [
-  { status: 'planning',          label: 'Planning',           color: '#8B5CF6' },
-  { status: 'preparation',       label: 'Preparation',        color: '#00E696' },
-  { status: 'documentation',     label: 'Documentation',      color: '#F59E0B' },
-  { status: 'in_transit',        label: 'In Transit',         color: '#7DD3FC' },
-  { status: 'customs_release',   label: 'Customs & Release',  color: '#F97316' },
-  { status: 'delivery_payment',  label: 'Delivery & Payment', color: '#3B82F6' },
-  { status: 'closed',            label: 'Closed',             color: '#64748B' },
-];
 
 interface Props {
   containers: Container[];
@@ -1109,6 +1112,8 @@ The spec (§4 Table View) requires rows grouped under collapsible stage headers.
 Skeleton for grouped table:
 
 ```tsx
+'use client';
+
 import { useState } from 'react';
 import type { Container, ContainerStatus, Importer } from '@/types';
 import { STAGES } from '@/lib/containers';  // export STAGES array from lib/containers.ts
@@ -2642,7 +2647,10 @@ The spec §7.3 requires showing bank, avg collection days (with threshold colori
 bank?: string;
 avgCollectionDays?: number;
 currency?: string;
+isDraft?: boolean;
 ```
+
+Also add these fields to the mock data entries in `commercial-profiles.ts`. Mark one entry with `isDraft: true` (e.g., `dap_open_account` or a new 6th profile). Add `bank`, `avgCollectionDays`, and `currency` values for at least 4 of the 6 profiles so the card renders them.
 
 Then use them in the card with threshold coloring:
 
@@ -2678,6 +2686,13 @@ export function CommercialProfileCard({ profile, isDraft = false, activePOCount 
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', fontSize: '12px', color: '#94a3b8' }}>
         <div><span style={{ color: '#e2e8f0', fontWeight: 600 }}>{profile.incoterm}</span> · {profile.paymentTerms}</div>
+        {profile.bank && <div>Banco: {profile.bank}</div>}
+        {profile.currency && <div>Moneda: {profile.currency}</div>}
+        {profile.avgCollectionDays != null && (
+          <div style={{ color: avgDaysOk ? '#00E696' : '#F59E0B' }}>
+            Cobro promedio: {profile.avgCollectionDays}d {avgDaysOk ? '✓' : '⚠'}
+          </div>
+        )}
       </div>
       <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '8px', borderTop: '1px solid #ffffff08' }}>
         {isDraft && (
@@ -2731,7 +2746,7 @@ export default function CompliancePage() {
         <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#e2e8f0', marginBottom: '16px' }}>Commercial Profiles</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
           {commercialProfiles.map(p => (
-            <CommercialProfileCard key={p.id} profile={p} />
+            <CommercialProfileCard key={p.id} profile={p} isDraft={p.isDraft} />
           ))}
         </div>
       </section>
