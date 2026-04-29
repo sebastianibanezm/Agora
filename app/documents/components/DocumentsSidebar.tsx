@@ -2,14 +2,8 @@
 
 import { useTranslations } from 'next-intl'
 import { shipmentDocuments } from '@/lib/mock-data/documents'
-import type { DocumentCategory, WorkflowDocType } from '@/types'
-
-const CATEGORIES: { key: DocumentCategory; types: WorkflowDocType[] }[] = [
-  { key: 'commercial',    types: ['commercial_invoice', 'packing_list', 'lc_compliance_letter'] },
-  { key: 'transport',     types: ['bill_of_lading'] },
-  { key: 'phytosanitary', types: ['sag_export_auth', 'cold_treatment_cert'] },
-  { key: 'customs',       types: ['certificate_of_origin', 'dus'] },
-]
+import type { WorkflowDocType } from '@/types'
+import { DOCUMENT_CATEGORIES } from '../constants'
 
 interface Props {
   selected: WorkflowDocType | null
@@ -43,7 +37,7 @@ export function DocumentsSidebar({ selected, onSelect }: Props) {
         <span className="text-ink-4 text-[10px]">{total}</span>
       </button>
 
-      {CATEGORIES.map(cat => (
+      {DOCUMENT_CATEGORIES.map(cat => (
         <div key={cat.key} className="mt-3">
           <div className="px-3.5 pb-1 text-[9px] uppercase tracking-wider text-ink-4">
             {t(`categories.${cat.key}`)}

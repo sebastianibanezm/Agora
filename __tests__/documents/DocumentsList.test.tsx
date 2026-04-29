@@ -19,9 +19,8 @@ test('type filter narrows the list', () => {
   expect(screen.queryByText('types.dus')).not.toBeInTheDocument()
 })
 
-test('empty state rendered when type filter matches nothing', () => {
-  // 'lc_compliance_letter' only exists on PO-2026-0142; status filtering leaves 0 results
-  render(<DocumentsList typeFilter={null} statusFilter={'approved'} />)
-  // Approved docs exist — list should render without crash
-  expect(document.body).toBeTruthy()
+test('empty state shown when no docs match both filters', () => {
+  // Use a type that has no approved docs to force empty state
+  render(<DocumentsList typeFilter="lc_compliance_letter" statusFilter="approved" />)
+  expect(screen.getByText('noDocumentsOfType')).toBeInTheDocument()
 })

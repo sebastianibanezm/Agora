@@ -4,14 +4,8 @@ import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { purchaseOrders } from '@/lib/mock-data/purchase-orders'
 import { containers } from '@/lib/mock-data/containers'
-import type { WorkflowDocType, DocumentCategory } from '@/types'
-
-const TYPE_OPTIONS: { category: DocumentCategory; types: WorkflowDocType[] }[] = [
-  { category: 'commercial',    types: ['commercial_invoice', 'packing_list', 'lc_compliance_letter'] },
-  { category: 'transport',     types: ['bill_of_lading'] },
-  { category: 'phytosanitary', types: ['sag_export_auth', 'cold_treatment_cert'] },
-  { category: 'customs',       types: ['certificate_of_origin', 'dus'] },
-]
+import type { WorkflowDocType } from '@/types'
+import { DOCUMENT_CATEGORIES } from '../constants'
 
 interface Props {
   onClose: () => void
@@ -105,7 +99,7 @@ export function UploadDocumentModal({ onClose, onSuccess }: Props) {
               style={{ background: 'var(--color-bg-2)', border: '1px solid var(--line-soft)' }}
             >
               <option value="">{t('upload.placeholderType')}</option>
-              {TYPE_OPTIONS.map(cat =>
+              {DOCUMENT_CATEGORIES.map(cat =>
                 cat.types.map(type => (
                   <option key={type} value={type}>{t(`types.${type}`)}</option>
                 ))
