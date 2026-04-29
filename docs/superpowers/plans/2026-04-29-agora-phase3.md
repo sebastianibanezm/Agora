@@ -631,7 +631,7 @@ export function MiniSeasonBar({ start, end }: Props) {
             flex: 1,
             height: '100%',
             borderRadius: '2px',
-            backgroundColor: active[i] ? '#00E696' : '#ffffff18',
+            backgroundColor: active[i] === true ? '#00E696' : '#ffffff18',
           }}
         />
       ))}
@@ -640,7 +640,60 @@ export function MiniSeasonBar({ start, end }: Props) {
 }
 ```
 
-- [ ] **Step 3: TypeScript check**
+- [ ] **Step 3: Write and run tests for shared components**
+
+Add to `agora-app/__tests__/phase3-components.test.tsx` (create the file if it doesn't exist yet):
+
+```tsx
+import { render, screen, container as domContainer } from '@testing-library/react';
+import { describe, it, expect } from 'vitest';
+import { VolumeTimeSeries } from '@/components/shared/VolumeTimeSeries';
+import { MiniSeasonBar } from '@/components/shared/MiniSeasonBar';
+import type { VolumeHistoryEntry } from '@/types';
+
+describe('VolumeTimeSeries', () => {
+  it('renders without error for valid data', () => {
+    const data: VolumeHistoryEntry[] = [
+      { season: '2023/24', volumeKg: 480_000 },
+      { season: '2024/25', volumeKg: 580_000 },
+    ];
+    const { container } = render(<VolumeTimeSeries data={data} />);
+    expect(container.querySelector('svg')).not.toBeNull();
+    expect(screen.getByText('2023/24')).toBeInTheDocument();
+  });
+
+  it('renders nothing for empty data', () => {
+    const { container } = render(<VolumeTimeSeries data={[]} />);
+    expect(container.querySelector('svg')).toBeNull();
+  });
+});
+
+describe('MiniSeasonBar', () => {
+  it('renders 12 month segments', () => {
+    const { container } = render(<MiniSeasonBar start="Nov" end="Jan" />);
+    expect(container.querySelectorAll('div > div').length).toBe(12);
+  });
+
+  it('marks Nov, Dec, Jan as active for a Nov–Jan season (wraps year boundary)', () => {
+    const { container } = render(<MiniSeasonBar start="Nov" end="Jan" />);
+    const segments = Array.from(container.querySelectorAll('div > div')) as HTMLElement[];
+    // MONTHS index: Nov=10, Dec=11, Jan=0
+    expect(segments[10]?.style.backgroundColor).toBe('rgb(0, 230, 150)');  // #00E696
+    expect(segments[11]?.style.backgroundColor).toBe('rgb(0, 230, 150)');
+    expect(segments[0]?.style.backgroundColor).toBe('rgb(0, 230, 150)');
+    // Feb (index 1) should NOT be active
+    expect(segments[1]?.style.backgroundColor).not.toBe('rgb(0, 230, 150)');
+  });
+});
+```
+
+```bash
+cd agora-app && pnpm test -- phase3-components
+```
+
+Expected: all 4 shared component tests pass.
+
+- [ ] **Step 4: TypeScript check**
 
 ```bash
 cd agora-app && pnpm tsc --noEmit 2>&1 | grep "shared/"
@@ -648,10 +701,10 @@ cd agora-app && pnpm tsc --noEmit 2>&1 | grep "shared/"
 
 Expected: no errors.
 
-- [ ] **Step 4: Commit**
+- [ ] **Step 5: Commit**
 
 ```bash
-git add agora-app/components/shared/
+git add agora-app/components/shared/ agora-app/__tests__/phase3-components.test.tsx
 git commit -m "feat(phase3): add VolumeTimeSeries and MiniSeasonBar shared components"
 ```
 
@@ -806,7 +859,7 @@ interface Props {
 
 export function KanbanColumn({ status, label, color, containers, importers, defaultCollapsed = false }: Props) {
   const [collapsed, setCollapsed] = useState(defaultCollapsed);
-  const imp = (id: string) => importers.find(i => i.id === id)!;
+  const imp = (id: string) => importers.find(i => i.id === id);
 
   return (
     <div style={{ minWidth: '220px', flex: '0 0 220px' }}>
@@ -842,9 +895,11 @@ export function KanbanColumn({ status, label, color, containers, importers, defa
 
       {!collapsed && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '4px' }}>
-          {containers.map(c => (
-            <ContainerCard key={c.id} container={c} importer={imp(c.importerId)} />
-          ))}
+          {containers.map(c => {
+            const importer = imp(c.importerId);
+            if (!importer) return null;
+            return <ContainerCard key={c.id} container={c} importer={importer} />;
+          })}
           {containers.length === 0 && (
             <div style={{ fontSize: '11px', color: '#334155', textAlign: 'center', padding: '16px 0' }}>—</div>
           )}
@@ -1042,7 +1097,70 @@ export default function ContainersPage() {
 }
 ```
 
-Note: `ContainerListTable` already exists from Phase 1. Its props signature may need updating to accept `importers` for the importer name column — check the existing component and add the prop if needed.
+- [ ] **Step 6b: Update `ContainerListTable` props and grouped-by-stage behavior**
+
+Read the existing `agora-app/components/containers/ContainerListTable.tsx` before editing.
+
+The spec (§4 Table View) requires rows grouped under collapsible stage headers. The existing component is a flat table. Two changes needed:
+
+1. Add `importers: Importer[]` to its props interface (needed by `ContainersPageClient`)
+2. Group rows by `container.status` and render collapsible stage headers using `@base-ui/react` Collapsible (or a simple `useState` toggle per group)
+
+Skeleton for grouped table:
+
+```tsx
+import { useState } from 'react';
+import type { Container, ContainerStatus, Importer } from '@/types';
+import { STAGES } from '@/lib/containers';  // export STAGES array from lib/containers.ts
+
+export function ContainerListTable({ containers, importers }: { containers: Container[]; importers: Importer[] }) {
+  const [collapsedStages, setCollapsedStages] = useState<Set<ContainerStatus>>(new Set());
+  const toggle = (s: ContainerStatus) => setCollapsedStages(prev => {
+    const next = new Set(prev);
+    next.has(s) ? next.delete(s) : next.add(s);
+    return next;
+  });
+
+  return (
+    <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+      <thead>...</thead>
+      <tbody>
+        {STAGES.map(stage => {
+          const rows = containers.filter(c => c.status === stage.status);
+          if (rows.length === 0) return null;
+          const collapsed = collapsedStages.has(stage.status);
+          return (
+            <>
+              <tr key={`header-${stage.status}`} onClick={() => toggle(stage.status)} style={{ cursor: 'pointer', background: '#0d1117' }}>
+                <td colSpan={7} style={{ padding: '8px 12px', color: stage.color, fontWeight: 600, fontSize: '12px' }}>
+                  {collapsed ? '▶' : '▼'} {stage.label} ({rows.length})
+                </td>
+              </tr>
+              {!collapsed && rows.map(c => <tr key={c.id}>...</tr>)}
+            </>
+          );
+        })}
+      </tbody>
+    </table>
+  );
+}
+```
+
+Also export `STAGES` from `agora-app/lib/containers.ts`:
+
+```ts
+export const STAGES: Array<{ status: ContainerStatus; label: string; color: string }> = [
+  { status: 'planning',         label: 'Planning',          color: '#8B5CF6' },
+  { status: 'preparation',      label: 'Preparation',       color: '#00E696' },
+  { status: 'documentation',    label: 'Documentation',     color: '#F59E0B' },
+  { status: 'in_transit',       label: 'In Transit',        color: '#7DD3FC' },
+  { status: 'customs_release',  label: 'Customs & Release', color: '#F97316' },
+  { status: 'delivery_payment', label: 'Delivery & Payment',color: '#3B82F6' },
+  { status: 'closed',           label: 'Closed',            color: '#64748B' },
+];
+```
+
+(Replace the inline array in `ContainerKanban.tsx` with an import from `@/lib/containers`.)
 
 - [ ] **Step 7: Run tests**
 
@@ -1287,7 +1405,41 @@ export function POResumenEjecutivo({ po }: Props) {
 }
 ```
 
-Note from spec: "No emoji icons — all icons use inline SVG styled to design tokens." Replace the emoji icons above with proper inline SVGs when polishing. For the initial implementation, the structure is correct.
+- [ ] **Step 5b: Replace emoji icons in `POResumenEjecutivo.tsx` with inline SVGs**
+
+The spec (§5) explicitly prohibits emoji icons. Replace the emoji `icon` strings with inline SVG elements. Use these minimal SVGs:
+
+```tsx
+// Status icon (clipboard)
+const StatusIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+    <rect x="9" y="2" width="6" height="4" rx="1"/><path d="M9 2H7a2 2 0 00-2 2v16a2 2 0 002 2h10a2 2 0 002-2V4a2 2 0 00-2-2h-2"/>
+    <line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="12" y2="16"/>
+  </svg>
+);
+// Cold chain icon (snowflake)
+const ColdIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7DD3FC" strokeWidth="1.5">
+    <line x1="12" y1="2" x2="12" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/>
+    <line x1="5.64" y1="5.64" x2="18.36" y2="18.36"/><line x1="5.64" y1="18.36" x2="18.36" y2="5.64"/>
+  </svg>
+);
+// Docs icon (file)
+const DocsIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+    <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/>
+    <line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="11" y2="17"/>
+  </svg>
+);
+// Finance icon (credit card)
+const FinanceIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+    <rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>
+  </svg>
+);
+```
+
+Replace the `icon` property in the 2×2 grid items with `icon: <StatusIcon />`, `icon: <ColdIcon />`, etc., and update the grid item render from `<span style={{ fontSize: '18px' }}>{item.icon}</span>` to `<span style={{ color: '#94a3b8' }}>{item.icon}</span>`.
 
 - [ ] **Step 6: Create `PODocumentSection.tsx`**
 
@@ -1418,19 +1570,23 @@ export function POListTable({ purchaseOrders, importers }: Props) {
 - [ ] **Step 8: Create `PODetail.tsx`**
 
 ```tsx
-import type { PurchaseOrder, Importer, DocumentInstance } from '@/types';
+import type { PurchaseOrder, Importer, DocumentInstance, Container } from '@/types';
 import { POKpiStrip } from './POKpiStrip';
 import { POResumenEjecutivo } from './POResumenEjecutivo';
 import { POLifecycleTimeline } from './POLifecycleTimeline';
 import { PODocumentSection } from './PODocumentSection';
+import { differenceInDays } from 'date-fns';
+import { getTodayDemo } from '@/lib/dates';
 
 interface Props {
   po: PurchaseOrder;
   importer: Importer;
   documents: DocumentInstance[];
+  linkedContainers: Container[];
 }
 
-export function PODetail({ po, importer, documents }: Props) {
+export function PODetail({ po, importer, documents, linkedContainers }: Props) {
+  const today = getTodayDemo();
   const pills = [
     { key: 'status',   label: po.status,                               color: '#3B82F6' },
     { key: 'importer', label: importer.name,                           color: '#8B5CF6' },
@@ -1472,11 +1628,42 @@ export function PODetail({ po, importer, documents }: Props) {
         </section>
         <PODocumentSection documents={documents} />
         <section>
-          <h2 style={{ fontSize: '15px', fontWeight: 600, color: '#e2e8f0', marginBottom: '12px' }}>Contraparte</h2>
-          <div style={{ background: '#1a1f2e', border: '1px solid #ffffff12', borderRadius: '8px', padding: '16px', display: 'inline-flex', flexDirection: 'column', gap: '4px' }}>
-            <div style={{ fontWeight: 600, color: '#e2e8f0' }}>{importer.name}</div>
-            <div style={{ fontSize: '12px', color: '#94a3b8' }}>{importer.country} · {importer.market}</div>
-            <div style={{ fontSize: '12px', color: '#64748b' }}>Avg payment: {importer.avgPaymentDays}d</div>
+          <h2 style={{ fontSize: '15px', fontWeight: 600, color: '#e2e8f0', marginBottom: '12px' }}>Fulfillment & Contraparte</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '24px', alignItems: 'start' }}>
+            {/* Linked containers table */}
+            <div>
+              <h3 style={{ fontSize: '12px', color: '#64748b', marginBottom: '8px', fontWeight: 500 }}>Contenedores vinculados</h3>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px' }}>
+                <thead>
+                  <tr style={{ borderBottom: '1px solid #ffffff12', color: '#64748b' }}>
+                    {['ID', 'Producto', 'Etapa', 'T-Day'].map(h => (
+                      <th key={h} style={{ padding: '6px 8px', textAlign: 'left', fontWeight: 500 }}>{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {linkedContainers.map(c => (
+                    <tr key={c.id} style={{ borderBottom: '1px solid #ffffff08', color: '#94a3b8' }}>
+                      <td style={{ padding: '8px', fontFamily: 'JetBrains Mono, monospace', color: '#00E696', fontSize: '11px' }}>{c.id}</td>
+                      <td style={{ padding: '8px' }}>{c.productLabel}</td>
+                      <td style={{ padding: '8px' }}>{c.status}</td>
+                      <td style={{ padding: '8px' }}>
+                        {(() => { const d = differenceInDays(new Date(c.etd), today); return `T${d >= 0 ? '+' : ''}${d}d`; })()}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            {/* Importer mini-card */}
+            <div style={{ background: '#1a1f2e', border: '1px solid #ffffff12', borderRadius: '8px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '4px', minWidth: '180px' }}>
+              <div style={{ fontWeight: 600, color: '#e2e8f0' }}>{importer.name}</div>
+              <div style={{ fontSize: '12px', color: '#94a3b8' }}>{importer.country} · {importer.market}</div>
+              {importer.creditRating && (
+                <div style={{ fontSize: '12px', color: '#00E696', fontFamily: 'JetBrains Mono, monospace' }}>{importer.creditRating}</div>
+              )}
+              <div style={{ fontSize: '12px', color: '#64748b' }}>Avg payment: {importer.avgPaymentDays}d</div>
+            </div>
           </div>
         </section>
       </div>
@@ -1508,6 +1695,7 @@ export default function POListPage() {
 import { purchaseOrders } from '@/lib/mock-data/purchase-orders';
 import { importers } from '@/lib/mock-data/importers';
 import { documents } from '@/lib/mock-data/documents';
+import { containers } from '@/lib/mock-data/containers';
 import { PODetail } from '@/components/purchase-orders/PODetail';
 import { notFound } from 'next/navigation';
 
@@ -1518,8 +1706,9 @@ export default async function PODetailPage({ params }: { params: Promise<{ id: s
   const importer = importers.find(i => i.id === po.importerId);
   if (!importer) notFound();
   const docs = documents.filter(d => po.containerIds.some(cid => d.containerId === cid));
+  const linked = containers.filter(c => po.containerIds.includes(c.id));
 
-  return <PODetail po={po} importer={importer} documents={docs} />;
+  return <PODetail po={po} importer={importer} documents={docs} linkedContainers={linked} />;
 }
 ```
 
@@ -1740,7 +1929,7 @@ interface Props<P, C> {
 }
 
 export function EntityFiche<P, C>({ name, pills, kpis, pos, containers, poColumns, containerColumns, children }: Props<P, C>) {
-  const initials = name.split(' ').slice(0, 2).map(w => w[0]).join('').toUpperCase();
+  const initials = name.split(' ').slice(0, 2).map(w => w.charAt(0)).join('').toUpperCase();
 
   return (
     <div style={{ padding: '24px', maxWidth: '1100px' }}>
@@ -2445,6 +2634,23 @@ export function ProductProfileCard({ product }: Props) {
 - [ ] **Step 6: Create `CommercialProfileCard.tsx`**
 
 Draft profiles: dashed border + `opacity: 0.55`.
+
+The spec §7.3 requires showing bank, avg collection days (with threshold coloring: ok if ≤ 7d for L/C or ≤ 45d for T/T; warn otherwise), and currency. The existing `CommercialProfile` type does not have these fields. First, add them to `types/index.ts` in the `CommercialProfile` interface and add matching values to `lib/mock-data/commercial-profiles.ts`:
+
+```ts
+// Add to CommercialProfile interface in types/index.ts:
+bank?: string;
+avgCollectionDays?: number;
+currency?: string;
+```
+
+Then use them in the card with threshold coloring:
+
+```tsx
+const avgDaysOk = profile.avgCollectionDays == null ? true
+  : profile.paymentMethod === 'L/C' ? profile.avgCollectionDays <= 7
+  : profile.avgCollectionDays <= 45;
+```
 
 ```tsx
 import type { CommercialProfile } from '@/types';
