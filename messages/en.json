@@ -52,11 +52,12 @@
     "paymentTerms": "Payment Terms",
     "statuses": {
       "planning": "Planning",
-      "docs_in_progress": "Documents in progress",
-      "in_treatment": "In treatment",
-      "at_sea": "In transit",
-      "arrived": "Arrived",
-      "cleared": "Cleared"
+      "preparation": "Preparation",
+      "documentation": "Documentation",
+      "in_transit": "In Transit",
+      "customs_release": "Customs & Release",
+      "delivery_payment": "Delivery & Payment",
+      "closed": "Closed"
     }
   },
   "dashboard": {

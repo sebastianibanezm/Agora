@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import type { Container, Alert, Importer } from '@/types';
+import { isActiveContainer } from '@/lib/containers';
 import { ContainerCard } from './ContainerCard';
 
 const QUEUE_IDS = [
@@ -25,7 +26,7 @@ export function ActionQueue({ containers, alerts, importers }: Props) {
     .map(id => containers.find(c => c.id === id))
     .filter((c): c is Container => c !== undefined);
 
-  const activeCount = containers.filter(c => c.status !== 'arrived').length;
+  const activeCount = containers.filter(isActiveContainer).length;
 
   return (
     <div className="flex flex-col">

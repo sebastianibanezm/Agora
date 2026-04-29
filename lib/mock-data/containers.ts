@@ -24,7 +24,7 @@ export const containers: Container[] = [
     etd: '2027-01-11T18:00:00-04:00',
     eta: '2027-02-08T08:00:00+05:30',
     cutoffAt: '2027-01-10T04:00:00-04:00',
-    status: 'docs_in_progress',
+    status: 'documentation',
     costAtRiskUsd: 8_500,
     timelineNodes: [
       { tDay: -15, status: 'done' },
@@ -56,7 +56,7 @@ export const containers: Container[] = [
     podCoords: [122.05, 30.63],
     etd: '2027-01-14T22:00:00-04:00',
     eta: '2027-02-08T08:00:00+08:00',
-    status: 'in_treatment',
+    status: 'preparation',
     coldChain: cherriesTrace,
     costAtRiskUsd: 0,
     timelineNodes: [
@@ -88,7 +88,7 @@ export const containers: Container[] = [
     podCoords: [114.06, 22.55],
     etd: '2027-01-10T20:00:00-04:00',
     eta: '2027-02-02T08:00:00+08:00',
-    status: 'docs_in_progress',
+    status: 'documentation',
     coldChain: grapesTrace,
     costAtRiskUsd: 0,
     timelineNodes: [
@@ -120,7 +120,7 @@ export const containers: Container[] = [
     podCoords: [121.47, 31.23],
     etd: '2026-12-02T00:00:00-04:00',
     eta: '2027-01-01T00:00:00+08:00',
-    status: 'arrived',
+    status: 'customs_release',
     costAtRiskUsd: 1_080,
     timelineNodes: [
       { tDay: 0, status: 'done' },
@@ -151,7 +151,7 @@ export const containers: Container[] = [
     podCoords: [-0.38, 39.46],
     etd: '2027-01-13T18:00:00-04:00',
     eta: '2027-02-06T08:00:00+01:00',
-    status: 'docs_in_progress',
+    status: 'documentation',
     costAtRiskUsd: 8_000,
     timelineNodes: [
       { tDay: -15, status: 'done' },
@@ -183,7 +183,7 @@ export const containers: Container[] = [
     podCoords: [55.13, 25.02],
     etd: '2027-01-16T00:00:00-04:00',
     eta: '2027-02-04T08:00:00+04:00',
-    status: 'docs_in_progress',
+    status: 'documentation',
     costAtRiskUsd: 540,
     timelineNodes: [
       { tDay: -15, status: 'done' },
@@ -214,7 +214,7 @@ export const containers: Container[] = [
     podCoords: [-118.27, 33.74],
     etd: '2026-12-18T00:00:00-04:00',
     eta: '2027-01-07T08:00:00-08:00',
-    status: 'arrived',
+    status: 'customs_release',
     costAtRiskUsd: 0,
     timelineNodes: [
       { tDay: -15, status: 'done' },
@@ -246,7 +246,7 @@ export const containers: Container[] = [
     podCoords: [4.48, 51.92],
     etd: '2027-01-15T18:00:00-04:00',
     eta: '2027-02-10T08:00:00+01:00',
-    status: 'docs_in_progress',
+    status: 'documentation',
     costAtRiskUsd: 0,
     timelineNodes: [
       { tDay: -15, status: 'done' },
