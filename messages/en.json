@@ -9,7 +9,9 @@
     "performance": "Performance",
     "approvalQueue": "Approval Queue",
     "approvalQueueSoon": "Available in V3",
-    "userMenu": "User menu"
+    "userMenu": "User menu",
+    "notifications": "Notifications",
+    "todaysQueue": "Today's queue"
   },
   "common": {
     "costAtRisk": "Cost at risk",

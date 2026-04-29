@@ -41,4 +41,19 @@ describe('Header', () => {
     const settingsItem = await screen.findByRole('menuitem', { name: /Configuración/i });
     expect(settingsItem).toBeInTheDocument();
   });
+
+  it('renders breadcrumb with Operations text', () => {
+    render(wrap(<Header />));
+    expect(screen.getByText('Operaciones')).toBeInTheDocument();
+  });
+
+  it('renders search icon button', () => {
+    render(wrap(<Header />));
+    expect(screen.getByRole('button', { name: /buscar/i })).toBeInTheDocument();
+  });
+
+  it('renders notification bell button', () => {
+    render(wrap(<Header />));
+    expect(screen.getByRole('button', { name: /notificaciones/i })).toBeInTheDocument();
+  });
 });

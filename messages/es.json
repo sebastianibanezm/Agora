@@ -9,7 +9,9 @@
     "performance": "Rendimiento",
     "approvalQueue": "Cola de Aprobación",
     "approvalQueueSoon": "Disponible en V3",
-    "userMenu": "Menú de usuario"
+    "userMenu": "Menú de usuario",
+    "notifications": "Notificaciones",
+    "todaysQueue": "Cola de hoy"
   },
   "common": {
     "costAtRisk": "Costo en riesgo",

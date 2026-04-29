@@ -1,23 +1,57 @@
 'use client';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
+import { Search, Bell, User } from 'lucide-react';
 import {
   DropdownMenu, DropdownMenuTrigger, DropdownMenuContent,
   DropdownMenuItem, DropdownMenuSeparator, DropdownMenuGroup, DropdownMenuLabel,
 } from '@/components/ui/dropdown-menu';
-import { User } from 'lucide-react';
 
-export function Header() {
+interface HeaderProps {
+  breadcrumb?: { parent: string; current: string };
+}
+
+export function Header({ breadcrumb }: HeaderProps) {
   const t = useTranslations();
   return (
-    <header className="fixed top-0 left-14 right-0 h-14 z-30 glass border-b border-white/10 flex items-center justify-end px-4">
+    <header className="fixed top-0 left-14 right-0 h-14 z-30 glass border-b border-white/10 flex items-center px-4 gap-4">
+      {/* Left: breadcrumb */}
+      {breadcrumb ? (
+        <div className="flex items-center gap-1.5 font-mono text-xs tracking-wider mr-auto">
+          <span className="text-ink-3 uppercase">{breadcrumb.parent}</span>
+          <span className="text-ink-4">/</span>
+          <span className="text-ink-2">{breadcrumb.current}</span>
+        </div>
+      ) : (
+        <div className="flex items-center gap-1.5 font-mono text-xs tracking-wider mr-auto">
+          <span className="text-ink-3 uppercase">{t('nav.operations')}</span>
+          <span className="text-ink-4">/</span>
+          <span className="text-ink-2">{t('nav.todaysQueue')}</span>
+        </div>
+      )}
+
+      {/* Right cluster */}
+      <button
+        aria-label={t('common.search')}
+        className="flex items-center justify-center h-7 w-7 rounded-md text-ink-3 hover:text-ink-1 hover:bg-white/5 transition-colors"
+      >
+        <Search className="h-4 w-4" />
+      </button>
+
+      <button
+        aria-label={t('nav.notifications')}
+        className="relative flex items-center justify-center h-[30px] w-[30px] rounded-md border border-white/10 text-ink-2 hover:text-ink-1 hover:border-white/20 transition-colors"
+      >
+        <Bell className="h-3.5 w-3.5" />
+      </button>
+
       <DropdownMenu>
         <DropdownMenuTrigger
           aria-label={t('nav.userMenu')}
           className="flex items-center gap-2 rounded-md px-3 py-1.5 hover:bg-white/5 transition-colors text-ink-2 hover:text-ink-1"
         >
-          <div className="h-7 w-7 rounded-full bg-mint-700 flex items-center justify-center">
-            <User className="h-3.5 w-3.5 text-mint-300" />
+          <div className="h-[30px] w-[30px] rounded-full bg-bg-2 border border-white/10 flex items-center justify-center">
+            <User className="h-3.5 w-3.5 text-ink-2" />
           </div>
           <span className="text-sm">María José</span>
         </DropdownMenuTrigger>
