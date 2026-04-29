@@ -53,7 +53,7 @@ Three changes to the existing header:
 **Package:** `react-simple-maps` — must be added (`pnpm add react-simple-maps`). The package does **not** bundle map data. Use the CDN URL approach: pass `geography="https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json"` directly to `<Geographies>`. This requires no extra install and no `tsconfig.json` changes.
 
 ### Layout
-Full-width panel, `background: #080E1A`, 320px tall.
+Full-width panel, `background: #080E1A`, 380px tall.
 
 ```
 [map-header: label + status counters]
@@ -68,17 +68,18 @@ Full-width panel, `background: #080E1A`, 320px tall.
 `react-simple-maps` `ComposableMap` with `Mercator` or equirectangular projection. Map data via CDN (see §3 Package note above). Layers back-to-front:
 
 1. Background fill `#080E1A`
-2. Graticule lines — every 20°, `rgba(255,255,255,0.04)`, 0.5px
-3. Country polygons — `Geographies` component, fill `#0F1A2E`, stroke `rgba(125,211,252,0.15)` 0.8px
-4. Shipping arcs — quadratic Bézier POL→POD via `<Line>` or custom `<path>`. SVG `stroke-dasharray` draw animation on mount (2–4s). Stroke by severity:
+2. Overlay grid — CSS `linear-gradient` lines forming a ~48×48px grid, `rgba(255,255,255,0.04)`, rendered as an absolutely-positioned `<div className="overlay-grid">` covering the map panel. No dot grid.
+3. Graticule lines — every 20°, `rgba(255,255,255,0.04)`, 0.5px
+4. Country polygons — `Geographies` component, fill `#0F1A2E`, stroke `rgba(125,211,252,0.15)` 0.8px
+5. Shipping arcs — quadratic Bézier POL→POD via `<Line>` or custom `<path>`. SVG `stroke-dasharray` draw animation on mount (2–4s). Stroke by severity:
    - on-track: `#00E696`, 1.6px
    - watch: `#F59E0B`, 1.6px
    - action: `#F97316`, 1.8px
    - critical: `#EF4444`, 2.2px — reefer arcs additionally pulse opacity (`0.9→0.5→0.9`, 1.5s)
-5. Motion pips — `<animateMotion>` along arc path, looping, colored by severity
-6. Origin pin (San Antonio, Chile) — filled circle + expanding halo animation
-7. Destination markers — 8×8 rotated diamond (`<rect transform="rotate(45)">`)
-8. Port labels — 8px monospace, `--color-ink-4`
+6. Motion pips — `<animateMotion>` along arc path, looping, colored by severity
+7. Origin pin (San Antonio, Chile) — filled circle + expanding halo animation
+8. Destination markers — 8×8 rotated diamond (`<rect transform="rotate(45)">`)
+9. Port labels — 8px monospace, `--color-ink-4`
 
 ### Legend overlay (bottom-left)
 `ON-TRACK · WATCH · ACTION · CRITICAL` with 20px colored line swatches.
@@ -129,20 +130,23 @@ export const kpis: KPI[] = [
 ```
 
 ### KPI Tile anatomy
+
+Tile style: `background: var(--bg-1)`, `border: 1px solid var(--line)`, `border-radius: 10px`, `padding: 14px 16px`, `position: relative; overflow: hidden`.
+
 ```
-[label — 10px uppercase --color-ink-3]
-[value — 28px JetBrains Mono bold]  [unit — 13px --color-ink-2]
-[delta — 11px; positive=mint, negative=--color-severity-crit]
-[sparkline — full-width SVG 40px tall, opacity 0.5, preserveAspectRatio="none"]
+[label — 9.5px uppercase mono --color-ink-3, letter-spacing 0.18em]
+[value — 30px JetBrains Mono bold, line-height 1]  [unit — 12px --color-ink-3]
+[delta — 11px mono; dir=up → mint; dir=down (good) → mint; dir=bad → --color-severity-risk]
+                              [sparkline — absolute, right: 12px, bottom: 10px, opacity 0.7]
 ```
 
-Sparkline: `<polyline>` with `stroke="#00E696"`, `stroke-width="2"`. Scale points to fit `viewBox="0 0 200 40"`.
+Sparkline: SVG `80×24px`, `viewBox="0 0 80 24"`. `<polyline>` with `stroke="#00E696"`, `stroke-width="1.5"`, fill gradient from `rgba(0,230,150,0.25)` to transparent. Absolutely positioned bottom-right of the tile, behind text (`z-index: 0`). Does not span full width.
 
 ---
 
 ## 5. Action Queue + Alerts Rail
 
-**Layout:** CSS grid `1fr 380px`, `align-items: stretch` — both panels equal height.
+**Layout:** CSS grid `1fr 360px`, `align-items: stretch` — both panels equal height.
 
 ### 5a. Action Queue — "Needs action now"
 
@@ -166,7 +170,7 @@ Assign realistic T-day values anchored to `getTodayDemo()` (2027-01-09).
 - Left: `Needs action` bold + `now` muted
 - Right: `● 2 CRITICAL · ● 2 ACTION · ● 1 WATCH` — counts derived from active alert severities
 
-#### ContainerCard row — 3-column grid: `260px 1fr 180px`
+#### ContainerCard row — 3-column grid: `200px 1fr 220px`
 
 **Left column**
 - Container ID — JetBrains Mono, 15px bold
@@ -176,8 +180,8 @@ Assign realistic T-day values anchored to `getTodayDemo()` (2027-01-09).
 - Route — `{polCode} → {podCode} · {carrier}` — 10px mono `--color-ink-4`. Add `carrier: string` to the `Container` interface and populate all 8 container records (e.g., `"MSC"`, `"CMA CGM"`, `"MAERSK"`, `"HAPAG-LLOYD"`, `"OOCL"`).
 
 **Center column**
-- T-day timeline: horizontal line `T–` to `T+45`, milestone dots (done=mint, alert=red, future=dim border), current position = 12px green circle with mint glow
-- Alert row: colored severity dot + alert description (11px `--color-ink-2`) + category label right-aligned (9px mono `--color-ink-4` uppercase)
+- T-day timeline: `height: 38px`, horizontal baseline `2px` line (`--line`), with a mint progress fill from T-15 to current day and circle nodes at specific T-offset milestones. Current day = 12px circle filled mint with glow (`box-shadow: 0 0 12px var(--accent)`) and `2px var(--bg-2)` ring. Past milestone nodes: `6px` circles — done=mint, crit=red with glow, warn=amber, future=dimmed border. Labels: ETD/ETA at ends (9px mono `--color-ink-4`), current T label centered below the now dot. Not a row of colored cells — this is a continuous line with positioned nodes.
+- Alert row: colored severity dot + alert description (12px `--color-ink-2`) + agent label right-aligned (9.5px mono `--color-ink-4` uppercase)
 
 **Right column** (right-aligned)
 - `COST AT RISK` — 9px uppercase `--color-ink-4`
@@ -285,16 +289,16 @@ Containers shown: those whose ETD falls within T-7 → T0 window (relative to `g
 ### Mini-cards
 6-column grid, `border-right: 1px solid var(--line-soft)` between cards.
 
-Each card:
+Each card (width 200px, padding 12px, `border-radius: 8px`):
 ```
-[container-id 11px mono]         [pct% 13px mono bold, severity-colored]
-[buyer name 10px --color-ink-3]
-[readiness grid — 8 cols × 3 rows of 9px squares]
-  mint=done, amber=watch, red=critical, gray=not started
-[T- date]                        [ETD date]
+[container-id 11px mono bold]    [pct% 11px mono bold, severity-colored]
+[buyer name 11px --color-ink-3]
+[readiness grid — 5 cols × 3 rows = 15 cells, aspect-ratio 1:1, gap 4px, border-radius 2px]
+  mint (g)=done, amber (y)=watch/pending, red (r)=critical/missing, gray (k)=not started
+[T- label]                       [ETD date]
 ```
 
-Readiness grid: filter `documents` array from `lib/mock-data/documents.ts` by `containerId`. Count docs by status: `approved`→mint, `pending_review`→amber, `missing`/`rejected`→red, not-yet-issued→gray. Readiness % = `approved / total_expected_docs`. For the 5 new containers, add a representative subset of `DocumentInstance` records to `documents.ts` (full document sets are not required for the strip — 12–18 entries per container is sufficient, with a mix of statuses matching the handoff percentages).
+Readiness grid: 15 cells total in a `grid-template-columns: repeat(5, 1fr)` layout with `aspect-ratio: 1`. Filter `documents` array from `lib/mock-data/documents.ts` by `containerId`. Count docs by status: `approved`→mint, `pending_review`→amber, `missing`/`rejected`→red, not-yet-issued→gray. Readiness % = `approved / total_expected_docs`. For the 5 new containers, add a representative subset of `DocumentInstance` records to `documents.ts` (full document sets are not required for the strip — 12–18 entries per container is sufficient, with a mix of statuses matching the handoff percentages).
 
 ---
 
@@ -459,7 +463,7 @@ CSS variable note: use Tailwind utility classes (e.g., `text-severity-crit`, `te
 
 - [ ] `pnpm add react-simple-maps && pnpm add -D @types/react-simple-maps` completed
 - [ ] Map renders ≥7 animated arcs; reefer arcs pulse; motion pips animate; hover tooltip works
-- [ ] KPI strip: exactly 5 tiles, sparklines span full tile width
+- [ ] KPI strip: exactly 5 tiles, sparklines are 80×24px absolute positioned bottom-right of each tile
 - [ ] Action queue: 5 cards ordered by urgency, each with T-day timeline + cost-at-risk + due badge
 - [ ] Alerts rail: matches action queue height, 7 rows with correct severity pills
 - [ ] Cold chain section: renders when reefer containers active, hidden otherwise
