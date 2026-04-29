@@ -14,9 +14,12 @@ import { ReadinessStrip } from '@/components/dashboard/ReadinessStrip';
 import { ClosedTable } from '@/components/dashboard/ClosedTable';
 import { PenaltyHeatmap } from '@/components/dashboard/PenaltyHeatmap';
 
+const OPS_DASHBOARD_KPI_IDS = ['active_shipments', 'avoided_penalties', 'demurrage_incurred', 'avg_cycle_time', 'doc_auto_gen_rate'];
+
 export default async function OperationsDashboard() {
   const t = await getTranslations('dashboard');
   const reefers = containers.filter(c => c.coldChain?.required === true);
+  const dashKpis = OPS_DASHBOARD_KPI_IDS.map(id => kpis.find(k => k.id === id)!).filter(Boolean);
 
   return (
     <div className="flex flex-col gap-4 px-4 pt-4 pb-8 min-h-screen bg-bg-0">
@@ -25,7 +28,7 @@ export default async function OperationsDashboard() {
       <ShipmentMap containers={containers} alerts={alerts} />
 
       {/* §4 KPI Strip */}
-      <KPIStrip kpis={kpis} />
+      <KPIStrip kpis={dashKpis} />
 
       {/* §5 Action Queue + Alerts Rail */}
       <div className="grid gap-4" style={{ gridTemplateColumns: '1fr 360px', alignItems: 'stretch' }}>

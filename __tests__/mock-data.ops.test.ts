@@ -26,8 +26,8 @@ describe('containers — Phase 2 data', () => {
 });
 
 describe('kpis — Phase 2', () => {
-  it('has exactly 5 KPIs', () => {
-    expect(kpis.length).toBe(5);
+  it('has exactly 7 KPIs', () => {
+    expect(kpis.length).toBe(7);
   });
 
   it('all KPIs have sparkline arrays', () => {

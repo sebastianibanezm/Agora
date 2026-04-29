@@ -25,20 +25,16 @@ vi.mock('@/components/dashboard/ContainerCard', () => ({
   ContainerCard: () => <div data-testid="timeline-mini" />,
 }));
 
-// KPIStrip is an async RSC — render stub that outputs the real tiles count
-vi.mock('@/components/kpi/KPIStrip', async () => {
-  const { KPITile } = await import('@/components/kpi/KPITile');
-  const { kpis } = await import('@/lib/mock-data/kpis');
-  return {
-    KPIStrip: () => (
-      <div>
-        {kpis.map((k) => (
-          <KPITile key={k.id} kpi={k} label={k.labelKey} />
-        ))}
-      </div>
-    ),
-  };
-});
+// KPIStrip is an async RSC — render stub that uses the kpis prop
+vi.mock('@/components/kpi/KPIStrip', () => ({
+  KPIStrip: ({ kpis }: { kpis: Array<{ id: string; value: number }> }) => (
+    <div>
+      {kpis.map((k) => (
+        <span key={k.id} data-testid="kpi-value">{k.value}</span>
+      ))}
+    </div>
+  ),
+}));
 
 import OperationsDashboard from '@/app/page';
 

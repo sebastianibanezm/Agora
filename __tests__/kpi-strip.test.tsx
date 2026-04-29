@@ -53,9 +53,9 @@ describe('KPITile', () => {
 });
 
 describe('KPIStrip', () => {
-  it('renders exactly 5 tiles', async () => {
+  it('renders exactly 7 tiles', async () => {
     // KPIStrip is an async RSC — invoke directly and await, then wrap result for rendering
     render(wrap(await KPIStrip({ kpis })));
-    expect(screen.getAllByTestId('kpi-value').length).toBe(5);
+    expect(screen.getAllByTestId('kpi-value').length).toBe(7);
   });
 });
