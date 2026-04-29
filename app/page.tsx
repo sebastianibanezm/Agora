@@ -5,6 +5,7 @@ import { alerts } from '@/lib/mock-data/alerts';
 import { importers } from '@/lib/mock-data/importers';
 import { documents } from '@/lib/mock-data/documents';
 import { penaltyAvoidedMatrix } from '@/lib/mock-data/penalty-events';
+import { PageTransition } from '@/components/shared/PageTransition';
 import { ShipmentMap } from '@/components/map/ShipmentMap';
 import { KPIStrip } from '@/components/kpi/KPIStrip';
 import { ActionQueue } from '@/components/dashboard/ActionQueue';
@@ -22,6 +23,7 @@ export default async function OperationsDashboard() {
   const dashKpis = OPS_DASHBOARD_KPI_IDS.map(id => kpis.find(k => k.id === id)!).filter(Boolean);
 
   return (
+    <PageTransition>
     <div className="flex flex-col gap-4 px-4 pt-4 pb-8 min-h-screen bg-bg-0">
 
       {/* §3 Shipment Map */}
@@ -70,5 +72,6 @@ export default async function OperationsDashboard() {
         </section>
       </div>
     </div>
+    </PageTransition>
   );
 }

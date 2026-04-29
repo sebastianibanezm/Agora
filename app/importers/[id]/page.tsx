@@ -1,3 +1,4 @@
+import { PageTransition } from '@/components/shared/PageTransition';
 import { importers } from '@/lib/mock-data/importers';
 import { purchaseOrders } from '@/lib/mock-data/purchase-orders';
 import { containers } from '@/lib/mock-data/containers';
@@ -31,29 +32,31 @@ export default async function ImporterFichePage({ params }: { params: Promise<{ 
   ];
 
   return (
-    <EntityFiche
-      name={imp.name}
-      pills={pills}
-      kpis={kpis}
-      pos={pos}
-      containers={cons}
-      poColumns={[
-        { label: 'ID', render: po => <Link href={`/purchase-orders/${po.id}`} style={{ color: '#00E696', fontFamily: 'monospace', textDecoration: 'none' }}>{po.id}</Link> },
-        { label: 'Product', render: po => po.productId.replace(/_/g, ' ') },
-        { label: 'Status', render: po => po.status },
-        { label: 'Value', render: po => `$${po.valueUsd.toLocaleString()}` },
-      ]}
-      containerColumns={[
-        { label: 'ID', render: c => <span style={{ fontFamily: 'monospace', color: '#00E696' }}>{c.id}</span> },
-        { label: 'Product', render: c => c.productLabel },
-        { label: 'Stage', render: c => c.status },
-        { label: 'T-Day', render: c => {
-          const d = differenceInDays(new Date(c.etd), today);
-          return `T${d >= 0 ? '+' : ''}${d}d`;
-        }},
-      ]}
-    >
-      <ImporterSpecificSections importer={imp} />
-    </EntityFiche>
+    <PageTransition>
+      <EntityFiche
+        name={imp.name}
+        pills={pills}
+        kpis={kpis}
+        pos={pos}
+        containers={cons}
+        poColumns={[
+          { label: 'ID', render: po => <Link href={`/purchase-orders/${po.id}`} style={{ color: '#00E696', fontFamily: 'monospace', textDecoration: 'none' }}>{po.id}</Link> },
+          { label: 'Product', render: po => po.productId.replace(/_/g, ' ') },
+          { label: 'Status', render: po => po.status },
+          { label: 'Value', render: po => `$${po.valueUsd.toLocaleString()}` },
+        ]}
+        containerColumns={[
+          { label: 'ID', render: c => <span style={{ fontFamily: 'monospace', color: '#00E696' }}>{c.id}</span> },
+          { label: 'Product', render: c => c.productLabel },
+          { label: 'Stage', render: c => c.status },
+          { label: 'T-Day', render: c => {
+            const d = differenceInDays(new Date(c.etd), today);
+            return `T${d >= 0 ? '+' : ''}${d}d`;
+          }},
+        ]}
+      >
+        <ImporterSpecificSections importer={imp} />
+      </EntityFiche>
+    </PageTransition>
   );
 }

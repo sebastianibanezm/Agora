@@ -1,3 +1,4 @@
+import { PageTransition } from '@/components/shared/PageTransition';
 import { producers } from '@/lib/mock-data/producers';
 import { purchaseOrders } from '@/lib/mock-data/purchase-orders';
 import { containers } from '@/lib/mock-data/containers';
@@ -35,29 +36,31 @@ export default async function ProducerFichePage({ params }: { params: Promise<{ 
   ];
 
   return (
-    <EntityFiche
-      name={prod.name}
-      pills={pills}
-      kpis={kpis}
-      pos={pos}
-      containers={cons}
-      poColumns={[
-        { label: 'ID', render: po => <Link href={`/purchase-orders/${po.id}`} style={{ color: '#00E696', fontFamily: 'monospace', textDecoration: 'none' }}>{po.id}</Link> },
-        { label: 'Importer', render: po => po.importerId },
-        { label: 'Status', render: po => po.status },
-        { label: 'Value', render: po => `$${po.valueUsd.toLocaleString()}` },
-      ]}
-      containerColumns={[
-        { label: 'ID', render: c => <span style={{ fontFamily: 'monospace', color: '#00E696' }}>{c.id}</span> },
-        { label: 'Destination', render: c => c.market },
-        { label: 'Stage', render: c => c.status },
-        { label: 'T-Day', render: c => {
-          const d = differenceInDays(new Date(c.etd), today);
-          return `T${d >= 0 ? '+' : ''}${d}d`;
-        }},
-      ]}
-    >
-      <ProducerSpecificSections producer={prod} />
-    </EntityFiche>
+    <PageTransition>
+      <EntityFiche
+        name={prod.name}
+        pills={pills}
+        kpis={kpis}
+        pos={pos}
+        containers={cons}
+        poColumns={[
+          { label: 'ID', render: po => <Link href={`/purchase-orders/${po.id}`} style={{ color: '#00E696', fontFamily: 'monospace', textDecoration: 'none' }}>{po.id}</Link> },
+          { label: 'Importer', render: po => po.importerId },
+          { label: 'Status', render: po => po.status },
+          { label: 'Value', render: po => `$${po.valueUsd.toLocaleString()}` },
+        ]}
+        containerColumns={[
+          { label: 'ID', render: c => <span style={{ fontFamily: 'monospace', color: '#00E696' }}>{c.id}</span> },
+          { label: 'Destination', render: c => c.market },
+          { label: 'Stage', render: c => c.status },
+          { label: 'T-Day', render: c => {
+            const d = differenceInDays(new Date(c.etd), today);
+            return `T${d >= 0 ? '+' : ''}${d}d`;
+          }},
+        ]}
+      >
+        <ProducerSpecificSections producer={prod} />
+      </EntityFiche>
+    </PageTransition>
   );
 }

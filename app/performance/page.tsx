@@ -4,6 +4,7 @@ import { kpis } from '@/lib/mock-data/kpis';
 import { penaltyAvoidedMatrix } from '@/lib/mock-data/penalty-events';
 import { agents } from '@/lib/mock-data/agents';
 import { agentStatuses } from '@/lib/mock-data/agent-statuses';
+import { PageTransition } from '@/components/shared/PageTransition';
 import { KPIStrip } from '@/components/kpi/KPIStrip';
 import { PenaltyHeatmap } from '@/components/dashboard/PenaltyHeatmap';
 import { AgentGrid } from './components/AgentGrid';
@@ -18,6 +19,7 @@ export default async function PerformancePage() {
   const coldAgentCount = agents.filter(a => a.tags.includes('cold_chain')).length;
 
   return (
+    <PageTransition>
     <div className="flex flex-col gap-4 px-4 pt-4 pb-8 min-h-screen bg-bg-0">
       {/* KPI strip */}
       <KPIStrip kpis={perfKpis} />
@@ -50,5 +52,6 @@ export default async function PerformancePage() {
         )}
       </div>
     </div>
+    </PageTransition>
   );
 }
