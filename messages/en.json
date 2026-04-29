@@ -81,7 +81,9 @@
     "coldChainStatus": "Cold chain status",
     "weekReadiness": "This week readiness",
     "closedLastWeek": "Closed last week",
-    "penaltyHeatmap": "Penalties"
+    "penaltyHeatmap": "Penalties",
+    "liveAlerts": "Live alerts",
+    "open": "OPEN"
   },
   "coldChain": {
     "title": "Cold chain",

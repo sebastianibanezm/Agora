@@ -81,7 +81,9 @@
     "coldChainStatus": "Estado de cadena de frío",
     "weekReadiness": "Preparación de la semana",
     "closedLastWeek": "Cerrados la semana pasada",
-    "penaltyHeatmap": "Penalizaciones"
+    "penaltyHeatmap": "Penalizaciones",
+    "liveAlerts": "Alertas en vivo",
+    "open": "ABIERTAS"
   },
   "coldChain": {
     "title": "Cadena de frío",
