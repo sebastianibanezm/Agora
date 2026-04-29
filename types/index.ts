@@ -379,7 +379,7 @@ export type PenaltyEventType =
 
 export interface PenaltyAvoidedRow {
   buyerName: string;
-  counts: Record<PenaltyEventType, number>;
+  savedUsd: Record<PenaltyEventType, number>;
 }
 
 // ===== Phase 4: Workflow Document System =====

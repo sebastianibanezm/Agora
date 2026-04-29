@@ -55,7 +55,7 @@ describe('penaltyAvoidedMatrix', () => {
     ];
     for (const row of penaltyAvoidedMatrix) {
       for (const ev of events) {
-        expect(typeof row.counts[ev as any]).toBe('number');
+        expect(typeof row.savedUsd[ev as any]).toBe('number');
       }
     }
   });

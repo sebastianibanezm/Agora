@@ -9,10 +9,10 @@ export const penaltyEvents: PenaltyEvent[] = [
 ];
 
 export const penaltyAvoidedMatrix: PenaltyAvoidedRow[] = [
-  { buyerName: 'Mumbai Dry Fruits',  counts: { refumigation:3, phyto_reissue:2, vgm_late:1, dus_error:2, bl_correction:2, demurrage:1, detention:1, bank_discrepancy:3 } },
-  { buyerName: 'Frutimar SL',        counts: { refumigation:1, phyto_reissue:2, vgm_late:2, dus_error:1, bl_correction:3, demurrage:2, detention:1, bank_discrepancy:2 } },
-  { buyerName: 'Sun Yang Foods',     counts: { refumigation:2, phyto_reissue:1, vgm_late:1, dus_error:1, bl_correction:1, demurrage:4, detention:3, bank_discrepancy:1 } },
-  { buyerName: 'Al Madina Trading',  counts: { refumigation:1, phyto_reissue:1, vgm_late:1, dus_error:2, bl_correction:2, demurrage:3, detention:2, bank_discrepancy:1 } },
-  { buyerName: 'Pacific Produce',    counts: { refumigation:2, phyto_reissue:2, vgm_late:3, dus_error:2, bl_correction:1, demurrage:1, detention:1, bank_discrepancy:2 } },
-  { buyerName: 'Costco FreshCo',     counts: { refumigation:1, phyto_reissue:1, vgm_late:2, dus_error:1, bl_correction:1, demurrage:1, detention:1, bank_discrepancy:2 } },
+  { buyerName: 'Mumbai Dry Fruits', savedUsd: { refumigation:2400, phyto_reissue:1100, vgm_late:400,  dus_error:900, bl_correction:700,  demurrage:800,  detention:600,  bank_discrepancy:2100 } },
+  { buyerName: 'Frutimar SL',       savedUsd: { refumigation:800,  phyto_reissue:1200, vgm_late:800,  dus_error:500, bl_correction:2400, demurrage:1600, detention:600,  bank_discrepancy:1600 } },
+  { buyerName: 'Sun Yang Foods',    savedUsd: { refumigation:1600, phyto_reissue:600,  vgm_late:400,  dus_error:500, bl_correction:700,  demurrage:3200, detention:2700, bank_discrepancy:800  } },
+  { buyerName: 'Al Madina Trading', savedUsd: { refumigation:800,  phyto_reissue:600,  vgm_late:400,  dus_error:900, bl_correction:1400, demurrage:2400, detention:1200, bank_discrepancy:800  } },
+  { buyerName: 'Pacific Produce',   savedUsd: { refumigation:1600, phyto_reissue:1200, vgm_late:1200, dus_error:900, bl_correction:700,  demurrage:800,  detention:600,  bank_discrepancy:1600 } },
+  { buyerName: 'Costco FreshCo',    savedUsd: { refumigation:800,  phyto_reissue:600,  vgm_late:800,  dus_error:500, bl_correction:700,  demurrage:800,  detention:600,  bank_discrepancy:1600 } },
 ];
