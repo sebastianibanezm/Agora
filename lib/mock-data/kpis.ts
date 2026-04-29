@@ -1,10 +1,9 @@
 import type { KPI } from '@/types';
 
 export const kpis: KPI[] = [
-  { id: 'active_containers', labelKey: 'dashboard.kpiActiveContainers', value: 3, unit: 'count', sparkline: [3, 3, 3, 3, 3] },
-  { id: 'cost_at_risk', labelKey: 'dashboard.kpiCostAtRisk', value: 8_500, unit: 'usd', severity: 'watch', sparkline: [8500, 8200, 8600, 8300, 8500], deltaPositiveIsGood: false },
-  { id: 'on_time_docs', labelKey: 'dashboard.kpiOnTimeDocs', value: 87, unit: 'pct', deltaPct: 3, sparkline: [84, 85, 86, 87, 87], deltaPositiveIsGood: true },
-  { id: 'alerts_open', labelKey: 'dashboard.kpiAlertsOpen', value: 4, unit: 'count', severity: 'risk', sparkline: [4, 3, 4, 4, 4], deltaPositiveIsGood: false },
-  { id: 'cutoff_next_24h', labelKey: 'dashboard.kpiCutoffNext24h', value: 1, unit: 'count', severity: 'crit', sparkline: [1, 1, 1, 1, 1], deltaPositiveIsGood: false },
-  { id: 'cold_treatment_compliance', labelKey: 'dashboard.kpiColdTreatmentCompliance', value: 96, unit: 'pct', severity: 'ok', sparkline: [92, 93, 94, 95, 96], deltaPositiveIsGood: true },
+  { id: 'active_shipments',   labelKey: 'dashboard.kpiActiveShipments',   value: 12,     unit: 'count', deltaPct:  2,  sparkline: [4,6,5,8,7,9,10,12] },
+  { id: 'avoided_penalties',  labelKey: 'dashboard.kpiAvoidedPenalties',  value: 14_200, unit: 'usd',   deltaPct:  18, sparkline: [3,5,4,7,6,9,8,14] },
+  { id: 'demurrage_incurred', labelKey: 'dashboard.kpiDemurrageIncurred', value: 1_080,  unit: 'usd',   deltaPct: -55, sparkline: [9,8,7,6,5,4,3,1], deltaPositiveIsGood: false },
+  { id: 'avg_cycle_time',     labelKey: 'dashboard.kpiAvgCycleTime',      value: 58,     unit: 'days',  deltaPct: -5,  sparkline: [62,61,60,61,60,59,58,58], deltaPositiveIsGood: false },
+  { id: 'doc_auto_gen_rate',  labelKey: 'dashboard.kpiDocAutoGenRate',     value: 87,     unit: 'pct',   deltaPct:  5,  sparkline: [78,80,79,82,84,85,86,87] },
 ];

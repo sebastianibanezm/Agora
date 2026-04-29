@@ -11,7 +11,7 @@ export const alerts: Alert[] = [
     raisedBy: 'doc_deadline_guardian',
     actionLabelKey: 'alerts.fileDusNow',
     category: 'shipment_doc',
-    amountUsd: 0,
+    amountUsd: 1_200,
   },
   {
     id: 'ALT-002',
@@ -22,6 +22,7 @@ export const alerts: Alert[] = [
     raisedAt: '2027-01-09T10:00:00-04:00',
     raisedBy: 'cold_treatment_auditor',
     category: 'market_compliance',
+    dismissed: true,
   },
   {
     id: 'ALT-003',
@@ -32,6 +33,7 @@ export const alerts: Alert[] = [
     raisedAt: '2027-01-05T15:00:00Z',
     raisedBy: 'in_transit_telemetry_watcher',
     category: 'market_compliance',
+    dismissed: true,
   },
   {
     id: 'ALT-004',
@@ -41,7 +43,44 @@ export const alerts: Alert[] = [
     bodyKey: 'alerts.lcDiscrepancyBody',
     raisedAt: '2027-01-08T14:00:00-04:00',
     raisedBy: 'lc_discrepancy_catcher',
-    category: 'payment_aging',
+    category: 'bl_switch_window',
     amountUsd: 5000,
+    dismissed: true,
+  },
+  {
+    id: 'ALT-005', containerId: 'CMAU-9281744', severity: 'risk',
+    titleKey: 'alerts.blMismatchTitle', bodyKey: 'alerts.blMismatchBody',
+    raisedAt: '2027-01-09T06:00:00-04:00', raisedBy: 'bl_tracker',
+    category: 'bl_switch_window', amountUsd: 1_500,
+  },
+  {
+    id: 'ALT-006', containerId: 'OOLU-7710443', severity: 'crit',
+    titleKey: 'alerts.demurrageAccruingTitle', bodyKey: 'alerts.demurrageAccruingBody',
+    raisedAt: '2027-01-05T08:00:00-04:00', raisedBy: 'in_transit_telemetry_watcher',
+    category: 'free_time_tracker', amountUsd: 1_080,
+  },
+  {
+    id: 'ALT-007', containerId: 'MSKU-3401827', severity: 'risk',
+    titleKey: 'alerts.aflatoxinRetestTitle', bodyKey: 'alerts.aflatoxinRetestBody',
+    raisedAt: '2027-01-08T12:00:00-04:00', raisedBy: 'phyto_validator',
+    category: 'market_compliance', amountUsd: 8_000,
+  },
+  {
+    id: 'ALT-008', containerId: 'HLXU-4427109', severity: 'watch',
+    titleKey: 'alerts.freeTimeEndingTitle', bodyKey: 'alerts.freeTimeEndingBody',
+    raisedAt: '2027-01-07T08:00:00-04:00', raisedBy: 'in_transit_telemetry_watcher',
+    category: 'free_time_tracker', amountUsd: 540,
+  },
+  {
+    id: 'ALT-009', containerId: 'MSCU-6128390', severity: 'info',
+    titleKey: 'alerts.paymentExpectedTitle', bodyKey: 'alerts.paymentExpectedBody',
+    raisedAt: '2027-01-09T08:00:00-04:00', raisedBy: 'bl_tracker',
+    category: 'payment_aging',
+  },
+  {
+    id: 'ALT-010', containerId: 'MSCU-2873561', severity: 'info',
+    titleKey: 'alerts.tracesNtPendingTitle', bodyKey: 'alerts.tracesNtPendingBody',
+    raisedAt: '2027-01-08T14:00:00-04:00', raisedBy: 'phyto_validator',
+    category: 'market_compliance',
   },
 ];

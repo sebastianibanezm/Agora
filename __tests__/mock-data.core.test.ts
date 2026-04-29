@@ -40,7 +40,7 @@ describe('core mock data', () => {
   it('agents catalog includes 6 cold-chain sentinels', () => {
     expect(agents.filter(a => a.tags.includes('cold_chain')).length).toBeGreaterThanOrEqual(6);
   });
-  it.skip('importers, producers, POs are referentially intact', () => {
+  it('importers, producers, POs are referentially intact', () => {
     const impIds = new Set(importers.map(i => i.id));
     const prodIds = new Set(producers.map(p => p.id));
     const poIds = new Set(purchaseOrders.map(p => p.id));
