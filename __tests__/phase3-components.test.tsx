@@ -41,6 +41,26 @@ describe('MiniSeasonBar', () => {
   });
 });
 
+import { POLifecycleTimeline } from '@/components/purchase-orders/POLifecycleTimeline';
+import type { POEvent } from '@/types';
+
+describe('POLifecycleTimeline', () => {
+  it('renders mint fill covering exactly completed milestones', () => {
+    const events: POEvent[] = [
+      { date: '2026-10-01', type: 'confirmed' },
+      { date: '2026-11-01', type: 'container_assigned' },
+      { date: '2026-12-01', type: 'bl_issued' },
+    ];
+    render(<POLifecycleTimeline events={events} />);
+    expect(screen.getByTestId('tl-progress')).toBeInTheDocument();
+  });
+
+  it('renders all 6 milestone nodes', () => {
+    render(<POLifecycleTimeline events={[]} />);
+    expect(screen.getAllByTestId('tl-node').length).toBe(6);
+  });
+});
+
 import { NextIntlClientProvider } from 'next-intl';
 import en from '../messages/en.json';
 import { ContainerCard } from '@/components/containers/ContainerCard';
