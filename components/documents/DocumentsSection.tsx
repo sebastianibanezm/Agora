@@ -32,6 +32,8 @@ export function DocumentsSection({ ownerId, ownerType, perspective }: Props) {
   const counts = {
     approved:   all.filter(d => d.status === 'approved').length,
     validating: all.filter(d => d.status === 'validating').length,
+    submitted:   all.filter(d => d.status === 'submitted').length,
+    under_review: all.filter(d => d.status === 'under_review').length,
     rejected:   all.filter(d => d.status === 'rejected').length,
     draft:      all.filter(d => d.status === 'draft').length,
   }
@@ -56,6 +58,8 @@ export function DocumentsSection({ ownerId, ownerType, perspective }: Props) {
         <div className="flex gap-1.5">
           {counts.approved > 0 && <Pill n={counts.approved} color="#00E696" label={t('statuses.approved')} />}
           {counts.validating > 0 && <Pill n={counts.validating} color="#F59E0B" label={t('statuses.validating')} />}
+          {counts.submitted > 0 && <Pill n={counts.submitted} color="#3B82F6" label={t('statuses.submitted')} />}
+          {counts.under_review > 0 && <Pill n={counts.under_review} color="#F97316" label={t('statuses.under_review')} />}
           {counts.rejected > 0 && <Pill n={counts.rejected} color="#EF4444" label={t('statuses.rejected')} />}
           {counts.draft > 0 && <Pill n={counts.draft} color="#475063" label={t('statuses.draft')} />}
         </div>

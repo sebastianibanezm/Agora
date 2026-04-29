@@ -30,8 +30,6 @@ test('provenance tag not shown for owned documents', () => {
   render(
     <DocumentsSection ownerId="PO-2026-0142" ownerType="po" perspective="po" />
   )
-  // PO-owned doc should NOT show a provenance tag
-  const cells = screen.getAllByText('Factura Comercial')
-  // If there are two Commercial Invoices (one per PO), find the owned one (PO-2026-0142)
-  expect(cells.length).toBeGreaterThan(0)
+  // The owned Factura Comercial row should not have a "de PO-2026-0142" provenance tag
+  expect(screen.queryByText(/de PO-2026-0142/)).not.toBeInTheDocument()
 })
