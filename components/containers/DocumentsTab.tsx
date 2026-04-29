@@ -4,12 +4,14 @@ import type { Container } from '@/types';
 import { documents } from '@/lib/mock-data/documents';
 import { DocumentStatusPill } from './DocumentStatusPill';
 import { formatDate } from '@/lib/utils/dates';
+import { DocumentsSection } from '@/components/documents/DocumentsSection';
 
 export function DocumentsTab({ container }: { container: Container }) {
   const t = useTranslations();
   const containerDocs = documents.filter(d => d.containerId === container.id);
 
   return (
+    <>
     <div className="rounded-md border border-white/10 overflow-hidden">
       <table className="w-full text-sm">
         <thead>
@@ -41,5 +43,9 @@ export function DocumentsTab({ container }: { container: Container }) {
         </tbody>
       </table>
     </div>
+    <div className="mt-8">
+      <DocumentsSection ownerId={container.id} ownerType="container" perspective="container" />
+    </div>
+    </>
   );
 }
