@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { getTranslations } from 'next-intl/server';
 
 interface Column<T> {
   label: string;
@@ -12,7 +13,8 @@ interface Props<P, C> {
   containerColumns: Column<C>[];
 }
 
-export function RelationshipHistory<P, C>({ pos, containers, poColumns, containerColumns }: Props<P, C>) {
+export async function RelationshipHistory<P, C>({ pos, containers, poColumns, containerColumns }: Props<P, C>) {
+  const t = await getTranslations('entityFiche');
   const renderTable = <T,>(rows: T[], columns: Column<T>[]) => (
     <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px' }}>
       <thead>
@@ -40,11 +42,11 @@ export function RelationshipHistory<P, C>({ pos, containers, poColumns, containe
   return (
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', margin: '16px 0' }}>
       <div>
-        <h3 style={{ fontSize: '13px', fontWeight: 600, color: '#94a3b8', marginBottom: '8px' }}>Purchase Orders</h3>
+        <h3 style={{ fontSize: '13px', fontWeight: 600, color: '#94a3b8', marginBottom: '8px' }}>{t('purchaseOrders')}</h3>
         {renderTable(pos, poColumns)}
       </div>
       <div>
-        <h3 style={{ fontSize: '13px', fontWeight: 600, color: '#94a3b8', marginBottom: '8px' }}>Containers</h3>
+        <h3 style={{ fontSize: '13px', fontWeight: 600, color: '#94a3b8', marginBottom: '8px' }}>{t('containers')}</h3>
         {renderTable(containers, containerColumns)}
       </div>
     </div>

@@ -1,30 +1,32 @@
 import type { Importer } from '@/types';
 import { VolumeTimeSeries } from '@/components/shared/VolumeTimeSeries';
+import { getTranslations } from 'next-intl/server';
 
 interface Props {
   importer: Importer;
 }
 
-export function ImporterSpecificSections({ importer }: Props) {
+export async function ImporterSpecificSections({ importer }: Props) {
+  const t = await getTranslations('entityFiche');
   return (
     <>
       <section>
-        <h2 style={{ fontSize: '15px', fontWeight: 600, color: '#e2e8f0', marginBottom: '12px' }}>Volumen por Temporada</h2>
+        <h2 style={{ fontSize: '15px', fontWeight: 600, color: '#e2e8f0', marginBottom: '12px' }}>{t('volumeBySeason')}</h2>
         <div style={{ background: '#1a1f2e', border: '1px solid #ffffff12', borderRadius: '8px', padding: '16px' }}>
           <VolumeTimeSeries data={importer.volumeHistory} />
         </div>
       </section>
 
       <section>
-        <h2 style={{ fontSize: '15px', fontWeight: 600, color: '#e2e8f0', marginBottom: '12px' }}>Perfil de Mercado</h2>
+        <h2 style={{ fontSize: '15px', fontWeight: 600, color: '#e2e8f0', marginBottom: '12px' }}>{t('marketProfile')}</h2>
         <div style={{ background: '#1a1f2e', border: '1px solid #ffffff12', borderRadius: '8px', padding: '16px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
           {[
-            { label: 'Autoridad de Inspección', values: importer.marketProfile.inspectionAuthority },
-            { label: 'Sistema Digital', values: [importer.marketProfile.digitalSystem] },
-            { label: 'Registros Requeridos', values: importer.marketProfile.requiredRegistrations },
-            { label: 'Idiomas de Etiqueta', values: importer.marketProfile.labelLanguages },
+            { label: t('inspectionAuthority'), values: importer.marketProfile.inspectionAuthority },
+            { label: t('digitalSystem'), values: [importer.marketProfile.digitalSystem] },
+            { label: t('requiredRegistrations'), values: importer.marketProfile.requiredRegistrations },
+            { label: t('labelLanguages'), values: importer.marketProfile.labelLanguages },
             ...(importer.marketProfile.coldTreatmentOptions
-              ? [{ label: 'Tratamiento de Frío', values: importer.marketProfile.coldTreatmentOptions }]
+              ? [{ label: t('coldTreatmentOptions'), values: importer.marketProfile.coldTreatmentOptions }]
               : []),
           ].map(row => (
             <div key={row.label}>
@@ -40,11 +42,11 @@ export function ImporterSpecificSections({ importer }: Props) {
       </section>
 
       <section>
-        <h2 style={{ fontSize: '15px', fontWeight: 600, color: '#e2e8f0', marginBottom: '12px' }}>Historial de Pagos</h2>
+        <h2 style={{ fontSize: '15px', fontWeight: 600, color: '#e2e8f0', marginBottom: '12px' }}>{t('paymentHistory')}</h2>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px' }}>
           <thead>
             <tr style={{ borderBottom: '1px solid #ffffff12', color: '#64748b' }}>
-              {['PO', 'Método', 'Banco', 'Monto', 'Días', 'Estado'].map(h => (
+              {[t('colPo'), t('colMethod'), t('colBank'), t('colAmount'), t('colDays'), t('colStatus')].map(h => (
                 <th key={h} style={{ padding: '6px 8px', textAlign: 'left', fontWeight: 500 }}>{h}</th>
               ))}
             </tr>
@@ -59,7 +61,7 @@ export function ImporterSpecificSections({ importer }: Props) {
                 <td style={{ padding: '8px' }}>{p.daysToCollect != null ? `${p.daysToCollect}d` : '—'}</td>
                 <td style={{ padding: '8px' }}>
                   <span style={{ color: p.status === 'paid' ? '#00E696' : '#F59E0B' }}>
-                    {p.status === 'paid' ? 'Pagado' : 'Pendiente'}
+                    {p.status === 'paid' ? t('paid') : t('paymentPending')}
                   </span>
                 </td>
               </tr>
