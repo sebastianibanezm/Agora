@@ -25,6 +25,16 @@ vi.mock('@/components/dashboard/ContainerCard', () => ({
   ContainerCard: () => <div data-testid="timeline-mini" />,
 }));
 
+vi.mock('@/components/dashboard/ClosedTable', () => ({
+  ClosedTable: ({ rows }: { rows: unknown[] }) => (
+    <div>{rows.map((_, i) => <div key={i} data-testid="closed-row" />)}</div>
+  ),
+}));
+
+vi.mock('@/components/dashboard/PenaltyHeatmap', () => ({
+  PenaltyHeatmap: () => <div data-testid="penalty-heatmap" />,
+}));
+
 // KPIStrip is an async RSC — render stub that uses the kpis prop
 vi.mock('@/components/kpi/KPIStrip', () => ({
   KPIStrip: ({ kpis }: { kpis: Array<{ id: string; value: number }> }) => (
@@ -36,7 +46,7 @@ vi.mock('@/components/kpi/KPIStrip', () => ({
   ),
 }));
 
-import OperationsDashboard from '@/app/page';
+import OperationsDashboard from '@/app/[locale]/page';
 
 const wrap = (ui: React.ReactNode) => (
   <NextIntlClientProvider locale="en" messages={en as any}>{ui}</NextIntlClientProvider>
