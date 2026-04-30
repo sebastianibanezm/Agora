@@ -180,12 +180,12 @@ export function ShipmentGlobe({ bookings, height = 400, className, style }: Prop
       const polKey = `${arc.startLat.toFixed(2)},${arc.startLng.toFixed(2)}`;
       if (!seen.has(polKey)) {
         seen.add(polKey);
-        items.push({ lat: arc.startLat, lng: arc.startLng, size: 0.4, color: '#00E696', label: arc.bookings[0]!.pol });
+        items.push({ lat: arc.startLat, lng: arc.startLng, size: 0.4, color: '#4F7A3C', label: arc.bookings[0]!.pol });
       }
       const podKey = `${arc.endLat.toFixed(2)},${arc.endLng.toFixed(2)}`;
       if (!seen.has(podKey)) {
         seen.add(podKey);
-        items.push({ lat: arc.endLat, lng: arc.endLng, size: 0.3, color: '#7DD3FC', label: arc.bookings[0]!.pod });
+        items.push({ lat: arc.endLat, lng: arc.endLng, size: 0.3, color: '#5A6B85', label: arc.bookings[0]!.pod });
       }
     }
     return items;
@@ -217,8 +217,8 @@ export function ShipmentGlobe({ bookings, height = 400, className, style }: Prop
       className={`relative overflow-hidden rounded-xl border border-[var(--line-soft)] bg-bg-1 ${className ?? ''}`}
       style={{ height, ...style }}
     >
-      <div className="pointer-events-none absolute top-3 left-4 z-10 font-mono text-[10px] tracking-[0.18em] text-mint-500/80">
-        <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-mint-500 align-middle mr-1.5" />
+      <div className="pointer-events-none absolute top-3 left-4 z-10 font-mono text-[10px] tracking-[0.18em] text-ink-3">
+        <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-[#4F7A3C] align-middle mr-1.5" />
         {t('globeLabel')}
       </div>
       <div className="pointer-events-none absolute top-3 right-4 z-10 font-mono text-[10px] tracking-[0.14em] text-ink-3">
@@ -243,10 +243,10 @@ export function ShipmentGlobe({ bookings, height = 400, className, style }: Prop
         arcAltitudeAutoScale={0.4}
         arcLabel={(d: object) => {
           const a = d as ArcDatum;
-          return `<div class="rounded-md bg-[#0E1320]/95 backdrop-blur p-2 text-xs text-ink-1 border border-white/10">
-            <div class="font-semibold">${a.bookings[0]!.pol.split(',')[0]} → ${a.bookings[0]!.pod.split(',')[0]}</div>
-            <div class="text-ink-3 text-[11px]">${a.bookings.length} active booking${a.bookings.length === 1 ? '' : 's'}</div>
-          </div>`;
+          return `<div style="border-radius:8px;background:#FFFCF1;backdrop-filter:blur(8px);padding:8px 10px;font-size:12px;color:#2B1F12;border:1px solid rgba(43,31,18,0.12);font-family:monospace">
+    <div style="font-weight:600">${a.bookings[0]!.pol.split(',')[0]} → ${a.bookings[0]!.pod.split(',')[0]}</div>
+    <div style="color:#8A7860;font-size:11px;margin-top:3px">${a.bookings.length} active booking${a.bookings.length === 1 ? '' : 's'}</div>
+  </div>`;
         }}
         onArcHover={(d: object | null) => setHovered((d as ArcDatum) ?? null)}
         onArcClick={(d: object) => {
