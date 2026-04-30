@@ -40,7 +40,7 @@ export function BookingLifecycleStrip({ current, className }: Props) {
     <ol className={clsx('flex items-center gap-1', className)}>
       {ORDER.map((status, i) => {
         const isCurrent = status === current || (failed && status === 'si_received');
-        const reached = i <= idx || failed && i <= 2;
+        const reached = i <= idx || (failed && i <= 2);
         return (
           <li key={status} className="flex items-center gap-1">
             <div
