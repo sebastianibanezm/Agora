@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { PageTransition } from '@/components/shared/PageTransition';
-import { BookingsListClient } from '@/components/bookings/BookingsListClient';
+import { BookingsViewClient } from '@/components/bookings/BookingsViewClient';
 import { bookings } from '@/lib/mock-data/bookings';
 import { exporters } from '@/lib/mock-data/exporters';
 import { navieras } from '@/lib/mock-data/navieras';
@@ -77,7 +77,7 @@ export default async function BookingsPage({ params }: Props) {
           <span className="font-mono text-[10px] text-ink-3">{rows.length} bookings</span>
         </div>
         <Suspense fallback={<div className="text-sm text-ink-3">Loading…</div>}>
-          <BookingsListClient rows={rows} exporters={exporters} navieras={navieras} />
+          <BookingsViewClient rows={rows} exporters={exporters} navieras={navieras} />
         </Suspense>
       </div>
     </PageTransition>
