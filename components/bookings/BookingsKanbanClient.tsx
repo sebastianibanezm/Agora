@@ -1,5 +1,6 @@
 'use client';
 
+import { useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import type { BookingStatus } from '@/types';
 import type { KanbanRow } from '@/components/bookings/KanbanCard';
@@ -16,6 +17,7 @@ interface ColumnDef {
   titleNs: 'lifecycle' | 'bookings.kanban';
 }
 
+// cancelled bookings are filtered at page.tsx — they have no column on the board
 const COLUMNS: ColumnDef[] = [
   { key: 'awaiting_si',      statuses: ['created', 'awaiting_si'],              dotClass: 'bg-severity-watch', titleKey: 'awaiting_si',      titleNs: 'lifecycle' },
   { key: 'si_in_review',     statuses: ['si_received'],                          dotClass: 'bg-severity-info',  titleKey: 'colSiInReview',    titleNs: 'bookings.kanban' },
@@ -34,12 +36,15 @@ export function BookingsKanbanClient({ rows }: Props) {
   const tKanban = useTranslations('bookings.kanban');
   const tLifecycle = useTranslations('lifecycle');
 
-  const byStatus = new Map<BookingStatus, KanbanRow[]>();
-  for (const row of rows) {
-    const list = byStatus.get(row.booking.status) ?? [];
-    list.push(row);
-    byStatus.set(row.booking.status, list);
-  }
+  const byStatus = useMemo(() => {
+    const map = new Map<BookingStatus, KanbanRow[]>();
+    for (const row of rows) {
+      const list = map.get(row.booking.status) ?? [];
+      list.push(row);
+      map.set(row.booking.status, list);
+    }
+    return map;
+  }, [rows]);
 
   return (
     <div className="flex gap-[10px] overflow-x-auto pb-4 pt-3">
@@ -52,6 +57,7 @@ export function BookingsKanbanClient({ rows }: Props) {
         return (
           <div
             key={col.key}
+            data-column={col.key}
             className="flex w-[230px] min-w-[230px] flex-col overflow-hidden rounded-[10px] border border-[var(--line-soft)] bg-bg-1"
           >
             {/* header */}

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { NextIntlClientProvider } from 'next-intl';
 import { BookingsKanbanClient } from '@/components/bookings/BookingsKanbanClient';
 import en from '@/messages/en.json';
@@ -59,22 +59,25 @@ describe('BookingsKanbanClient', () => {
   });
 
   it('places awaiting_si booking in column 1', () => {
-    renderBoard([makeRow('awaiting_si', 'BKG001')]);
-    expect(screen.getByText('BKG001')).toBeInTheDocument();
+    const { container } = renderBoard([makeRow('awaiting_si', 'BKG001')]);
+    const col = container.querySelector('[data-column="awaiting_si"]')! as HTMLElement;
+    expect(within(col).getByText('BKG001')).toBeInTheDocument();
   });
 
   it('places si_failed booking in SI Failed column', () => {
-    renderBoard([makeRow('si_failed', 'BKG002')]);
-    expect(screen.getByText('BKG002')).toBeInTheDocument();
+    const { container } = renderBoard([makeRow('si_failed', 'BKG002')]);
+    const col = container.querySelector('[data-column="si_failed"]')! as HTMLElement;
+    expect(within(col).getByText('BKG002')).toBeInTheDocument();
   });
 
   it('places esi_sent and draft_bl_received in same column 5', () => {
-    renderBoard([
+    const { container } = renderBoard([
       makeRow('esi_sent', 'ESI001'),
       makeRow('draft_bl_received', 'DBL001'),
     ]);
-    expect(screen.getByText('ESI001')).toBeInTheDocument();
-    expect(screen.getByText('DBL001')).toBeInTheDocument();
+    const col = container.querySelector('[data-column="awaiting_dbl"]')! as HTMLElement;
+    expect(within(col).getByText('ESI001')).toBeInTheDocument();
+    expect(within(col).getByText('DBL001')).toBeInTheDocument();
   });
 
   it('shows empty-column text when a column has no cards', () => {
