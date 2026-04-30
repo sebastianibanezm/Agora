@@ -126,69 +126,82 @@ export function BookingDetailClient({
 
         {/* OVERVIEW */}
         <TabsContent value="overview" className="mt-3 grid grid-cols-1 gap-4 lg:grid-cols-3">
-          <Card className="lg:col-span-2 p-4">
-            <div className="mb-3 font-mono text-[10px] tracking-wider text-ink-3 uppercase">
-              {t('parameters')}
+          <Card className="lg:col-span-2 p-4 flex flex-col gap-4">
+            {/* Route & Schedule */}
+            <div>
+              <div className="mb-2 font-mono text-[10px] tracking-wider text-ink-4 uppercase">
+                Route & Schedule
+              </div>
+              <dl className="grid grid-cols-2 gap-x-6 gap-y-2 text-xs">
+                <div>
+                  <dt className="text-ink-3">POL → POD</dt>
+                  <dd className="text-ink-1">{booking.pol.split(',')[0]} → {booking.pod.split(',')[0]}</dd>
+                </div>
+                <div>
+                  <dt className="text-ink-3">{t('vessel')}</dt>
+                  <dd className="text-ink-1">{booking.vesselName}</dd>
+                </div>
+                <div>
+                  <dt className="text-ink-3">{t('voyage')}</dt>
+                  <dd className="font-mono text-ink-1">{booking.voyage}</dd>
+                </div>
+                <div>
+                  <dt className="text-ink-3">ETD → ETA</dt>
+                  <dd className="text-ink-1">{formatTs(booking.etd)} → {formatTs(booking.eta)}</dd>
+                </div>
+                <div>
+                  <dt className="text-ink-3">{t('stacking')}</dt>
+                  <dd className="text-ink-1">{formatTs(booking.stackingFrom)} → {formatTs(booking.stackingTo)}</dd>
+                </div>
+                <div>
+                  <dt className="text-ink-3">Cut-off</dt>
+                  <dd className="font-mono text-ink-1">{formatTs(booking.cutOff)}</dd>
+                </div>
+              </dl>
             </div>
-            <dl className="grid grid-cols-2 gap-x-6 gap-y-2 text-xs">
-              <div>
-                <dt className="text-ink-3">{t('container')}</dt>
-                <dd className="text-ink-1">
-                  {booking.containerType}
-                  {booking.isReefer && booking.setpointC !== undefined && ` · ${booking.setpointC} °C`}
-                </dd>
+
+            {/* Container */}
+            <div className="border-t border-[var(--line-soft)] pt-3">
+              <div className="mb-2 font-mono text-[10px] tracking-wider text-ink-4 uppercase">
+                Container
               </div>
-              <div>
-                <dt className="text-ink-3">{t('vessel')}</dt>
-                <dd className="text-ink-1">{booking.vesselName}</dd>
-              </div>
-              <div>
-                <dt className="text-ink-3">{t('voyage')}</dt>
-                <dd className="font-mono text-ink-1">{booking.voyage}</dd>
-              </div>
-              <div>
-                <dt className="text-ink-3">{t('colRoute')}</dt>
-                <dd className="text-ink-1">
-                  {booking.pol.split(',')[0]} → {booking.pod.split(',')[0]}
-                </dd>
-              </div>
-              <div>
-                <dt className="text-ink-3">{t('colEtd')}</dt>
-                <dd className="text-ink-1">{formatTs(booking.etd)}</dd>
-              </div>
-              <div>
-                <dt className="text-ink-3">{t('colEta')}</dt>
-                <dd className="text-ink-1">{formatTs(booking.eta)}</dd>
-              </div>
-              <div>
-                <dt className="text-ink-3">{t('stacking')}</dt>
-                <dd className="text-ink-1">
-                  {formatTs(booking.stackingFrom)} → {formatTs(booking.stackingTo)}
-                </dd>
-              </div>
-              <div>
-                <dt className="text-ink-3">Cut-off</dt>
-                <dd className="font-mono text-ink-1">{formatTs(booking.cutOff)}</dd>
-              </div>
-              {booking.containerNumber && (
+              <dl className="grid grid-cols-2 gap-x-6 gap-y-2 text-xs">
                 <div>
-                  <dt className="text-ink-3">{t('containerNumber')}</dt>
-                  <dd className="font-mono text-ink-1">{booking.containerNumber}</dd>
+                  <dt className="text-ink-3">{t('container')}</dt>
+                  <dd className="text-ink-1">
+                    {booking.containerType}
+                    {booking.isReefer && booking.setpointC !== undefined && ` · ${booking.setpointC} °C`}
+                  </dd>
                 </div>
-              )}
-              {booking.sealNumber && (
-                <div>
-                  <dt className="text-ink-3">{t('sealNumber')}</dt>
-                  <dd className="font-mono text-ink-1">{booking.sealNumber}</dd>
+                {booking.containerNumber && (
+                  <div>
+                    <dt className="text-ink-3">{t('containerNumber')}</dt>
+                    <dd className="font-mono text-ink-1">{booking.containerNumber}</dd>
+                  </div>
+                )}
+                {booking.sealNumber && (
+                  <div>
+                    <dt className="text-ink-3">{t('sealNumber')}</dt>
+                    <dd className="font-mono text-ink-1">{booking.sealNumber}</dd>
+                  </div>
+                )}
+              </dl>
+            </div>
+
+            {/* Documents */}
+            {booking.blNumber && (
+              <div className="border-t border-[var(--line-soft)] pt-3">
+                <div className="mb-2 font-mono text-[10px] tracking-wider text-ink-4 uppercase">
+                  Documents
                 </div>
-              )}
-              {booking.blNumber && (
-                <div>
-                  <dt className="text-ink-3">{t('blNumber')}</dt>
-                  <dd className="font-mono text-ink-1">{booking.blNumber}</dd>
-                </div>
-              )}
-            </dl>
+                <dl className="grid grid-cols-2 gap-x-6 gap-y-2 text-xs">
+                  <div>
+                    <dt className="text-ink-3">{t('blNumber')}</dt>
+                    <dd className="font-mono text-ink-1">{booking.blNumber}</dd>
+                  </div>
+                </dl>
+              </div>
+            )}
           </Card>
 
           <Card className="p-4">
