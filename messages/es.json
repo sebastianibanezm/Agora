@@ -51,6 +51,10 @@
     "weight": "Peso",
     "incoterm": "Incoterm",
     "paymentTerms": "Términos de pago",
+    "searchPlaceholder": "Buscar contenedores…",
+    "viewKanban": "Kanban",
+    "viewTable": "Tabla",
+    "reefer": "Refrigerado",
     "statuses": {
       "planning": "Planificación",
       "preparation": "Preparación",
@@ -90,7 +94,12 @@
     "kpiDocAutoGenRate": "Tasa Auto-Gen Docs",
     "costAtRisk": "COSTO EN RIESGO",
     "dueNow": "Vence AHORA",
-    "coldChainStatus": "Estado de Cadena de Frío"
+    "coldChainStatus": "Estado de Cadena de Frío",
+    "colContainer": "CONTENEDOR",
+    "colBuyer": "COMPRADOR",
+    "colCycle": "CICLO",
+    "colDeltaAvg": "Δ PROM",
+    "colPenalty": "MULTA"
   },
   "coldChain": {
     "title": "Cadena de frío",
@@ -288,6 +297,7 @@
     "gaccOk": "Registro GACC válido"
   },
   "alerts": {
+    "noAlerts": "Sin alertas",
     "dusMissingTitle": "DUS no presentado",
     "dusMissingBody": "Faltan 18 horas para el cierre del documento aduanero",
     "fileDusNow": "Presentar DUS ahora",
@@ -315,7 +325,15 @@
     "customsDelay": "Demora en procesamiento aduanero",
     "none": "Sin penalización",
     "portCongestion": "Recargo por congestión portuaria",
-    "documentRejection": "Rechazo y reenvío de documentos"
+    "documentRejection": "Rechazo y reenvío de documentos",
+    "refumigation": "Refumig.",
+    "phytoReissue": "Reem. Fitosanitario",
+    "vgmLate": "VGM Tardío",
+    "dusError": "Error DUS",
+    "blCorrection": "Corrección BL",
+    "demurrage": "Demurrage",
+    "detention": "Detención",
+    "bankDiscrepancy": "Discrepancia Banco"
   },
   "lane": {
     "timeline": {
@@ -457,5 +475,112 @@
     "incidents": "Incidentes",
     "compliance": "Cumplimiento",
     "onTrack": "EN CURSO"
+  },
+  "purchaseOrders": {
+    "searchPlaceholder": "Buscar OCs…",
+    "colId": "ID OC",
+    "colProduct": "Producto",
+    "colImporter": "Importador",
+    "colStatus": "Estado",
+    "colValue": "Valor USD",
+    "colDate": "Fecha",
+    "kpi": {
+      "totalValue": "Valor Total",
+      "quantity": "Cantidad",
+      "containers": "Contenedores",
+      "daysToDelivery": "Días para entrega",
+      "payment": "Pago",
+      "usd": "USD",
+      "kg": "kg",
+      "units": "unidades",
+      "received": "Recibido",
+      "pending": "Pendiente",
+      "past": "Vencido"
+    },
+    "resumen": {
+      "title": "Resumen Ejecutivo",
+      "summary": "OC {id} en estado {status} con {n} contenedor(es) asignado(s).",
+      "statusLabel": "Estado de OC",
+      "coldChainLabel": "Cadena de frío",
+      "docsLabel": "Documentación",
+      "financeLabel": "Situación financiera",
+      "coldChainActive": "Monitoreo activo",
+      "coldChainPending": "Pendiente",
+      "docsSubmitted": "Presentada",
+      "docsInProgress": "En proceso",
+      "paymentReceived": "Pago recibido",
+      "paymentPending": "Pendiente de pago"
+    },
+    "statuses": {
+      "draft": "Borrador",
+      "confirmed": "Confirmado",
+      "in_fulfillment": "En Ejecución",
+      "delivered": "Entregado",
+      "cancelled": "Cancelado"
+    },
+    "lifecycle": {
+      "title": "Ciclo de Vida",
+      "confirmed": "Confirmada",
+      "containerAssigned": "Contenedor asignado",
+      "blIssued": "BL emitido",
+      "docsSubmitted": "Docs presentados",
+      "delivered": "Entregada",
+      "paymentReceived": "Pago recibido"
+    },
+    "fulfillment": {
+      "title": "Ejecución y Contraparte",
+      "linkedContainers": "Contenedores vinculados",
+      "colId": "ID",
+      "colProduct": "Producto",
+      "colStage": "Etapa",
+      "colTDay": "T-Day",
+      "avgPayment": "Pago promedio: {n}d"
+    }
+  },
+  "entityFiche": {
+    "purchaseOrders": "Órdenes de Compra",
+    "containers": "Contenedores",
+    "volumeBySeason": "Volumen por Temporada",
+    "marketProfile": "Perfil de Mercado",
+    "paymentHistory": "Historial de Pagos",
+    "colPo": "OC",
+    "colMethod": "Método",
+    "colBank": "Banco",
+    "colAmount": "Monto",
+    "colDays": "Días",
+    "colStatus": "Estado",
+    "paid": "Pagado",
+    "paymentPending": "Pendiente",
+    "inspectionAuthority": "Autoridad de Inspección",
+    "digitalSystem": "Sistema Digital",
+    "requiredRegistrations": "Registros Requeridos",
+    "labelLanguages": "Idiomas de Etiqueta",
+    "coldTreatmentOptions": "Tratamiento de Frío",
+    "certifiedProducts": "Productos Certificados",
+    "sagCertifications": "Certificaciones SAG",
+    "season": "Temporada",
+    "protocol": "Protocolo",
+    "coldChain": "Cadena de frío",
+    "ambient": "Ambiente",
+    "valid": "Vigente",
+    "expiresIn": "Vence en {n}d"
+  },
+  "compliance": {
+    "season": "Temporada",
+    "coldChain": "Cadena de frío",
+    "ambient": "Ambiente",
+    "inspectionAuthority": "Autoridad de Inspección",
+    "digitalSystem": "Sistema Digital",
+    "registrations": "Registros",
+    "labelLanguages": "Idiomas de Etiqueta",
+    "draft": "Borrador",
+    "activePOs": "{n} OCs activas",
+    "bank": "Banco",
+    "currency": "Moneda",
+    "avgCollection": "Cobro promedio: {n}d"
+  },
+  "map": {
+    "liveLabel": "EMBARQUES ACTIVOS · EN VIVO",
+    "arcs": "{n} ARCOS"
   }
 }

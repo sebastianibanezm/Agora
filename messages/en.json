@@ -51,6 +51,10 @@
     "weight": "Weight",
     "incoterm": "Incoterm",
     "paymentTerms": "Payment Terms",
+    "searchPlaceholder": "Search containers…",
+    "viewKanban": "Kanban",
+    "viewTable": "Table",
+    "reefer": "Reefer",
     "statuses": {
       "planning": "Planning",
       "preparation": "Preparation",
@@ -90,7 +94,12 @@
     "kpiDocAutoGenRate": "Doc Auto-Gen Rate",
     "costAtRisk": "COST AT RISK",
     "dueNow": "Due NOW",
-    "coldChainStatus": "Cold Chain Status"
+    "coldChainStatus": "Cold Chain Status",
+    "colContainer": "CONTAINER",
+    "colBuyer": "BUYER",
+    "colCycle": "CYCLE",
+    "colDeltaAvg": "Δ AVG",
+    "colPenalty": "PENALTY"
   },
   "coldChain": {
     "title": "Cold chain",
@@ -288,6 +297,7 @@
     "gaccOk": "GACC registration valid"
   },
   "alerts": {
+    "noAlerts": "No alerts",
     "dusMissingTitle": "DUS not filed",
     "dusMissingBody": "18 hours remaining to customs document cutoff",
     "fileDusNow": "File DUS now",
@@ -315,7 +325,15 @@
     "customsDelay": "Customs processing delay",
     "none": "No penalty",
     "portCongestion": "Port congestion surcharge",
-    "documentRejection": "Document rejection and resubmission"
+    "documentRejection": "Document rejection and resubmission",
+    "refumigation": "Refumig.",
+    "phytoReissue": "Phyto Reissue",
+    "vgmLate": "VGM Late",
+    "dusError": "DUS Error",
+    "blCorrection": "BL Correction",
+    "demurrage": "Demurrage",
+    "detention": "Detention",
+    "bankDiscrepancy": "Bank Discrep."
   },
   "lane": {
     "timeline": {
@@ -457,5 +475,112 @@
     "incidents": "Incidents",
     "compliance": "Compliance",
     "onTrack": "ON TRACK"
+  },
+  "purchaseOrders": {
+    "searchPlaceholder": "Search POs…",
+    "colId": "PO ID",
+    "colProduct": "Product",
+    "colImporter": "Importer",
+    "colStatus": "Status",
+    "colValue": "Value USD",
+    "colDate": "Date",
+    "kpi": {
+      "totalValue": "Total Value",
+      "quantity": "Quantity",
+      "containers": "Containers",
+      "daysToDelivery": "Days to Delivery",
+      "payment": "Payment",
+      "usd": "USD",
+      "kg": "kg",
+      "units": "units",
+      "received": "Received",
+      "pending": "Pending",
+      "past": "Past"
+    },
+    "resumen": {
+      "title": "Executive Summary",
+      "summary": "PO {id} in status {status} with {n} container(s) assigned.",
+      "statusLabel": "PO Status",
+      "coldChainLabel": "Cold Chain",
+      "docsLabel": "Documentation",
+      "financeLabel": "Financial Status",
+      "coldChainActive": "Active monitoring",
+      "coldChainPending": "Pending",
+      "docsSubmitted": "Submitted",
+      "docsInProgress": "In progress",
+      "paymentReceived": "Payment received",
+      "paymentPending": "Payment pending"
+    },
+    "statuses": {
+      "draft": "Draft",
+      "confirmed": "Confirmed",
+      "in_fulfillment": "In Fulfillment",
+      "delivered": "Delivered",
+      "cancelled": "Cancelled"
+    },
+    "lifecycle": {
+      "title": "Lifecycle",
+      "confirmed": "Confirmed",
+      "containerAssigned": "Container assigned",
+      "blIssued": "B/L issued",
+      "docsSubmitted": "Docs submitted",
+      "delivered": "Delivered",
+      "paymentReceived": "Payment received"
+    },
+    "fulfillment": {
+      "title": "Fulfillment & Counterparty",
+      "linkedContainers": "Linked containers",
+      "colId": "ID",
+      "colProduct": "Product",
+      "colStage": "Stage",
+      "colTDay": "T-Day",
+      "avgPayment": "Avg payment: {n}d"
+    }
+  },
+  "entityFiche": {
+    "purchaseOrders": "Purchase Orders",
+    "containers": "Containers",
+    "volumeBySeason": "Volume by Season",
+    "marketProfile": "Market Profile",
+    "paymentHistory": "Payment History",
+    "colPo": "PO",
+    "colMethod": "Method",
+    "colBank": "Bank",
+    "colAmount": "Amount",
+    "colDays": "Days",
+    "colStatus": "Status",
+    "paid": "Paid",
+    "paymentPending": "Pending",
+    "inspectionAuthority": "Inspection Authority",
+    "digitalSystem": "Digital System",
+    "requiredRegistrations": "Required Registrations",
+    "labelLanguages": "Label Languages",
+    "coldTreatmentOptions": "Cold Treatment Options",
+    "certifiedProducts": "Certified Products",
+    "sagCertifications": "SAG Certifications",
+    "season": "Season",
+    "protocol": "Protocol",
+    "coldChain": "Cold chain",
+    "ambient": "Ambient",
+    "valid": "Valid",
+    "expiresIn": "Expires in {n}d"
+  },
+  "compliance": {
+    "season": "Season",
+    "coldChain": "Cold chain",
+    "ambient": "Ambient",
+    "inspectionAuthority": "Inspection Authority",
+    "digitalSystem": "Digital System",
+    "registrations": "Registrations",
+    "labelLanguages": "Label Languages",
+    "draft": "Draft",
+    "activePOs": "{n} active POs",
+    "bank": "Bank",
+    "currency": "Currency",
+    "avgCollection": "Avg collection: {n}d"
+  },
+  "map": {
+    "liveLabel": "ACTIVE SHIPMENTS · LIVE",
+    "arcs": "{n} ARCS"
   }
 }
