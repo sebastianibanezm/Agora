@@ -250,7 +250,24 @@
     "documentNotReceived": "No recibido",
     "documentValidating": "Validando",
     "documentValidated": "Validado",
-    "documentIssues": "Con problemas"
+    "documentIssues": "Con problemas",
+    "kanban": {
+      "viewBoard": "Tablero",
+      "viewList": "Lista",
+      "colSiInReview": "SI en Revisión",
+      "colReadyToSend": "Listo para Enviar",
+      "colAwaitingDraftBl": "Esperando Draft BL",
+      "colReadyToRelease": "Listo para Liberar",
+      "filterUrgentOnly": "Solo urgentes",
+      "cardIssues": "{n, plural, one {# problema} other {# problemas}}",
+      "cardEsiSent": "e-SI enviado {when}",
+      "cardDraftBlReceived": "BL borrador recibido",
+      "cardBlReady": "BL limpio · listo",
+      "cardReleased": "✓ Liberado · {date}",
+      "cardClosed": "Cerrado · {date}",
+      "cardReadySince": "Listo hace {when}",
+      "emptyColumn": "Sin bookings"
+    }
   },
   "siViewer": {
     "viewerTitle": "Documento",
