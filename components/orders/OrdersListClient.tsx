@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useTranslations, useLocale } from 'next-intl';
 import type { Order, Exporter, OrderStatus, Market } from '@/types';
 import { ExporterChip } from '@/components/shared/ExporterChip';
@@ -30,6 +31,7 @@ const STATUS_PILL: Record<OrderStatus, string> = {
 
 export function OrdersListClient({ orders, exporters, bookingCounts }: Props) {
   const t = useTranslations('orders');
+  const router = useRouter();
   const locale = useLocale() as 'es' | 'en';
   const demo = useDemoStore();
 
@@ -138,7 +140,7 @@ export function OrdersListClient({ orders, exporters, bookingCounts }: Props) {
                 if (!exp) return null;
                 const booked = bookingCounts[o.id] ?? o.bookingIds.length;
                 return (
-                  <tr key={o.id} className="border-b border-[var(--line-soft)] last:border-b-0 hover:bg-white/5">
+                  <tr key={o.id} onClick={() => router.push(`/orders/${o.id}`)} className="cursor-pointer border-b border-[var(--line-soft)] last:border-b-0 hover:bg-white/5">
                     <td className="px-3 py-2.5">
                       <Link href={`/orders/${o.id}`} className="font-mono text-ink-1 hover:underline">
                         {o.orderNumber}

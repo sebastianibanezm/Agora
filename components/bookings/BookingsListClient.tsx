@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
 import { useTranslations, useLocale } from 'next-intl';
 import type { Booking, Exporter, Naviera, Order, BookingStatus, Market } from '@/types';
@@ -45,6 +46,7 @@ const MARKETS: Market[] = ['US', 'EU', 'IN', 'CN', 'MENA', 'LATAM'];
 export function BookingsListClient({ rows, exporters, navieras }: Props) {
   const t = useTranslations('bookings');
   const tCommon = useTranslations('common');
+  const router = useRouter();
   const locale = useLocale() as 'es' | 'en';
   const sp = useSearchParams();
 
@@ -241,8 +243,9 @@ export function BookingsListClient({ rows, exporters, navieras }: Props) {
               {filtered.map(({ booking, exporter, naviera, alertCount }) => (
                 <tr
                   key={booking.id}
+                  onClick={() => router.push(`/bookings/${booking.id}`)}
                   className={clsx(
-                    'border-b border-[var(--line-soft)] last:border-b-0 hover:bg-white/5',
+                    'cursor-pointer border-b border-[var(--line-soft)] last:border-b-0 hover:bg-white/5',
                     density === 'compact' ? '[&>td]:py-1.5' : '[&>td]:py-2.5',
                   )}
                 >
