@@ -1,3 +1,4 @@
+import { getTranslations } from 'next-intl/server';
 import type { CommercialProfile } from '@/types';
 
 interface Props {
@@ -6,7 +7,8 @@ interface Props {
   activePOCount?: number;
 }
 
-export function CommercialProfileCard({ profile, isDraft = false, activePOCount = 0 }: Props) {
+export async function CommercialProfileCard({ profile, isDraft = false, activePOCount = 0 }: Props) {
+  const t = await getTranslations('compliance');
   const avgDaysOk = profile.avgCollectionDays == null ? true
     : profile.paymentMethod === 'L/C' ? profile.avgCollectionDays <= 7
     : profile.avgCollectionDays <= 45;
@@ -23,17 +25,17 @@ export function CommercialProfileCard({ profile, isDraft = false, activePOCount 
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', fontSize: '12px', color: '#94a3b8' }}>
         <div><span style={{ color: '#e2e8f0', fontWeight: 600 }}>{profile.incoterm}</span> · {profile.paymentTerms}</div>
-        {profile.bank && <div>Banco: {profile.bank}</div>}
-        {profile.currency && <div>Moneda: {profile.currency}</div>}
+        {profile.bank && <div>{t('bank')}: {profile.bank}</div>}
+        {profile.currency && <div>{t('currency')}: {profile.currency}</div>}
         {profile.avgCollectionDays != null && (
           <div style={{ color: avgDaysOk ? '#00E696' : '#F59E0B' }}>
-            Cobro promedio: {profile.avgCollectionDays}d
+            {t('avgCollection', { n: profile.avgCollectionDays })}
           </div>
         )}
       </div>
       <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '8px', borderTop: '1px solid #ffffff08' }}>
-        {isDraft && <span style={{ fontSize: '10px', color: '#64748b' }}>Draft</span>}
-        {activePOCount > 0 && <span style={{ fontSize: '11px', color: '#94a3b8' }}>{activePOCount} active POs</span>}
+        {isDraft && <span style={{ fontSize: '10px', color: '#64748b' }}>{t('draft')}</span>}
+        {activePOCount > 0 && <span style={{ fontSize: '11px', color: '#94a3b8' }}>{t('activePOs', { n: activePOCount })}</span>}
       </div>
     </div>
   );

@@ -19,7 +19,7 @@ export function SentinelQueue({ alerts }: Props) {
   const t = useTranslations();
 
   if (alerts.length === 0) {
-    return <div style={{ color: '#475569', fontSize: '13px', padding: '16px 0' }}>No alerts</div>;
+    return <div style={{ color: '#475569', fontSize: '13px', padding: '16px 0' }}>{t('alerts.noAlerts')}</div>;
   }
 
   return (

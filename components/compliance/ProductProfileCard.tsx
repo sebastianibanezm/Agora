@@ -1,3 +1,4 @@
+import { getTranslations } from 'next-intl/server';
 import type { ProductProfile } from '@/types';
 import { MiniSeasonBar } from '@/components/shared/MiniSeasonBar';
 
@@ -5,7 +6,8 @@ interface Props {
   product: ProductProfile;
 }
 
-export function ProductProfileCard({ product }: Props) {
+export async function ProductProfileCard({ product }: Props) {
+  const t = await getTranslations('compliance');
   const parts = (product.seasonality ?? 'Jan-Dec').split(/[–\-]/);
   const seasonStart = parts[0]?.trim() ?? 'Jan';
   const seasonEnd = parts[1]?.trim() ?? 'Dec';
@@ -17,9 +19,9 @@ export function ProductProfileCard({ product }: Props) {
         <div style={{ fontSize: '11px', color: '#64748b', fontFamily: 'JetBrains Mono, monospace' }}>{product.hsCode}</div>
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px' }}>
-        <span style={{ color: '#64748b' }}>Season: {product.seasonality}</span>
+        <span style={{ color: '#64748b' }}>{t('season')}: {product.seasonality}</span>
         <span style={{ color: product.requiresColdChain ? '#7DD3FC' : '#64748b' }}>
-          {product.requiresColdChain ? 'Cold chain' : 'Ambient'}
+          {product.requiresColdChain ? t('coldChain') : t('ambient')}
         </span>
       </div>
       <MiniSeasonBar start={seasonStart} end={seasonEnd} />
