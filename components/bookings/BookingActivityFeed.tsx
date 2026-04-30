@@ -8,26 +8,6 @@ import { Input } from '@/components/ui/input';
 import { formatTs } from '@/lib/utils/dates';
 import clsx from 'clsx';
 
-const TYPE_LABELS: Record<ActivityEvent['type'], string> = {
-  booking_created: 'Booking created',
-  si_received: 'SI received',
-  si_validation_run: 'SI validation run',
-  si_validation_passed: 'SI validation passed',
-  si_validation_failed: 'SI validation failed',
-  esi_generated: 'e-SI generated',
-  esi_sent: 'e-SI sent',
-  esi_acknowledged: 'e-SI acknowledged',
-  draft_bl_received: 'Draft BL received',
-  draft_bl_validation_run: 'BL validation run',
-  draft_bl_validation_passed: 'BL validation passed',
-  draft_bl_validation_failed: 'BL validation failed',
-  bl_released_to_exporter: 'BL released',
-  alert_fired: 'Alert fired',
-  alert_dismissed: 'Alert dismissed',
-  note_added: 'Note added',
-  manual_override: 'Manual override',
-};
-
 const TYPE_COLORS: Record<ActivityEvent['type'], string> = {
   booking_created: 'bg-ink-3',
   si_received: 'bg-severity-info',
@@ -54,6 +34,26 @@ export function BookingActivityFeed({ events }: { events: ActivityEvent[] }) {
   const t = useTranslations('bookings');
   const [search, setSearch] = useState('');
   const [actor, setActor] = useState<typeof FILTER_IDS[number]>('all');
+
+  const TYPE_LABELS: Record<ActivityEvent['type'], string> = {
+    booking_created: t('activityType_booking_created'),
+    si_received: t('activityType_si_received'),
+    si_validation_run: t('activityType_si_validation_run'),
+    si_validation_passed: t('activityType_si_validation_passed'),
+    si_validation_failed: t('activityType_si_validation_failed'),
+    esi_generated: t('activityType_esi_generated'),
+    esi_sent: t('activityType_esi_sent'),
+    esi_acknowledged: t('activityType_esi_acknowledged'),
+    draft_bl_received: t('activityType_draft_bl_received'),
+    draft_bl_validation_run: t('activityType_draft_bl_validation_run'),
+    draft_bl_validation_passed: t('activityType_draft_bl_validation_passed'),
+    draft_bl_validation_failed: t('activityType_draft_bl_validation_failed'),
+    bl_released_to_exporter: t('activityType_bl_released_to_exporter'),
+    alert_fired: t('activityType_alert_fired'),
+    alert_dismissed: t('activityType_alert_dismissed'),
+    note_added: t('activityType_note_added'),
+    manual_override: t('activityType_manual_override'),
+  };
 
   const FILTER_LABELS: Record<typeof FILTER_IDS[number], string> = {
     all: t('activityFilterAll'),
