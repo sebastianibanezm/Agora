@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import type { Exporter, Market, Naviera } from '@/types';
+import type { Exporter, Naviera } from '@/types';
 import type { ListRow } from '@/components/bookings/BookingsListClient';
 import { BookingsListClient } from '@/components/bookings/BookingsListClient';
 import { BookingsKanbanClient } from '@/components/bookings/BookingsKanbanClient';
@@ -14,7 +14,6 @@ import clsx from 'clsx';
 
 export type { ListRow as Row };
 
-const MARKETS: Market[] = ['US', 'EU', 'IN', 'CN', 'MENA', 'LATAM'];
 const URGENT_MS = 24 * 3_600_000;
 
 interface Props {
@@ -37,7 +36,6 @@ export function BookingsViewClient({ rows, exporters, navieras }: Props) {
   const [search, setSearch] = useState('');
   const [exporterFilters, setExporterFilters] = useState<Set<string>>(new Set());
   const [navieraFilters, setNavieraFilters] = useState<Set<string>>(new Set());
-  const [marketFilters, setMarketFilters] = useState<Set<string>>(new Set());
   const [reeferOnly, setReeferOnly] = useState(false);
   const [urgentOnly, setUrgentOnly] = useState(false);
 
@@ -45,10 +43,9 @@ export function BookingsViewClient({ rows, exporters, navieras }: Props) {
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
-    return rows.filter(({ booking, exporter, naviera, order, highestAlertSeverity }) => {
+    return rows.filter(({ booking, exporter, naviera, highestAlertSeverity }) => {
       if (exporterFilters.size > 0 && !exporterFilters.has(exporter.id)) return false;
       if (navieraFilters.size > 0 && !navieraFilters.has(naviera.id)) return false;
-      if (marketFilters.size > 0 && !marketFilters.has(order.destinationMarket)) return false;
       if (reeferOnly && !booking.isReefer) return false;
       if (initialPol && booking.pol !== initialPol) return false;
       if (initialPod && booking.pod !== initialPod) return false;
@@ -59,29 +56,27 @@ export function BookingsViewClient({ rows, exporters, navieras }: Props) {
       }
       if (q) {
         const hay = [
-          booking.bookingNumber, booking.containerNumber ?? '',
-          booking.vesselName, booking.voyage, exporter.name, naviera.name, order.orderNumber,
+          booking.bookingNumber,
+          booking.vesselName, booking.voyage, exporter.name, naviera.name,
         ].join(' ').toLowerCase();
         if (!hay.includes(q)) return false;
       }
       return true;
     });
-  }, [rows, exporterFilters, navieraFilters, marketFilters, reeferOnly, urgentOnly, search, initialPol, initialPod, now]);
+  }, [rows, exporterFilters, navieraFilters, reeferOnly, urgentOnly, search, initialPol, initialPod, now]);
 
   const clearAll = () => {
     setExporterFilters(new Set());
     setNavieraFilters(new Set());
-    setMarketFilters(new Set());
     setReeferOnly(false);
     setUrgentOnly(false);
     setSearch('');
   };
 
-  const hasFilters = exporterFilters.size > 0 || navieraFilters.size > 0 || marketFilters.size > 0 || reeferOnly || urgentOnly || search;
+  const hasFilters = exporterFilters.size > 0 || navieraFilters.size > 0 || reeferOnly || urgentOnly || search;
 
   const exporterOptions = exporters.map((e) => ({ value: e.id, label: e.name }));
   const navieraOptions = navieras.map((n) => ({ value: n.id, label: n.shortName }));
-  const marketOptions = MARKETS.map((m) => ({ value: m, label: m }));
 
   return (
     <div className="flex flex-col">
@@ -112,13 +107,6 @@ export function BookingsViewClient({ rows, exporters, navieras }: Props) {
             selected={navieraFilters}
             onChange={setNavieraFilters}
             placeholder={t('filterNaviera')}
-          />
-
-          <MultiSelectDropdown
-            options={marketOptions}
-            selected={marketFilters}
-            onChange={setMarketFilters}
-            placeholder={t('filterMarket')}
           />
 
           {/* reefer */}

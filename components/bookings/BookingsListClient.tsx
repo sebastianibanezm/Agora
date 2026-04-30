@@ -1,10 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations, useLocale } from 'next-intl';
-import type { Booking, BookingStatus, Exporter, Naviera, Order, AlertSeverity } from '@/types';
+import type { Booking, BookingStatus, Exporter, Naviera, AlertSeverity } from '@/types';
 import { LifecyclePill } from '@/components/bookings/LifecyclePill';
 import { CutoffCountdown } from '@/components/bookings/CutoffCountdown';
 import { ExporterChip } from '@/components/shared/ExporterChip';
@@ -15,7 +15,6 @@ import clsx from 'clsx';
 
 export interface ListRow {
   booking: Booking;
-  order: Order;
   exporter: Exporter;
   naviera: Naviera;
   alertCount: number;
@@ -121,10 +120,9 @@ export function BookingsListClient({ rows }: Props) {
                 : tKanban(group.titleKey as Parameters<typeof tKanban>[0]);
 
               return (
-                <>
+                <Fragment key={group.key}>
                   {/* group header row */}
                   <tr
-                    key={`hdr-${group.key}`}
                     onClick={() => toggleGroup(group.key)}
                     className="cursor-pointer border-b border-[var(--line-soft)] bg-bg-0/60 hover:bg-bg-0/80"
                   >
@@ -183,7 +181,7 @@ export function BookingsListClient({ rows }: Props) {
                       </td>
                     </tr>
                   ))}
-                </>
+                </Fragment>
               );
             })}
           </tbody>

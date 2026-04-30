@@ -5,7 +5,6 @@ import { BookingsViewClient } from '@/components/bookings/BookingsViewClient';
 import { bookings } from '@/lib/mock-data/bookings';
 import { exporters } from '@/lib/mock-data/exporters';
 import { navieras } from '@/lib/mock-data/navieras';
-import { orders } from '@/lib/mock-data/orders';
 import { activeAlerts } from '@/lib/mock-data/alerts';
 import { shippingInstructions } from '@/lib/mock-data/shipping-instructions';
 import type { AlertSeverity } from '@/types';
@@ -28,9 +27,7 @@ export default async function BookingsPage({ params }: Props) {
   setRequestLocale(locale);
   const t = await getTranslations('bookings');
 
-  const exporterMap = new Map(exporters.map((e) => [e.id, e]));
   const navieraMap = new Map(navieras.map((n) => [n.id, n]));
-  const orderMap = new Map(orders.map((o) => [o.id, o]));
 
   const siByBookingId = new Map(
     shippingInstructions.map((si) => [si.bookingId, si])
@@ -39,10 +36,11 @@ export default async function BookingsPage({ params }: Props) {
   const rows = bookings
     .filter((b) => b.status !== 'cancelled')
     .map((booking) => {
-      const order = orderMap.get(booking.orderId);
-      const exporter = order ? exporterMap.get(order.exporterId) : undefined;
+      const exporter = exporters.find(
+        (e) => e.name === booking.shipper || e.legalName === booking.shipper
+      );
       const naviera = navieraMap.get(booking.navieraId);
-      if (!order || !exporter || !naviera) return null;
+      if (!exporter || !naviera) return null;
 
       const bookingAlerts = activeAlerts.filter((a) => a.bookingId === booking.id);
       const alertCount = bookingAlerts.length;
@@ -55,11 +53,10 @@ export default async function BookingsPage({ params }: Props) {
       const esiTransmittedAt = si?.esiTransmittedAt ?? null;
       const siReceivedAt = si?.receivedAt ?? null;
 
-      return { booking, order, exporter, naviera, alertCount, highestAlertSeverity, siFailedCheckCount, esiTransmittedAt, siReceivedAt };
+      return { booking, exporter, naviera, alertCount, highestAlertSeverity, siFailedCheckCount, esiTransmittedAt, siReceivedAt };
     })
     .filter(Boolean) as Array<{
       booking: typeof bookings[number];
-      order: typeof orders[number];
       exporter: typeof exporters[number];
       naviera: typeof navieras[number];
       alertCount: number;

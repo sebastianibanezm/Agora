@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useTranslations, useLocale } from 'next-intl';
-import type { Booking, AlertSeverity, Exporter, Naviera, Order } from '@/types';
+import type { Booking, AlertSeverity, Exporter, Naviera } from '@/types';
 import { NavieraChip } from '@/components/shared/NavieraChip';
 import { CutoffCountdown } from '@/components/bookings/CutoffCountdown';
 import { formatElapsedSince, formatShortDate } from '@/lib/utils/dates';
@@ -17,7 +17,6 @@ const SEVERITY_STRIP: Record<AlertSeverity, string> = {
 
 export interface KanbanRow {
   booking: Booking;
-  order: Order;
   exporter: Exporter;
   naviera: Naviera;
   alertCount: number;
