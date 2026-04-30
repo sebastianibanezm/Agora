@@ -191,6 +191,26 @@ export function ShipmentGlobe({ bookings, height = 400, className, style }: Prop
     return items;
   }, [arcs]);
 
+  const globeMatRef = useRef<THREE.MeshPhongMaterial | null>(null);
+  if (!globeMatRef.current) {
+    const mat = new THREE.MeshPhongMaterial({ color: new THREE.Color('#D4B890'), shininess: 4 });
+    const loader = new THREE.TextureLoader();
+    loader.load('https://unpkg.com/three-globe/example/img/earth-day.jpg',
+      (tex) => { mat.map = tex; mat.needsUpdate = true; });
+    loader.load('https://unpkg.com/three-globe/example/img/earth-topology.png',
+      (tex) => { mat.bumpMap = tex; mat.bumpScale = 12; mat.needsUpdate = true; });
+    globeMatRef.current = mat;
+  }
+
+  useEffect(() => {
+    const mat = globeMatRef.current;
+    return () => {
+      mat?.map?.dispose();
+      mat?.bumpMap?.dispose();
+      mat?.dispose();
+    };
+  }, []);
+
   return (
     <div
       ref={containerRef}
@@ -211,10 +231,9 @@ export function ShipmentGlobe({ bookings, height = 400, className, style }: Prop
         height={size.h}
         backgroundColor="rgba(0,0,0,0)"
         showAtmosphere
-        atmosphereColor="#7DD3FC"
-        atmosphereAltitude={0.18}
-        globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
-        bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
+        globeMaterial={globeMatRef.current ?? undefined}
+        atmosphereColor="#C8A870"
+        atmosphereAltitude={0.15}
         arcsData={arcs}
         arcColor={(d: object) => (d as ArcDatum).color}
         arcStroke={(d: object) => (d as ArcDatum).stroke}
