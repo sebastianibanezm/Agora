@@ -5,6 +5,7 @@ import { POLifecycleTimeline } from './POLifecycleTimeline';
 import { DocumentsSection } from '@/components/documents/DocumentsSection';
 import { differenceInDays } from 'date-fns';
 import { getTodayDemo } from '@/lib/utils/dates';
+import { getTranslations } from 'next-intl/server';
 
 interface Props {
   po: PurchaseOrder;
@@ -12,7 +13,8 @@ interface Props {
   linkedContainers: Container[];
 }
 
-export function PODetail({ po, importer, linkedContainers }: Props) {
+export async function PODetail({ po, importer, linkedContainers }: Props) {
+  const t = await getTranslations('purchaseOrders');
   const today = getTodayDemo();
   const pills = [
     { key: 'status',   label: po.status,                                    color: '#3B82F6' },
@@ -38,19 +40,19 @@ export function PODetail({ po, importer, linkedContainers }: Props) {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '32px', marginTop: '24px' }}>
         <POResumenEjecutivo po={po} />
         <section>
-          <h2 style={{ fontSize: '15px', fontWeight: 600, color: '#e2e8f0', marginBottom: '12px' }}>Ciclo de Vida</h2>
+          <h2 style={{ fontSize: '15px', fontWeight: 600, color: '#e2e8f0', marginBottom: '12px' }}>{t('lifecycle.title')}</h2>
           <POLifecycleTimeline events={po.events} />
         </section>
         <DocumentsSection ownerId={po.id} ownerType="po" perspective="po" />
         <section>
-          <h2 style={{ fontSize: '15px', fontWeight: 600, color: '#e2e8f0', marginBottom: '12px' }}>Fulfillment & Contraparte</h2>
+          <h2 style={{ fontSize: '15px', fontWeight: 600, color: '#e2e8f0', marginBottom: '12px' }}>{t('fulfillment.title')}</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '24px', alignItems: 'start' }}>
             <div>
-              <h3 style={{ fontSize: '12px', color: '#64748b', marginBottom: '8px', fontWeight: 500 }}>Contenedores vinculados</h3>
+              <h3 style={{ fontSize: '12px', color: '#64748b', marginBottom: '8px', fontWeight: 500 }}>{t('fulfillment.linkedContainers')}</h3>
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px' }}>
                 <thead>
                   <tr style={{ borderBottom: '1px solid #ffffff12', color: '#64748b' }}>
-                    {['ID', 'Producto', 'Etapa', 'T-Day'].map(h => <th key={h} style={{ padding: '6px 8px', textAlign: 'left', fontWeight: 500 }}>{h}</th>)}
+                    {[t('fulfillment.colId'), t('fulfillment.colProduct'), t('fulfillment.colStage'), t('fulfillment.colTDay')].map(h => <th key={h} style={{ padding: '6px 8px', textAlign: 'left', fontWeight: 500 }}>{h}</th>)}
                   </tr>
                 </thead>
                 <tbody>
@@ -69,7 +71,7 @@ export function PODetail({ po, importer, linkedContainers }: Props) {
               <div style={{ fontWeight: 600, color: '#e2e8f0' }}>{importer.name}</div>
               <div style={{ fontSize: '12px', color: '#94a3b8' }}>{importer.country} · {importer.market}</div>
               {importer.creditRating && <div style={{ fontSize: '12px', color: '#00E696', fontFamily: 'JetBrains Mono, monospace' }}>{importer.creditRating}</div>}
-              <div style={{ fontSize: '12px', color: '#64748b' }}>Avg payment: {importer.avgPaymentDays}d</div>
+              <div style={{ fontSize: '12px', color: '#64748b' }}>{t('fulfillment.avgPayment', { n: importer.avgPaymentDays })}</div>
             </div>
           </div>
         </section>

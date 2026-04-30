@@ -1,20 +1,22 @@
 import type { PurchaseOrder } from '@/types';
 import { getTodayDemo } from '@/lib/utils/dates';
 import { differenceInDays } from 'date-fns';
+import { getTranslations } from 'next-intl/server';
 
 interface Props { po: PurchaseOrder }
 
-export function POKpiStrip({ po }: Props) {
+export async function POKpiStrip({ po }: Props) {
+  const t = await getTranslations('purchaseOrders');
   const today = getTodayDemo();
   const daysToDelivery = differenceInDays(new Date(po.deliveryWindow.to), today);
   const lastPayment = po.events.find(e => e.type === 'payment_received');
 
   const tiles = [
-    { label: 'Total Value', value: `$${(po.valueUsd / 1000).toFixed(0)}k`, sub: 'USD' },
-    { label: 'Quantity', value: `${(po.quantityKg / 1000).toFixed(1)}t`, sub: 'kg' },
-    { label: 'Containers', value: String(po.containerIds.length), sub: 'units' },
-    { label: 'Days to Delivery', value: daysToDelivery > 0 ? `${daysToDelivery}d` : 'Past', sub: '' },
-    { label: 'Payment', value: lastPayment ? 'Received' : 'Pending', sub: po.incotermPaymentId },
+    { label: t('kpi.totalValue'),    value: `$${(po.valueUsd / 1000).toFixed(0)}k`, sub: t('kpi.usd') },
+    { label: t('kpi.quantity'),      value: `${(po.quantityKg / 1000).toFixed(1)}t`, sub: t('kpi.kg') },
+    { label: t('kpi.containers'),    value: String(po.containerIds.length), sub: t('kpi.units') },
+    { label: t('kpi.daysToDelivery'), value: daysToDelivery > 0 ? `${daysToDelivery}d` : t('kpi.past'), sub: '' },
+    { label: t('kpi.payment'),       value: lastPayment ? t('kpi.received') : t('kpi.pending'), sub: po.incotermPaymentId },
   ];
 
   return (

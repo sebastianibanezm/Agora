@@ -1,4 +1,5 @@
 import type { PurchaseOrder } from '@/types';
+import { getTranslations } from 'next-intl/server';
 
 const StatusIcon = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -26,24 +27,21 @@ const FinanceIcon = () => (
 
 interface Props { po: PurchaseOrder }
 
-export function POResumenEjecutivo({ po }: Props) {
-  const statusLabel: Record<string, string> = {
-    draft: 'Borrador', confirmed: 'Confirmado', in_fulfillment: 'En Ejecución',
-    delivered: 'Entregado', cancelled: 'Cancelado',
-  };
+export async function POResumenEjecutivo({ po }: Props) {
+  const t = await getTranslations('purchaseOrders');
 
   const gridItems = [
-    { icon: <StatusIcon />, label: 'Estado de PO', value: statusLabel[po.status] ?? po.status },
-    { icon: <ColdIcon />, label: 'Cadena de frío', value: po.events.find(e => e.type === 'bl_issued') ? 'Monitoreo activo' : 'Pendiente' },
-    { icon: <DocsIcon />, label: 'Documentación', value: po.events.find(e => e.type === 'docs_submitted') ? 'Presentada' : 'En proceso' },
-    { icon: <FinanceIcon />, label: 'Situación financiera', value: po.events.find(e => e.type === 'payment_received') ? 'Pago recibido' : 'Pendiente de pago' },
+    { icon: <StatusIcon />, label: t('resumen.statusLabel'),    value: t('statuses.' + po.status as Parameters<typeof t>[0]) },
+    { icon: <ColdIcon />,   label: t('resumen.coldChainLabel'), value: po.events.find(e => e.type === 'bl_issued') ? t('resumen.coldChainActive') : t('resumen.coldChainPending') },
+    { icon: <DocsIcon />,   label: t('resumen.docsLabel'),      value: po.events.find(e => e.type === 'docs_submitted') ? t('resumen.docsSubmitted') : t('resumen.docsInProgress') },
+    { icon: <FinanceIcon />, label: t('resumen.financeLabel'),  value: po.events.find(e => e.type === 'payment_received') ? t('resumen.paymentReceived') : t('resumen.paymentPending') },
   ];
 
   return (
     <section>
-      <h2 style={{ fontSize: '15px', fontWeight: 600, color: '#e2e8f0', marginBottom: '12px' }}>Resumen Ejecutivo</h2>
+      <h2 style={{ fontSize: '15px', fontWeight: 600, color: '#e2e8f0', marginBottom: '12px' }}>{t('resumen.title')}</h2>
       <p style={{ fontSize: '13px', color: '#94a3b8', marginBottom: '12px' }}>
-        PO {po.id} en estado <strong style={{ color: '#e2e8f0' }}>{statusLabel[po.status]}</strong> con {po.containerIds.length} contenedor(es) asignado(s).
+        {t('resumen.summary', { id: po.id, status: t('statuses.' + po.status as Parameters<typeof t>[0]), n: po.containerIds.length })}
       </p>
       <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '16px' }}>
         {[po.market, po.incotermPaymentId, po.status].map(tag => (
