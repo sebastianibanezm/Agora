@@ -147,17 +147,17 @@ export function BookingDetailClient({
                 <dd className="font-mono text-ink-1">{booking.voyage}</dd>
               </div>
               <div>
-                <dt className="text-ink-3">POL → POD</dt>
+                <dt className="text-ink-3">{t('colRoute')}</dt>
                 <dd className="text-ink-1">
                   {booking.pol.split(',')[0]} → {booking.pod.split(',')[0]}
                 </dd>
               </div>
               <div>
-                <dt className="text-ink-3">ETD</dt>
+                <dt className="text-ink-3">{t('colEtd')}</dt>
                 <dd className="text-ink-1">{formatTs(booking.etd)}</dd>
               </div>
               <div>
-                <dt className="text-ink-3">ETA</dt>
+                <dt className="text-ink-3">{t('colEta')}</dt>
                 <dd className="text-ink-1">{formatTs(booking.eta)}</dd>
               </div>
               <div>

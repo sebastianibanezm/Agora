@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import type { BookingStatus } from '@/types';
 import clsx from 'clsx';
 
@@ -12,26 +13,26 @@ const ORDER: BookingStatus[] = [
   'closed',
 ];
 
-const SHORT_LABELS: Record<BookingStatus, string> = {
-  created: 'New',
-  awaiting_si: 'Awaiting SI',
-  si_received: 'SI in',
-  si_validated: 'SI ✓',
-  si_failed: 'SI failed',
-  esi_sent: 'e-SI sent',
-  draft_bl_received: 'BL in',
-  bl_validated: 'BL ✓',
-  bl_released: 'Released',
-  closed: 'Closed',
-  cancelled: 'Cancelled',
-};
-
 interface Props {
   current: BookingStatus;
   className?: string;
 }
 
 export function BookingLifecycleStrip({ current, className }: Props) {
+  const t = useTranslations('lifecycle');
+  const SHORT_LABELS: Record<BookingStatus, string> = {
+    created: t('new'),
+    awaiting_si: t('awaiting_si'),
+    si_received: t('si_in'),
+    si_validated: t('si_validated_short'),
+    si_failed: t('si_failed'),
+    esi_sent: t('esi_sent'),
+    draft_bl_received: t('bl_in'),
+    bl_validated: t('bl_validated_short'),
+    bl_released: t('bl_released'),
+    closed: t('closed'),
+    cancelled: t('cancelled'),
+  };
   const idx = ORDER.indexOf(current);
   const failed = current === 'si_failed';
 

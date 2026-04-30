@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ArrowLeft, AlertTriangle } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import type { Booking, Exporter, Naviera, Order } from '@/types';
 import { LifecyclePill } from './LifecyclePill';
 import { CutoffCountdown } from './CutoffCountdown';
@@ -14,13 +15,14 @@ interface Props {
 }
 
 export function BookingHeader({ booking, exporter, naviera, order }: Props) {
+  const t = useTranslations('bookings');
   return (
     <div className="flex flex-col gap-2">
       <Link
         href="/bookings"
         className="inline-flex w-fit items-center gap-1 text-xs text-ink-3 hover:text-ink-1"
       >
-        <ArrowLeft className="h-3 w-3" /> Back to Bookings
+        <ArrowLeft className="h-3 w-3" /> {t('backToBookings')}
       </Link>
 
       {/* Identity row */}
@@ -49,7 +51,7 @@ export function BookingHeader({ booking, exporter, naviera, order }: Props) {
           {booking.costAtRiskUsd > 0 && (
             <div className="flex items-center gap-1 font-mono text-xs text-severity-watch">
               <AlertTriangle className="h-3 w-3" />
-              USD {booking.costAtRiskUsd.toLocaleString()} at risk
+              USD {booking.costAtRiskUsd.toLocaleString()} {t('atRisk')}
             </div>
           )}
           <CutoffCountdown cutoffIso={booking.cutOff} prefix />
