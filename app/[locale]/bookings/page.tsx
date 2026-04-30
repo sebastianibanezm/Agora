@@ -1,6 +1,5 @@
 import { Suspense } from 'react';
-import { setRequestLocale } from 'next-intl/server';
-import { getTranslations } from 'next-intl/server';
+import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { PageTransition } from '@/components/shared/PageTransition';
 import { BookingsListClient } from '@/components/bookings/BookingsListClient';
 import { bookings } from '@/lib/mock-data/bookings';
@@ -11,6 +10,15 @@ import { activeAlerts } from '@/lib/mock-data/alerts';
 import { shippingInstructions } from '@/lib/mock-data/shipping-instructions';
 import type { AlertSeverity } from '@/types';
 
+const SEVERITY_ORDER: AlertSeverity[] = ['critical', 'action', 'watch', 'info'];
+
+function resolveHighestSeverity(bookingAlerts: typeof activeAlerts): AlertSeverity | null {
+  for (const sev of SEVERITY_ORDER) {
+    if (bookingAlerts.some((a) => a.severity === sev)) return sev;
+  }
+  return null;
+}
+
 type Props = {
   params: Promise<{ locale: string }>;
 };
@@ -19,15 +27,6 @@ export default async function BookingsPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations('bookings');
-
-  const SEVERITY_ORDER: AlertSeverity[] = ['critical', 'action', 'watch', 'info'];
-
-  function resolveHighestSeverity(bookingAlerts: typeof activeAlerts): AlertSeverity | null {
-    for (const sev of SEVERITY_ORDER) {
-      if (bookingAlerts.some((a) => a.severity === sev)) return sev;
-    }
-    return null;
-  }
 
   const exporterMap = new Map(exporters.map((e) => [e.id, e]));
   const navieraMap = new Map(navieras.map((n) => [n.id, n]));
