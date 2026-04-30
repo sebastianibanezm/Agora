@@ -312,6 +312,7 @@
     "title": "Exportadores",
     "search": "Buscar exportadores…",
     "noMatches": "Ningún exportador coincide con tu búsqueda.",
+    "kpi_orders": "Órdenes",
     "kpi_containers": "Contenedores",
     "kpi_onTimeSi": "SI a tiempo",
     "kpi_quality": "Calidad SI",

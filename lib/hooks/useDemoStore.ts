@@ -86,6 +86,10 @@ export function useDemoStore() {
   return useSyncExternalStore(subscribe, snapshot, serverSnapshot);
 }
 
+export function getNewBookingById(id: string): Booking | undefined {
+  return state.newBookings.find((b) => b.id === id);
+}
+
 export function applyBookingOverride(b: Booking): Booking {
   const patch = state.bookingOverrides[b.id];
   return patch ? { ...b, ...patch } : b;

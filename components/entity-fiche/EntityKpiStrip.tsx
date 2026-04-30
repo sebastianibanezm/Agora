@@ -1,7 +1,7 @@
 interface KpiTile {
   label: string;
   value: string;
-  sub: string;
+  sub?: string;
 }
 
 interface Props {
@@ -10,12 +10,15 @@ interface Props {
 
 export function EntityKpiStrip({ kpis }: Props) {
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: `repeat(${kpis.length}, 1fr)`, gap: '12px', margin: '16px 0' }}>
-      {kpis.map(k => (
-        <div key={k.label} style={{ background: '#1a1f2e', border: '1px solid #ffffff12', borderRadius: '8px', padding: '14px' }}>
-          <div style={{ fontSize: '11px', color: '#64748b', marginBottom: '4px' }}>{k.label}</div>
-          <div style={{ fontSize: '20px', fontWeight: 700, color: '#e2e8f0' }}>{k.value}</div>
-          <div style={{ fontSize: '11px', color: '#475569' }}>{k.sub}</div>
+    <div className="grid gap-3" style={{ gridTemplateColumns: `repeat(${kpis.length}, minmax(0, 1fr))` }}>
+      {kpis.map((k) => (
+        <div
+          key={k.label}
+          className="rounded-md border border-[var(--line-soft)] bg-bg-2 px-4 py-3"
+        >
+          <div className="mb-1 font-mono text-[10px] tracking-wider text-ink-3 uppercase">{k.label}</div>
+          <div className="font-mono text-lg font-semibold text-ink-1">{k.value}</div>
+          {k.sub && <div className="text-[11px] text-ink-3">{k.sub}</div>}
         </div>
       ))}
     </div>

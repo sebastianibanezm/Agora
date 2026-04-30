@@ -4,46 +4,48 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* ── Agora design tokens ───────────────────────────────────────────────── */
+/* ── Agora design tokens — Ivory / Ink / Fraunces ───────────────────────── */
 @theme {
-  /* Surfaces */
-  --color-bg-0: #070A12;
-  --color-bg-1: #0E1320;
-  --color-bg-2: #141A29;
-  --color-bg-3: #1B2235;
+  /* Surfaces — paper tones (was navy bg-0..bg-3) */
+  --color-bg-0: #F8F2E4;   /* deepest paper, app bg */
+  --color-bg-1: #FCF7EA;   /* card */
+  --color-bg-2: #FFFCF1;   /* raised */
+  --color-bg-3: #F1E8D5;   /* sunken / hover */
 
-  /* Text / Ink */
-  --color-ink-1: #F4F6FA;
-  --color-ink-2: #A8B3C7;
-  --color-ink-3: #6B7689;
-  --color-ink-4: #475063;
+  /* Text / Ink — warm dark browns (was cool greys) */
+  --color-ink-1: #2B1F12;
+  --color-ink-2: #5A4A38;
+  --color-ink-3: #8A7860;
+  --color-ink-4: #B5A586;
 
-  /* Mint scale */
-  --color-mint-300: #4DFFB8;
-  --color-mint-500: #00E696;
-  --color-mint-600: #00B377;
-  --color-mint-700: #008055;
+  /* "Mint" scale — repurposed as Ink accent (monochrome) so existing
+     bg-mint-500 / text-mint-500 utilities still work without renames */
+  --color-mint-300: #5A4A38;
+  --color-mint-500: #2B1F12;
+  --color-mint-600: #1F1609;
+  --color-mint-700: #140E04;
 
-  /* Severity */
-  --color-severity-ok:    #00E696;
-  --color-severity-info:  #3B82F6;
-  --color-severity-watch: #F59E0B;
-  --color-severity-risk:  #F97316;
-  --color-severity-crit:  #EF4444;
+  /* Severity — retuned to warm/earthy palette */
+  --color-severity-ok:    #4F7A3C;   /* moss */
+  --color-severity-info:  #5A6B85;   /* slate */
+  --color-severity-watch: #B97A1F;   /* mustard */
+  --color-severity-risk:  #B25028;   /* copper */
+  --color-severity-crit:  #8B2A1F;   /* oxblood */
 
-  /* Trace */
-  --color-trace: #7DD3FC;
+  /* Trace — muted slate (was sky blue) */
+  --color-trace: #6B7E9A;
 
-  /* Fonts */
+  /* Fonts — Fraunces for display, Inter for body, JetBrains Mono unchanged */
   --font-family-sans: var(--font-inter), Inter, system-ui, sans-serif;
   --font-family-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-family-display: var(--font-fraunces), "Fraunces", Georgia, serif;
 
   /* Shadcn / Tailwind inline tokens (kept for component compatibility) */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-inter), Inter, system-ui, sans-serif;
   --font-mono: var(--font-mono-var);
-  --font-heading: var(--font-inter), Inter, system-ui, sans-serif;
+  --font-heading: var(--font-fraunces), "Fraunces", Georgia, serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -83,85 +85,88 @@
 }
 
 :root {
-  /* Shadcn base tokens */
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  /* Shadcn base tokens — paper-first */
+  --background: oklch(0.965 0.018 80);
+  --foreground: oklch(0.22 0.02 50);
+  --card: oklch(0.975 0.015 80);
+  --card-foreground: oklch(0.22 0.02 50);
+  --popover: oklch(0.985 0.012 80);
+  --popover-foreground: oklch(0.22 0.02 50);
+  --primary: oklch(0.22 0.02 50);            /* ink */
+  --primary-foreground: oklch(0.97 0.018 80);
+  --secondary: oklch(0.94 0.022 78);
+  --secondary-foreground: oklch(0.22 0.02 50);
+  --muted: oklch(0.94 0.022 78);
+  --muted-foreground: oklch(0.50 0.022 60);
+  --accent: oklch(0.94 0.022 78);
+  --accent-foreground: oklch(0.22 0.02 50);
+  --destructive: oklch(0.46 0.14 35);
+  --border: oklch(0.86 0.025 70);
+  --input: oklch(0.86 0.025 70);
+  --ring: oklch(0.22 0.02 50);
+  --chart-1: oklch(0.46 0.10 35);    /* copper */
+  --chart-2: oklch(0.50 0.06 240);   /* slate */
+  --chart-3: oklch(0.60 0.10 70);    /* mustard */
+  --chart-4: oklch(0.50 0.10 25);    /* oxblood */
+  --chart-5: oklch(0.55 0.06 100);   /* moss */
+  --radius: 0.5rem;
+  --sidebar: oklch(0.975 0.015 80);
+  --sidebar-foreground: oklch(0.22 0.02 50);
+  --sidebar-primary: oklch(0.22 0.02 50);
+  --sidebar-primary-foreground: oklch(0.97 0.018 80);
+  --sidebar-accent: oklch(0.94 0.022 78);
+  --sidebar-accent-foreground: oklch(0.22 0.02 50);
+  --sidebar-border: oklch(0.86 0.025 70);
+  --sidebar-ring: oklch(0.22 0.02 50);
 
-  /* Glass + line tokens (not Tailwind utilities — used via var()) */
-  --glass: rgba(17, 24, 39, 0.55);
-  --line-soft: rgba(255, 255, 255, 0.07);
-  --line-mid:  rgba(255, 255, 255, 0.14);
-  --line-mint: rgba(0, 230, 150, 0.32);
+  /* Glass + line tokens (used via var()) */
+  --glass: rgba(252, 247, 234, 0.78);
+  --line-soft: rgba(60, 42, 22, 0.08);
+  --line-mid:  rgba(60, 42, 22, 0.16);
+  --line-mint: rgba(43, 31, 18, 0.32);   /* "mint" line — now ink */
 }
 
+/* The app html element still has class="dark" applied in layout.tsx,
+   so we must redefine the .dark scope to ALSO be the paper theme,
+   otherwise the entire UI continues using the old dark navy palette. */
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --background: #F8F2E4;            /* bg-0 */
+  --foreground: #2B1F12;            /* ink-1 */
+  --card: #FCF7EA;                  /* bg-1 */
+  --card-foreground: #2B1F12;
+  --popover: #FFFCF1;               /* bg-2 */
+  --popover-foreground: #2B1F12;
+  --primary: #2B1F12;               /* ink */
+  --primary-foreground: #FCF7EA;
+  --secondary: #FFFCF1;             /* bg-2 */
+  --secondary-foreground: #2B1F12;
+  --muted: #FFFCF1;                 /* bg-2 */
+  --muted-foreground: #5A4A38;      /* ink-2 */
+  --accent: #F1E8D5;                /* bg-3 */
+  --accent-foreground: #2B1F12;
+  --destructive: #8B2A1F;           /* oxblood */
+  --border: rgba(60, 42, 22, 0.08);
+  --input: rgba(60, 42, 22, 0.16);
+  --ring: #2B1F12;                  /* ink */
+  --chart-1: #2B1F12;
+  --chart-2: #5A6B85;
+  --chart-3: #B97A1F;
+  --chart-4: #8B2A1F;
+  --chart-5: #5A4A38;
+  --sidebar: #FCF7EA;
+  --sidebar-foreground: #2B1F12;
+  --sidebar-primary: #2B1F12;
+  --sidebar-primary-foreground: #FCF7EA;
+  --sidebar-accent: #F1E8D5;
+  --sidebar-accent-foreground: #2B1F12;
+  --sidebar-border: rgba(60, 42, 22, 0.08);
+  --sidebar-ring: #2B1F12;
 }
 
 /* ── Base styles ─────────────────────────────────────────────────────────── */
 html, body {
-  background-color: #070A12;
-  color: #F4F6FA;
+  background-color: #F8F2E4;
+  color: #2B1F12;
 }
 
 body {
@@ -169,7 +174,16 @@ body {
   font-size: 13px;
 }
 
-/* ── Ambient glows ───────────────────────────────────────────────────────── */
+/* Display headings → Fraunces (italic for editorial feel) */
+h1, h2, h3,
+.font-display,
+.font-heading {
+  font-family: var(--font-fraunces), "Fraunces", Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+/* ── Ambient warm wash + paper grain ─────────────────────────────────────── */
 body::before {
   content: '';
   position: fixed;
@@ -177,8 +191,8 @@ body::before {
   pointer-events: none;
   z-index: 0;
   background:
-    radial-gradient(60% 40% at 90% 0%, rgba(0, 230, 150, 0.05), transparent 60%),
-    radial-gradient(50% 40% at 10% 100%, rgba(125, 211, 252, 0.05), transparent 60%);
+    radial-gradient(60% 40% at 90% 0%, rgba(178, 80, 40, 0.05), transparent 60%),
+    radial-gradient(50% 40% at 10% 100%, rgba(120, 85, 50, 0.045), transparent 60%);
 }
 
 body::after {
@@ -187,12 +201,13 @@ body::after {
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(90, 60, 30, 0.045) 1px, transparent 1px);
   background-size: 3px 3px;
-  mix-blend-mode: screen;
+  mix-blend-mode: multiply;
+  opacity: 0.7;
 }
 
-/* ── Glass utility ───────────────────────────────────────────────────────── */
+/* ── Glass utility — now warm cream frost ────────────────────────────────── */
 .glass {
   background: var(--glass);
   backdrop-filter: blur(12px);

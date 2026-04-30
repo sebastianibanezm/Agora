@@ -24,28 +24,39 @@ export default async function BookingDetailPage({ params }: Props) {
   setRequestLocale(locale);
 
   const booking = getBookingById(id);
-  if (!booking) notFound();
-  const exporter = exporters.find((e) => e.name === booking.shipper || e.legalName === booking.shipper);
-  if (!exporter) notFound();
-  const naviera = getNavieraById(booking.navieraId);
-  if (!naviera) notFound();
 
-  const si = getSIByBookingId(id);
-  const bl = getDraftBlByBookingId(id);
-  const alerts = getAlertsByBookingId(id);
-  const events = getActivityForBooking(id);
+  // booking may be undefined if it was just created via the upload dialog (store-only).
+  // in that case the client component reads it from the demo store.
+  if (booking) {
+    const exporter = exporters.find((e) => e.name === booking.shipper || e.legalName === booking.shipper);
+    const naviera = getNavieraById(booking.navieraId);
+    if (!exporter || !naviera) notFound();
 
+    const si = getSIByBookingId(id);
+    const bl = getDraftBlByBookingId(id);
+    const alerts = getAlertsByBookingId(id);
+    const events = getActivityForBooking(id);
+
+    return (
+      <PageTransition>
+        <BookingDetailClient
+          bookingId={id}
+          booking={booking}
+          exporter={exporter}
+          naviera={naviera}
+          si={si}
+          bl={bl}
+          alerts={alerts}
+          events={events}
+        />
+      </PageTransition>
+    );
+  }
+
+  // store-only booking — let the client component look it up
   return (
     <PageTransition>
-      <BookingDetailClient
-        booking={booking}
-        exporter={exporter}
-        naviera={naviera}
-        si={si}
-        bl={bl}
-        alerts={alerts}
-        events={events}
-      />
+      <BookingDetailClient bookingId={id} />
     </PageTransition>
   );
 }

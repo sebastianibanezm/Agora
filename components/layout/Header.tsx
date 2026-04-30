@@ -53,14 +53,14 @@ export function Header({ breadcrumb }: HeaderProps) {
           <div className="h-[30px] w-[30px] rounded-full bg-bg-2 border border-white/10 flex items-center justify-center">
             <User className="h-3.5 w-3.5 text-ink-2" />
           </div>
-          <span className="text-sm">María José</span>
+          <span className="text-sm">Felipe Donoso</span>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-56 glass border border-white/10">
           <DropdownMenuGroup>
             <DropdownMenuLabel className="font-normal">
-              <div className="font-mono text-xs text-ink-3 mb-0.5">Valle Fresco S.A.</div>
-              <div className="text-sm text-ink-1">María José Soto</div>
-              <div className="text-xs text-ink-3">Logistics Manager</div>
+              <div className="font-mono text-xs text-ink-3 mb-0.5">Interglobo Chile</div>
+              <div className="text-sm text-ink-1">Felipe Donoso</div>
+              <div className="text-xs text-ink-3">FF Operator</div>
             </DropdownMenuLabel>
           </DropdownMenuGroup>
           <DropdownMenuSeparator className="bg-white/10" />

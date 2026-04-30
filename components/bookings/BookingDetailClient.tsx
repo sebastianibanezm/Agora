@@ -22,19 +22,20 @@ import { SIViewer } from './SIViewer';
 import { ValidationPanel } from './ValidationPanel';
 import { DraftBLViewer } from './DraftBLViewer';
 import { BookingActivityFeed } from './BookingActivityFeed';
-import { useDemoStore, applyBookingOverride, transitionBooking } from '@/lib/hooks/useDemoStore';
+import { useDemoStore, applyBookingOverride, transitionBooking, getNewBookingById } from '@/lib/hooks/useDemoStore';
 import { toast } from '@/components/ui/toast';
 import { formatTs } from '@/lib/utils/dates';
 import { Send, Upload, FileCheck2, AlertTriangle, Loader2 } from 'lucide-react';
 
 interface Props {
-  booking: Booking;
-  exporter: Exporter;
-  naviera: Naviera;
-  si: ShippingInstruction | undefined;
-  bl: DraftBL | undefined;
-  alerts: Alert[];
-  events: ActivityEvent[];
+  bookingId: string;
+  booking?: Booking;
+  exporter?: Exporter;
+  naviera?: Naviera;
+  si?: ShippingInstruction;
+  bl?: DraftBL;
+  alerts?: Alert[];
+  events?: ActivityEvent[];
 }
 
 function GenerateEsiButton({
@@ -62,18 +63,24 @@ function GenerateEsiButton({
 }
 
 export function BookingDetailClient({
+  bookingId,
   booking: initialBooking,
   exporter,
   naviera,
   si,
   bl,
-  alerts,
-  events,
+  alerts = [],
+  events = [],
 }: Props) {
   const t = useTranslations('bookings');
   const locale = useLocale() as 'es' | 'en';
-  useDemoStore();
-  const booking = useMemo(() => applyBookingOverride(initialBooking), [initialBooking]);
+  const storeState = useDemoStore();
+  const booking = useMemo(() => {
+    const base = initialBooking ?? getNewBookingById(bookingId);
+    if (!base) return null;
+    return applyBookingOverride(base);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialBooking, bookingId, storeState]);
   const [transmitting, setTransmitting] = useState(false);
   const [tab, setTab] = useState<'overview' | 'si' | 'bl' | 'activity'>('overview');
 
@@ -81,19 +88,27 @@ export function BookingDetailClient({
   const blHasFails = (bl?.validationResults ?? []).some((c) => c.result === 'fail');
 
   function handleGenerateEsi() {
-    if (!si || siHasFails) return;
+    if (!booking || !si || siHasFails) return;
     setTransmitting(true);
     setTimeout(() => {
       transitionBooking(booking.id, 'esi_sent');
-      toast.success(t('toasts.esiSent', { naviera: naviera.shortName }));
+      toast.success(t('toasts.esiSent', { naviera: naviera?.shortName ?? '' }));
       setTransmitting(false);
     }, 1500);
   }
 
   function handleReleaseBl() {
-    if (!bl || blHasFails) return;
+    if (!booking || !bl || blHasFails) return;
     transitionBooking(booking.id, 'bl_released');
-    toast.success(t('toasts.blReleased', { email: exporter.contactEmail }));
+    toast.success(t('toasts.blReleased', { email: exporter?.contactEmail ?? '' }));
+  }
+
+  if (!booking) {
+    return (
+      <div className="flex min-h-screen items-center justify-center text-sm text-ink-3">
+        {t('empty')}
+      </div>
+    );
   }
 
   return (
@@ -283,8 +298,8 @@ export function BookingDetailClient({
             </>
           ) : (
             <EmptyState
-              title={t('siEmptyTitle', { exporter: exporter.name })}
-              hint={t('siEmptyHint', { exporter: exporter.name })}
+              title={t('siEmptyTitle', { exporter: exporter?.name ?? booking.shipper })}
+              hint={t('siEmptyHint', { exporter: exporter?.name ?? booking.shipper })}
             />
           )}
         </TabsContent>
@@ -306,7 +321,7 @@ export function BookingDetailClient({
             </>
           ) : (
             <EmptyState
-              title={t('blEmptyTitle', { naviera: naviera.shortName })}
+              title={t('blEmptyTitle', { naviera: naviera?.shortName ?? '' })}
               hint={t('blEmptyHint', { when: si?.esiTransmittedAt ? formatTs(si.esiTransmittedAt) : '—' })}
             />
           )}

@@ -43,8 +43,15 @@ export function NavierasGrid({ navieras }: { navieras: Naviera[] }) {
               className="group flex flex-col gap-3 rounded-xl border border-[var(--line-soft)] bg-bg-1 p-4 transition-colors hover:border-[var(--line-mid)]"
             >
               <div className="flex items-start gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-white/5 font-mono text-[10px] font-semibold text-ink-2 group-hover:text-ink-1">
-                  {n.code}
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-white/5 overflow-hidden">
+                  {n.logoUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={n.logoUrl} alt={n.shortName} className="h-full w-full object-contain" />
+                  ) : (
+                    <span className="font-mono text-[10px] font-semibold text-ink-2 group-hover:text-ink-1">
+                      {n.code}
+                    </span>
+                  )}
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="font-medium text-ink-1">{n.shortName}</div>

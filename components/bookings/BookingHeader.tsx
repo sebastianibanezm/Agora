@@ -9,8 +9,8 @@ import { NavieraChip } from '@/components/shared/NavieraChip';
 
 interface Props {
   booking: Booking;
-  exporter: Exporter;
-  naviera: Naviera;
+  exporter?: Exporter;
+  naviera?: Naviera;
 }
 
 export function BookingHeader({ booking, exporter, naviera }: Props) {
@@ -33,10 +33,8 @@ export function BookingHeader({ booking, exporter, naviera }: Props) {
       {/* Metadata row */}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-2 text-xs text-ink-3">
-          <ExporterChip exporter={exporter} />
-          <span>·</span>
-          <NavieraChip naviera={naviera} />
-          <span>·</span>
+          {exporter && <><ExporterChip exporter={exporter} /><span>·</span></>}
+          {naviera && <><NavieraChip naviera={naviera} /><span>·</span></>}
           <span className="text-ink-2">{booking.shipper} → {booking.consignee}</span>
         </div>
 

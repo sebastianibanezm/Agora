@@ -48,8 +48,13 @@ export function ExportersGrid({ exporters }: { exporters: Exporter[] }) {
               className="group flex flex-col gap-3 rounded-xl border border-[var(--line-soft)] bg-bg-1 p-4 transition-colors hover:border-[var(--line-mid)]"
             >
               <div className="flex items-start gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-white/5 text-ink-2 group-hover:text-ink-1">
-                  <Building2 className="h-5 w-5" />
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-white/5 overflow-hidden text-ink-2 group-hover:text-ink-1">
+                  {exp.logoUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={exp.logoUrl} alt={exp.name} className="h-full w-full object-contain" />
+                  ) : (
+                    <Building2 className="h-5 w-5" />
+                  )}
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="font-medium text-ink-1">{exp.name}</div>

@@ -46,10 +46,21 @@ export function formatElapsedSince(iso: string, now: Date = getTodayDemo()): str
 
 /**
  * Returns a short locale-aware date like "Apr 25" (en) or "25 abr" (es).
+ *
+ * Implemented manually (not via Intl.DateTimeFormat) so the output is
+ * byte-identical between Node.js (SSR) and the browser. ICU/CLDR data
+ * differs across runtimes for Spanish abbreviated months — e.g. some
+ * environments append a trailing period ("abr.") and others don't ("abr"),
+ * which causes React hydration mismatches.
  */
+const SHORT_MONTHS_ES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+const SHORT_MONTHS_EN = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
 export function formatShortDate(iso: string, locale: 'es' | 'en'): string {
-  return new Date(iso).toLocaleDateString(locale === 'es' ? 'es-CL' : 'en-US', {
-    month: 'short',
-    day: 'numeric',
-  });
+  const date = new Date(iso);
+  const day = date.getDate();
+  const monthIdx = date.getMonth();
+  return locale === 'es'
+    ? `${day} ${SHORT_MONTHS_ES[monthIdx]}`
+    : `${SHORT_MONTHS_EN[monthIdx]} ${day}`;
 }

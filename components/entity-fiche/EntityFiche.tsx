@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react';
 import { EntityKpiStrip } from './EntityKpiStrip';
-import { RelationshipHistory } from './RelationshipHistory';
 
 interface Pill {
   label: string;
@@ -10,54 +9,58 @@ interface Pill {
 interface KpiTile {
   label: string;
   value: string;
-  sub: string;
+  sub?: string;
 }
 
-interface Column<T> {
-  label: string;
-  render: (row: T) => ReactNode;
-}
-
-interface Props<P, C> {
+interface Props {
   name: string;
-  pills: Pill[];
-  kpis: KpiTile[];
-  pos: P[];
-  containers: C[];
-  poColumns: Column<P>[];
-  containerColumns: Column<C>[];
-  children: ReactNode;
+  subtitle?: string;
+  logoUrl?: string;
+  pills?: Pill[];
+  kpis?: KpiTile[];
+  children?: ReactNode;
 }
 
-export function EntityFiche<P, C>({ name, pills, kpis, pos, containers, poColumns, containerColumns, children }: Props<P, C>) {
-  const initials = name.split(' ').slice(0, 2).map(w => w.charAt(0)).join('').toUpperCase();
+export function EntityFiche({ name, subtitle, logoUrl, pills = [], kpis = [], children }: Props) {
+  const initials = name
+    .split(/[\s.]+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((w) => w.charAt(0))
+    .join('')
+    .toUpperCase();
 
   return (
-    <div style={{ padding: '24px', maxWidth: '1100px' }}>
-      <div style={{ display: 'flex', gap: '16px', alignItems: 'center', marginBottom: '24px' }}>
-        <div style={{
-          width: '48px', height: '48px', borderRadius: '50%',
-          background: '#ffffff18', display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontWeight: 700, fontSize: '16px', color: '#e2e8f0', flexShrink: 0,
-        }}>
-          {initials}
+    <div className="rounded-xl border border-[var(--line-soft)] bg-bg-1 p-6">
+      <div className="mb-4 flex items-center gap-4">
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/10 text-base font-bold text-ink-1 overflow-hidden">
+          {logoUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={logoUrl} alt={name} className="h-full w-full object-contain p-1" />
+          ) : (
+            initials || '?'
+          )}
         </div>
-        <div>
-          <h1 style={{ fontSize: '20px', fontWeight: 700, color: '#e2e8f0', marginBottom: '8px' }}>{name}</h1>
-          <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-            {pills.map(p => (
-              <span key={p.label} style={{ padding: '2px 8px', borderRadius: '10px', background: p.color + '22', color: p.color, fontSize: '11px', fontWeight: 500 }}>
-                {p.label}
-              </span>
-            ))}
-          </div>
+        <div className="min-w-0">
+          <h1 className="truncate text-xl font-semibold text-ink-1">{name}</h1>
+          {subtitle && <div className="text-xs text-ink-3">{subtitle}</div>}
+          {pills.length > 0 && (
+            <div className="mt-1 flex flex-wrap gap-1.5">
+              {pills.map((p) => (
+                <span
+                  key={p.label}
+                  className="rounded-full px-2 py-[2px] text-[11px] font-medium"
+                  style={{ background: `${p.color}22`, color: p.color }}
+                >
+                  {p.label}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
       </div>
-      <EntityKpiStrip kpis={kpis} />
-      <RelationshipHistory pos={pos} containers={containers} poColumns={poColumns} containerColumns={containerColumns} />
-      <div style={{ marginTop: '32px', display: 'flex', flexDirection: 'column', gap: '32px' }}>
-        {children}
-      </div>
+      {kpis.length > 0 && <EntityKpiStrip kpis={kpis} />}
+      {children && <div className="mt-6 flex flex-col gap-6">{children}</div>}
     </div>
   );
 }
