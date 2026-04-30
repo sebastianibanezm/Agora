@@ -81,7 +81,14 @@ export function BookingDetailClient({
 
       <Tabs value={tab} onValueChange={(v) => setTab(v as typeof tab)} className="flex-1">
         <TabsList variant="line" className="border-b border-[var(--line-soft)] w-full rounded-none pb-0">
-          <TabsTrigger value="overview">{t('tabOverview')}</TabsTrigger>
+          <TabsTrigger value="overview" className="gap-1.5">
+            {t('tabOverview')}
+            {alerts.length > 0 && (
+              <span className="flex h-4 min-w-4 items-center justify-center rounded-full bg-severity-watch/20 px-1 font-mono text-[10px] text-severity-watch">
+                {alerts.length}
+              </span>
+            )}
+          </TabsTrigger>
           <TabsTrigger value="si" className="gap-1.5">
             {t('tabSI')}
             {si && siHasFails && (
@@ -235,7 +242,7 @@ export function BookingDetailClient({
           {alerts.length > 0 && (
             <Card className="lg:col-span-3 p-4">
               <div className="mb-2 flex items-center gap-2 font-mono text-[10px] tracking-wider text-ink-3 uppercase">
-                <AlertTriangle className="h-3 w-3 text-severity-watch" /> Alerts
+                <AlertTriangle className="h-3 w-3 text-severity-watch" /> {t('alertsSection')}
               </div>
               <ul className="space-y-2">
                 {alerts.map((a) => (
@@ -262,7 +269,7 @@ export function BookingDetailClient({
               <SIViewer si={si} locale={locale} />
               <ValidationPanel
                 checks={si.validationResults}
-                title="SI Validation"
+                title={t('validationSiTitle')}
                 action={
                   <Button
                     onClick={handleGenerateEsi}
@@ -296,7 +303,7 @@ export function BookingDetailClient({
               <DraftBLViewer bl={bl} si={si} />
               <ValidationPanel
                 checks={bl.validationResults}
-                title="Draft BL Comparison"
+                title={t('validationBlTitle')}
                 action={
                   <Button onClick={handleReleaseBl} disabled={blHasFails || booking.status === 'bl_released'}>
                     {t('releaseBl')}
