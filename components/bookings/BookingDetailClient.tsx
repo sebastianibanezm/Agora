@@ -280,12 +280,12 @@ export function BookingDetailClient({
                 {alerts.map((a) => (
                   <li key={a.id} className="rounded-md border border-[var(--line-soft)] bg-bg-2 p-3">
                     <div className="flex items-baseline justify-between gap-2">
-                      <div className="text-sm font-medium text-ink-1">{a.title}</div>
-                      <div className="font-mono text-[10px] text-ink-3">{a.agentName}</div>
+                      <div className="text-sm font-medium text-ink-1">{locale === 'es' ? (a.titleEs ?? a.title) : a.title}</div>
+                      <div className="font-mono text-[10px] text-ink-3">{locale === 'es' ? (a.agentNameEs ?? a.agentName) : a.agentName}</div>
                     </div>
-                    <div className="mt-0.5 text-xs text-ink-2">{a.message}</div>
+                    <div className="mt-0.5 text-xs text-ink-2">{locale === 'es' ? (a.messageEs ?? a.message) : a.message}</div>
                     {a.suggestedAction && (
-                      <div className="mt-1 text-xs text-mint-500">→ {a.suggestedAction}</div>
+                      <div className="mt-1 text-xs text-mint-500">→ {locale === 'es' ? (a.suggestedActionEs ?? a.suggestedAction) : a.suggestedAction}</div>
                     )}
                   </li>
                 ))}
