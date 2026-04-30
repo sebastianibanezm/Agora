@@ -23,9 +23,32 @@ bookings/page.tsx  (server — fetches rows, passes to wrapper)
     └── BookingsListClient  (existing — unchanged)
 ```
 
-`BookingsViewClient` receives the same `rows: Row[]`, `exporters`, and `navieras` props that `BookingsListClient` currently receives from the page. It owns the `view: 'board' | 'list'` toggle and the shared filter state (exporter, naviera, market, date range, reeferOnly, search, urgentOnly). It renders either `BookingsKanbanClient` or `BookingsListClient`, passing filtered rows down to whichever is active.
+`BookingsViewClient` receives the same `rows: Row[]`, `exporters`, and `navieras` props that `BookingsListClient` currently receives from the page. It owns the `view: 'board' | 'list'` toggle and the shared filter state (exporter, naviera, market, reeferOnly, search, urgentOnly). The `statuses` multi-select and `pol`/`pod` URL-param filters also move to `BookingsViewClient` — they are applicable to both views and must not remain inside `BookingsListClient` where they would double-filter pre-filtered rows. It renders either `BookingsKanbanClient` or `BookingsListClient`, passing filtered rows down to whichever is active.
 
-The existing `BookingsListClient` is refactored to accept pre-filtered rows and no longer owns filter state — filter management moves up to `BookingsViewClient`.
+The existing `BookingsListClient` is refactored to accept pre-filtered rows and no longer owns filter state — filter management moves up to `BookingsViewClient`. The `compact / comfortable` density toggle moves inside `BookingsListClient`'s own header (it is irrelevant to the board view and should not appear there).
+
+`cancelled` bookings continue to be excluded in both views — the refactor does not change this behavior.
+
+### Row type extension
+
+`page.tsx` computes two additional fields from `activeAlerts` and SI mock data, extending the `Row` type:
+
+```ts
+interface Row {
+  booking: Booking;
+  order: Order;
+  exporter: Exporter;
+  naviera: Naviera;
+  alertCount: number;
+  highestAlertSeverity: AlertSeverity | null;  // new
+  siFailedCheckCount: number;                   // new — 0 when no SI or no failures
+  esiTransmittedAt: string | null;              // new — from SI, null when not yet sent
+}
+```
+
+- `highestAlertSeverity`: derived in `page.tsx` by filtering `activeAlerts` for the booking, then picking the highest severity by `critical > action > watch > info`. Used by `KanbanCard` to render the severity strip.
+- `siFailedCheckCount`: derived from the SI mock data (`shippingInstructions` array keyed by `bookingId`), counting `validationResults` with `result === 'fail'`. Used only by the SI Failed column metric.
+- `esiTransmittedAt: string | null`: from `si.esiTransmittedAt` when present. Used by the Awaiting Draft BL metric to compute elapsed time for `cardEsiSent`.
 
 ---
 
@@ -69,10 +92,11 @@ Shared across both views, owned by `BookingsViewClient`. Renders at the top of t
 - Exporter select → `bookings.filterExporter`
 - Naviera select → `bookings.filterNaviera`
 - Market select → `bookings.filterMarket`
-- Date range select (ETD window) — new, board-specific display
+
+Date range filtering is deferred (not present in the current list view either; `bookings.filterDateRange` key exists in i18n but is unimplemented).
 
 **Board-only addition:**
-- "Show urgent only" toggle: filters to bookings with cut-off < 24h OR active critical alerts
+- "Show urgent only" toggle: filters to bookings where `new Date(booking.cutOff).getTime() - now < 24 * 3_600_000` (using `getTodayDemo()` as `now`) OR `row.highestAlertSeverity === 'critical'`
   - i18n: `bookings.kanban.filterUrgentOnly`
   - Active state: amber border + background tint (`severity-watch/8`)
 
@@ -110,9 +134,13 @@ Each card is `230px` wide (full column width minus padding). Layout:
 
 **Severity strip:**
 - `3px` left border on the card
-- Rendered only when the booking has `alertIds.length > 0`
-- Color maps to the highest-severity active alert: `sev-crit` > `sev-watch` > `sev-info`
-- No strip when no active alerts
+- Rendered only when `row.highestAlertSeverity !== null`
+- Color mapping from `AlertSeverity` to Tailwind token:
+  - `critical` → `bg-severity-crit`
+  - `action` → `bg-severity-risk`
+  - `watch` → `bg-severity-watch`
+  - `info` → `bg-severity-info`
+- No strip when `highestAlertSeverity === null`
 
 **Card click:** navigates to `/bookings/${booking.id}` (same as list row).
 
@@ -126,9 +154,9 @@ The bottom-right of each card shows a context-specific metric:
 |--------|---------------|-------------|
 | Awaiting SI | Cutoff countdown via `CutoffCountdown` component | Component handles colors (`crit`/`warn`/`ok`) |
 | SI in Review | Cutoff countdown | Same as above |
-| SI Failed | `{n} issue(s)` — count of `si_failed` validation checks | Always `text-severity-crit` |
+| SI Failed | `{n} issue(s)` — from `row.siFailedCheckCount` | Always `text-severity-crit` |
 | Ready to Send | `bookings.kanban.cardReadySince` with elapsed time | `text-ink-3` |
-| Awaiting Draft BL | `bookings.kanban.cardEsiSent` with elapsed time, OR `bookings.kanban.cardDraftBlReceived` | `text-trace` / `text-severity-info` |
+| Awaiting Draft BL | If `booking.status === 'draft_bl_received'` → `bookings.kanban.cardDraftBlReceived` (`text-severity-info`); else → `bookings.kanban.cardEsiSent` with elapsed time since `si.esiTransmittedAt` (`text-trace`) | see condition |
 | Ready to Release | `bookings.kanban.cardBlReady` | `text-severity-ok` |
 | Released | `bookings.kanban.cardReleased` / `bookings.kanban.cardClosed` with date | `text-ink-4` |
 
@@ -197,7 +225,7 @@ All new strings live under `bookings.kanban`. Both `en.json` and `es.json` must 
 **Reused existing keys (no new strings):**
 - `lifecycle.awaiting_si`, `lifecycle.si_failed`, `lifecycle.bl_released` — column headers
 - `bookings.filterExporter`, `bookings.filterNaviera`, `bookings.filterMarket` — filter dropdowns
-- `bookings.empty` — empty column fallback (alternative to `kanban.emptyColumn`)
+- `bookings.empty` — not used in the kanban; `kanban.emptyColumn` is the definitive empty-column string
 - `cutoff.*` — via `CutoffCountdown` component
 - `common.all` — "All" prefix for filter options
 
@@ -215,7 +243,7 @@ All new strings live under `bookings.kanban`. Both `en.json` and `es.json` must 
 
 | File | Change |
 |------|--------|
-| `agora-app/app/[locale]/bookings/page.tsx` | Pass rows to `BookingsViewClient` instead of `BookingsListClient` |
+| `agora-app/app/[locale]/bookings/page.tsx` | Compute `highestAlertSeverity` and `siFailedCheckCount` per row; pass rows to `BookingsViewClient` instead of `BookingsListClient` |
 | `components/bookings/BookingsListClient.tsx` | Refactor to accept pre-filtered rows; remove filter state ownership |
 | `messages/en.json` | Add `bookings.kanban.*` keys |
 | `messages/es.json` | Add `bookings.kanban.*` keys (Spanish) |
