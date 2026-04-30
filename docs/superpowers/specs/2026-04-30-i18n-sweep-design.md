@@ -26,7 +26,7 @@ The Agora platform uses next-intl v4 with `messages/en.json` and `messages/es.js
 | `compliance/ProductProfileCard.tsx` | "Season:", "Cold chain", "Ambient" | server → `getTranslations` |
 | `compliance/MarketRulePackCard.tsx` | "Inspection Authority", "Digital System", "Registrations", "Label Languages" | server → `getTranslations` |
 | `compliance/CommercialProfileCard.tsx` | "Draft", "{n} active POs", "Banco:", "Moneda:", "Cobro promedio: {n}d" | server → `getTranslations` |
-| `compliance/SentinelQueue.tsx` | "No alerts" (already uses `useTranslations` but has this hardcoded) | client → extend existing `useTranslations` call |
+| `compliance/SentinelQueue.tsx` | "No alerts" (already uses `useTranslations()` root-scoped — keep the root scope, add `t('alerts.noAlerts')`) | client → keep existing root-scoped `useTranslations()`, do NOT change to `useTranslations('alerts')` as that would break existing `t(alert.titleKey)` lookups |
 | `containers/ContainersPageClient.tsx` | "Search containers…", "Kanban", "Table" | client → `useTranslations` |
 | `containers/ContainerCard.tsx` | "Reefer" badge | add `'use client'` + `useTranslations` |
 | `containers/ContainerKanban.tsx` | Stage labels from `STAGES.label` (Planning, Preparation, etc.) | client → translate via `containers.statuses.*` |
@@ -60,6 +60,8 @@ The Agora platform uses next-intl v4 with `messages/en.json` and `messages/es.js
     "containers": "Containers",
     "daysToDelivery": "Days to Delivery",
     "payment": "Payment",
+    "usd": "USD",
+    "kg": "kg",
     "units": "units",
     "received": "Received",
     "pending": "Pending",
@@ -67,7 +69,7 @@ The Agora platform uses next-intl v4 with `messages/en.json` and `messages/es.js
   },
   "resumen": {
     "title": "Executive Summary",
-    "summary": "PO {id} in status <strong>{status}</strong> with {n} container(s) assigned.",
+    "summary": "PO {id} in status {status} with {n} container(s) assigned.",
     "statusLabel": "PO Status",
     "coldChainLabel": "Cold Chain",
     "docsLabel": "Documentation",
@@ -123,6 +125,8 @@ Spanish (`es.json`):
     "containers": "Contenedores",
     "daysToDelivery": "Días para entrega",
     "payment": "Pago",
+    "usd": "USD",
+    "kg": "kg",
     "units": "unidades",
     "received": "Recibido",
     "pending": "Pendiente",
@@ -130,7 +134,7 @@ Spanish (`es.json`):
   },
   "resumen": {
     "title": "Resumen Ejecutivo",
-    "summary": "OC {id} en estado <strong>{status}</strong> con {n} contenedor(es) asignado(s).",
+    "summary": "OC {id} en estado {status} con {n} contenedor(es) asignado(s).",
     "statusLabel": "Estado de OC",
     "coldChainLabel": "Cadena de frío",
     "docsLabel": "Documentación",
@@ -321,6 +325,8 @@ Spanish:
 ```
 
 ### `dashboard` (add)
+
+Note: `dashboard.costAtRisk` already exists in both `en.json` and `es.json`. `dashboard/ContainerCard.tsx` only needs to be wired up to use the existing key — no new key addition needed for that string.
 
 ```json
 {
