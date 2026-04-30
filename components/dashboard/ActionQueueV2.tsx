@@ -83,7 +83,7 @@ export function ActionQueueV2({ items }: Props) {
                   )}
                 </div>
                 <div className="flex flex-col items-end gap-1">
-                  <CutoffCountdown cutoffIso={booking.cutOff} />
+                  <CutoffCountdown cutoffIso={booking.cutOff ?? ''} />
                 </div>
                 <ChevronRight className="h-4 w-4 text-ink-3 transition-colors group-hover:text-ink-1" />
               </Link>

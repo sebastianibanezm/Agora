@@ -29,11 +29,11 @@ export function getDashboardMetrics(): DashboardMetrics {
   const now = getTodayDemo();
   const active = bookings.filter((b) => ACTIVE_STATUSES.has(b.status));
   const awaitingSi = bookings.filter((b) => b.status === 'awaiting_si');
-  const overdue = awaitingSi.filter((b) => hoursUntil(b.cutOff, now) < 36);
+  const overdue = awaitingSi.filter((b) => hoursUntil(b.cutOff ?? '', now) < 36);
 
   const cutoffsAtRisk = bookings.filter((b) => {
     if (b.status === 'closed' || b.status === 'cancelled' || b.status === 'bl_released') return false;
-    const h = hoursUntil(b.cutOff, now);
+    const h = hoursUntil(b.cutOff ?? '', now);
     return h >= 0 && h <= 24;
   });
   const usdAtRisk = cutoffsAtRisk.reduce((s, b) => s + b.costAtRiskUsd, 0);

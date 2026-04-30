@@ -30,7 +30,7 @@ export default async function NavieraDetailPage({ params }: Props) {
 
   const navieraBookings = allBookings
     .filter((b) => b.navieraId === id)
-    .sort((a, b) => new Date(a.cutOff).getTime() - new Date(b.cutOff).getTime());
+    .sort((a, b) => new Date(a.cutOff ?? '').getTime() - new Date(b.cutOff ?? '').getTime());
 
   return (
     <PageTransition>
@@ -80,7 +80,7 @@ export default async function NavieraDetailPage({ params }: Props) {
                         </td>
                         <td className="px-3 py-2">{exporter && <ExporterChip exporter={exporter} size="sm" asLink={false} />}</td>
                         <td className="px-3 py-2 text-ink-2">{b.pol.split(',')[0]} → {b.pod.split(',')[0]}</td>
-                        <td className="px-3 py-2"><CutoffCountdown cutoffIso={b.cutOff} /></td>
+                        <td className="px-3 py-2"><CutoffCountdown cutoffIso={b.cutOff ?? ''} /></td>
                         <td className="px-3 py-2"><LifecyclePill status={b.status} size="sm" /></td>
                       </tr>
                     );

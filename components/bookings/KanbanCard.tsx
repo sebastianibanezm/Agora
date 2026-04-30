@@ -110,7 +110,7 @@ function CardMetric({ booking, siFailedCheckCount, esiTransmittedAt, siReceivedA
   const status = booking.status;
 
   if (status === 'awaiting_si' || status === 'created' || status === 'si_received') {
-    return <CutoffCountdown cutoffIso={booking.cutOff} />;
+    return <CutoffCountdown cutoffIso={booking.cutOff ?? ''} />;
   }
 
   if (status === 'si_failed') {

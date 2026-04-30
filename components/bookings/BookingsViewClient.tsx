@@ -51,7 +51,7 @@ export function BookingsViewClient({ rows, exporters, navieras }: Props) {
       if (initialPol && booking.pol !== initialPol) return false;
       if (initialPod && booking.pod !== initialPod) return false;
       if (urgentOnly) {
-        const isNearCutoff = new Date(booking.cutOff).getTime() - now < URGENT_MS;
+        const isNearCutoff = new Date(booking.cutOff ?? '').getTime() - now < URGENT_MS;
         const isCritical = highestAlertSeverity === 'critical';
         if (!isNearCutoff && !isCritical) return false;
       }

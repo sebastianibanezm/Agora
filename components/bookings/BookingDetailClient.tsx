@@ -140,7 +140,7 @@ export function BookingDetailClient({
           <span>{booking.vesselName} / {booking.voyage}</span>
           <span>{t('labelEtd')} {formatTs(booking.etd)}</span>
           <span>{t('labelEta')} {formatTs(booking.eta)}</span>
-          <span>{t('labelCutoff')} {formatTs(booking.cutOff)}</span>
+          <span>{t('labelCutoff')} {formatTs(booking.cutOff ?? '')}</span>
           {booking.isReefer && booking.setpointC !== undefined && (
             <span className="text-trace">{booking.containerType} @ {booking.setpointC} °C</span>
           )}
@@ -173,11 +173,11 @@ export function BookingDetailClient({
                 </div>
                 <div>
                   <dt className="text-ink-3">{t('stacking')}</dt>
-                  <dd className="text-ink-1">{formatTs(booking.stackingFrom)} → {formatTs(booking.stackingTo)}</dd>
+                  <dd className="text-ink-1">{formatTs(booking.stackingFrom ?? '')} → {formatTs(booking.stackingTo ?? '')}</dd>
                 </div>
                 <div>
                   <dt className="text-ink-3">{t('labelCutoff')}</dt>
-                  <dd className="font-mono text-ink-1">{formatTs(booking.cutOff)}</dd>
+                  <dd className="font-mono text-ink-1">{formatTs(booking.cutOff ?? '')}</dd>
                 </div>
               </dl>
             </div>

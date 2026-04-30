@@ -117,7 +117,7 @@ export default async function ExporterDetailPage({ params }: Props) {
                         </td>
                         <td className="px-3 py-2"><NavieraChip naviera={naviera} size="sm" asLink={false} /></td>
                         <td className="px-3 py-2 text-ink-2">{b.pol.split(',')[0]} → {b.pod.split(',')[0]}</td>
-                        <td className="px-3 py-2"><CutoffCountdown cutoffIso={b.cutOff} /></td>
+                        <td className="px-3 py-2"><CutoffCountdown cutoffIso={b.cutOff ?? ''} /></td>
                         <td className="px-3 py-2"><LifecyclePill status={b.status} size="sm" /></td>
                       </tr>
                     );
@@ -155,7 +155,7 @@ export default async function ExporterDetailPage({ params }: Props) {
                         </td>
                         <td className="px-3 py-2"><NavieraChip naviera={naviera} size="sm" asLink={false} /></td>
                         <td className="px-3 py-2 text-ink-2">{b.pol.split(',')[0]} → {b.pod.split(',')[0]}</td>
-                        <td className="px-3 py-2"><CutoffCountdown cutoffIso={b.cutOff} /></td>
+                        <td className="px-3 py-2"><CutoffCountdown cutoffIso={b.cutOff ?? ''} /></td>
                         <td className="px-3 py-2"><LifecyclePill status={b.status} size="sm" /></td>
                       </tr>
                     );

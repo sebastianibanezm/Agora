@@ -46,7 +46,7 @@ export function ApproachingCutoffStrip({ items }: Props) {
               ) : (
                 <span />
               )}
-              <CutoffCountdown cutoffIso={booking.cutOff} />
+              <CutoffCountdown cutoffIso={booking.cutOff ?? ''} />
             </div>
           </Link>
         ))}

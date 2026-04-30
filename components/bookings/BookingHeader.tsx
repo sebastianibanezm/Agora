@@ -48,7 +48,7 @@ export function BookingHeader({ booking, exporter, naviera }: Props) {
               USD {booking.costAtRiskUsd.toLocaleString()} {t('atRisk')}
             </div>
           )}
-          <CutoffCountdown cutoffIso={booking.cutOff} prefix />
+          <CutoffCountdown cutoffIso={booking.cutOff ?? ''} prefix />
         </div>
       </div>
 

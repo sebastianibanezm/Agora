@@ -37,7 +37,7 @@ export default function OperationsDashboard() {
       const sevRank = alert
         ? { critical: 0, action: 1, watch: 2, info: 3 }[alert.severity]
         : 4;
-      const hours = hoursUntil(booking.cutOff);
+      const hours = hoursUntil(booking.cutOff ?? '');
       return { booking, exporter, naviera, alert, sevRank, hours };
     })
     .filter((r): r is typeof r & { exporter: NonNullable<typeof r.exporter>; naviera: NonNullable<typeof r.naviera> } =>
@@ -48,10 +48,10 @@ export default function OperationsDashboard() {
 
   const approaching = bookings
     .filter((b) => {
-      const h = hoursUntil(b.cutOff);
+      const h = hoursUntil(b.cutOff ?? '');
       return h > 0 && h <= 168 && b.status !== 'closed' && b.status !== 'bl_released' && b.status !== 'cancelled';
     })
-    .sort((a, b) => hoursUntil(a.cutOff) - hoursUntil(b.cutOff))
+    .sort((a, b) => hoursUntil(a.cutOff ?? '') - hoursUntil(b.cutOff ?? ''))
     .map((booking) => {
       const exporter = exporters.find(
         (e) => e.name === booking.shipper || e.legalName === booking.shipper

@@ -163,7 +163,7 @@ export function BookingsListClient({ rows }: Props) {
                       <td className="px-3"><NavieraChip naviera={naviera} size="sm" asLink={false} /></td>
                       <td className="px-3 font-mono text-ink-2">{booking.containerType}</td>
                       <td className="px-3 text-ink-2">{booking.pol.split(',')[0]} → {booking.pod.split(',')[0]}</td>
-                      <td className="px-3"><CutoffCountdown cutoffIso={booking.cutOff} /></td>
+                      <td className="px-3"><CutoffCountdown cutoffIso={booking.cutOff ?? ''} /></td>
                       <td className="px-3 font-mono text-ink-2">{formatDate(booking.etd, locale)}</td>
                       <td className="px-3"><LifecyclePill status={booking.status} size="sm" /></td>
                       <td className="px-3 text-center">
