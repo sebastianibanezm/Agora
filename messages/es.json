@@ -333,6 +333,11 @@
     "resolve": "Resolver"
   },
   "blViewer": {
+    "draftBlLabel": "Draft BL",
+    "openInTab": "Abrir",
+    "colField": "Campo",
+    "colSi": "SI",
+    "colDraftBl": "Draft BL",
     "field_blNumber": "BL #",
     "field_bookingRef": "Booking ref",
     "field_vesselVoyage": "Vapor / Viaje",
@@ -406,6 +411,7 @@
     "severity_critical": "Crítico"
   },
   "cutoff": {
+    "label": "cut-off",
     "in": "En {value}",
     "ago": "Hace {value}",
     "passed": "Pasó"

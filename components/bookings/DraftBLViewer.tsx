@@ -58,7 +58,7 @@ export function DraftBLViewer({ bl, si }: Props) {
       {/* PDF preview */}
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
-          <div className="font-mono text-[10px] tracking-wider text-ink-3 uppercase">Draft BL · {blF.blNumber}</div>
+          <div className="font-mono text-[10px] tracking-wider text-ink-3 uppercase">{t('draftBlLabel')} · {blF.blNumber}</div>
           <a
             href={bl.sourceFileUrl}
             target="_blank"
@@ -66,14 +66,14 @@ export function DraftBLViewer({ bl, si }: Props) {
             className="inline-flex items-center gap-1 text-xs text-ink-3 hover:text-ink-1"
           >
             <ExternalLink className="h-3 w-3" />
-            Open
+            {t('openInTab')}
           </a>
         </div>
         <div className="relative flex-1 overflow-hidden rounded-md border border-[var(--line-soft)] bg-bg-2">
           {bl.sourceFileUrl.endsWith('.pdf') ? (
             <iframe src={bl.sourceFileUrl} title={blF.blNumber} className="h-full min-h-[480px] w-full rounded-md" />
           ) : (
-            <img src={bl.sourceFileUrl} alt={`Draft BL ${blF.blNumber}`} className="h-full min-h-[480px] w-full rounded-md object-contain" />
+            <img src={bl.sourceFileUrl} alt={`${t('draftBlLabel')} ${blF.blNumber}`} className="h-full min-h-[480px] w-full rounded-md object-contain" />
           )}
         </div>
       </div>
@@ -83,9 +83,9 @@ export function DraftBLViewer({ bl, si }: Props) {
         <table className="w-full">
           <thead>
             <tr className="border-b border-[var(--line-soft)]">
-              <th className="px-3 py-2 text-left font-mono text-[9px] tracking-wider text-ink-3 uppercase">Field</th>
-              <th className="px-3 py-2 text-left font-mono text-[9px] tracking-wider text-ink-3 uppercase">SI</th>
-              <th className="px-3 py-2 text-left font-mono text-[9px] tracking-wider text-ink-3 uppercase">Draft BL</th>
+              <th className="px-3 py-2 text-left font-mono text-[9px] tracking-wider text-ink-3 uppercase">{t('colField')}</th>
+              <th className="px-3 py-2 text-left font-mono text-[9px] tracking-wider text-ink-3 uppercase">{t('colSi')}</th>
+              <th className="px-3 py-2 text-left font-mono text-[9px] tracking-wider text-ink-3 uppercase">{t('colDraftBl')}</th>
             </tr>
           </thead>
           <tbody>
