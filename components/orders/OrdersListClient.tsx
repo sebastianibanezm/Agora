@@ -10,7 +10,8 @@ import { MarketChip } from '@/components/shared/MarketChip';
 import { CreateOrderDialog } from '@/components/orders/CreateOrderDialog';
 import { useDemoStore } from '@/lib/hooks/useDemoStore';
 import { formatDate } from '@/lib/utils/dates';
-import { Search, Plus } from 'lucide-react';
+import { MultiSelectDropdown } from '@/components/shared/MultiSelectDropdown';
+import { Search, Plus, X } from 'lucide-react';
 import clsx from 'clsx';
 
 const STATUS_OPTIONS: OrderStatus[] = ['open', 'in_progress', 'completed', 'cancelled'];
@@ -36,9 +37,9 @@ export function OrdersListClient({ orders, exporters, bookingCounts }: Props) {
   const demo = useDemoStore();
 
   const [search, setSearch] = useState('');
-  const [statusFilter, setStatusFilter] = useState<OrderStatus | ''>('');
-  const [exporterFilter, setExporterFilter] = useState<string>('');
-  const [marketFilter, setMarketFilter] = useState<Market | ''>('');
+  const [statusFilters, setStatusFilters] = useState<Set<string>>(new Set());
+  const [exporterFilters, setExporterFilters] = useState<Set<string>>(new Set());
+  const [marketFilters, setMarketFilters] = useState<Set<string>>(new Set());
 
   const allOrders = useMemo(() => [...demo.newOrders, ...orders], [orders, demo.newOrders]);
 
@@ -47,9 +48,9 @@ export function OrdersListClient({ orders, exporters, bookingCounts }: Props) {
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
     return allOrders.filter((o) => {
-      if (statusFilter && o.status !== statusFilter) return false;
-      if (exporterFilter && o.exporterId !== exporterFilter) return false;
-      if (marketFilter && o.destinationMarket !== marketFilter) return false;
+      if (statusFilters.size > 0 && !statusFilters.has(o.status)) return false;
+      if (exporterFilters.size > 0 && !exporterFilters.has(o.exporterId)) return false;
+      if (marketFilters.size > 0 && !marketFilters.has(o.destinationMarket)) return false;
       if (q) {
         const exp = exporterMap.get(o.exporterId);
         const hay = [o.orderNumber, exp?.name ?? '', o.destinationCountry].join(' ').toLowerCase();
@@ -57,7 +58,10 @@ export function OrdersListClient({ orders, exporters, bookingCounts }: Props) {
       }
       return true;
     });
-  }, [allOrders, search, statusFilter, exporterFilter, marketFilter, exporterMap]);
+  }, [allOrders, search, statusFilters, exporterFilters, marketFilters, exporterMap]);
+
+  const hasFilters = statusFilters.size > 0 || exporterFilters.size > 0 || marketFilters.size > 0 || search;
+  const clearAll = () => { setStatusFilters(new Set()); setExporterFilters(new Set()); setMarketFilters(new Set()); setSearch(''); };
 
   return (
     <div className="flex flex-col gap-3">
@@ -73,38 +77,35 @@ export function OrdersListClient({ orders, exporters, bookingCounts }: Props) {
           />
         </div>
 
-        <select
-          value={exporterFilter}
-          onChange={(e) => setExporterFilter(e.target.value)}
-          className="rounded-md border border-[var(--line-soft)] bg-bg-1 px-2 py-2 text-xs text-ink-1 focus:border-mint-500 focus:outline-none"
-        >
-          <option value="">{t('filterExporter')}</option>
-          {exporters.map((e) => (
-            <option key={e.id} value={e.id}>{e.name}</option>
-          ))}
-        </select>
+        <MultiSelectDropdown
+          options={exporters.map((e) => ({ value: e.id, label: e.name }))}
+          selected={exporterFilters}
+          onChange={setExporterFilters}
+          placeholder={t('filterExporter')}
+        />
 
-        <select
-          value={marketFilter}
-          onChange={(e) => setMarketFilter(e.target.value as Market | '')}
-          className="rounded-md border border-[var(--line-soft)] bg-bg-1 px-2 py-2 text-xs text-ink-1 focus:border-mint-500 focus:outline-none"
-        >
-          <option value="">{t('filterMarket')}</option>
-          {MARKETS.map((m) => (
-            <option key={m} value={m}>{m}</option>
-          ))}
-        </select>
+        <MultiSelectDropdown
+          options={MARKETS.map((m) => ({ value: m, label: m }))}
+          selected={marketFilters}
+          onChange={setMarketFilters}
+          placeholder={t('filterMarket')}
+        />
 
-        <select
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value as OrderStatus | '')}
-          className="rounded-md border border-[var(--line-soft)] bg-bg-1 px-2 py-2 text-xs text-ink-1 focus:border-mint-500 focus:outline-none"
-        >
-          <option value="">{t('filterStatus')}</option>
-          {STATUS_OPTIONS.map((s) => (
-            <option key={s} value={s}>{t(`statuses.${s}`)}</option>
-          ))}
-        </select>
+        <MultiSelectDropdown
+          options={STATUS_OPTIONS.map((s) => ({ value: s, label: t(`statuses.${s}`) }))}
+          selected={statusFilters}
+          onChange={setStatusFilters}
+          placeholder={t('filterStatus')}
+        />
+
+        {hasFilters && (
+          <button
+            onClick={clearAll}
+            className="flex items-center gap-1 rounded-md border border-[var(--line-soft)] bg-bg-1 px-2 py-[7px] text-xs text-ink-3 transition-colors hover:text-ink-2"
+          >
+            <X className="h-3 w-3" />
+          </button>
+        )}
 
         <div className="ml-auto">
           <CreateOrderDialog exporters={exporters}>
