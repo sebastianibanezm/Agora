@@ -18,6 +18,7 @@ const STATUS_OPTIONS: BookingStatus[] = [
   'esi_sent', 'draft_bl_received', 'bl_validated', 'bl_released', 'closed',
 ];
 const MARKETS: Market[] = ['US', 'EU', 'IN', 'CN', 'MENA', 'LATAM'];
+const URGENT_MS = 24 * 3_600_000;
 
 interface Props {
   rows: ListRow[];
@@ -52,8 +53,7 @@ export function BookingsViewClient({ rows, exporters, navieras }: Props) {
     setStatuses(next);
   };
 
-  const now = getTodayDemo().getTime();
-  const URGENT_MS = 24 * 3_600_000;
+  const now = useMemo(() => getTodayDemo().getTime(), []);
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -160,7 +160,7 @@ export function BookingsViewClient({ rows, exporters, navieras }: Props) {
               className={clsx('rounded px-2 py-1 text-[10px] font-medium', view === 'board' ? 'bg-bg-3 text-ink-1' : 'text-ink-3')}>
               {tKanban('viewBoard')}
             </button>
-            <button onClick={() => setView('list')}
+            <button onClick={() => { setView('list'); setUrgentOnly(false); }}
               className={clsx('rounded px-2 py-1 text-[10px] font-medium', view === 'list' ? 'bg-bg-3 text-ink-1' : 'text-ink-3')}>
               {tKanban('viewList')}
             </button>
