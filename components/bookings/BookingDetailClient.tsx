@@ -17,7 +17,6 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { BookingHeader } from './BookingHeader';
 import { BookingLifecycleStrip } from './BookingLifecycleStrip';
-import { LifecyclePill } from './LifecyclePill';
 import { SIViewer } from './SIViewer';
 import { ValidationPanel } from './ValidationPanel';
 import { DraftBLViewer } from './DraftBLViewer';
@@ -343,10 +342,12 @@ export function BookingDetailClient({
 
 function EmptyState({ title, hint }: { title: string; hint: string }) {
   return (
-    <Card className="flex flex-col items-center justify-center gap-2 p-12 text-center">
-      <LifecyclePill status="awaiting_si" />
-      <div className="mt-2 text-sm font-medium text-ink-1">{title}</div>
-      <div className="text-xs text-ink-3">{hint}</div>
+    <Card className="flex flex-col items-center justify-center gap-3 p-12 text-center">
+      <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--line-soft)] bg-bg-2">
+        <FileCheck2 className="h-5 w-5 text-ink-3" />
+      </div>
+      <div className="text-sm font-medium text-ink-1">{title}</div>
+      <div className="max-w-xs text-xs text-ink-3">{hint}</div>
     </Card>
   );
 }
