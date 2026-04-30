@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
+import { useTranslations } from 'next-intl';
 import type { Container, Importer } from '@/types';
 import { ContainerKanban } from './ContainerKanban';
 import { ContainerListTable } from './ContainerListTable';
@@ -11,6 +12,7 @@ interface Props {
 }
 
 export function ContainersPageClient({ containers, importers }: Props) {
+  const t = useTranslations('containers');
   const [view, setView] = useState<'kanban' | 'table'>('kanban');
   const [search, setSearch] = useState('');
   const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
@@ -46,7 +48,7 @@ export function ContainersPageClient({ containers, importers }: Props) {
       <div style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap' }}>
         <input
           type="text"
-          placeholder="Search containers…"
+          placeholder={t('searchPlaceholder')}
           value={search}
           onChange={e => setSearch(e.target.value)}
           style={{ padding: '7px 12px', borderRadius: '6px', border: '1px solid #ffffff18', background: '#1a1f2e', color: '#e2e8f0', fontSize: '13px', width: '220px' }}
@@ -98,7 +100,7 @@ export function ContainersPageClient({ containers, importers }: Props) {
                 border: 'none',
               }}
             >
-              {v === 'kanban' ? 'Kanban' : 'Table'}
+              {v === 'kanban' ? t('viewKanban') : t('viewTable')}
             </button>
           ))}
         </div>

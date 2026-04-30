@@ -1,3 +1,6 @@
+'use client';
+
+import { useTranslations } from 'next-intl';
 import type { Container, Importer } from '@/types';
 import { getTodayDemo } from '@/lib/utils/dates';
 import { differenceInDays } from 'date-fns';
@@ -15,6 +18,7 @@ function tDayColor(days: number): string {
 }
 
 export function ContainerCard({ container, importer }: Props) {
+  const t = useTranslations('containers');
   const today = getTodayDemo();
   const etd = new Date(container.etd);
   const tDays = differenceInDays(etd, today);
@@ -39,7 +43,7 @@ export function ContainerCard({ container, importer }: Props) {
         {container.productLabel}
         {container.coldChain?.required && (
           <span data-testid="cold-chain-badge" style={{ fontSize: '11px', color: '#7DD3FC', display: 'flex', alignItems: 'center', gap: '3px' }}>
-            ❄ Reefer
+            ❄ {t('reefer')}
           </span>
         )}
       </div>
