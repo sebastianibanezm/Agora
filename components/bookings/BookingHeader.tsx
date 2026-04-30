@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { ArrowLeft, AlertTriangle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import type { Booking, Exporter, Naviera, Order } from '@/types';
+import type { Booking, Exporter, Naviera } from '@/types';
 import { LifecyclePill } from './LifecyclePill';
 import { CutoffCountdown } from './CutoffCountdown';
 import { ExporterChip } from '@/components/shared/ExporterChip';
@@ -11,10 +11,9 @@ interface Props {
   booking: Booking;
   exporter: Exporter;
   naviera: Naviera;
-  order: Order;
 }
 
-export function BookingHeader({ booking, exporter, naviera, order }: Props) {
+export function BookingHeader({ booking, exporter, naviera }: Props) {
   const t = useTranslations('bookings');
   return (
     <div className="flex flex-col gap-2">
@@ -38,12 +37,7 @@ export function BookingHeader({ booking, exporter, naviera, order }: Props) {
           <span>·</span>
           <NavieraChip naviera={naviera} />
           <span>·</span>
-          <Link
-            href={`/orders/${order.id}`}
-            className="text-ink-2 underline-offset-2 hover:underline"
-          >
-            {order.orderNumber}
-          </Link>
+          <span className="text-ink-2">{booking.shipper} → {booking.consignee}</span>
         </div>
 
         {/* Urgency signals — right-aligned */}

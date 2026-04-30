@@ -9,9 +9,10 @@ import type {
   DraftBL,
   Exporter,
   Naviera,
-  Order,
   ShippingInstruction,
 } from '@/types';
+import { getContainersByBookingId } from '@/lib/hooks/useDemoStore';
+import { ContainerCard } from './ContainerCard';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -30,7 +31,6 @@ interface Props {
   booking: Booking;
   exporter: Exporter;
   naviera: Naviera;
-  order: Order;
   si: ShippingInstruction | undefined;
   bl: DraftBL | undefined;
   alerts: Alert[];
@@ -65,7 +65,6 @@ export function BookingDetailClient({
   booking: initialBooking,
   exporter,
   naviera,
-  order,
   si,
   bl,
   alerts,
@@ -99,7 +98,7 @@ export function BookingDetailClient({
 
   return (
     <div className="flex min-h-screen flex-col gap-4 px-4 pt-4 pb-8">
-      <BookingHeader booking={booking} exporter={exporter} naviera={naviera} order={order} />
+      <BookingHeader booking={booking} exporter={exporter} naviera={naviera} />
       <BookingLifecycleStrip current={booking.status} />
 
       <Tabs value={tab} onValueChange={(v) => setTab(v as typeof tab)} className="flex-1">
@@ -183,48 +182,17 @@ export function BookingDetailClient({
               </dl>
             </div>
 
-            {/* Container */}
+            {/* Containers */}
             <div className="border-t border-[var(--line-soft)] pt-3">
               <div className="mb-2 font-mono text-[10px] tracking-wider text-ink-4 uppercase">
-                {t('sectionContainer')}
+                {t('containers', { n: getContainersByBookingId(booking.id).length })}
               </div>
-              <dl className="grid grid-cols-2 gap-x-6 gap-y-2 text-xs">
-                <div>
-                  <dt className="text-ink-3">{t('container')}</dt>
-                  <dd className="text-ink-1">
-                    {booking.containerType}
-                    {booking.isReefer && booking.setpointC !== undefined && ` · ${booking.setpointC} °C`}
-                  </dd>
-                </div>
-                {booking.containerNumber && (
-                  <div>
-                    <dt className="text-ink-3">{t('containerNumber')}</dt>
-                    <dd className="font-mono text-ink-1">{booking.containerNumber}</dd>
-                  </div>
-                )}
-                {booking.sealNumber && (
-                  <div>
-                    <dt className="text-ink-3">{t('sealNumber')}</dt>
-                    <dd className="font-mono text-ink-1">{booking.sealNumber}</dd>
-                  </div>
-                )}
-              </dl>
+              <div className="flex flex-col gap-2">
+                {getContainersByBookingId(booking.id).map((c) => (
+                  <ContainerCard key={c.id} container={c} />
+                ))}
+              </div>
             </div>
-
-            {/* Documents */}
-            {booking.blNumber && (
-              <div className="border-t border-[var(--line-soft)] pt-3">
-                <div className="mb-2 font-mono text-[10px] tracking-wider text-ink-4 uppercase">
-                  {t('sectionDocuments')}
-</div>
-                <dl className="grid grid-cols-2 gap-x-6 gap-y-2 text-xs">
-                  <div>
-                    <dt className="text-ink-3">{t('blNumber')}</dt>
-                    <dd className="font-mono text-ink-1">{booking.blNumber}</dd>
-                  </div>
-                </dl>
-              </div>
-            )}
           </Card>
 
           <Card className="p-4">
