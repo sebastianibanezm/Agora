@@ -111,4 +111,5 @@ export const SCAC_TO_NAVIERA_ID: Record<string, string> = {
   COSU: 'NAV-COSCO',
   ONEY: 'NAV-ONE',
   EGLV: 'NAV-EVERGREEN',
+  HDMU: 'NAV-HMM',
 };

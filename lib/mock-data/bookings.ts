@@ -1,7 +1,5 @@
-import type { Booking, ContainerType } from '@/types';
+import type { Booking } from '@/types';
 import { POL, POD } from './lanes';
-
-const isReefer = (t: ContainerType) => t === '40RF' || t === '20RF';
 
 export const bookings: Booking[] = [
   // ============================================================
@@ -823,5 +821,3 @@ export function getBookingById(id: string): Booking | undefined {
 export function getBookingsByNavieraId(navieraId: string): Booking[] {
   return bookings.filter((b) => b.navieraId === navieraId);
 }
-
-export const isReeferBooking = isReefer;
