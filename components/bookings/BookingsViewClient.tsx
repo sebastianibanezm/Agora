@@ -8,6 +8,7 @@ import type { ListRow } from '@/components/bookings/BookingsListClient';
 import { BookingsListClient } from '@/components/bookings/BookingsListClient';
 import { BookingsKanbanClient } from '@/components/bookings/BookingsKanbanClient';
 import { MultiSelectDropdown } from '@/components/shared/MultiSelectDropdown';
+import { UploadBookingDialog } from '@/components/bookings/UploadBookingDialog';
 import { getTodayDemo } from '@/lib/mock-data/today';
 import { Search, Snowflake, X } from 'lucide-react';
 import clsx from 'clsx';
@@ -83,6 +84,12 @@ export function BookingsViewClient({ rows, exporters, navieras }: Props) {
       {/* sticky filter bar */}
       <div className="sticky top-0 z-20 -mx-4 border-b border-[var(--line-soft)] bg-bg-0/95 px-4 py-3 backdrop-blur">
         <div className="flex items-center gap-2">
+          <UploadBookingDialog>
+            <button className="shrink-0 rounded-md bg-mint-500 px-3 py-[7px] text-xs font-medium text-bg-0 hover:bg-mint-500/90 transition-colors">
+              {t('upload')}
+            </button>
+          </UploadBookingDialog>
+
           {/* search */}
           <div className="relative flex-1 max-w-sm">
             <Search className="pointer-events-none absolute top-2 left-2.5 h-4 w-4 text-ink-3" />
