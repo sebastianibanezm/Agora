@@ -1,463 +1,378 @@
-// ===== Enums =====
-export type Market = 'US' | 'EU' | 'IN' | 'CN' | 'MENA';
+// ============================================================================
+// AGORA V2 - Freight Forwarder Edition - Data Model
+// ============================================================================
 
-export type ContainerStatus =
-  | 'planning'
-  | 'preparation'
-  | 'documentation'
-  | 'in_transit'
-  | 'customs_release'
-  | 'delivery_payment'
+export type Market = 'US' | 'EU' | 'IN' | 'CN' | 'MENA' | 'LATAM';
+
+export type Incoterm = 'FOB' | 'CIF' | 'CFR' | 'DAP' | 'EXW' | 'FCA';
+
+export type PaymentTerm = 'COBRANZA' | 'L/C' | 'OPEN_ACCOUNT' | 'CAD' | 'PREPAID';
+
+export type ContainerType = '40HC' | '40RF' | '20DV' | '40DV' | '20RF';
+
+export type FreightTerm = 'COLLECT' | 'PREPAID';
+
+export type AlertSeverity = 'info' | 'watch' | 'action' | 'critical';
+
+// The Booking lifecycle is the spine of the platform. Every status transition
+// is logged in the booking's activity feed.
+export type BookingStatus =
+  | 'created'
+  | 'awaiting_si'
+  | 'si_received'
+  | 'si_validated'
+  | 'si_failed'
+  | 'esi_sent'
+  | 'draft_bl_received'
+  | 'bl_validated'
+  | 'bl_released'
   | 'closed'
+  | 'cancelled';
 
-export type POStatus = 'draft' | 'confirmed' | 'in_fulfillment' | 'delivered' | 'cancelled'
+export type ValidationResult = 'pass' | 'warn' | 'fail';
+export type ValidationStatus = 'pending' | 'green' | 'failed';
 
-export type POEvent = {
-  date: string
-  type: 'confirmed' | 'container_assigned' | 'bl_issued' | 'docs_submitted' | 'delivered' | 'payment_received'
-  note?: string
-}
-
-export type VolumeHistoryEntry = {
-  season: string
-  volumeKg: number
-}
-
-export type CertifiedProduct = {
-  productId: string
-  name: string
-  hsCode: string
-  seasonStart: string
-  seasonEnd: string
-  requiresColdChain: boolean
-  coldProtocol?: string
-  enabledMarkets: Market[]
-}
-
-export type SAGCertification = {
-  id: string
-  name: string
-  expiryDate: string
-  daysUntilExpiry: number
-}
-
-export type ProductId =
-  | 'walnuts_in_shell' | 'walnut_kernels' | 'almonds_in_shell'
-  | 'fresh_cherries' | 'fresh_blueberries'
-  | 'table_grapes_red' | 'table_grapes_white';
-
-export type IncotermPaymentId =
-  | 'cif_cad_at_sight' | 'cif_lc_at_sight' | 'cif_lc_60'
-  | 'cif_open_account_30' | 'fob_open_account_30' | 'dap_open_account';
-
-export type DocumentType =
-  | 'commercial_invoice' | 'packing_list' | 'bill_of_lading' | 'certificate_of_origin'
-  | 'phyto_certificate' | 'fumigation_cert' | 'cold_treatment_cert' | 'health_cert'
-  | 'gacc_registration' | 'lc_compliance_letter' | 'insurance_certificate'
-  | 'dus' | 'sag_export_auth' | 'transport_document' | 'pti_certificate'
-  | 'pre_cooling_log' | 'logger_report' | 'ca_atmosphere_log';
-
-export type DocStatus = 'missing' | 'draft' | 'pending_review' | 'approved' | 'rejected' | 'in_transit' | 'delivered';
-
-export type Severity = 'ok' | 'info' | 'watch' | 'risk' | 'crit';
-
-// ===== Document Requirement =====
-export interface DocumentRequirement {
-  type: DocumentType;
-  label: string;
-  requiredBy: string;
-  issuingAuthority?: string;
-  notes?: string;
-}
-
-// ===== Validation =====
-export interface ValidationSummary {
-  passed: number;
-  failed: number;
-  warnings: number;
-}
-
-export interface Validation {
+// ----------------------------------------------------------------------------
+// Exporter - the FF's customer (e.g. Comfrut, Agrosuper)
+// ----------------------------------------------------------------------------
+export interface Exporter {
   id: string;
-  containerId: string;
-  documentType?: DocumentType;
-  checkId: string;
-  severity: Severity;
-  status: 'passed' | 'failed' | 'warning';
-  message: string;
-  detectedAt: string;
+  name: string;
+  legalName: string;
+  taxId: string;
+  address: string;
+  city: string;
+  country: string;
+  contactName: string;
+  contactEmail: string;
+  contactPhone: string;
+  defaultIncoterm: Incoterm;
+  defaultPaymentTerm: PaymentTerm;
+  primaryProducts: string[];
+  primaryMarkets: Market[];
+  totalOrders: number;
+  totalContainers: number;
+  onTimeSiRate: number;
+  siQualityScore: number;
+  avgSiTurnaroundHours: number;
+  logoUrl?: string;
 }
 
-// ===== Cold chain =====
-export interface DataLogger {
+// ----------------------------------------------------------------------------
+// Naviera - the FF's other counterparty (carrier)
+// ----------------------------------------------------------------------------
+export type ApiCapability = 'DCSA' | 'myMSC' | 'INTTRA' | 'manual';
+
+export interface Naviera {
   id: string;
-  position: 'top' | 'middle' | 'bottom';
-  serial: string;
-  readings: Array<{ t: string; tempC: number }>;
+  name: string;
+  shortName: string;
+  code: string;
+  apiCapability: ApiCapability;
+  logoUrl?: string;
+  totalBookings: number;
+  avgDraftBlTurnaroundHours: number;
+  siRejectionRate: number;
+  cutoffDisciplineRate: number;
 }
 
-export interface CaReading {
-  t: string;
-  o2Pct: number;
-  co2Pct: number;
-  n2Pct: number;
-}
-
-export interface ExcursionEvent {
+// ----------------------------------------------------------------------------
+// Booking - top-level entity, created via PDF upload.
+// ----------------------------------------------------------------------------
+export interface Booking {
   id: string;
-  startAt: string;
-  endAt: string;
-  durationMin: number;
-  loggerId: string;
-  peakTempC: number;
-  severity: Severity;
-  brokeCompliance: boolean;
-}
+  bookingNumber: string;
+  navieraId: string;
 
-export interface PreCoolingRecord {
-  facility: string;
-  startedAt: string;
-  completedAt: string;
-  targetTempC: number;
-  pulpTempCurve: Array<{ t: string; tempC: number }>;
-}
+  // Parties (from PDF)
+  shipper: string;
+  consignee: string;
+  referenciaCliente?: string;
 
-export interface ReeferPtiRecord {
-  performedAt: string;
-  technician: string;
-  passed: boolean;
-  notes?: string;
-}
+  // Routing
+  vesselName: string;
+  voyage: string;
+  pol: string;
+  polCoords: [number, number];
+  pod: string;
+  podCoords: [number, number];
+  transshipmentPort?: string;
 
-export interface ColdTreatmentProtocol {
-  id: string;
-  label: string;
-  market: Market;
-  durationDays: number;
-  setpointC: number;
-  toleranceC: number;
-  description: string;
-}
-
-export interface ColdChainTrace {
-  required: boolean;
-  protocol: string | null;
-  setpointC: number;
-  toleranceC: number;
-  caGasMix?: { o2Pct: number; co2Pct: number; n2Pct: number };
-  rhTargetPct: [number, number];
-  preCooling?: PreCoolingRecord;
-  reeferPti?: ReeferPtiRecord;
-  loggers: DataLogger[];
-  caReadings?: CaReading[];
-  treatmentRequiredMinutes: number;
-  treatmentMinutesCompliant: number;
-  treatmentMinutesViolation: number;
-  excursionEvents: ExcursionEvent[];
-  status: 'pre_load' | 'in_treatment' | 'completed' | 'breached';
-  lastReadingAt: string;
-  loggerDownloadReportUrl?: string;
-  arrivalTransferStatus?: 'pending' | 'in_progress' | 'completed';
-}
-
-// ===== Profiles =====
-export interface ProductProfile {
-  id: ProductId;
-  label: string;
-  requiresColdChain: boolean;
-  defaultProtocols: string[];
-  seasonality?: string;
-  hsCode: string;
-  requiredDocs: DocumentType[];
-  activeAgents: AgentId[];
-}
-
-export interface MarketProfile {
-  id: Market;
-  label: string;
-  inspectionAuthority: string;
-}
-
-export interface MarketProfileExtended extends MarketProfile {
-  coldTreatmentOptions?: ColdTreatmentProtocol[];
-  registrationsRequired: string[];
-  labelLanguageRequired: string[];
-  digitalPhytoSystem?: string;
-  activeAgents: AgentId[];
-  requiredDocs: DocumentType[];
-}
-
-export interface CommercialProfile {
-  id: IncotermPaymentId;
-  label: string;
-  incoterm: 'CIF' | 'FOB' | 'DAP';
-  paymentMethod: 'CAD' | 'L/C' | 'open_account';
-  paymentTerms: string;
-  requiredDocs: DocumentType[];
-  validationChecks: string[];
-  activeAgents: AgentId[];
-  bank?: string;
-  avgCollectionDays?: number;
-  currency?: string;
-  isDraft?: boolean;
-}
-
-// ===== Lane profile =====
-export interface LaneTimelineEvent {
-  tDay: string;
-  label: string;
-  actor: 'producer' | 'exporter' | 'importer' | 'agent' | 'authority';
-}
-
-export interface LaneProfile {
-  id: string;
-  product: ProductProfile;
-  market: MarketProfileExtended;
-  commercial: CommercialProfile;
-  documentSet: DocumentRequirement[];
-  agentsActive: AgentId[];
-  validationChecks: string[];
-  timeline: LaneTimelineEvent[];
-}
-
-// ===== Container =====
-export interface Container {
-  id: string;
-  productId: ProductId;
-  productLabel: string;
-  commercialId: IncotermPaymentId;
-  laneProfileId: string;
-  market: Market;
-  polCode: string;
-  polLabel: string;
-  podCode: string;
-  podLabel: string;
-  importerId: string;
-  producerId: string;
-  purchaseOrderId: string;
-  weightKg: number;
-  valueUsd: number;
+  // Schedule
   etd: string;
   eta: string;
-  cutoffAt?: string;
-  status: ContainerStatus;
-  coldChain?: ColdChainTrace;
-  costAtRiskUsd?: number;
-  carrier: string;
-  polCoords: [number, number];
-  podCoords: [number, number];
-  timelineNodes?: Array<{ tDay: number; status: 'done' | 'crit' | 'warn' | 'future' }>;
+  cutOff?: string;
+  stackingFrom?: string;
+  stackingTo?: string;
+
+  // Cargo spec
+  containerType: ContainerType;
+  containerCount: number;
+  isReefer: boolean;
+  setpointC?: number;
+  ventilation?: number;
+  freightTerm: FreightTerm;
+  emissionType: 'BL' | 'Seawaybill';
+
+  // Source file (session-scoped blob URL)
+  bookingFileUrl?: string;
+  bookingFileName?: string;
+
+  // Relations
+  containerIds: string[];
+  siId?: string;
+  draftBlId?: string;
+
+  status: BookingStatus;
+  createdAt: string;
+  alertIds: string[];
+  costAtRiskUsd: number;
 }
 
-// ===== Other entities =====
-export type AgentId = string;
+// ----------------------------------------------------------------------------
+// Container - physical cargo unit, child of Booking.
+// ----------------------------------------------------------------------------
+export interface Container {
+  id: string;
+  bookingId: string;
+  containerNumber?: string;
+  sealNumber?: string;
+  blNumber?: string;
+  netWeightKg?: number;
+  grossWeightKg?: number;
+  cargoDescription?: string;
+}
+
+// ----------------------------------------------------------------------------
+// Shipping Instruction
+// ----------------------------------------------------------------------------
+export interface ParsedParty {
+  name: string;
+  address: string;
+}
+
+export interface SICargoLine {
+  product: string;
+  kgNetUnit: number;
+  kgGrossUnit: number;
+  qty: number;
+  kgNetTotal: number;
+  kgGrossTotal: number;
+  fobPrice: number;
+}
+
+export interface ShippingInstruction {
+  id: string;
+  bookingId: string;
+  receivedAt: string;
+  sourceFileUrl: string;
+  sourceFileName: string;
+  uploadedVia: 'portal' | 'email';
+
+  parsedFields: {
+    embarqueNumber: string;
+    poNumber?: string;
+    portOfLoading: string;
+    portOfDischarge: string;
+    finalDestination: string;
+    vesselVoyage: string;
+    naviera: string;
+    forwarder: string;
+    bookingReference: string;
+    blNumber?: string;
+    salesModality: string;
+    paymentForm: string;
+    incoterm: Incoterm;
+
+    containerCount: string;
+    containerType: ContainerType;
+    setpointC?: number;
+    deposito: string;
+    generator: string;
+    transport: string;
+    truckType: string;
+    freightTerms: FreightTerm;
+    returnPeriod: string;
+
+    plant: { name: string; address: string; contact: string };
+    loadingDate: string;
+    portArrivalDate: string;
+    stackingFrom: string;
+    stackingTo: string;
+    cutOff: string;
+
+    consignee: ParsedParty;
+    notify: ParsedParty;
+    alsoNotify?: ParsedParty;
+    thirdNotifyParty?: ParsedParty;
+    shipper: ParsedParty;
+
+    cargo: SICargoLine[];
+    totalKgNet: number;
+    totalKgGross: number;
+  };
+
+  validationStatus: ValidationStatus;
+  validationResults: ValidationCheck[];
+
+  esiGeneratedAt?: string;
+  esiTransmittedAt?: string;
+  esiTransmissionStatus?: 'pending' | 'sent' | 'acknowledged' | 'rejected';
+}
+
+// ----------------------------------------------------------------------------
+// Draft BL
+// ----------------------------------------------------------------------------
+export interface DraftBL {
+  id: string;
+  bookingId: string;
+  receivedAt: string;
+  sourceFileUrl: string;
+
+  parsedFields: {
+    blNumber: string;
+    bookingReference: string;
+    vesselVoyage: string;
+    pol: string;
+    pod: string;
+    consignee: string;
+    notify: string;
+    shipper: string;
+    containerNumber: string;
+    sealNumber: string;
+    netWeight: number;
+    grossWeight: number;
+    cargoDescription: string;
+    freightTerms: FreightTerm;
+  };
+
+  validationStatus: ValidationStatus;
+  validationResults: ValidationCheck[];
+
+  releasedToExporterAt?: string;
+}
+
+// ----------------------------------------------------------------------------
+// Validation
+// ----------------------------------------------------------------------------
+export interface ValidationCheck {
+  id: string;
+  checkName: string;
+  agentId: AgentId;
+  result: ValidationResult;
+  details: string;
+  fieldRef?: string;
+  expected?: string;
+  actual?: string;
+}
+
+// ----------------------------------------------------------------------------
+// Alerts
+// ----------------------------------------------------------------------------
+export interface Alert {
+  id: string;
+  bookingId: string;
+  severity: AlertSeverity;
+  agentId: AgentId;
+  agentName: string;
+  agentNameEs?: string;
+  title: string;
+  titleEs?: string;
+  message: string;
+  messageEs?: string;
+  costAtRiskUsd: number | null;
+  createdAt: string;
+  dueAt?: string;
+  dismissedAt?: string;
+  suggestedAction?: string;
+  suggestedActionEs?: string;
+}
+
+// ----------------------------------------------------------------------------
+// Agents (slimmed to MVP scope)
+// ----------------------------------------------------------------------------
+export type AgentId =
+  // Active in V1
+  | 'si_validator'
+  | 'cutoff_clock'
+  | 'esi_transmitter'
+  | 'draft_bl_validator'
+  | 'master_data_sentinel'
+  // Coming soon
+  | 'po_validator'
+  | 'free_time_tracker'
+  | 'lc_consignee_checker';
+
+export type AgentCategory = 'validator' | 'monitor' | 'transmitter';
 
 export interface Agent {
   id: AgentId;
-  label: string;
+  displayName: string;
+  category: AgentCategory;
   description: string;
-  category: 'collect' | 'validate' | 'monitor' | 'orchestrate' | 'reconcile';
-  tags: string[];
-  activeOnLanes: string[];
+  status: 'active' | 'beta' | 'coming_soon';
+  runsThisWeek: number;
+  catchesThisWeek: number;
+  estimatedSavingsUsd: number;
 }
 
-export type AlertCategory =
-  | 'shipment_doc' | 'market_compliance' | 'bl_switch_window'
-  | 'payment_aging' | 'free_time_tracker';
+// ----------------------------------------------------------------------------
+// Activity events (for the Booking detail Activity tab)
+// ----------------------------------------------------------------------------
+export type ActivityEventType =
+  | 'booking_created'
+  | 'si_received'
+  | 'si_validation_run'
+  | 'si_validation_passed'
+  | 'si_validation_failed'
+  | 'esi_generated'
+  | 'esi_sent'
+  | 'esi_acknowledged'
+  | 'draft_bl_received'
+  | 'draft_bl_validation_run'
+  | 'draft_bl_validation_passed'
+  | 'draft_bl_validation_failed'
+  | 'bl_released_to_exporter'
+  | 'alert_fired'
+  | 'alert_dismissed'
+  | 'note_added'
+  | 'manual_override';
 
-export interface Alert {
+export interface ActivityEvent {
   id: string;
-  containerId?: string;
-  severity: Severity;
-  titleKey: string;
-  bodyKey: string;
-  raisedAt: string;
-  raisedBy: AgentId;
-  actionLabelKey?: string;
-  dismissed?: boolean;
-  category: AlertCategory;
-  amountUsd?: number;
+  bookingId: string;
+  type: ActivityEventType;
+  timestamp: string;
+  actor: 'agent' | 'user' | 'system';
+  actorName?: string;
+  description: string;
+  metadata?: Record<string, unknown>;
 }
 
-export interface PurchaseOrder {
-  id: string;
-  importerId: string;
-  producerId: string;
-  productId: ProductId;
-  market: Market;
-  quantityKg: number;
-  incotermPaymentId: IncotermPaymentId;
-  valueUsd: number;
-  issuedAt: string;
-  deliveryWindow: { from: string; to: string };
-  containerIds: string[];
-  status: POStatus;
-  events: POEvent[];
-}
-
-export interface Importer {
-  id: string;
-  name: string;
-  country: string;
-  market: Market;
-  activeContainers: number;
-  annualVolumeKg: number;
-  creditRating?: string;
-  avgPaymentDays: number;
-  volumeHistory: VolumeHistoryEntry[];
-  paymentHistory: Array<{
-    poId: string;
-    method: string;
-    bank: string;
-    amount: number;
-    daysToCollect?: number;
-    status: 'paid' | 'pending';
-  }>;
-  marketProfile: {
-    inspectionAuthority: string[];
-    digitalSystem: string;
-    requiredRegistrations: string[];
-    labelLanguages: string[];
-    coldTreatmentOptions?: string[];
-  };
-}
-
-export interface Producer {
-  id: string;
-  name: string;
-  region: string;
-  products: ProductId[];
-  sagId: string;
-  activeContainers: number;
-  avgPaymentDays?: number;
-  volumeHistory: VolumeHistoryEntry[];
-  certifiedProducts: CertifiedProduct[];
-  sagCertifications: SAGCertification[];
-}
-
+// ----------------------------------------------------------------------------
+// KPIs (dashboard top strip)
+// ----------------------------------------------------------------------------
 export interface KPI {
   id: string;
-  labelKey: string;
-  value: number;
-  unit: 'usd' | 'pct' | 'count' | 'days' | 'minutes';
-  deltaPct?: number;
-  severity?: Severity;
-  sparkline: number[];
-  deltaPositiveIsGood?: boolean;
+  label: string;
+  value: string;
+  delta?: string;
+  deltaDirection?: 'up' | 'down' | 'flat';
+  deltaPositive?: boolean;
+  sublabel?: string;
 }
+
+// ----------------------------------------------------------------------------
+// Penalty register (for the rolled-up "USD avoided" tooltips)
+// ----------------------------------------------------------------------------
+export type PenaltyStage = 'pre_cutoff' | 't0' | 't1' | 't2' | 't3' | 't5';
 
 export interface PenaltyEvent {
   id: string;
-  containerId: string;
-  week: string;
-  amountUsd: number;
-  reason: string;
-}
-
-export interface DocumentInstance {
-  id: string;
-  type: DocumentType;
-  containerId: string;
-  status: DocStatus;
-  issuedAt?: string;
-  fileUrl?: string;
-  issuer?: string;
-  number?: string;
-}
-
-export interface ClosedContainer {
-  id: string;
-  buyerName: string;
-  cycledays: number;
-  deltaAvgDays: number;
-  penaltyUsd: number;
-}
-
-export type PenaltyEventType =
-  | 'refumigation' | 'phyto_reissue' | 'vgm_late' | 'dus_error'
-  | 'bl_correction' | 'demurrage' | 'detention' | 'bank_discrepancy';
-
-export interface PenaltyAvoidedRow {
-  buyerName: string;
-  savedUsd: Record<PenaltyEventType, number>;
-}
-
-export type AgentStatus = 'active' | 'idle' | 'alert';
-
-export interface AgentStatusEntry {
-  agentId: string;
-  status: AgentStatus;
-  lastAction: string; // raw display string in Spanish — not an i18n key
-}
-
-// ===== Phase 4: Workflow Document System =====
-
-export type DocumentCategory =
-  | 'commercial'
-  | 'transport'
-  | 'phytosanitary'
-  | 'customs'
-
-// Subset of existing DocumentType used in the workflow system.
-// Extends existing DocumentType — does not replace it.
-export type WorkflowDocType = Extract<
-  DocumentType,
-  | 'commercial_invoice'
-  | 'packing_list'
-  | 'lc_compliance_letter'
-  | 'bill_of_lading'
-  | 'dus'
-  | 'sag_export_auth'
-  | 'cold_treatment_cert'
-  | 'certificate_of_origin'
->
-
-export type WorkflowDocStatus =
-  | 'draft'
-  | 'submitted'
-  | 'validating'
-  | 'under_review'
-  | 'approved'
-  | 'rejected'
-
-export type ShipmentDocOwner =
-  | { type: 'po'; id: string }
-  | { type: 'container'; id: string }
-
-export type ShipmentDocLink = {
-  type: 'po' | 'container'
-  id: string
-  label: string
-}
-
-export type ValidationFlag = {
-  severity: 'error' | 'warning'
-  conflictingDocId: string
-  conflictingDocType: WorkflowDocType
-  message: string
-  detectedAt: string
-}
-
-export type ShipmentDocEvent = {
-  status: WorkflowDocStatus | 'comment'
-  actor: 'user' | 'system'
-  actorName: string
-  timestamp: string
-  note?: string
-}
-
-export interface ShipmentDocument {
-  id: string
-  name: string
-  category: DocumentCategory
-  type: WorkflowDocType
-  status: WorkflowDocStatus
-  owner: ShipmentDocOwner
-  links: ShipmentDocLink[]
-  flags: ValidationFlag[]
-  events: ShipmentDocEvent[]
-  createdAt: string
-  dueDate?: string
-  fileUrl?: string
-  overview: Record<string, string>
+  stage: PenaltyStage;
+  event: string;
+  trigger: string;
+  usdMin: number;
+  usdMax: number;
+  avoidedBy: AgentId;
 }
