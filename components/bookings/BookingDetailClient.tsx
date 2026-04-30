@@ -103,6 +103,20 @@ export function BookingDetailClient({
           <TabsTrigger value="activity">{t('tabActivity')}</TabsTrigger>
         </TabsList>
 
+        {/* Persistent route context — visible on all tabs */}
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 border-b border-[var(--line-soft)] px-0 py-2 font-mono text-[11px] text-ink-3">
+          <span className="text-ink-2">
+            {booking.pol.split(',')[0]} → {booking.pod.split(',')[0]}
+          </span>
+          <span>{booking.vesselName} / {booking.voyage}</span>
+          <span>ETD {formatTs(booking.etd)}</span>
+          <span>ETA {formatTs(booking.eta)}</span>
+          <span>Cut-off {formatTs(booking.cutOff)}</span>
+          {booking.isReefer && booking.setpointC !== undefined && (
+            <span className="text-trace">{booking.containerType} @ {booking.setpointC} °C</span>
+          )}
+        </div>
+
         {/* OVERVIEW */}
         <TabsContent value="overview" className="mt-3 grid grid-cols-1 gap-4 lg:grid-cols-3">
           <Card className="lg:col-span-2 p-4">
