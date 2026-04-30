@@ -16,7 +16,7 @@ export function ColdChainTab({ container }: { container: Container }) {
   );
   const projectedSatisfiedAt = treatmentDaysLeft > 0
     ? `T+${10 + treatmentDaysLeft}`
-    : 'Completed';
+    : t('completed');
 
   return (
     <div className="space-y-6">
@@ -63,7 +63,7 @@ export function ColdChainTab({ container }: { container: Container }) {
         <div className="rounded-md bg-bg-2/50 border border-white/10 p-4">
           <div className="font-mono text-sm">
             {trace.status === 'breached' ? (
-              <span className="text-severity-crit">{t('breached')} — fallback recommended</span>
+              <span className="text-severity-crit">{t('breached')} — {t('fallbackRecommended')}</span>
             ) : (
               <span className="text-severity-ok">
                 {t('satisfiesAt')}: <strong>{projectedSatisfiedAt}</strong>
@@ -77,15 +77,16 @@ export function ColdChainTab({ container }: { container: Container }) {
 }
 
 function CaAtmosphereChart({ caReadings, caGasMix }: { caReadings: CaReading[]; caGasMix?: { o2Pct: number; co2Pct: number; n2Pct: number } }) {
+  const t = useTranslations('coldChain');
   const SAMPLE = 12;
   const data = caReadings.filter((_, i) => i % SAMPLE === 0);
   return (
     <div>
       {caGasMix && (
         <div className="flex gap-4 mb-3 text-xs font-mono text-ink-3">
-          <span>O₂ target: {caGasMix.o2Pct}%</span>
-          <span>CO₂ target: {caGasMix.co2Pct}%</span>
-          <span>N₂: {caGasMix.n2Pct}%</span>
+          <span>{t('o2Target', { pct: caGasMix.o2Pct })}</span>
+          <span>{t('co2Target', { pct: caGasMix.co2Pct })}</span>
+          <span>{t('n2', { pct: caGasMix.n2Pct })}</span>
         </div>
       )}
       <AreaChart width={900} height={180} data={data}>
@@ -101,13 +102,14 @@ function CaAtmosphereChart({ caReadings, caGasMix }: { caReadings: CaReading[]; 
 }
 
 function LifecycleStepper({ trace }: { trace: ColdChainTrace }) {
+  const t = useTranslations('coldChain');
   const stages = [
-    { id: 'precooling', label: 'Pre-cooling', done: !!trace.preCooling?.completedAt, active: false, detail: trace.preCooling?.facility ?? '—' },
-    { id: 'pti', label: 'PTI', done: !!trace.reeferPti?.passed, active: false, detail: trace.reeferPti?.technician ?? '—' },
-    { id: 'loading', label: 'Loading', done: true, active: false, detail: 'Loaded' },
-    { id: 'treatment', label: 'Cold Treatment', done: trace.status === 'completed', active: trace.status === 'in_treatment', detail: `${Math.round(trace.treatmentMinutesCompliant / 1440)}d elapsed` },
-    { id: 'arrival', label: 'Arrival', done: ['completed','breached'].includes(trace.status) && !!trace.loggerDownloadReportUrl, active: false, detail: '—' },
-    { id: 'transfer', label: 'Transfer', done: trace.arrivalTransferStatus === 'completed', active: false, detail: trace.arrivalTransferStatus ?? 'pending' },
+    { id: 'precooling', label: t('stagePrecooling'), done: !!trace.preCooling?.completedAt, active: false, detail: trace.preCooling?.facility ?? '—' },
+    { id: 'pti', label: t('stagePti'), done: !!trace.reeferPti?.passed, active: false, detail: trace.reeferPti?.technician ?? '—' },
+    { id: 'loading', label: t('stageLoading'), done: true, active: false, detail: t('loaded') },
+    { id: 'treatment', label: t('stageTreatment'), done: trace.status === 'completed', active: trace.status === 'in_treatment', detail: t('daysElapsed', { days: Math.round(trace.treatmentMinutesCompliant / 1440) }) },
+    { id: 'arrival', label: t('stageArrival'), done: ['completed','breached'].includes(trace.status) && !!trace.loggerDownloadReportUrl, active: false, detail: '—' },
+    { id: 'transfer', label: t('stageTransfer'), done: trace.arrivalTransferStatus === 'completed', active: false, detail: trace.arrivalTransferStatus ?? t('pending') },
   ];
 
   return (
@@ -141,12 +143,13 @@ function LifecycleStepper({ trace }: { trace: ColdChainTrace }) {
 }
 
 function PreCoolingSection({ preCooling }: { preCooling: PreCoolingRecord }) {
+  const t = useTranslations('coldChain');
   return (
     <div className="rounded-md bg-bg-2/50 border border-white/10 p-4">
       <div className="flex gap-6 mb-3 text-xs font-mono text-ink-3">
-        <span>Facility: {preCooling.facility}</span>
-        <span>Target: {preCooling.targetTempC}°C</span>
-        <span>Duration: {Math.round((new Date(preCooling.completedAt).getTime() - new Date(preCooling.startedAt).getTime()) / 3600000)}h</span>
+        <span>{t('facility', { name: preCooling.facility })}</span>
+        <span>{t('target', { temp: preCooling.targetTempC })}</span>
+        <span>{t('duration', { hours: Math.round((new Date(preCooling.completedAt).getTime() - new Date(preCooling.startedAt).getTime()) / 3600000) })}</span>
       </div>
       <LineChart width={600} height={160} data={preCooling.pulpTempCurve}>
         <CartesianGrid stroke="rgba(255,255,255,0.07)" vertical={false} />
@@ -174,11 +177,11 @@ function ExcursionTable({ excursions }: { excursions: ExcursionEvent[] }) {
       <table className="w-full text-sm">
         <thead>
           <tr className="border-b border-white/10 bg-bg-2/50">
-            <th className="text-left px-4 py-3 text-ink-3 font-medium">Start</th>
-            <th className="text-left px-4 py-3 text-ink-3 font-medium">Duration</th>
-            <th className="text-left px-4 py-3 text-ink-3 font-medium">Logger</th>
-            <th className="text-right px-4 py-3 text-ink-3 font-medium">Peak Temp</th>
-            <th className="text-left px-4 py-3 text-ink-3 font-medium">Compliance</th>
+            <th className="text-left px-4 py-3 text-ink-3 font-medium">{t('excStart')}</th>
+            <th className="text-left px-4 py-3 text-ink-3 font-medium">{t('excDuration')}</th>
+            <th className="text-left px-4 py-3 text-ink-3 font-medium">{t('excLogger')}</th>
+            <th className="text-right px-4 py-3 text-ink-3 font-medium">{t('excPeakTemp')}</th>
+            <th className="text-left px-4 py-3 text-ink-3 font-medium">{t('excCompliance')}</th>
           </tr>
         </thead>
         <tbody>
@@ -190,8 +193,8 @@ function ExcursionTable({ excursions }: { excursions: ExcursionEvent[] }) {
               <td className="px-4 py-3 font-mono text-xs text-right text-severity-watch">{exc.peakTempC}°C</td>
               <td className="px-4 py-3 text-xs">
                 {exc.brokeCompliance
-                  ? <span className="text-severity-crit">Broke</span>
-                  : <span className="text-severity-ok">Within tolerance</span>}
+                  ? <span className="text-severity-crit">{t('excBroke')}</span>
+                  : <span className="text-severity-ok">{t('excWithinTolerance')}</span>}
               </td>
             </tr>
           ))}
