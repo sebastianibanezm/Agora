@@ -37,6 +37,30 @@ interface Props {
   events: ActivityEvent[];
 }
 
+function GenerateEsiButton({
+  onClick,
+  disabled,
+  transmitting,
+  label,
+  transmittingLabel,
+}: {
+  onClick: () => void;
+  disabled: boolean;
+  transmitting: boolean;
+  label: string;
+  transmittingLabel: string;
+}) {
+  return (
+    <Button onClick={onClick} disabled={disabled}>
+      {transmitting ? (
+        <><Loader2 data-icon="inline-start" className="animate-spin" /> {transmittingLabel}</>
+      ) : (
+        <><Send data-icon="inline-start" /> {label}</>
+      )}
+    </Button>
+  );
+}
+
 export function BookingDetailClient({
   booking: initialBooking,
   exporter,
@@ -209,17 +233,13 @@ export function BookingDetailClient({
             </div>
             <div className="flex flex-col gap-2">
               {/* Primary actions */}
-              <Button
+              <GenerateEsiButton
                 onClick={handleGenerateEsi}
                 disabled={!si || siHasFails || transmitting || booking.status === 'esi_sent' || booking.status === 'bl_released'}
-                className="w-full"
-              >
-                {transmitting ? (
-                  <><Loader2 data-icon="inline-start" className="animate-spin" /> {t('transmittingEsi')}</>
-                ) : (
-                  <><Send data-icon="inline-start" /> {t('generateEsi')}</>
-                )}
-              </Button>
+                transmitting={transmitting}
+                label={t('generateEsi')}
+                transmittingLabel={t('transmittingEsi')}
+              />
               <Button
                 onClick={handleReleaseBl}
                 disabled={!bl || blHasFails || booking.status === 'bl_released' || booking.status === 'closed'}
@@ -283,20 +303,13 @@ export function BookingDetailClient({
                 checks={si.validationResults}
                 title={t('validationSiTitle')}
                 action={
-                  <Button
+                  <GenerateEsiButton
                     onClick={handleGenerateEsi}
                     disabled={siHasFails || transmitting || booking.status === 'esi_sent' || booking.status === 'bl_released'}
-                  >
-                    {transmitting ? (
-                      <>
-                        <Loader2 data-icon="inline-start" className="animate-spin" /> {t('transmittingEsi')}
-                      </>
-                    ) : (
-                      <>
-                        <Send data-icon="inline-start" /> {t('generateEsi')}
-                      </>
-                    )}
-                  </Button>
+                    transmitting={transmitting}
+                    label={t('generateEsi')}
+                    transmittingLabel={t('transmittingEsi')}
+                  />
                 }
               />
             </>
