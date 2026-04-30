@@ -27,7 +27,6 @@ interface ArcDatum {
   endLat: number;
   endLng: number;
   color: string;
-  stroke: number;
   reefer: boolean;
   bookings: Booking[];
   laneKey: string;
@@ -155,15 +154,12 @@ export function ShipmentGlobe({ bookings, height = 400, className, style }: Prop
       const reeferShare = list.filter((b) => b.isReefer).length / list.length;
       const primary = list[0]!;
       const color = LIFECYCLE_COLORS[primary.status];
-      const baseStroke = list.length > 10 ? 1.6 : list.length > 3 ? 1.2 : 0.8;
-      const reeferBoost = reeferShare >= 0.5 ? 0.6 : 0;
       result.push({
         startLat: primary.polCoords[1],
         startLng: primary.polCoords[0],
         endLat: primary.podCoords[1],
         endLng: primary.podCoords[0],
         color,
-        stroke: baseStroke + reeferBoost,
         reefer: reeferShare >= 0.5,
         bookings: list,
         laneKey,
@@ -235,11 +231,8 @@ export function ShipmentGlobe({ bookings, height = 400, className, style }: Prop
         atmosphereColor="#C8A870"
         atmosphereAltitude={0.15}
         arcsData={arcs}
-        arcColor={(d: object) => (d as ArcDatum).color}
-        arcStroke={(d: object) => (d as ArcDatum).stroke}
-        arcDashLength={0.5}
-        arcDashGap={0.25}
-        arcDashAnimateTime={(d: object) => ((d as ArcDatum).reefer ? 2200 : 4000)}
+        arcColor={(d: object) => hexToRgba((d as ArcDatum).color, 0.35)}
+        arcStroke={() => 0.6}
         arcAltitudeAutoScale={0.4}
         arcLabel={(d: object) => {
           const a = d as ArcDatum;
