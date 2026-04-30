@@ -53,8 +53,9 @@ export default async function BookingsPage({ params }: Props) {
         ? si.validationResults.filter((c) => c.result === 'fail').length
         : 0;
       const esiTransmittedAt = si?.esiTransmittedAt ?? null;
+      const siReceivedAt = si?.receivedAt ?? null;
 
-      return { booking, order, exporter, naviera, alertCount, highestAlertSeverity, siFailedCheckCount, esiTransmittedAt };
+      return { booking, order, exporter, naviera, alertCount, highestAlertSeverity, siFailedCheckCount, esiTransmittedAt, siReceivedAt };
     })
     .filter(Boolean) as Array<{
       booking: typeof bookings[number];
@@ -65,6 +66,7 @@ export default async function BookingsPage({ params }: Props) {
       highestAlertSeverity: AlertSeverity | null;
       siFailedCheckCount: number;
       esiTransmittedAt: string | null;
+      siReceivedAt: string | null;
     }>;
 
   return (

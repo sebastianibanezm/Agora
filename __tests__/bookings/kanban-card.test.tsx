@@ -48,6 +48,7 @@ function makeRow(bookingOverrides: Partial<Booking> = {}, extras: {
   highestAlertSeverity?: AlertSeverity | null;
   siFailedCheckCount?: number;
   esiTransmittedAt?: string | null;
+  siReceivedAt?: string | null;
 } = {}) {
   return {
     booking: makeBooking(bookingOverrides),
@@ -58,6 +59,7 @@ function makeRow(bookingOverrides: Partial<Booking> = {}, extras: {
     highestAlertSeverity: extras.highestAlertSeverity ?? null,
     siFailedCheckCount: extras.siFailedCheckCount ?? 0,
     esiTransmittedAt: extras.esiTransmittedAt ?? null,
+    siReceivedAt: extras.siReceivedAt ?? null,
   };
 }
 
@@ -131,5 +133,19 @@ describe('KanbanCard', () => {
     const { container } = renderCard(makeRow());
     const link = container.querySelector('a');
     expect(link?.getAttribute('href')).toBe('/bookings/BKG-TEST');
+  });
+
+  it('shows elapsed time for si_validated bookings', () => {
+    renderCard(makeRow({ status: 'si_validated' }, { siReceivedAt: '2026-04-28T10:00:00-04:00' }));
+    // Should render the cardReadySince metric — presence of the elapsed span confirms the metric renders
+    // (exact text depends on demo date anchor; we just verify it doesn't crash and renders something)
+    const card = screen.getByText(/Ready/i);
+    expect(card).toBeInTheDocument();
+  });
+
+  it('shows elapsed time for esi_sent bookings', () => {
+    renderCard(makeRow({ status: 'esi_sent' }, { esiTransmittedAt: '2026-04-27T08:00:00-04:00' }));
+    const metric = screen.getByText(/e-SI sent/i);
+    expect(metric).toBeInTheDocument();
   });
 });

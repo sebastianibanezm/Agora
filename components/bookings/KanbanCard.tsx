@@ -24,6 +24,7 @@ export interface KanbanRow {
   highestAlertSeverity: AlertSeverity | null;
   siFailedCheckCount: number;
   esiTransmittedAt: string | null;
+  siReceivedAt: string | null;
 }
 
 interface Props {
@@ -31,7 +32,7 @@ interface Props {
 }
 
 export function KanbanCard({ row }: Props) {
-  const { booking, exporter, naviera, highestAlertSeverity, siFailedCheckCount, esiTransmittedAt } = row;
+  const { booking, exporter, naviera, highestAlertSeverity, siFailedCheckCount, esiTransmittedAt, siReceivedAt } = row;
   const t = useTranslations('bookings.kanban');
   const locale = useLocale() as 'es' | 'en';
 
@@ -86,6 +87,7 @@ export function KanbanCard({ row }: Props) {
           booking={booking}
           siFailedCheckCount={siFailedCheckCount}
           esiTransmittedAt={esiTransmittedAt}
+          siReceivedAt={siReceivedAt}
           locale={locale}
           t={t}
         />
@@ -98,10 +100,11 @@ export function KanbanCard({ row }: Props) {
 
 type TFn = ReturnType<typeof useTranslations<'bookings.kanban'>>;
 
-function CardMetric({ booking, siFailedCheckCount, esiTransmittedAt, locale, t }: {
+function CardMetric({ booking, siFailedCheckCount, esiTransmittedAt, siReceivedAt, locale, t }: {
   booking: Booking;
   siFailedCheckCount: number;
   esiTransmittedAt: string | null;
+  siReceivedAt: string | null;
   locale: 'es' | 'en';
   t: TFn;
 }) {
@@ -120,7 +123,7 @@ function CardMetric({ booking, siFailedCheckCount, esiTransmittedAt, locale, t }
   }
 
   if (status === 'si_validated') {
-    const when = formatElapsedSince(booking.createdAt);
+    const when = siReceivedAt ? formatElapsedSince(siReceivedAt) : '—';
     return (
       <span className="font-mono text-[10px] text-ink-3">
         {t('cardReadySince', { when })}
@@ -171,5 +174,6 @@ function CardMetric({ booking, siFailedCheckCount, esiTransmittedAt, locale, t }
     );
   }
 
+  // cancelled bookings are filtered at page.tsx before reaching the board
   return null;
 }
