@@ -35,6 +35,7 @@ export function formatTs(iso: string): string {
  */
 export function formatElapsedSince(iso: string, now: Date = getTodayDemo()): string {
   const deltaMs = now.getTime() - new Date(iso).getTime();
+  if (deltaMs <= 0) return '0m ago';
   const totalMinutes = Math.floor(deltaMs / 60_000);
   const totalHours = Math.floor(deltaMs / 3_600_000);
   const totalDays = Math.floor(deltaMs / 86_400_000);
