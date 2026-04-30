@@ -1,7 +1,12 @@
 import type { PenaltyAvoidedRow, PenaltyEventType } from '@/types';
+import { getTranslations } from 'next-intl/server';
 
-const COL_LABELS = ['Refumig.', 'Phyto Reissue', 'VGM Late', 'DUS Error', 'BL Correction', 'Demurrage', 'Detention', 'Bank Discrep.'];
 const COL_KEYS: PenaltyEventType[] = ['refumigation', 'phyto_reissue', 'vgm_late', 'dus_error', 'bl_correction', 'demurrage', 'detention', 'bank_discrepancy'];
+
+const COL_TRANSLATION_KEYS = [
+  'refumigation', 'phytoReissue', 'vgmLate', 'dusError',
+  'blCorrection', 'demurrage', 'detention', 'bankDiscrepancy',
+] as const;
 
 function fmtSaved(usd: number): string {
   if (usd === 0) return '';
@@ -21,13 +26,15 @@ interface Props {
   hidePerformanceLink?: boolean;
 }
 
-export function PenaltyHeatmap({ matrix, hidePerformanceLink = false }: Props) {
+export async function PenaltyHeatmap({ matrix, hidePerformanceLink = false }: Props) {
+  const t = await getTranslations();
+  const colLabels = COL_TRANSLATION_KEYS.map(k => t('penalties.' + k));
   return (
     <div className="p-4">
       {/* Header row */}
       <div className="grid gap-[3px] mb-[3px]" style={{ gridTemplateColumns: '110px repeat(8, 1fr)' }}>
         <div />
-        {COL_LABELS.map((label, i) => (
+        {colLabels.map((label, i) => (
           <div
             key={i}
             data-testid="heatmap-col-header"
@@ -74,7 +81,7 @@ export function PenaltyHeatmap({ matrix, hidePerformanceLink = false }: Props) {
         </div>
         {!hidePerformanceLink && (
           <a href="/performance" className="font-mono text-[9px] text-mint-500 hover:text-mint-400">
-            OPEN PERFORMANCE →
+            {t('dashboard.openPerformance')} →
           </a>
         )}
       </div>

@@ -1,6 +1,7 @@
 'use client';
 import type { Container, Alert, Importer } from '@/types';
 import { containerSeverity } from '@/lib/utils/severity';
+import { useTranslations } from 'next-intl';
 
 interface Props {
   container: Container;
@@ -32,6 +33,7 @@ const SEV_COLORS: Record<string, string> = {
 };
 
 export function ContainerCard({ container, alerts, importers }: Props) {
+  const t = useTranslations('dashboard');
   const sev = containerSeverity(container.id, alerts);
   const buyer = importers.find(i => i.id === container.importerId)?.name ?? '—';
   const marketCls = MARKET_CLASSES[container.market] ?? 'bg-ink-4/10 text-ink-3 border border-white/10';
@@ -87,7 +89,7 @@ export function ContainerCard({ container, alerts, importers }: Props) {
 
         {/* RIGHT: cost at risk */}
         <div className="flex flex-col items-end justify-center gap-1 pl-4 border-l border-[var(--line-soft)]">
-          <span className="font-mono text-[9px] text-ink-4 tracking-widest uppercase">COST AT RISK</span>
+          <span className="font-mono text-[9px] text-ink-4 tracking-widest uppercase">{t('costAtRisk')}</span>
           <span
             data-testid="cost-at-risk"
             className={`font-mono font-semibold text-[22px] ${sev !== 'ok' && (container.costAtRiskUsd ?? 0) > 0 ? `text-severity-${sev}` : 'text-ink-4'}`}

@@ -1,8 +1,10 @@
 import type { ClosedContainer } from '@/types';
+import { getTranslations } from 'next-intl/server';
 
 interface Props { rows: ClosedContainer[] }
 
-export function ClosedTable({ rows }: Props) {
+export async function ClosedTable({ rows }: Props) {
+  const t = await getTranslations('dashboard');
   return (
     <div className="overflow-hidden">
       {/* Column headers */}
@@ -10,11 +12,11 @@ export function ClosedTable({ rows }: Props) {
         className="grid font-mono text-[9.5px] uppercase text-ink-3 px-4 py-2 bg-white/[0.015]"
         style={{ gridTemplateColumns: '1fr 1fr 60px 60px 80px' }}
       >
-        <span>CONTAINER</span>
-        <span>BUYER</span>
-        <span className="text-right">CYCLE</span>
-        <span className="text-right">Δ AVG</span>
-        <span className="text-right">PENALTY</span>
+        <span>{t('colContainer')}</span>
+        <span>{t('colBuyer')}</span>
+        <span className="text-right">{t('colCycle')}</span>
+        <span className="text-right">{t('colDeltaAvg')}</span>
+        <span className="text-right">{t('colPenalty')}</span>
       </div>
 
       {/* Rows */}

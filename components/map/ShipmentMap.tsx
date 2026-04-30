@@ -2,6 +2,7 @@
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
 import type { Container, Alert } from '@/types';
 import { containerSeverity } from '@/lib/utils/severity';
+import { useTranslations } from 'next-intl';
 
 const GEO_URL = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json';
 
@@ -31,6 +32,7 @@ interface Props {
 }
 
 export function ShipmentMap({ containers, alerts }: Props) {
+  const t = useTranslations('map');
   const W = 800, H = 380;
 
   return (
@@ -95,10 +97,10 @@ export function ShipmentMap({ containers, alerts }: Props) {
       {/* Header overlay */}
       <div style={{ position: 'absolute', top: 12, left: 16, right: 16, zIndex: 3, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <span style={{ fontFamily: 'monospace', fontSize: 10, color: '#00E696', letterSpacing: '0.15em' }}>
-          ACTIVE SHIPMENTS · LIVE
+          {t('liveLabel')}
         </span>
         <span style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(168,179,199,0.6)', letterSpacing: '0.1em' }}>
-          {containers.length} ARCS
+          {t('arcs', { n: containers.length })}
         </span>
       </div>
     </div>
