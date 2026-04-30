@@ -100,6 +100,17 @@ function createOrbGroup(color: string): THREE.Group {
   return group;
 }
 
+function orbPosition(
+  arc: ArcDatum,
+  t: number,
+  globe: GlobeMethods,
+): { x: number; y: number; z: number } {
+  const { lat, lng } = slerpLatLng(arc.startLat, arc.startLng, arc.endLat, arc.endLng, t);
+  const angDist = greatCircleRad(arc.startLat, arc.startLng, arc.endLat, arc.endLng);
+  const alt = Math.sin(Math.PI * t) * 0.4 * (angDist / Math.PI);
+  return globe.getCoords(lat, lng, alt);
+}
+
 const ACTIVE_STATUSES = new Set([
   'created', 'awaiting_si', 'si_received', 'si_validated', 'si_failed',
   'esi_sent', 'draft_bl_received', 'bl_validated',
@@ -187,6 +198,9 @@ export function ShipmentGlobe({ bookings, height = 400, className, style }: Prop
     return items;
   }, [arcs]);
 
+  const orbProgressRef = useRef<Map<string, number>>(new Map());
+  const orbObjectsRef = useRef<Map<string, THREE.Object3D>>(new Map());
+
   const globeMatRef = useRef<THREE.MeshPhongMaterial | null>(null);
   if (!globeMatRef.current) {
     const mat = new THREE.MeshPhongMaterial({ color: new THREE.Color('#D4B890'), shininess: 4 });
@@ -206,6 +220,45 @@ export function ShipmentGlobe({ bookings, height = 400, className, style }: Prop
       mat?.dispose();
     };
   }, []);
+
+  useEffect(() => {
+    const next = new Map<string, number>();
+    arcs.forEach((arc, i) => {
+      next.set(arc.laneKey, orbProgressRef.current.get(arc.laneKey) ?? i / Math.max(arcs.length, 1));
+    });
+    orbProgressRef.current = next;
+    for (const key of orbObjectsRef.current.keys()) {
+      if (!next.has(key)) orbObjectsRef.current.delete(key);
+    }
+  }, [arcs]);
+
+  useEffect(() => {
+    const SPEED = 0.000055;
+    let last = performance.now();
+    let rafId: number;
+
+    const tick = (now: number) => {
+      const dt = Math.min(now - last, 100);
+      last = now;
+
+      for (const [key, t] of orbProgressRef.current) {
+        const newT = (t + dt * SPEED) % 1;
+        orbProgressRef.current.set(key, newT);
+
+        const obj = orbObjectsRef.current.get(key);
+        const arc = arcs.find((a) => a.laneKey === key);
+        if (!obj || !arc || !globeRef.current) continue;
+
+        const pos = orbPosition(arc, newT, globeRef.current);
+        obj.position.set(pos.x, pos.y, pos.z);
+      }
+
+      rafId = requestAnimationFrame(tick);
+    };
+
+    rafId = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafId);
+  }, [arcs]);
 
   return (
     <div
@@ -255,6 +308,23 @@ export function ShipmentGlobe({ bookings, height = 400, className, style }: Prop
         pointAltitude={0}
         pointRadius={(d: object) => (d as { size: number }).size}
         pointsMerge
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        {...({
+          customThreeObjectData: arcs,
+          customThreeObject: (d: any) => {
+            const arc = d as ArcDatum;
+            const group = createOrbGroup(arc.color);
+            orbObjectsRef.current.set(arc.laneKey, group);
+            return group;
+          },
+          customThreeObjectUpdate: (obj: any, d: any) => {
+            const arc = d as ArcDatum;
+            const t = orbProgressRef.current.get(arc.laneKey) ?? 0;
+            if (!globeRef.current) return;
+            const pos = orbPosition(arc, t, globeRef.current);
+            (obj as THREE.Object3D).position.set(pos.x, pos.y, pos.z);
+          },
+        } as any)}
       />
 
       {hovered && (
