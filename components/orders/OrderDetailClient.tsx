@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useMemo } from 'react';
+import { useRouter } from 'next/navigation';
 import { useTranslations, useLocale } from 'next-intl';
 import type { Booking, Exporter, Naviera, Order } from '@/types';
 import { LifecyclePill } from '@/components/bookings/LifecyclePill';
@@ -23,6 +24,7 @@ interface Props {
 
 export function OrderDetailClient({ order, exporter, navieras, initialBookings }: Props) {
   const t = useTranslations('orders');
+  const router = useRouter();
   const tBookings = useTranslations('bookings');
   const locale = useLocale() as 'es' | 'en';
   const demo = useDemoStore();
@@ -104,7 +106,7 @@ export function OrderDetailClient({ order, exporter, navieras, initialBookings }
                 const naviera = navieraMap.get(b.navieraId);
                 if (!naviera) return null;
                 return (
-                  <tr key={b.id} className="border-b border-[var(--line-soft)] last:border-b-0 hover:bg-white/5">
+                  <tr key={b.id} onClick={() => router.push(`/bookings/${b.id}`)} className="cursor-pointer border-b border-[var(--line-soft)] last:border-b-0 hover:bg-white/5">
                     <td className="px-3 py-2.5">
                       <Link href={`/bookings/${b.id}`} className="inline-flex items-center gap-1.5 font-mono text-ink-1 hover:underline">
                         {b.bookingNumber}

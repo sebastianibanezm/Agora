@@ -1,4 +1,7 @@
+'use client';
+
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useTranslations, useLocale } from 'next-intl';
 import type { Booking, Exporter, Naviera, ShippingInstruction, DraftBL } from '@/types';
 import { LifecyclePill } from '@/components/bookings/LifecyclePill';
@@ -19,6 +22,7 @@ function turnaroundHours(si?: ShippingInstruction, bl?: DraftBL) {
 
 export function CompletedBookingsTable({ rows }: { rows: Row[] }) {
   const t = useTranslations('dashboard');
+  const router = useRouter();
   const locale = useLocale() as 'es' | 'en';
   if (rows.length === 0) {
     return null;
@@ -44,7 +48,7 @@ export function CompletedBookingsTable({ rows }: { rows: Row[] }) {
           {rows.map(({ booking, exporter, naviera, si, bl }) => {
             const ta = turnaroundHours(si, bl);
             return (
-              <tr key={booking.id} className="border-b border-[var(--line-soft)] last:border-b-0 hover:bg-white/5">
+              <tr key={booking.id} onClick={() => router.push(`/bookings/${booking.id}`)} className="cursor-pointer border-b border-[var(--line-soft)] last:border-b-0 hover:bg-white/5">
                 <td className="px-4 py-2">
                   <Link
                     href={`/bookings/${booking.id}`}
