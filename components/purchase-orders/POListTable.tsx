@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import type { PurchaseOrder, Importer } from '@/types';
 import Link from 'next/link';
 
@@ -15,6 +16,7 @@ interface Props {
 }
 
 export function POListTable({ purchaseOrders, importers }: Props) {
+  const t = useTranslations('purchaseOrders');
   const [search, setSearch] = useState('');
   const imp = (id: string) => importers.find(i => i.id === id);
 
@@ -26,12 +28,12 @@ export function POListTable({ purchaseOrders, importers }: Props) {
 
   return (
     <div>
-      <input type="text" placeholder="Search POs…" value={search} onChange={e => setSearch(e.target.value)}
+      <input type="text" placeholder={t('searchPlaceholder')} value={search} onChange={e => setSearch(e.target.value)}
         style={{ marginBottom: '16px', padding: '8px 12px', borderRadius: '6px', border: '1px solid #ffffff18', background: '#1a1f2e', color: '#e2e8f0', fontSize: '13px', width: '280px' }} />
       <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
         <thead>
           <tr style={{ color: '#64748b', borderBottom: '1px solid #ffffff12' }}>
-            {['PO ID', 'Product', 'Importer', 'Status', 'Value USD', 'Date'].map(h => (
+            {[t('colId'), t('colProduct'), t('colImporter'), t('colStatus'), t('colValue'), t('colDate')].map(h => (
               <th key={h} style={{ padding: '8px 12px', textAlign: 'left', fontWeight: 500 }}>{h}</th>
             ))}
           </tr>
