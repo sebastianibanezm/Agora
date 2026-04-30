@@ -1,7 +1,25 @@
 import { render, screen } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
+import en from '../messages/en.json';
 import { VolumeTimeSeries } from '@/components/shared/VolumeTimeSeries';
 import { MiniSeasonBar } from '@/components/shared/MiniSeasonBar';
+
+vi.mock('next-intl/server', () => ({
+  getTranslations: async (ns?: string) => {
+    const nsData = ns ? (en as Record<string, unknown>)[ns] : en;
+    function resolve(obj: unknown, key: string): string {
+      const parts = key.split('.');
+      let cur: unknown = obj;
+      for (const p of parts) cur = (cur as Record<string, unknown>)?.[p];
+      return typeof cur === 'string' ? cur : key;
+    }
+    return (key: string, values?: Record<string, unknown>) => {
+      const val = resolve(nsData, key);
+      if (!values) return val;
+      return val.replace(/\{(\w+)\}/g, (_: string, k: string) => String(values[k] ?? k));
+    };
+  },
+}));
 import type { VolumeHistoryEntry } from '@/types';
 
 describe('VolumeTimeSeries', () => {
@@ -45,24 +63,25 @@ import { POLifecycleTimeline } from '@/components/purchase-orders/POLifecycleTim
 import type { POEvent } from '@/types';
 
 describe('POLifecycleTimeline', () => {
-  it('renders mint fill covering exactly completed milestones', () => {
+  it('renders mint fill covering exactly completed milestones', async () => {
     const events: POEvent[] = [
       { date: '2026-10-01', type: 'confirmed' },
       { date: '2026-11-01', type: 'container_assigned' },
       { date: '2026-12-01', type: 'bl_issued' },
     ];
-    render(<POLifecycleTimeline events={events} />);
+    const resolved = await POLifecycleTimeline({ events });
+    render(resolved);
     expect(screen.getByTestId('tl-progress')).toBeInTheDocument();
   });
 
-  it('renders all 6 milestone nodes', () => {
-    render(<POLifecycleTimeline events={[]} />);
+  it('renders all 6 milestone nodes', async () => {
+    const resolved = await POLifecycleTimeline({ events: [] });
+    render(resolved);
     expect(screen.getAllByTestId('tl-node').length).toBe(6);
   });
 });
 
 import { NextIntlClientProvider } from 'next-intl';
-import en from '../messages/en.json';
 import { ContainerCard } from '@/components/containers/ContainerCard';
 import { containers } from '@/lib/mock-data/containers';
 import { importers } from '@/lib/mock-data/importers';
