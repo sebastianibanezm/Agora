@@ -189,39 +189,45 @@ export function BookingDetailClient({
               {t('quickActions')}
             </div>
             <div className="flex flex-col gap-2">
-              <Button
-                variant="outline"
-                disabled={!si}
-                onClick={() => setTab('si')}
-              >
-                <Upload data-icon="inline-start" /> {t('openSi')}
-              </Button>
+              {/* Primary actions */}
               <Button
                 onClick={handleGenerateEsi}
                 disabled={!si || siHasFails || transmitting || booking.status === 'esi_sent' || booking.status === 'bl_released'}
+                className="w-full"
               >
                 {transmitting ? (
-                  <>
-                    <Loader2 data-icon="inline-start" className="animate-spin" /> {t('transmittingEsi')}
-                  </>
+                  <><Loader2 data-icon="inline-start" className="animate-spin" /> {t('transmittingEsi')}</>
                 ) : (
-                  <>
-                    <Send data-icon="inline-start" /> {t('generateEsi')}
-                  </>
+                  <><Send data-icon="inline-start" /> {t('generateEsi')}</>
                 )}
-              </Button>
-              <Button
-                variant="outline"
-                disabled={!bl}
-                onClick={() => setTab('bl')}
-              >
-                <FileCheck2 data-icon="inline-start" /> {t('viewBl')}
               </Button>
               <Button
                 onClick={handleReleaseBl}
                 disabled={!bl || blHasFails || booking.status === 'bl_released' || booking.status === 'closed'}
+                className="w-full"
               >
                 {t('releaseBl')}
+              </Button>
+
+              {/* Divider */}
+              <div className="my-1 h-px bg-[var(--line-soft)]" />
+
+              {/* Navigation actions */}
+              <Button
+                variant="ghost"
+                disabled={!si}
+                onClick={() => setTab('si')}
+                className="w-full justify-start text-ink-2"
+              >
+                <Upload data-icon="inline-start" /> {t('openSi')}
+              </Button>
+              <Button
+                variant="ghost"
+                disabled={!bl}
+                onClick={() => setTab('bl')}
+                className="w-full justify-start text-ink-2"
+              >
+                <FileCheck2 data-icon="inline-start" /> {t('viewBl')}
               </Button>
             </div>
           </Card>
