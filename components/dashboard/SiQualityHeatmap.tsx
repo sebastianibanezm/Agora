@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import type { Booking, Exporter, Order, ShippingInstruction } from '@/types';
+import type { Booking, Exporter, ShippingInstruction } from '@/types';
 
 const ERROR_BUCKET_MATCHERS: { id: string; matches: (check: { id: string; checkName: string }) => boolean }[] = [
   { id: 'consignee', matches: (c) => /consignee|notify|shipper/i.test(c.checkName) },
@@ -13,11 +13,10 @@ const ERROR_BUCKET_MATCHERS: { id: string; matches: (check: { id: string; checkN
 interface Props {
   exporters: Exporter[];
   bookings: Booking[];
-  orders: Order[];
   sis: ShippingInstruction[];
 }
 
-export function SiQualityHeatmap({ exporters, bookings, orders, sis }: Props) {
+export function SiQualityHeatmap({ exporters, bookings, sis }: Props) {
   const t = useTranslations('dashboard');
 
   const ERROR_BUCKETS = [
@@ -34,9 +33,11 @@ export function SiQualityHeatmap({ exporters, bookings, orders, sis }: Props) {
   for (const si of sis) {
     const booking = bookings.find((b) => b.id === si.bookingId);
     if (!booking) continue;
-    const order = orders.find((o) => o.id === booking.orderId);
-    if (!order) continue;
-    const exporterId = order.exporterId;
+    const exporter = exporters.find(
+      (e) => e.name === booking.shipper || e.legalName === booking.shipper
+    );
+    if (!exporter) continue;
+    const exporterId = exporter.id;
     if (!grid[exporterId]) continue;
 
     const failChecks = si.validationResults.filter((r) => r.result === 'fail' || r.result === 'warn');

@@ -3,7 +3,7 @@ import { render, screen, within } from '@testing-library/react';
 import { NextIntlClientProvider } from 'next-intl';
 import { BookingsKanbanClient } from '@/components/bookings/BookingsKanbanClient';
 import en from '@/messages/en.json';
-import type { Booking, Exporter, Naviera, Order } from '@/types';
+import type { Booking, Exporter, Naviera } from '@/types';
 
 // minimal mocks ---------------------------------------------------------------
 const naviera: Naviera = {
@@ -18,24 +18,20 @@ const exporter: Exporter = {
   primaryProducts: [], primaryMarkets: [], totalOrders: 0, totalContainers: 0,
   onTimeSiRate: 1, siQualityScore: 1, avgSiTurnaroundHours: 12,
 };
-const order: Order = {
-  id: 'ORD-1', orderNumber: 'ORD-001', exporterId: 'EXP-1',
-  destinationMarket: 'US', destinationCountry: 'USA', containerCount: 1,
-  windowFrom: '', windowTo: '', status: 'in_progress', bookingIds: [],
-  createdAt: '',
-};
-
 function makeRow(status: Booking['status'], num: string) {
   const booking: Booking = {
-    id: `BKG-${num}`, bookingNumber: num, orderId: 'ORD-1', navieraId: 'NAV-MSC',
-    containerType: '40HC', isReefer: false, vesselName: 'Test', voyage: 'V1',
+    id: `BKG-${num}`, bookingNumber: num, navieraId: 'NAV-MSC',
+    shipper: 'Comfrut', consignee: 'Consignee Co.',
+    containerType: '40HC', containerCount: 1, isReefer: false,
+    freightTerm: 'COLLECT', emissionType: 'BL', containerIds: [],
+    vesselName: 'Test', voyage: 'V1',
     pol: 'San Antonio', polCoords: [-71.6, -33.6], pod: 'Charleston', podCoords: [-79.9, 32.8],
     etd: '2026-05-03T00:00:00Z', eta: '2026-05-17T00:00:00Z',
     cutOff: '2026-05-01T16:00:00-04:00', stackingFrom: '2026-04-29T00:00:00Z',
     stackingTo: '2026-05-01T00:00:00Z', status, createdAt: '2026-04-20T00:00:00Z',
     alertIds: [], costAtRiskUsd: 0,
   };
-  return { booking, order, exporter, naviera, alertCount: 0, highestAlertSeverity: null, siFailedCheckCount: 0, esiTransmittedAt: null, siReceivedAt: null };
+  return { booking, exporter, naviera, alertCount: 0, highestAlertSeverity: null, siFailedCheckCount: 0, esiTransmittedAt: null, siReceivedAt: null };
 }
 
 function renderBoard(rows: ReturnType<typeof makeRow>[]) {

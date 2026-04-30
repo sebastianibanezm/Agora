@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import { NextIntlClientProvider } from 'next-intl';
 import { KanbanCard } from '@/components/bookings/KanbanCard';
 import en from '@/messages/en.json';
-import type { Booking, Exporter, Naviera, Order, AlertSeverity } from '@/types';
+import type { Booking, Exporter, Naviera, AlertSeverity } from '@/types';
 
 const mockNaviera: Naviera = {
   id: 'NAV-MSC', name: 'MSC', shortName: 'MSC', code: 'MSCU',
@@ -21,17 +21,12 @@ const mockExporter: Exporter = {
   siQualityScore: 0.85, avgSiTurnaroundHours: 12,
 };
 
-const mockOrder: Order = {
-  id: 'ORD-1', orderNumber: 'ORD-2026-0001', exporterId: 'EXP-1',
-  destinationMarket: 'US', destinationCountry: 'USA', containerCount: 1,
-  windowFrom: '2026-05-01', windowTo: '2026-05-15',
-  status: 'in_progress', bookingIds: ['BKG-TEST'], createdAt: '2026-04-01',
-};
-
 function makeBooking(overrides: Partial<Booking> = {}): Booking {
   return {
-    id: 'BKG-TEST', bookingNumber: 'MSCSAI9999', orderId: 'ORD-1',
-    navieraId: 'NAV-MSC', containerType: '40RF', isReefer: false,
+    id: 'BKG-TEST', bookingNumber: 'MSCSAI9999',
+    navieraId: 'NAV-MSC', containerType: '40RF', containerCount: 1, isReefer: false,
+    shipper: 'Comfrut', consignee: 'Consignee Co.',
+    freightTerm: 'COLLECT', emissionType: 'BL', containerIds: [],
     vesselName: 'MSC Test', voyage: 'V001',
     pol: 'San Antonio, Chile', polCoords: [-71.6, -33.6],
     pod: 'Charleston, USA', podCoords: [-79.9, 32.8],
@@ -52,7 +47,6 @@ function makeRow(bookingOverrides: Partial<Booking> = {}, extras: {
 } = {}) {
   return {
     booking: makeBooking(bookingOverrides),
-    order: mockOrder,
     exporter: mockExporter,
     naviera: mockNaviera,
     alertCount: extras.highestAlertSeverity ? 1 : 0,
