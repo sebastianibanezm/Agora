@@ -139,9 +139,9 @@ export function BookingDetailClient({
             {booking.pol.split(',')[0]} → {booking.pod.split(',')[0]}
           </span>
           <span>{booking.vesselName} / {booking.voyage}</span>
-          <span>ETD {formatTs(booking.etd)}</span>
-          <span>ETA {formatTs(booking.eta)}</span>
-          <span>Cut-off {formatTs(booking.cutOff)}</span>
+          <span>{t('labelEtd')} {formatTs(booking.etd)}</span>
+          <span>{t('labelEta')} {formatTs(booking.eta)}</span>
+          <span>{t('labelCutoff')} {formatTs(booking.cutOff)}</span>
           {booking.isReefer && booking.setpointC !== undefined && (
             <span className="text-trace">{booking.containerType} @ {booking.setpointC} °C</span>
           )}
@@ -153,11 +153,11 @@ export function BookingDetailClient({
             {/* Route & Schedule */}
             <div>
               <div className="mb-2 font-mono text-[10px] tracking-wider text-ink-4 uppercase">
-                Route & Schedule
+                {t('sectionRouteSchedule')}
               </div>
               <dl className="grid grid-cols-2 gap-x-6 gap-y-2 text-xs">
                 <div>
-                  <dt className="text-ink-3">POL → POD</dt>
+                  <dt className="text-ink-3">{t('labelPolToPod')}</dt>
                   <dd className="text-ink-1">{booking.pol.split(',')[0]} → {booking.pod.split(',')[0]}</dd>
                 </div>
                 <div>
@@ -169,7 +169,7 @@ export function BookingDetailClient({
                   <dd className="font-mono text-ink-1">{booking.voyage}</dd>
                 </div>
                 <div>
-                  <dt className="text-ink-3">ETD → ETA</dt>
+                  <dt className="text-ink-3">{t('labelEtdToEta')}</dt>
                   <dd className="text-ink-1">{formatTs(booking.etd)} → {formatTs(booking.eta)}</dd>
                 </div>
                 <div>
@@ -177,7 +177,7 @@ export function BookingDetailClient({
                   <dd className="text-ink-1">{formatTs(booking.stackingFrom)} → {formatTs(booking.stackingTo)}</dd>
                 </div>
                 <div>
-                  <dt className="text-ink-3">Cut-off</dt>
+                  <dt className="text-ink-3">{t('labelCutoff')}</dt>
                   <dd className="font-mono text-ink-1">{formatTs(booking.cutOff)}</dd>
                 </div>
               </dl>
@@ -186,7 +186,7 @@ export function BookingDetailClient({
             {/* Container */}
             <div className="border-t border-[var(--line-soft)] pt-3">
               <div className="mb-2 font-mono text-[10px] tracking-wider text-ink-4 uppercase">
-                Container
+                {t('sectionContainer')}
               </div>
               <dl className="grid grid-cols-2 gap-x-6 gap-y-2 text-xs">
                 <div>
@@ -215,8 +215,8 @@ export function BookingDetailClient({
             {booking.blNumber && (
               <div className="border-t border-[var(--line-soft)] pt-3">
                 <div className="mb-2 font-mono text-[10px] tracking-wider text-ink-4 uppercase">
-                  Documents
-                </div>
+                  {t('sectionDocuments')}
+</div>
                 <dl className="grid grid-cols-2 gap-x-6 gap-y-2 text-xs">
                   <div>
                     <dt className="text-ink-3">{t('blNumber')}</dt>
