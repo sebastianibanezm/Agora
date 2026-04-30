@@ -250,7 +250,24 @@
     "documentNotReceived": "Not received",
     "documentValidating": "Validating",
     "documentValidated": "Validated",
-    "documentIssues": "Issues"
+    "documentIssues": "Issues",
+    "kanban": {
+      "viewBoard": "Board",
+      "viewList": "List",
+      "colSiInReview": "SI in Review",
+      "colReadyToSend": "Ready to Send",
+      "colAwaitingDraftBl": "Awaiting Draft BL",
+      "colReadyToRelease": "Ready to Release",
+      "filterUrgentOnly": "Show urgent only",
+      "cardIssues": "{n, plural, one {# issue} other {# issues}}",
+      "cardEsiSent": "e-SI sent {when}",
+      "cardDraftBlReceived": "Draft BL received",
+      "cardBlReady": "BL clean · ready",
+      "cardReleased": "✓ Released · {date}",
+      "cardClosed": "Closed · {date}",
+      "cardReadySince": "Ready {when}",
+      "emptyColumn": "No bookings"
+    }
   },
   "siViewer": {
     "viewerTitle": "Document",
