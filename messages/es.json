@@ -321,6 +321,7 @@
     "contact": "Contacto",
     "viewProfile": "Ver perfil →",
     "activeBookings": "Bookings activos",
+    "noActiveBookings": "Sin bookings activos.",
     "recentBookings": "Bookings recientes (30d)",
     "siQuality": "Calidad SI · últimos 90d",
     "noRecentBookings": "Sin bookings en los últimos 30 días."

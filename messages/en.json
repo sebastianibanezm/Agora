@@ -321,6 +321,7 @@
     "contact": "Contact",
     "viewProfile": "View profile →",
     "activeBookings": "Active bookings",
+    "noActiveBookings": "No active bookings.",
     "recentBookings": "Recent bookings (last 30d)",
     "siQuality": "SI quality · last 90d",
     "noRecentBookings": "No bookings in the last 30 days."
