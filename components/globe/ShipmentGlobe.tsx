@@ -13,6 +13,7 @@ import { useTranslations } from 'next-intl';
 import type { GlobeMethods } from 'react-globe.gl';
 import type { Booking } from '@/types';
 import { LIFECYCLE_COLORS } from '@/components/bookings/LifecyclePill';
+import * as THREE from 'three';
 
 // Lazy-load react-globe.gl client-side only.
 const Globe = dynamic(() => import('react-globe.gl').then((m) => m.default), {
@@ -31,6 +32,73 @@ interface ArcDatum {
   bookings: Booking[];
   laneKey: string;
   primaryBookingId: string;
+}
+
+const toRad = (d: number) => (d * Math.PI) / 180;
+
+/** Expects 6-digit hex (#rrggbb). */
+function hexToRgba(hex: string, alpha: number): string {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
+function slerpLatLng(
+  lat1: number, lng1: number,
+  lat2: number, lng2: number,
+  t: number,
+): { lat: number; lng: number } {
+  const toDeg = (r: number) => (r * 180) / Math.PI;
+  const φ1 = toRad(lat1), λ1 = toRad(lng1);
+  const φ2 = toRad(lat2), λ2 = toRad(lng2);
+  const [x1, y1, z1] = [Math.cos(φ1) * Math.cos(λ1), Math.cos(φ1) * Math.sin(λ1), Math.sin(φ1)];
+  const [x2, y2, z2] = [Math.cos(φ2) * Math.cos(λ2), Math.cos(φ2) * Math.sin(λ2), Math.sin(φ2)];
+  const dot = Math.min(1, Math.max(-1, x1 * x2 + y1 * y2 + z1 * z2));
+  const Ω = Math.acos(dot);
+  if (Ω < 1e-10) return { lat: lat1, lng: lng1 };
+  const sinΩ = Math.sin(Ω);
+  const s1 = Math.sin((1 - t) * Ω) / sinΩ;
+  const s2 = Math.sin(t * Ω) / sinΩ;
+  const xi = s1 * x1 + s2 * x2;
+  const yi = s1 * y1 + s2 * y2;
+  const zi = s1 * z1 + s2 * z2;
+  return {
+    lat: toDeg(Math.atan2(zi, Math.sqrt(xi * xi + yi * yi))),
+    lng: toDeg(Math.atan2(yi, xi)),
+  };
+}
+
+// Scales orb altitude to match react-globe.gl's arcAltitudeAutoScale behavior.
+function greatCircleRad(lat1: number, lng1: number, lat2: number, lng2: number): number {
+  const φ1 = toRad(lat1), φ2 = toRad(lat2);
+  const Δφ = φ2 - φ1, Δλ = toRad(lng2 - lng1);
+  const a = Math.sin(Δφ / 2) ** 2 + Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) ** 2;
+  return 2 * Math.asin(Math.sqrt(a));
+}
+
+function createOrbGroup(color: string): THREE.Group {
+  const baseColor = new THREE.Color(color);
+  const group = new THREE.Group();
+  const glowLayers: Array<{ r: number; opacity: number }> = [
+    { r: 0.65, opacity: 0.07 },
+    { r: 0.42, opacity: 0.18 },
+    { r: 0.25, opacity: 0.48 },
+  ];
+  for (const { r, opacity } of glowLayers) {
+    const mat = new THREE.MeshBasicMaterial({
+      color: baseColor,
+      transparent: true,
+      opacity,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    });
+    group.add(new THREE.Mesh(new THREE.SphereGeometry(r, 8, 8), mat));
+  }
+  const coreColor = baseColor.clone().lerp(new THREE.Color(0xffffff), 0.45);
+  const coreMat = new THREE.MeshBasicMaterial({ color: coreColor, depthWrite: false });
+  group.add(new THREE.Mesh(new THREE.SphereGeometry(0.11, 12, 12), coreMat));
+  return group;
 }
 
 const ACTIVE_STATUSES = new Set([
