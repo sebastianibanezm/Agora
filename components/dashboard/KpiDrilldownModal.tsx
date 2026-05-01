@@ -57,7 +57,7 @@ export function KpiDrilldownModal({ open, onClose, title, rows }: Props) {
       <DialogContent className="max-w-lg p-0 flex flex-col max-h-[72vh] overflow-hidden">
 
         {/* ── Header ─────────────────────────────────────────────────── */}
-        <DialogHeader className="shrink-0 px-5 pt-5 pb-4">
+        <DialogHeader className="shrink-0 px-5 pt-8 pb-4">
           <div className="flex items-end justify-between gap-3">
             <DialogTitle className="font-display text-xl italic text-ink-1 leading-none tracking-[-0.01em]">
               {title}
