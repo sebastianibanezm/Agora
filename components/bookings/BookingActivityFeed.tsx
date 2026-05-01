@@ -26,6 +26,8 @@ const TYPE_COLORS: Record<ActivityEvent['type'], string> = {
   alert_dismissed: 'bg-ink-3',
   note_added: 'bg-ink-3',
   manual_override: 'bg-severity-watch',
+  document_replaced: 'bg-trace',
+  document_deleted: 'bg-severity-watch',
 };
 
 const FILTER_IDS = ['all', 'agent', 'system', 'user'] as const;
@@ -53,6 +55,8 @@ export function BookingActivityFeed({ events }: { events: ActivityEvent[] }) {
     alert_dismissed: t('activityType_alert_dismissed'),
     note_added: t('activityType_note_added'),
     manual_override: t('activityType_manual_override'),
+    document_replaced: t('activityType_document_replaced'),
+    document_deleted: t('activityType_document_deleted'),
   };
 
   const FILTER_LABELS: Record<typeof FILTER_IDS[number], string> = {

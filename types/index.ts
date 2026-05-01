@@ -127,6 +127,15 @@ export interface Booking {
   createdAt: string;
   alertIds: string[];
   costAtRiskUsd: number;
+
+  // Extended fields (booking detail redesign)
+  diasLibresOrigen?: number;
+  masterBl?: string;
+  blInterglobo?: string;
+  scacNaviera?: string;
+  scacInterglobo?: string;
+  depositoRetiro?: string;
+  destinoUsa?: boolean;
 }
 
 // ----------------------------------------------------------------------------
@@ -253,6 +262,19 @@ export interface DraftBL {
 }
 
 // ----------------------------------------------------------------------------
+// Exporter BL - uploaded by the agent post-release, validated for accuracy.
+// ----------------------------------------------------------------------------
+export interface ExporterBL {
+  id: string;
+  bookingId: string;
+  status: 'pending' | 'uploaded' | 'approved';
+  uploadedAt?: string;
+  fileUrl?: string;
+  extractedFields?: Record<string, string>;
+  validationResults?: ValidationCheck[];
+}
+
+// ----------------------------------------------------------------------------
 // Validation
 // ----------------------------------------------------------------------------
 export interface ValidationCheck {
@@ -336,11 +358,14 @@ export type ActivityEventType =
   | 'alert_fired'
   | 'alert_dismissed'
   | 'note_added'
-  | 'manual_override';
+  | 'manual_override'
+  | 'document_replaced'
+  | 'document_deleted';
 
 export interface ActivityEvent {
   id: string;
   bookingId: string;
+  documentId?: string;
   type: ActivityEventType;
   timestamp: string;
   actor: 'agent' | 'user' | 'system';
