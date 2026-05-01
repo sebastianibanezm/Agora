@@ -29,7 +29,7 @@ No shader changes. No new materials. No lighting changes. The existing raking `r
 | Specular map | `https://unpkg.com/three-globe/example/img/earth-water.png` |
 | Normal map | `https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/waternormals.jpg` |
 
-Both are loaded via `THREE.TextureLoader` in the same lazy-init block where `earth-day.jpg` and `earth-topology.png` are already loaded.
+Both are loaded via `THREE.TextureLoader` in the same lazy-init block where `earth-day.jpg` and `earth-topology.png` are already loaded. Each loader callback must assign the texture to the material property and set `mat.needsUpdate = true`, consistent with the existing pattern.
 
 ---
 
@@ -55,9 +55,15 @@ Normal map deflections on land won't produce visible highlights because the spec
 
 The existing cleanup `useEffect` disposes `mat.map` and `mat.bumpMap`. It must be extended to also dispose `mat.specularMap` and `mat.normalMap` to prevent GPU memory leaks.
 
+The full updated disposal block (textures must be disposed before the material):
+
 ```ts
+mat?.map?.dispose();
+mat?.bumpMap?.dispose();
 mat?.specularMap?.dispose();
 mat?.normalMap?.dispose();
+mat?.dispose();
+globeMatRef.current = null;
 ```
 
 ---
