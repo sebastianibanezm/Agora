@@ -277,6 +277,8 @@ export function ShipmentGlobe({ bookings, height = 468, className, style, highli
       (tex) => { mat.map = tex; mat.needsUpdate = true; });
     loader.load('https://unpkg.com/three-globe/example/img/earth-topology.png',
       (tex) => { mat.bumpMap = tex; mat.bumpScale = 18; mat.needsUpdate = true; });
+    loader.load('https://unpkg.com/three-globe/example/img/earth-water.png',
+      (tex) => { mat.specularMap = tex; mat.needsUpdate = true; });
     globeMatRef.current = mat;
   }
 
