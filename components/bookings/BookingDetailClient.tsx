@@ -164,6 +164,7 @@ export function BookingDetailClient({
       size="sm"
       disabled={blHasFails || booking.status === 'bl_released'}
       onClick={handleReleaseBl}
+      className="border-ink-2/30 bg-ink-2/15 text-ink-2 hover:bg-ink-2/25"
     >
       {t('releaseBl')}
     </Button>

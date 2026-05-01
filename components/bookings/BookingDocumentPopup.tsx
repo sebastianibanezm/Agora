@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { X, AlertTriangle, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -59,6 +59,12 @@ export function BookingDocumentPopup({
   primaryAction,
 }: Props) {
   const t = useTranslations('bookings');
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = ''; };
+  }, []);
+
   const [showConfirm, setShowConfirm] = useState(false);
   const [replacing, setReplacing] = useState(false);
   const [replaceNotice, setReplaceNotice] = useState<'idle' | 'pending' | 'scanning'>('idle');
@@ -118,7 +124,7 @@ export function BookingDocumentPopup({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center bg-[rgba(43,31,18,0.45)] p-8 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-start justify-center bg-black/60 px-8 pt-20 pb-8 backdrop-blur-[2px]"
       onClick={handleBackdropClick}
     >
       <div className="relative flex w-full max-w-[900px] flex-col overflow-hidden rounded-xl border border-line-mid bg-bg-1 shadow-[0_24px_60px_rgba(43,31,18,0.22)] max-h-[calc(100vh-64px)]">
