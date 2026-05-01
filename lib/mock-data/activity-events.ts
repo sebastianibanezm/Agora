@@ -1,4 +1,5 @@
-import type { ActivityEvent } from '@/types';
+import type { ActivityEvent, BookingStatus } from '@/types';
+import { bookings } from './bookings';
 
 export const activityEvents: ActivityEvent[] = [
   // ============================================================
@@ -231,8 +232,79 @@ export const activityEvents: ActivityEvent[] = [
   },
 ];
 
+// Status transitions that imply prior activity events, newest first.
+const STATUS_EVENTS: Partial<Record<BookingStatus, Array<{ offset: number; type: ActivityEvent['type']; actor: ActivityEvent['actor']; description: string }>>> = {
+  awaiting_si: [
+    { offset: 0, type: 'booking_created', actor: 'system', description: 'Booking PDF uploaded and parsed. Awaiting Shipping Instruction from exporter.' },
+  ],
+  si_received: [
+    { offset: 60, type: 'si_received', actor: 'system', description: 'SI received via portal.' },
+    { offset: 0, type: 'booking_created', actor: 'system', description: 'Booking PDF uploaded and parsed.' },
+  ],
+  si_validated: [
+    { offset: 120, type: 'si_validation_passed', actor: 'agent', description: 'All SI checks passed.' },
+    { offset: 60, type: 'si_received', actor: 'system', description: 'SI received via portal.' },
+    { offset: 0, type: 'booking_created', actor: 'system', description: 'Booking PDF uploaded and parsed.' },
+  ],
+  si_failed: [
+    { offset: 90, type: 'si_validation_failed', actor: 'agent', description: 'SI validation failed — one or more checks did not pass.' },
+    { offset: 60, type: 'si_received', actor: 'system', description: 'SI received via portal.' },
+    { offset: 0, type: 'booking_created', actor: 'system', description: 'Booking PDF uploaded and parsed.' },
+  ],
+  esi_sent: [
+    { offset: 180, type: 'esi_sent', actor: 'agent', description: 'e-SI transmitted to carrier via API.' },
+    { offset: 120, type: 'si_validation_passed', actor: 'agent', description: 'All SI checks passed.' },
+    { offset: 60, type: 'si_received', actor: 'system', description: 'SI received via portal.' },
+    { offset: 0, type: 'booking_created', actor: 'system', description: 'Booking PDF uploaded and parsed.' },
+  ],
+  draft_bl_received: [
+    { offset: 300, type: 'draft_bl_received', actor: 'system', description: 'Draft BL received from carrier.' },
+    { offset: 180, type: 'esi_sent', actor: 'agent', description: 'e-SI transmitted to carrier via API.' },
+    { offset: 60, type: 'si_received', actor: 'system', description: 'SI received via portal.' },
+    { offset: 0, type: 'booking_created', actor: 'system', description: 'Booking PDF uploaded and parsed.' },
+  ],
+  bl_validated: [
+    { offset: 360, type: 'draft_bl_validation_passed', actor: 'agent', description: 'All BL comparison checks passed.' },
+    { offset: 300, type: 'draft_bl_received', actor: 'system', description: 'Draft BL received from carrier.' },
+    { offset: 180, type: 'esi_sent', actor: 'agent', description: 'e-SI transmitted to carrier via API.' },
+    { offset: 60, type: 'si_received', actor: 'system', description: 'SI received via portal.' },
+    { offset: 0, type: 'booking_created', actor: 'system', description: 'Booking PDF uploaded and parsed.' },
+  ],
+  bl_released: [
+    { offset: 420, type: 'bl_released_to_exporter', actor: 'user', description: 'BL released to exporter.' },
+    { offset: 360, type: 'draft_bl_validation_passed', actor: 'agent', description: 'All BL comparison checks passed.' },
+    { offset: 300, type: 'draft_bl_received', actor: 'system', description: 'Draft BL received from carrier.' },
+    { offset: 60, type: 'si_received', actor: 'system', description: 'SI received via portal.' },
+    { offset: 0, type: 'booking_created', actor: 'system', description: 'Booking PDF uploaded and parsed.' },
+  ],
+  closed: [
+    { offset: 500, type: 'bl_released_to_exporter', actor: 'user', description: 'BL released. Booking closed.' },
+    { offset: 360, type: 'draft_bl_validation_passed', actor: 'agent', description: 'All BL comparison checks passed.' },
+    { offset: 300, type: 'draft_bl_received', actor: 'system', description: 'Draft BL received from carrier.' },
+    { offset: 60, type: 'si_received', actor: 'system', description: 'SI received via portal.' },
+    { offset: 0, type: 'booking_created', actor: 'system', description: 'Booking PDF uploaded and parsed.' },
+  ],
+};
+
+function synthesizeEvents(bookingId: string): ActivityEvent[] {
+  const booking = bookings.find((b) => b.id === bookingId);
+  if (!booking) return [];
+  const templates = STATUS_EVENTS[booking.status] ?? [
+    { offset: 0, type: 'booking_created' as const, actor: 'system' as const, description: 'Booking PDF uploaded and parsed.' },
+  ];
+  const base = new Date(booking.createdAt).getTime();
+  return templates.map((tpl, i) => ({
+    id: `EVT-SYN-${bookingId}-${i}`,
+    bookingId,
+    type: tpl.type,
+    timestamp: new Date(base + tpl.offset * 60_000).toISOString(),
+    actor: tpl.actor,
+    description: tpl.description,
+  }));
+}
+
 export function getActivityForBooking(bookingId: string): ActivityEvent[] {
-  return activityEvents
-    .filter((e) => e.bookingId === bookingId)
-    .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+  const real = activityEvents.filter((e) => e.bookingId === bookingId);
+  const events = real.length > 0 ? real : synthesizeEvents(bookingId);
+  return events.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
 }
