@@ -54,7 +54,7 @@ export function KpiDrilldownModal({ open, onClose, title, rows }: Props) {
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="max-w-xl p-0 flex flex-col max-h-[72vh] overflow-hidden">
+      <DialogContent className="max-w-lg p-0 flex flex-col max-h-[72vh] overflow-hidden">
 
         {/* ── Header ─────────────────────────────────────────────────── */}
         <DialogHeader className="shrink-0 px-5 pt-5 pb-4">
