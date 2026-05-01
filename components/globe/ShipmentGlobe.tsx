@@ -105,9 +105,9 @@ function createHighlightOrbGroup(color: string): THREE.Group {
   const baseColor = new THREE.Color(color);
   const group = new THREE.Group();
   const glowLayers: Array<{ r: number; opacity: number }> = [
-    { r: 1.1,  opacity: 0.06 },
-    { r: 0.72, opacity: 0.16 },
-    { r: 0.42, opacity: 0.45 },
+    { r: 2.0,  opacity: 0.05 },
+    { r: 1.3,  opacity: 0.14 },
+    { r: 0.78, opacity: 0.42 },
   ];
   for (const { r, opacity } of glowLayers) {
     const mat = new THREE.MeshBasicMaterial({
@@ -121,7 +121,7 @@ function createHighlightOrbGroup(color: string): THREE.Group {
   }
   const coreColor = baseColor.clone().lerp(new THREE.Color(0xffffff), 0.55);
   const coreMat = new THREE.MeshBasicMaterial({ color: coreColor, depthWrite: false });
-  group.add(new THREE.Mesh(new THREE.SphereGeometry(0.18, 12, 12), coreMat));
+  group.add(new THREE.Mesh(new THREE.SphereGeometry(0.34, 12, 12), coreMat));
   return group;
 }
 
@@ -390,7 +390,7 @@ export function ShipmentGlobe({ bookings, height = 468, className, style, highli
         arcStroke={(d: object) => {
           const a = d as ArcDatum;
           if (!highlightedBooking) return 0.6;
-          return a.highlighted ? 1.4 : 0.4;
+          return a.highlighted ? 0.9 : 0.4;
         }}
         arcAltitudeAutoScale={0.4}
         arcLabel={(d: object) => {
