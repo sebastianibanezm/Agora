@@ -296,6 +296,8 @@ export function ShipmentGlobe({ bookings, height = 468, className, style, highli
     return () => {
       mat?.map?.dispose();
       mat?.bumpMap?.dispose();
+      mat?.specularMap?.dispose();
+      mat?.normalMap?.dispose();
       mat?.dispose();
       globeMatRef.current = null;
     };
