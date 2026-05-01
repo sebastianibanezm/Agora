@@ -289,7 +289,7 @@
       "colReadyToSend": "Listo para Enviar",
       "colAwaitingDraftBl": "Esperando Draft BL",
       "colReadyToRelease": "Listo para Liberar",
-      "filterUrgentOnly": "Solo urgentes",
+      "filterUrgentOnly": "Urgente",
       "cardIssues": "{n, plural, one {# problema} other {# problemas}}",
       "cardEsiSent": "e-SI enviado {when}",
       "cardDraftBlReceived": "BL borrador recibido",
