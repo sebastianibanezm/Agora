@@ -35,7 +35,10 @@ export function Sidebar() {
         expanded ? 'w-56' : 'w-14',
       )}
     >
-      <div className={clsx('flex h-14 items-center', expanded ? 'px-2' : 'justify-center px-0')}>
+      <Link
+        href="/"
+        className={clsx('flex w-full h-14 items-center', expanded ? 'px-2' : 'justify-center px-0')}
+      >
         <Image
           src="/agora-logo-lambda.png"
           alt="Agora"
@@ -49,7 +52,7 @@ export function Sidebar() {
             AGORA
           </span>
         )}
-      </div>
+      </Link>
       <nav className="flex flex-col gap-1 px-2 mt-[48px]">
         {NAV.map(({ href, key, Icon }) => {
           const active = pathname === href || (href !== '/' && pathname.startsWith(href));

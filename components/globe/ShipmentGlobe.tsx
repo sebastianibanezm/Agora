@@ -379,6 +379,10 @@ export function ShipmentGlobe({ bookings, height = 468, className, style, highli
         const arc = arcs.find((a) => a.laneKey === key);
         if (!obj || !arc || !globeRef.current) continue;
 
+        const isHighlightedLane = highlightedArcRef.current?.laneKey === key;
+        obj.visible = !isHighlightedLane;
+        if (isHighlightedLane) continue;
+
         const pos = orbPosition(arc, newT, globeRef.current);
         obj.position.set(pos.x, pos.y, pos.z);
       }
@@ -475,17 +479,6 @@ export function ShipmentGlobe({ bookings, height = 468, className, style, highli
       />
       </div>
 
-      {hovered && (
-        <div className="pointer-events-none absolute right-4 bottom-4 z-10 max-w-xs rounded-lg border border-[var(--line-soft)] bg-bg-2/95 p-3 text-xs shadow-lg backdrop-blur">
-          <div className="font-semibold text-ink-1">
-            {hovered.bookings[0]!.pol.split(',')[0]} → {hovered.bookings[0]!.pod.split(',')[0]}
-          </div>
-          <div className="mt-1 text-ink-3">
-            {hovered.bookings.length} booking{hovered.bookings.length === 1 ? '' : 's'}
-            {hovered.reefer && <span className="ml-2 rounded-sm bg-trace/15 px-1 text-trace">REEFER</span>}
-          </div>
-        </div>
-      )}
 
     </div>
   );
