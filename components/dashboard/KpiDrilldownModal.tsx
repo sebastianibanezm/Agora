@@ -70,8 +70,6 @@ export function KpiDrilldownModal({ open, onClose, title, rows }: Props) {
           </div>
         </DialogHeader>
 
-        <div className="mx-5 h-px bg-[var(--line-soft)] shrink-0" />
-
         {/* ── List ───────────────────────────────────────────────────── */}
         <div className="overflow-y-auto flex-1">
           {rows.length === 0 ? (
@@ -79,7 +77,7 @@ export function KpiDrilldownModal({ open, onClose, title, rows }: Props) {
               {tCommon('empty')}
             </div>
           ) : (
-            <ul className="divide-y divide-[var(--line-soft)]">
+            <ul className="flex flex-col gap-2 px-4 py-3">
               {rows.map(({ booking, exporter, naviera, alert }) => {
                 const borderClass = alert
                   ? ALERT_BORDER[alert.severity]
@@ -91,7 +89,7 @@ export function KpiDrilldownModal({ open, onClose, title, rows }: Props) {
                       href={`/bookings/${booking.id}`}
                       onClick={onClose}
                       className={clsx(
-                        'group flex items-center gap-3 border-l-2 px-4 py-3 transition-colors hover:bg-black/[0.025]',
+                        'group flex items-center gap-3 border-l-2 rounded-r-lg border border-[var(--line-soft)] bg-bg-2 px-3 py-2.5 transition-colors hover:bg-bg-3',
                         borderClass,
                       )}
                     >
