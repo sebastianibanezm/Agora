@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, AlertTriangle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
@@ -33,9 +34,17 @@ export function BookingHeader({ booking, exporter, naviera }: Props) {
       {/* Metadata row */}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-2 text-xs text-ink-3">
-          {exporter && <><ExporterChip exporter={exporter} /><span>·</span></>}
-          {naviera && <><NavieraChip naviera={naviera} /><span>·</span></>}
-          <span className="text-ink-2">{booking.shipper} → {booking.consignee}</span>
+          {[
+            exporter && <ExporterChip key="exp" exporter={exporter} />,
+            naviera  && <NavieraChip  key="nav" naviera={naviera} />,
+          ]
+            .filter((el): el is React.ReactElement => Boolean(el))
+            .map((el, i, arr) => (
+              <Fragment key={el.key ?? i}>
+                {el}
+                {i < arr.length - 1 && <span>·</span>}
+              </Fragment>
+            ))}
         </div>
 
         {/* Urgency signals — right-aligned */}
