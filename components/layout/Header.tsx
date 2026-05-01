@@ -10,6 +10,7 @@ interface HeaderProps {
 }
 
 const USER_FIRST_NAME = 'Felipe';
+const COMPANY_NAME = 'InterGlobo';
 
 const SECTION_KEYS: Record<string, 'operations' | 'bookings' | 'exporters' | 'navieras' | 'performance' | 'settings'> = {
   bookings: 'bookings',
@@ -43,7 +44,7 @@ export function Header({ breadcrumb }: HeaderProps) {
         </div>
       ) : (
         <div className="flex items-baseline gap-1.5 font-mono text-xs tracking-wider mr-auto">
-          <span className="text-ink-3 uppercase">{sectionLabel}</span>
+          <span className="text-ink-3 uppercase">{COMPANY_NAME}</span>
           <span className="text-ink-4">/</span>
           <span className="text-ink-2 normal-case tracking-normal text-xs">
             {greeting}{' '}
