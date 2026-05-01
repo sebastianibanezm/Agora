@@ -30,6 +30,13 @@ const SEVERITY_BORDER: Record<AlertSeverity, string> = {
   info:     'border-l-ink-3',
 };
 
+const ALERT_ICON_COLOR: Record<AlertSeverity, string> = {
+  critical: 'text-severity-crit',
+  action:   'text-severity-watch',
+  watch:    'text-severity-info',
+  info:     'text-ink-3',
+};
+
 function resolveSeverity(booking: Booking, alert?: Alert, showCutoff?: boolean): AlertSeverity | null {
   if (alert) return alert.severity;
   if (showCutoff) return getCutoffSeverity(booking.cutOff ?? '');
@@ -99,7 +106,7 @@ export function BookingCard({
         <div className="mt-1.5 border-t border-[var(--line-soft)] pt-1.5 flex flex-col gap-1">
           {alert && (
             <div className="flex items-start gap-1.5 text-[10px]">
-              <AlertTriangle className="mt-px h-3 w-3 shrink-0 text-severity-watch" />
+              <AlertTriangle className={clsx('mt-px h-3 w-3 shrink-0', ALERT_ICON_COLOR[alert.severity])} />
               <span className="text-ink-2">
                 {locale === 'es' ? (alert.titleEs ?? alert.title) : alert.title}
               </span>

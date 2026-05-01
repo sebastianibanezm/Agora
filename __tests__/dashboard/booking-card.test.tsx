@@ -75,6 +75,13 @@ describe('BookingCard base', () => {
     wrap(<BookingCard booking={makeBooking({ isReefer: false })} exporter={mockExporter} naviera={mockNaviera} />);
     expect(screen.queryByText('❄')).not.toBeInTheDocument();
   });
+
+  it('applies hover style when isHovered', () => {
+    const { container } = wrap(
+      <BookingCard booking={makeBooking()} exporter={mockExporter} naviera={mockNaviera} isHovered />
+    );
+    expect(container.firstChild).toHaveClass('bg-bg-3');
+  });
 });
 
 describe('BookingCard cutoff slot', () => {
@@ -92,9 +99,11 @@ describe('BookingCard cutoff slot', () => {
 describe('BookingCard alert slot', () => {
   const mockAlert: Alert = {
     id: 'ALT-1', bookingId: 'BKG-1',
-    severity: 'critical', title: 'SI rejected', titleEs: 'SI rechazado',
+    severity: 'critical',
+    agentId: 'si_validator', agentName: 'SI Validator',
+    title: 'SI rejected', titleEs: 'SI rechazado',
+    message: 'SI was rejected',
     costAtRiskUsd: 4200, createdAt: '2026-04-30T10:00:00-04:00',
-    resolvedAt: null,
   };
 
   it('does not render alert when not provided', () => {
