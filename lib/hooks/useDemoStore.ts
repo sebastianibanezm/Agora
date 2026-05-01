@@ -94,3 +94,36 @@ export function applyBookingOverride(b: Booking): Booking {
   const patch = state.bookingOverrides[b.id];
   return patch ? { ...b, ...patch } : b;
 }
+
+export function updateBookingField(
+  bookingId: string,
+  field: keyof Booking,
+  value: unknown
+): void {
+  state.bookingOverrides[bookingId] = {
+    ...state.bookingOverrides[bookingId],
+    [field]: value,
+  };
+  emit();
+}
+
+export function deleteBookingDocument(
+  bookingId: string,
+  documentType: 'booking' | 'si' | 'bl' | 'exporterBl'
+): void {
+  const fieldMap: Record<typeof documentType, keyof Booking | null> = {
+    booking: 'bookingFileUrl',
+    si: 'siId',
+    bl: 'draftBlId',
+    exporterBl: null, // handled separately — no Booking field for ExporterBL
+  };
+  const field = fieldMap[documentType];
+
+  if (field) {
+    state.bookingOverrides[bookingId] = {
+      ...state.bookingOverrides[bookingId],
+      [field]: undefined,
+    };
+  }
+  emit();
+}
