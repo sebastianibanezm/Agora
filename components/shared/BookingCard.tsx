@@ -9,7 +9,7 @@ import { LifecyclePill } from '@/components/bookings/LifecyclePill';
 import { CutoffCountdown } from '@/components/bookings/CutoffCountdown';
 import { ExporterChip } from '@/components/shared/ExporterChip';
 import { NavieraChip } from '@/components/shared/NavieraChip';
-import { getCutoffSeverity } from '@/lib/utils/dates';
+import { getCutoffSeverity, formatShortDate } from '@/lib/utils/dates';
 
 export interface BookingCardProps {
   booking: Booking;
@@ -96,7 +96,7 @@ export function BookingCard({
             {booking.containerType}
           </span>
           <span className="font-mono text-[9.5px] text-ink-4">
-            ETD {booking.etd ? new Date(booking.etd).toLocaleDateString(locale === 'es' ? 'es-CL' : 'en-GB', { day: 'numeric', month: 'short' }) : '—'}
+            ETD {booking.etd ? formatShortDate(booking.etd, locale) : '—'}
           </span>
         </div>
       </div>
