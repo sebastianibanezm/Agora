@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useRef, useEffect } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import type {
   ActivityEvent,
@@ -70,6 +70,20 @@ export function BookingDetailClient({
   // Local events for demo actions (e.g. document_deleted). Prepended to server events.
   const [localEvents, setLocalEvents] = useState<ActivityEvent[]>([]);
   const allEvents = [...localEvents, ...events];
+
+  // Sync the activity log height to the info cards column height.
+  const infoCardsRef = useRef<HTMLDivElement>(null);
+  const [infoCardsHeight, setInfoCardsHeight] = useState<number | undefined>(undefined);
+  useEffect(() => {
+    const el = infoCardsRef.current;
+    if (!el) return;
+    const observer = new ResizeObserver((entries) => {
+      const entry = entries[0];
+      if (entry) setInfoCardsHeight(entry.contentRect.height);
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   const siHasFails = (si?.validationResults ?? []).some((c) => c.result === 'fail');
   const blHasFails = (bl?.validationResults ?? []).some((c) => c.result === 'fail');
@@ -196,15 +210,18 @@ export function BookingDetailClient({
           </div>
         )}
 
-        {/* Ruta y Horario — 2-column: info cards (left) + activity log (right) */}
-        <div className="grid grid-cols-1 items-stretch gap-3 lg:grid-cols-2">
-          {/* Left: 4 info cards */}
-          <div className="flex flex-col gap-2.5">
+        {/* Ruta y Horario — 2-column: info cards (left) + activity log (right, capped to left height) */}
+        <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
+          {/* Left: 4 info cards — measured via ref to sync right column height */}
+          <div ref={infoCardsRef} className="flex flex-col gap-2.5">
             <BookingInfoCards booking={booking} />
           </div>
 
-          {/* Right: Actividades log */}
-          <div className="flex h-full flex-col overflow-hidden rounded-lg border border-line-soft bg-bg-2">
+          {/* Right: Actividades log — height locked to left column, scrolls internally */}
+          <div
+            className="flex flex-col overflow-hidden rounded-lg border border-line-soft bg-bg-2"
+            style={infoCardsHeight !== undefined ? { height: infoCardsHeight } : undefined}
+          >
             <p className="flex-shrink-0 border-b border-line-soft px-[14px] py-[9px] font-mono text-[10px] uppercase tracking-widest text-ink-4">
               {t('sectionActividades')}
             </p>
