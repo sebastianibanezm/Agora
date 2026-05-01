@@ -49,6 +49,10 @@ export function BookingLifecycleStrip({ current, className }: Props) {
   const isFailed = current === 'si_failed';
 
   useEffect(() => {
+    if (currentStep === -1) {
+      setFillPct(0);
+      return;
+    }
     function update() {
       const dot = activeDotRef.current;
       const track = trackRef.current;
@@ -70,7 +74,7 @@ export function BookingLifecycleStrip({ current, className }: Props) {
       {/* Continuous track behind the dots */}
       <div
         ref={trackRef}
-        className="absolute left-0 right-0 top-[5px] h-[2px] rounded-sm bg-[var(--line-soft)]"
+        className="absolute left-0 right-0 top-[6px] h-[2px] rounded-sm bg-[var(--line-soft)]"
       >
         <div
           className={clsx(
