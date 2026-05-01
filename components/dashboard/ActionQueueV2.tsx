@@ -31,7 +31,7 @@ export function ActionQueueV2({ items }: Props) {
     if (children.length < VISIBLE_COUNT) return;
 
     const containerTop = listRef.current.getBoundingClientRect().top;
-    const nthBottom = children[VISIBLE_COUNT - 1].getBoundingClientRect().bottom;
+    const nthBottom = children[VISIBLE_COUNT - 1]!.getBoundingClientRect().bottom;
     const padding = parseFloat(getComputedStyle(listRef.current).paddingBottom);
 
     setMaxHeight(nthBottom - containerTop + padding);

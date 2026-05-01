@@ -8,6 +8,7 @@ import { getSIByBookingId } from '@/lib/mock-data/shipping-instructions';
 import { getDraftBlByBookingId } from '@/lib/mock-data/draft-bls';
 import { getAlertsByBookingId } from '@/lib/mock-data/alerts';
 import { getActivityForBooking } from '@/lib/mock-data/activity-events';
+import { getExporterBlByBookingId } from '@/lib/mock-data/exporter-bls';
 import { BookingDetailClient } from '@/components/bookings/BookingDetailClient';
 import { PageTransition } from '@/components/shared/PageTransition';
 
@@ -36,6 +37,7 @@ export default async function BookingDetailPage({ params }: Props) {
     const bl = getDraftBlByBookingId(id);
     const alerts = getAlertsByBookingId(id);
     const events = getActivityForBooking(id);
+    const exporterBl = getExporterBlByBookingId(id);
 
     return (
       <PageTransition>
@@ -48,6 +50,7 @@ export default async function BookingDetailPage({ params }: Props) {
           bl={bl}
           alerts={alerts}
           events={events}
+          exporterBl={exporterBl}
         />
       </PageTransition>
     );
