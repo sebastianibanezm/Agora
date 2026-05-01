@@ -29,7 +29,7 @@ export function Header({ breadcrumb }: HeaderProps) {
           <span className="text-ink-2">{breadcrumb.current}</span>
         </div>
       ) : (
-        <div className="flex items-center gap-1.5 font-mono text-xs tracking-wider mr-auto">
+        <div className="flex items-baseline gap-1.5 font-mono text-xs tracking-wider mr-auto">
           <span className="text-ink-3 uppercase">{t('nav.operations')}</span>
           <span className="text-ink-4">/</span>
           <span className="text-ink-2 normal-case tracking-normal text-xs">
