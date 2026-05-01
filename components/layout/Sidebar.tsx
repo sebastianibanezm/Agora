@@ -50,7 +50,7 @@ export function Sidebar() {
           </span>
         )}
       </div>
-      <nav className="flex flex-col gap-1 px-2 mt-10">
+      <nav className="flex flex-col gap-1 px-2 mt-[48px]">
         {NAV.map(({ href, key, Icon }) => {
           const active = pathname === href || (href !== '/' && pathname.startsWith(href));
           return (
