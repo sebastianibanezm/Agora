@@ -47,13 +47,15 @@ export default async function BookingsPage({ params }: Props) {
       const highestAlertSeverity = resolveHighestSeverity(bookingAlerts);
 
       const si = siByBookingId.get(booking.id);
-      const siFailedCheckCount = si
-        ? si.validationResults.filter((c) => c.result === 'fail').length
-        : 0;
+      const siFailedChecks = si
+        ? si.validationResults.filter((c) => c.result === 'fail')
+        : [];
+      const siFailedCheckCount = siFailedChecks.length;
+      const siFailedCheckNames = siFailedChecks.map((c) => c.checkName);
       const esiTransmittedAt = si?.esiTransmittedAt ?? null;
       const siReceivedAt = si?.receivedAt ?? null;
 
-      return { booking, exporter, naviera, alertCount, highestAlertSeverity, siFailedCheckCount, esiTransmittedAt, siReceivedAt };
+      return { booking, exporter, naviera, alertCount, highestAlertSeverity, siFailedCheckCount, siFailedCheckNames, esiTransmittedAt, siReceivedAt };
     })
     .filter(Boolean) as Array<{
       booking: typeof bookings[number];
@@ -62,6 +64,7 @@ export default async function BookingsPage({ params }: Props) {
       alertCount: number;
       highestAlertSeverity: AlertSeverity | null;
       siFailedCheckCount: number;
+      siFailedCheckNames: string[];
       esiTransmittedAt: string | null;
       siReceivedAt: string | null;
     }>;

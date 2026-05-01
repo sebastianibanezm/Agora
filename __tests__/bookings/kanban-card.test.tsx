@@ -42,6 +42,7 @@ function makeBooking(overrides: Partial<Booking> = {}): Booking {
 function makeRow(bookingOverrides: Partial<Booking> = {}, extras: {
   highestAlertSeverity?: AlertSeverity | null;
   siFailedCheckCount?: number;
+  siFailedCheckNames?: string[];
   esiTransmittedAt?: string | null;
   siReceivedAt?: string | null;
 } = {}) {
@@ -52,6 +53,7 @@ function makeRow(bookingOverrides: Partial<Booking> = {}, extras: {
     alertCount: extras.highestAlertSeverity ? 1 : 0,
     highestAlertSeverity: extras.highestAlertSeverity ?? null,
     siFailedCheckCount: extras.siFailedCheckCount ?? 0,
+    siFailedCheckNames: extras.siFailedCheckNames ?? [],
     esiTransmittedAt: extras.esiTransmittedAt ?? null,
     siReceivedAt: extras.siReceivedAt ?? null,
   };

@@ -12,6 +12,7 @@ import { NavieraChip } from '@/components/shared/NavieraChip';
 import { formatDate } from '@/lib/utils/dates';
 import { Snowflake, AlertTriangle, ChevronDown } from 'lucide-react';
 import clsx from 'clsx';
+import { getPodFlag } from '@/lib/utils/flags';
 
 export interface ListRow {
   booking: Booking;
@@ -20,6 +21,7 @@ export interface ListRow {
   alertCount: number;
   highestAlertSeverity: AlertSeverity | null;
   siFailedCheckCount: number;
+  siFailedCheckNames: string[];
   esiTransmittedAt: string | null;
   siReceivedAt: string | null;
 }
@@ -40,10 +42,10 @@ const GROUPS: GroupDef[] = [
   { key: 'awaiting_si',      statuses: ['created', 'awaiting_si'],         dotClass: 'bg-severity-watch', titleKey: 'awaiting_si',       titleNs: 'lifecycle' },
   { key: 'si_in_review',     statuses: ['si_received'],                     dotClass: 'bg-severity-info',  titleKey: 'colSiInReview',     titleNs: 'bookings.kanban' },
   { key: 'si_failed',        statuses: ['si_failed'],                       dotClass: 'bg-severity-crit',  titleKey: 'si_failed',         titleNs: 'lifecycle' },
-  { key: 'ready_to_send',    statuses: ['si_validated'],                    dotClass: 'bg-mint-500',       titleKey: 'colReadyToSend',    titleNs: 'bookings.kanban' },
+  { key: 'ready_to_send',    statuses: ['si_validated'],                    dotClass: 'bg-severity-ok',       titleKey: 'colReadyToSend',    titleNs: 'bookings.kanban' },
   { key: 'awaiting_dbl',     statuses: ['esi_sent', 'draft_bl_received'],   dotClass: 'bg-trace',          titleKey: 'colAwaitingDraftBl', titleNs: 'bookings.kanban' },
-  { key: 'ready_to_release', statuses: ['bl_validated'],                    dotClass: 'bg-mint-500',       titleKey: 'colReadyToRelease', titleNs: 'bookings.kanban' },
-  { key: 'released',         statuses: ['bl_released', 'closed'],           dotClass: 'bg-ink-4',          titleKey: 'bl_released',       titleNs: 'lifecycle' },
+  { key: 'ready_to_release', statuses: ['bl_validated'],                    dotClass: 'bg-severity-ok',       titleKey: 'colReadyToRelease', titleNs: 'bookings.kanban' },
+  { key: 'released',         statuses: ['bl_released', 'closed'],           dotClass: 'bg-severity-ok',       titleKey: 'bl_released',       titleNs: 'lifecycle' },
 ];
 
 const COL_SPAN = 10;
@@ -54,8 +56,6 @@ export function BookingsListClient({ rows }: Props) {
   const tLifecycle = useTranslations('lifecycle');
   const locale = useLocale() as 'es' | 'en';
   const router = useRouter();
-  const [density, setDensity] = useState<'compact' | 'comfortable'>('compact');
-
   // groups with rows are open by default; empty groups start collapsed
   const emptyGroupKeys = new Set(
     GROUPS.filter((g) => !rows.some((r) => g.statuses.includes(r.booking.status))).map((g) => g.key),
@@ -76,27 +76,9 @@ export function BookingsListClient({ rows }: Props) {
 
   return (
     <div className="flex flex-col gap-2">
-      {/* density toggle */}
-      <div className="flex justify-end">
-        <div className="flex items-center gap-1 rounded-md border border-[var(--line-soft)] bg-bg-1 p-0.5">
-          <button
-            onClick={() => setDensity('compact')}
-            className={clsx('rounded px-2 py-1 text-[10px] font-mono uppercase tracking-wider', density === 'compact' ? 'bg-bg-2 text-ink-1' : 'text-ink-3')}
-          >
-            {t('densityCompact')}
-          </button>
-          <button
-            onClick={() => setDensity('comfortable')}
-            className={clsx('rounded px-2 py-1 text-[10px] font-mono uppercase tracking-wider', density === 'comfortable' ? 'bg-bg-2 text-ink-1' : 'text-ink-3')}
-          >
-            {t('densityComfortable')}
-          </button>
-        </div>
-      </div>
-
       {/* grouped table */}
       <div className="rounded-xl border border-[var(--line-soft)] bg-bg-1 overflow-hidden">
-        <table className={clsx('w-full', density === 'compact' ? 'text-xs' : 'text-sm')}>
+        <table className="w-full text-xs">
           <thead>
             <tr className="border-b border-[var(--line-soft)] text-left font-mono text-[9.5px] tracking-wider text-ink-3 uppercase">
               <th className="px-3 py-2 font-normal">{t('colNumber')}</th>
@@ -141,13 +123,14 @@ export function BookingsListClient({ rows }: Props) {
                   </tr>
 
                   {/* group rows */}
-                  {!collapsed && groupRows.map(({ booking, exporter, naviera, alertCount }) => (
+                  {!collapsed && groupRows.map(({ booking, exporter, naviera, alertCount }) => {
+                    const flag = getPodFlag(booking.pod);
+                    return (
                     <tr
                       key={booking.id}
                       onClick={() => router.push(`/bookings/${booking.id}`)}
                       className={clsx(
-                        'cursor-pointer border-b border-[var(--line-soft)] last:border-b-0 hover:bg-white/5',
-                        density === 'compact' ? '[&>td]:py-1.5' : '[&>td]:py-2.5',
+                        'cursor-pointer border-b border-[var(--line-soft)] last:border-b-0 hover:bg-white/5 [&>td]:py-1.5',
                       )}
                     >
                       <td className="px-3">
@@ -156,6 +139,7 @@ export function BookingsListClient({ rows }: Props) {
                           className="inline-flex items-center gap-1.5 font-mono text-ink-1 hover:underline"
                         >
                           {booking.bookingNumber}
+                          {flag && <span className="text-[11px] leading-none not-italic">{flag}</span>}
                           {booking.isReefer && <Snowflake className="h-3 w-3 text-trace" />}
                         </Link>
                       </td>
@@ -180,7 +164,7 @@ export function BookingsListClient({ rows }: Props) {
                         {booking.costAtRiskUsd > 0 ? booking.costAtRiskUsd.toLocaleString('en-US') : '—'}
                       </td>
                     </tr>
-                  ))}
+                  ); })}
                 </Fragment>
               );
             })}

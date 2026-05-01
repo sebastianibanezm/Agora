@@ -16,7 +16,7 @@ export function ExporterChip({ exporter, size = 'sm', asLink = true, className }
   const inner = (
     <span
       className={clsx(
-        'inline-flex items-center gap-1.5 rounded-md border border-[var(--line-soft)] bg-bg-2 text-ink-2',
+        'inline-flex min-w-0 items-center gap-1.5 rounded-md border border-[var(--line-soft)] bg-bg-2 text-ink-2',
         size === 'sm' ? 'px-1.5 py-0.5 text-[11px]' : 'px-2 py-1 text-xs',
         asLink && 'transition-colors hover:border-[var(--line-mid)] hover:text-ink-1',
         className,

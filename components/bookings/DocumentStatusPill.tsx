@@ -6,7 +6,7 @@ import clsx from 'clsx';
 const STYLE_MAP: Record<ValidationStatus | 'missing', { bg: string; fg: string; Icon: typeof CheckCircle2 }> = {
   missing: { bg: 'bg-ink-3/15', fg: 'text-ink-3', Icon: AlertCircle },
   pending: { bg: 'bg-severity-info/15', fg: 'text-severity-info', Icon: Loader2 },
-  green: { bg: 'bg-mint-500/15', fg: 'text-mint-500', Icon: CheckCircle2 },
+  green: { bg: 'bg-severity-ok/15', fg: 'text-severity-ok', Icon: CheckCircle2 },
   failed: { bg: 'bg-severity-crit/15', fg: 'text-severity-crit', Icon: AlertCircle },
 };
 

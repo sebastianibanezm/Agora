@@ -1,19 +1,11 @@
 'use client';
 
-import Link from 'next/link';
+import type { ReactNode } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import type { Booking, AlertSeverity, Exporter, Naviera } from '@/types';
-import { NavieraChip } from '@/components/shared/NavieraChip';
+import { BookingCard } from '@/components/shared/BookingCard';
 import { CutoffCountdown } from '@/components/bookings/CutoffCountdown';
 import { formatElapsedSince, formatShortDate } from '@/lib/utils/dates';
-import clsx from 'clsx';
-
-const SEVERITY_STRIP: Record<AlertSeverity, string> = {
-  critical: 'bg-severity-crit',
-  action:   'bg-severity-risk',
-  watch:    'bg-severity-watch',
-  info:     'bg-severity-info',
-};
 
 export interface KanbanRow {
   booking: Booking;
@@ -22,6 +14,7 @@ export interface KanbanRow {
   alertCount: number;
   highestAlertSeverity: AlertSeverity | null;
   siFailedCheckCount: number;
+  siFailedCheckNames: string[];
   esiTransmittedAt: string | null;
   siReceivedAt: string | null;
 }
@@ -31,92 +24,56 @@ interface Props {
 }
 
 export function KanbanCard({ row }: Props) {
-  const { booking, exporter, naviera, highestAlertSeverity, siFailedCheckCount, esiTransmittedAt, siReceivedAt } = row;
+  const { booking, exporter, naviera, highestAlertSeverity, siFailedCheckCount, siFailedCheckNames, esiTransmittedAt, siReceivedAt } = row;
   const t = useTranslations('bookings.kanban');
+  const tCutoff = useTranslations('dashboard');
   const locale = useLocale() as 'es' | 'en';
 
-  const pol = booking.pol.split(',')[0];
-  const pod = booking.pod.split(',')[0];
+  const metric = getMetric({ booking, siFailedCheckCount, siFailedCheckNames, esiTransmittedAt, siReceivedAt, locale, t, tCutoff });
 
   return (
-    <Link
-      href={`/bookings/${booking.id}`}
-      className="group block relative rounded-lg border border-[var(--line-soft)] bg-bg-2 px-2 pb-2 pt-2 pl-[11px] transition-colors hover:border-white/15 hover:bg-bg-3 overflow-hidden"
-    >
-      {/* severity strip */}
-      {highestAlertSeverity && (
-        <span
-          data-severity={highestAlertSeverity}
-          className={clsx(
-            'absolute left-0 top-0 bottom-0 w-[3px] rounded-l-lg',
-            SEVERITY_STRIP[highestAlertSeverity],
-          )}
-        />
-      )}
-
-      {/* row 1: booking number + naviera */}
-      <div className="flex items-center justify-between gap-1">
-        <span className="font-mono text-[11px] font-semibold text-ink-1">
-          {booking.bookingNumber}
-        </span>
-        <NavieraChip naviera={naviera} size="sm" asLink={false} />
-      </div>
-
-      {/* row 2: exporter + container type + reefer */}
-      <div className="mt-1 flex items-center justify-between gap-1">
-        <span className="max-w-[110px] truncate text-[11px] text-ink-2">
-          {exporter.name}
-        </span>
-        <div className="flex items-center gap-1">
-          <span className="rounded border border-[var(--line-soft)] bg-bg-1 px-[5px] py-px font-mono text-[9.5px] text-ink-3">
-            {booking.containerType}
-          </span>
-          {booking.isReefer && (
-            <span data-testid="reefer-icon" className="text-[11px] text-trace">❄</span>
-          )}
-        </div>
-      </div>
-
-      {/* row 3: lane + column metric */}
-      <div className="mt-[5px] flex items-center justify-between gap-1">
-        <span className="text-[10px] text-ink-3">
-          {pol} → {pod}
-        </span>
-        <CardMetric
-          booking={booking}
-          siFailedCheckCount={siFailedCheckCount}
-          esiTransmittedAt={esiTransmittedAt}
-          siReceivedAt={siReceivedAt}
-          locale={locale}
-          t={t}
-        />
-      </div>
-    </Link>
+    <BookingCard
+      booking={booking}
+      exporter={exporter}
+      naviera={naviera}
+      severity={highestAlertSeverity ?? undefined}
+      metric={metric}
+    />
   );
 }
 
 // ── Column metric ─────────────────────────────────────────────────────────────
 
-type TFn = ReturnType<typeof useTranslations<'bookings.kanban'>>;
+type TKanban = ReturnType<typeof useTranslations<'bookings.kanban'>>;
+type TDash = ReturnType<typeof useTranslations<'dashboard'>>;
 
-function CardMetric({ booking, siFailedCheckCount, esiTransmittedAt, siReceivedAt, locale, t }: {
+function getMetric({ booking, siFailedCheckCount, siFailedCheckNames, esiTransmittedAt, siReceivedAt, locale, t, tCutoff }: {
   booking: Booking;
   siFailedCheckCount: number;
+  siFailedCheckNames: string[];
   esiTransmittedAt: string | null;
   siReceivedAt: string | null;
   locale: 'es' | 'en';
-  t: TFn;
-}) {
-  const status = booking.status;
+  t: TKanban;
+  tCutoff: TDash;
+}): ReactNode {
+  const { status } = booking;
 
   if (status === 'awaiting_si' || status === 'created' || status === 'si_received') {
-    return <CutoffCountdown cutoffIso={booking.cutOff ?? ''} />;
+    return (
+      <div className="flex items-center justify-between">
+        <span className="text-[9px] text-ink-4">{tCutoff('cutoff')}</span>
+        <CutoffCountdown cutoffIso={booking.cutOff ?? ''} />
+      </div>
+    );
   }
 
   if (status === 'si_failed') {
     return (
-      <span className="font-mono text-[10px] text-severity-crit">
-        {t('cardIssues', { n: siFailedCheckCount })}
+      <span className="text-[10px] text-severity-crit">
+        {siFailedCheckCount === 1
+          ? siFailedCheckNames[0]
+          : t('cardIssues', { n: siFailedCheckCount })}
       </span>
     );
   }
@@ -173,6 +130,5 @@ function CardMetric({ booking, siFailedCheckCount, esiTransmittedAt, siReceivedA
     );
   }
 
-  // cancelled bookings are filtered at page.tsx before reaching the board
   return null;
 }

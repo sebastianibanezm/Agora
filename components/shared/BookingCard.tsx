@@ -1,5 +1,6 @@
 'use client';
 
+import type { ReactNode } from 'react';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { ChevronRight, AlertTriangle } from 'lucide-react';
@@ -10,6 +11,7 @@ import { CutoffCountdown } from '@/components/bookings/CutoffCountdown';
 import { ExporterChip } from '@/components/shared/ExporterChip';
 import { NavieraChip } from '@/components/shared/NavieraChip';
 import { getCutoffSeverity, formatShortDate } from '@/lib/utils/dates';
+import { getPodFlag } from '@/lib/utils/flags';
 
 export interface BookingCardProps {
   booking: Booking;
@@ -18,6 +20,8 @@ export interface BookingCardProps {
   alert?: Alert;
   showCutoff?: boolean;
   showChevron?: boolean;
+  severity?: AlertSeverity;
+  metric?: ReactNode;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
   isHovered?: boolean;
@@ -37,7 +41,8 @@ const ALERT_ICON_COLOR: Record<AlertSeverity, string> = {
   info:     'text-ink-3',
 };
 
-function resolveSeverity(booking: Booking, alert?: Alert, showCutoff?: boolean): AlertSeverity | null {
+function resolveSeverity(booking: Booking, alert?: Alert, showCutoff?: boolean, severity?: AlertSeverity): AlertSeverity | null {
+  if (severity) return severity;
   if (alert) return alert.severity;
   if (showCutoff) return getCutoffSeverity(booking.cutOff ?? '');
   return null;
@@ -46,13 +51,15 @@ function resolveSeverity(booking: Booking, alert?: Alert, showCutoff?: boolean):
 export function BookingCard({
   booking, exporter, naviera,
   alert, showCutoff, showChevron,
+  severity: severityProp, metric,
   onMouseEnter, onMouseLeave, isHovered,
 }: BookingCardProps) {
   const t = useTranslations('dashboard');
   const locale = useLocale() as 'es' | 'en';
 
-  const severity = resolveSeverity(booking, alert, showCutoff);
-  const hasExtra = !!alert || !!showCutoff;
+  const severity = resolveSeverity(booking, alert, showCutoff, severityProp);
+  const hasExtra = !!alert || !!showCutoff || !!metric;
+  const flag = getPodFlag(booking.pod);
 
   const pol = booking.pol.split(',')[0];
   const pod = booking.pod.split(',')[0];
@@ -72,9 +79,12 @@ export function BookingCard({
     >
       {/* Row 1 */}
       <div className="flex items-center justify-between gap-2">
-        <span className="font-mono text-[11px] font-semibold text-ink-1">
-          {booking.bookingNumber}
-        </span>
+        <div className="flex items-center gap-1">
+          <span className="font-mono text-[11px] font-semibold text-ink-1">
+            {booking.bookingNumber}
+          </span>
+          {flag && <span className="text-[11px] leading-none">{flag}</span>}
+        </div>
         <div className="flex items-center gap-1.5">
           <NavieraChip naviera={naviera} size="sm" asLink={false} />
           {showChevron && <ChevronRight className="h-3.5 w-3.5 text-ink-3" />}
@@ -82,14 +92,16 @@ export function BookingCard({
       </div>
 
       {/* Row 2 */}
-      <div className="mt-1 flex items-center justify-between gap-2">
-        <span className="text-[10px] text-ink-3">{pol} → {pod}</span>
-        <LifecyclePill status={booking.status} size="sm" />
+      <div className="mt-1 flex items-center justify-between gap-2 min-w-0">
+        <span className="truncate text-[10px] text-ink-3">{pol} → {pod}</span>
+        <LifecyclePill status={booking.status} size="sm" className="shrink-0" />
       </div>
 
       {/* Row 3 */}
-      <div className="mt-1 flex items-center justify-between gap-2">
-        <ExporterChip exporter={exporter} size="sm" asLink={false} />
+      <div className="mt-1 flex items-center justify-between gap-2 min-w-0">
+        <div className="min-w-0 shrink">
+          <ExporterChip exporter={exporter} size="sm" asLink={false} className="max-w-full" />
+        </div>
         <div className="flex items-center gap-1.5 shrink-0">
           {booking.isReefer && <span className="text-[10px] text-trace">❄</span>}
           <span className="rounded border border-[var(--line-soft)] bg-bg-1 px-[5px] py-px font-mono text-[9px] text-ink-3">
@@ -123,6 +135,7 @@ export function BookingCard({
               <CutoffCountdown cutoffIso={booking.cutOff ?? ''} />
             </div>
           )}
+          {metric}
         </div>
       )}
     </Link>

@@ -31,7 +31,7 @@ function makeRow(status: Booking['status'], num: string) {
     stackingTo: '2026-05-01T00:00:00Z', status, createdAt: '2026-04-20T00:00:00Z',
     alertIds: [], costAtRiskUsd: 0,
   };
-  return { booking, exporter, naviera, alertCount: 0, highestAlertSeverity: null, siFailedCheckCount: 0, esiTransmittedAt: null, siReceivedAt: null };
+  return { booking, exporter, naviera, alertCount: 0, highestAlertSeverity: null, siFailedCheckCount: 0, siFailedCheckNames: [], esiTransmittedAt: null, siReceivedAt: null };
 }
 
 function renderBoard(rows: ReturnType<typeof makeRow>[]) {

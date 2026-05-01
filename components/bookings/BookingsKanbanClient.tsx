@@ -22,10 +22,10 @@ const COLUMNS: ColumnDef[] = [
   { key: 'awaiting_si',      statuses: ['created', 'awaiting_si'],              dotClass: 'bg-severity-watch', titleKey: 'awaiting_si',      titleNs: 'lifecycle' },
   { key: 'si_in_review',     statuses: ['si_received'],                          dotClass: 'bg-severity-info',  titleKey: 'colSiInReview',    titleNs: 'bookings.kanban' },
   { key: 'si_failed',        statuses: ['si_failed'],                            dotClass: 'bg-severity-crit',  titleKey: 'si_failed',        titleNs: 'lifecycle' },
-  { key: 'ready_to_send',    statuses: ['si_validated'],                         dotClass: 'bg-mint-500',       titleKey: 'colReadyToSend',   titleNs: 'bookings.kanban' },
+  { key: 'ready_to_send',    statuses: ['si_validated'],                         dotClass: 'bg-severity-ok',       titleKey: 'colReadyToSend',   titleNs: 'bookings.kanban' },
   { key: 'awaiting_dbl',     statuses: ['esi_sent', 'draft_bl_received'],        dotClass: 'bg-trace',          titleKey: 'colAwaitingDraftBl', titleNs: 'bookings.kanban' },
-  { key: 'ready_to_release', statuses: ['bl_validated'],                         dotClass: 'bg-mint-500',       titleKey: 'colReadyToRelease', titleNs: 'bookings.kanban' },
-  { key: 'released',         statuses: ['bl_released', 'closed'],               dotClass: 'bg-ink-4',          titleKey: 'bl_released',      titleNs: 'lifecycle' },
+  { key: 'ready_to_release', statuses: ['bl_validated'],                         dotClass: 'bg-severity-ok',       titleKey: 'colReadyToRelease', titleNs: 'bookings.kanban' },
+  { key: 'released',         statuses: ['bl_released', 'closed'],               dotClass: 'bg-severity-ok',       titleKey: 'bl_released',      titleNs: 'lifecycle' },
 ];
 
 interface Props {
@@ -58,7 +58,7 @@ export function BookingsKanbanClient({ rows }: Props) {
           <div
             key={col.key}
             data-column={col.key}
-            className="flex w-[230px] min-w-[230px] flex-col overflow-hidden rounded-[10px] border border-[var(--line-soft)] bg-bg-1"
+            className="flex w-[270px] min-w-[270px] flex-col overflow-hidden rounded-[10px] border border-[var(--line-soft)] bg-bg-1"
           >
             {/* header */}
             <div className="flex items-center justify-between border-b border-[var(--line-soft)] px-[10px] py-2">

@@ -10,6 +10,7 @@ import { BookingsKanbanClient } from '@/components/bookings/BookingsKanbanClient
 import { MultiSelectDropdown } from '@/components/shared/MultiSelectDropdown';
 import { UploadBookingDialog } from '@/components/bookings/UploadBookingDialog';
 import { getTodayDemo } from '@/lib/mock-data/today';
+import { getPodFlag } from '@/lib/utils/flags';
 import { Search, Snowflake, X } from 'lucide-react';
 import clsx from 'clsx';
 
@@ -37,6 +38,7 @@ export function BookingsViewClient({ rows, exporters, navieras }: Props) {
   const [search, setSearch] = useState('');
   const [exporterFilters, setExporterFilters] = useState<Set<string>>(new Set());
   const [navieraFilters, setNavieraFilters] = useState<Set<string>>(new Set());
+  const [countryFilters, setCountryFilters] = useState<Set<string>>(new Set());
   const [reeferOnly, setReeferOnly] = useState(false);
   const [urgentOnly, setUrgentOnly] = useState(false);
 
@@ -47,6 +49,10 @@ export function BookingsViewClient({ rows, exporters, navieras }: Props) {
     return rows.filter(({ booking, exporter, naviera, highestAlertSeverity }) => {
       if (exporterFilters.size > 0 && !exporterFilters.has(exporter.id)) return false;
       if (navieraFilters.size > 0 && !navieraFilters.has(naviera.id)) return false;
+      if (countryFilters.size > 0) {
+        const country = booking.pod.split(',').at(-1)?.trim() ?? '';
+        if (!countryFilters.has(country)) return false;
+      }
       if (reeferOnly && !booking.isReefer) return false;
       if (initialPol && booking.pol !== initialPol) return false;
       if (initialPod && booking.pod !== initialPod) return false;
@@ -64,20 +70,34 @@ export function BookingsViewClient({ rows, exporters, navieras }: Props) {
       }
       return true;
     });
-  }, [rows, exporterFilters, navieraFilters, reeferOnly, urgentOnly, search, initialPol, initialPod, now]);
+  }, [rows, exporterFilters, navieraFilters, countryFilters, reeferOnly, urgentOnly, search, initialPol, initialPod, now]);
 
   const clearAll = () => {
     setExporterFilters(new Set());
     setNavieraFilters(new Set());
+    setCountryFilters(new Set());
     setReeferOnly(false);
     setUrgentOnly(false);
     setSearch('');
   };
 
-  const hasFilters = exporterFilters.size > 0 || navieraFilters.size > 0 || reeferOnly || urgentOnly || search;
+  const hasFilters = exporterFilters.size > 0 || navieraFilters.size > 0 || countryFilters.size > 0 || reeferOnly || urgentOnly || search;
 
   const exporterOptions = exporters.map((e) => ({ value: e.id, label: e.name }));
   const navieraOptions = navieras.map((n) => ({ value: n.id, label: n.shortName }));
+  const countryOptions = useMemo(() => {
+    const seen = new Map<string, string>();
+    for (const { booking } of rows) {
+      const country = booking.pod.split(',').at(-1)?.trim() ?? '';
+      if (country && !seen.has(country)) {
+        const flag = getPodFlag(booking.pod);
+        seen.set(country, flag ? `${flag} ${country}` : country);
+      }
+    }
+    return Array.from(seen.entries())
+      .sort((a, b) => a[0].localeCompare(b[0]))
+      .map(([value, label]) => ({ value, label }));
+  }, [rows]);
 
   return (
     <div className="flex flex-col">
@@ -114,6 +134,13 @@ export function BookingsViewClient({ rows, exporters, navieras }: Props) {
             selected={navieraFilters}
             onChange={setNavieraFilters}
             placeholder={t('filterNaviera')}
+          />
+
+          <MultiSelectDropdown
+            options={countryOptions}
+            selected={countryFilters}
+            onChange={setCountryFilters}
+            placeholder={t('filterCountry')}
           />
 
           {/* reefer */}
