@@ -218,6 +218,8 @@
     "activityType_alert_dismissed": "Alert dismissed",
     "activityType_note_added": "Note added",
     "activityType_manual_override": "Manual override",
+    "activityType_document_replaced": "Document replaced",
+    "activityType_document_deleted": "Document deleted",
     "activitySearch": "Search activity…",
     "activityFilterAll": "All",
     "activityFilterAgent": "Agent",
