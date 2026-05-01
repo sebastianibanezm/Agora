@@ -11,7 +11,7 @@ import { navieras } from '@/lib/mock-data/navieras';
 import { activeAlerts } from '@/lib/mock-data/alerts';
 import { shippingInstructions } from '@/lib/mock-data/shipping-instructions';
 import { draftBls } from '@/lib/mock-data/draft-bls';
-import { getDashboardKpis, getRecentlyClosedBookings } from '@/lib/mock-data/kpis';
+import { getRecentlyClosedBookings } from '@/lib/mock-data/kpis';
 import { hoursUntil } from '@/lib/utils/dates';
 
 const ATTENTION_STATUSES = new Set([
@@ -22,8 +22,6 @@ const ATTENTION_STATUSES = new Set([
 ]);
 
 export default function OperationsDashboard() {
-  const kpis = getDashboardKpis();
-
   const navieraMap = new Map(navieras.map((n) => [n.id, n]));
 
   const queueRanked = bookings
@@ -74,9 +72,9 @@ export default function OperationsDashboard() {
   return (
     <PageTransition>
       <div className="flex flex-col gap-4 bg-bg-0 px-4 pt-4 pb-8">
-        <GlobeTransitSection bookings={bookings} navieras={navieras} height={468} />
+        <GlobeTransitSection bookings={bookings} navieras={navieras} exporters={exporters} height={468} />
 
-        <KpiStripV2 kpis={kpis} />
+        <KpiStripV2 />
 
         <ActionQueueV2 items={queueRanked} />
 
