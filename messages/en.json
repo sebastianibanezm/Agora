@@ -124,6 +124,7 @@
     "filterStatus": "Status",
     "filterExporter": "Exporter",
     "filterNaviera": "Carrier",
+    "filterCountry": "Country",
     "filterMarket": "Market",
     "filterDateRange": "Cut-off range",
     "search": "Search booking, container, vessel…",
@@ -152,7 +153,12 @@
       "toast": "Booking {number} created.",
       "unknownCarrier": "Unknown carrier — please select",
       "parseError": "Could not extract data from this PDF. Please try again.",
-      "tryAgain": "Try again"
+      "tryAgain": "Try again",
+      "dropzoneMultiple": "Drop PDFs here, or click to browse",
+      "processingTitle": "Parsing documents…",
+      "allFailed": "Could not extract data from any of the uploaded PDFs.",
+      "confirmNext": "Confirm & next",
+      "bookingCounter": "Booking {current} of {total}"
     },
     "empty": "No bookings match these filters.",
     "densityCompact": "Compact",
