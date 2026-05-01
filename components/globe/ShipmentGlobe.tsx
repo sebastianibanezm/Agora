@@ -31,6 +31,7 @@ interface ArcDatum {
   bookings: Booking[];
   laneKey: string;
   primaryBookingId: string;
+  highlighted: boolean;
 }
 
 const toRad = (d: number) => (d * Math.PI) / 180;
@@ -121,35 +122,50 @@ interface Props {
   height?: number;
   className?: string;
   style?: CSSProperties;
+  highlightedBooking?: Booking | null;
 }
 
-export function ShipmentGlobe({ bookings, height = 400, className, style }: Props) {
+export function ShipmentGlobe({ bookings, height = 468, className, style, highlightedBooking }: Props) {
   const t = useTranslations('dashboard');
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
   const containerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const [hovered, setHovered] = useState<ArcDatum | null>(null);
-  const [size, setSize] = useState<{ w: number; h: number }>({ w: 800, h: height });
+  // canvasH is kept square-ish so the sphere is never squished by aspect ratio.
+  // The container clips to `height` via overflow:hidden.
+  const [size, setSize] = useState<{ w: number; h: number }>({ w: 800, h: 520 });
 
   useEffect(() => {
     if (!containerRef.current) return;
     const ro = new ResizeObserver((entries) => {
       for (const e of entries) {
-        setSize({ w: e.contentRect.width, h: height });
+        setSize({ w: e.contentRect.width, h: 520 });
       }
     });
     ro.observe(containerRef.current);
     return () => ro.disconnect();
-  }, [height]);
+  }, []);
 
   useEffect(() => {
+    if (!globeRef.current) return;
+    globeRef.current.pointOfView({ lat: 0, lng: -75, altitude: 2.4 }, 0);
+  }, [size.w]);
+
+  const handleGlobeReady = () => {
     if (!globeRef.current) return;
     const controls = globeRef.current.controls();
     controls.autoRotate = true;
     controls.autoRotateSpeed = 0.35;
     controls.enableZoom = false;
     globeRef.current.pointOfView({ lat: 0, lng: -75, altitude: 2.4 }, 0);
-  }, [size.w]);
+
+    // Low-angle directional light so bump-map terrain casts visible relief.
+    const scene = globeRef.current.scene();
+    const relief = new THREE.DirectionalLight(0xfff5e0, 1.4);
+    relief.position.set(2, 0.6, 1.2).normalize();
+    relief.name = 'relief-light';
+    if (!scene.getObjectByName('relief-light')) scene.add(relief);
+  };
 
   const arcs: ArcDatum[] = useMemo(() => {
     const active = bookings.filter((b) => ACTIVE_STATUSES.has(b.status));
@@ -175,10 +191,11 @@ export function ShipmentGlobe({ bookings, height = 400, className, style }: Prop
         bookings: list,
         laneKey,
         primaryBookingId: primary.id,
+        highlighted: !!highlightedBooking && list.some((b) => b.id === highlightedBooking.id),
       });
     }
     return result;
-  }, [bookings]);
+  }, [bookings, highlightedBooking]);
 
   const points = useMemo(() => {
     const seen = new Set<string>();
@@ -202,13 +219,13 @@ export function ShipmentGlobe({ bookings, height = 400, className, style }: Prop
   const orbObjectsRef = useRef<Map<string, THREE.Object3D>>(new Map());
 
   const globeMatRef = useRef<THREE.MeshPhongMaterial | null>(null);
-  if (!globeMatRef.current) {
+  if (!globeMatRef.current && typeof window !== 'undefined') {
     const mat = new THREE.MeshPhongMaterial({ color: new THREE.Color('#D4B890'), shininess: 4 });
     const loader = new THREE.TextureLoader();
     loader.load('https://unpkg.com/three-globe/example/img/earth-day.jpg',
       (tex) => { mat.map = tex; mat.needsUpdate = true; });
     loader.load('https://unpkg.com/three-globe/example/img/earth-topology.png',
-      (tex) => { mat.bumpMap = tex; mat.bumpScale = 12; mat.needsUpdate = true; });
+      (tex) => { mat.bumpMap = tex; mat.bumpScale = 40; mat.needsUpdate = true; });
     globeMatRef.current = mat;
   }
 
@@ -265,22 +282,24 @@ export function ShipmentGlobe({ bookings, height = 400, className, style }: Prop
     <div
       ref={containerRef}
       className={`relative overflow-hidden rounded-xl border border-[var(--line-soft)] bg-bg-1 ${className ?? ''}`}
-      style={{ height, ...style }}
+      style={{ height, width: size.h, ...style }}
     >
       <div className="pointer-events-none absolute top-3 left-4 z-10 font-mono text-[10px] tracking-[0.18em] text-ink-3">
         <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-[#4F7A3C] align-middle mr-1.5" />
         {t('globeLabel')}
       </div>
-      <div className="pointer-events-none absolute top-3 right-4 z-10 font-mono text-[10px] tracking-[0.14em] text-ink-3">
-        {t('globeArcs', { n: arcs.length })}
-      </div>
 
+      <div
+        className="absolute left-0"
+        style={{ top: '50%', transform: `translateY(-50%)`, width: size.h, height: size.h, pointerEvents: 'auto' }}
+      >
       <Globe
         ref={globeRef}
-        width={size.w}
+        width={size.h}
         height={size.h}
         backgroundColor="rgba(0,0,0,0)"
         showAtmosphere
+        onGlobeReady={handleGlobeReady}
         globeMaterial={globeMatRef.current ?? undefined}
         atmosphereColor="#C8A870"
         atmosphereAltitude={0.15}
@@ -327,6 +346,7 @@ export function ShipmentGlobe({ bookings, height = 400, className, style }: Prop
           },
         } as any)}
       />
+      </div>
 
       {hovered && (
         <div className="pointer-events-none absolute right-4 bottom-4 z-10 max-w-xs rounded-lg border border-[var(--line-soft)] bg-bg-2/95 p-3 text-xs shadow-lg backdrop-blur">
@@ -340,9 +360,6 @@ export function ShipmentGlobe({ bookings, height = 400, className, style }: Prop
         </div>
       )}
 
-      <div className="pointer-events-none absolute bottom-3 left-4 z-10 font-mono text-[9.5px] tracking-[0.14em] text-ink-3 uppercase">
-        {t('globeHint')}
-      </div>
     </div>
   );
 }
