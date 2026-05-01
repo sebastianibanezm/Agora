@@ -74,7 +74,7 @@ export function BookingLifecycleStrip({ current, className }: Props) {
       {/* Continuous track behind the dots */}
       <div
         ref={trackRef}
-        className="absolute left-0 right-0 top-[6px] h-[2px] rounded-sm bg-[var(--line-soft)]"
+        className="absolute left-0 right-0 top-[5px] h-[2px] rounded-sm bg-[var(--line-soft)]"
       >
         <div
           className={clsx(
@@ -110,10 +110,10 @@ export function BookingLifecycleStrip({ current, className }: Props) {
                 className={clsx(
                   'relative z-10 rounded-full border-2 transition-all duration-200',
                   isUnreached     && 'h-3 w-3 border-[var(--line-soft)] bg-bg-0',
-                  isReached       && 'h-3 w-3 border-severity-ok bg-severity-ok/20',
-                  isCurrent       && 'h-3.5 w-3.5 -mt-px border-severity-ok bg-severity-ok/30 shadow-[0_0_0_4px_rgba(74,222,128,0.12)]',
-                  isFailedCurrent && 'h-3.5 w-3.5 -mt-px border-severity-crit bg-severity-crit/20 shadow-[0_0_0_4px_rgba(239,68,68,0.12)]',
-                  isGhost         && 'h-3 w-3 border-[var(--line-soft)] bg-transparent opacity-20',
+                  isReached       && 'h-3 w-3 border-severity-ok bg-bg-0',
+                  isCurrent       && 'h-3.5 w-3.5 -mt-px border-severity-ok bg-bg-0 shadow-[0_0_0_4px_rgba(74,222,128,0.12)]',
+                  isFailedCurrent && 'h-3.5 w-3.5 -mt-px border-severity-crit bg-bg-0 shadow-[0_0_0_4px_rgba(239,68,68,0.12)]',
+                  isGhost         && 'h-3 w-3 border-[var(--line-soft)] bg-bg-0 opacity-20',
                 )}
               />
 
