@@ -80,7 +80,7 @@ export function BookingInfoCards({ booking }: Props) {
           <Field label={t('labelTemperatura')} value={`${booking.setpointC} °C`} />
         )}
         {booking.ventilation !== undefined && (
-          <Field label="Ventilación" value={`${booking.ventilation}%`} />
+          <Field label={t('labelVentilacion')} value={`${booking.ventilation}%`} />
         )}
         <Field label={t('stacking')} value={stackingStr} />
         <Field label={t('labelCutoff')} value={formatTs(booking.cutOff ?? '')} />
