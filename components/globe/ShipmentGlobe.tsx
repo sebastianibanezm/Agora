@@ -153,6 +153,10 @@ export function ShipmentGlobe({ bookings, height = 468, className, style, highli
   const t = useTranslations('dashboard');
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
   const containerRef = useRef<HTMLDivElement>(null);
+  const controlsRef = useRef<ReturnType<GlobeMethods['controls']> | null>(null);
+  const highlightOrbRef = useRef<THREE.Group | null>(null);
+  const highlightedArcRef = useRef<ArcDatum | null>(null);
+  const highlightOrbProgressRef = useRef<number>(0);
   const router = useRouter();
   const [hovered, setHovered] = useState<ArcDatum | null>(null);
   // canvasH is kept square-ish so the sphere is never squished by aspect ratio.
@@ -242,10 +246,6 @@ export function ShipmentGlobe({ bookings, height = 468, className, style, highli
 
   const orbProgressRef = useRef<Map<string, number>>(new Map());
   const orbObjectsRef = useRef<Map<string, THREE.Object3D>>(new Map());
-  const controlsRef = useRef<ReturnType<GlobeMethods['controls']> | null>(null);
-  const highlightOrbRef = useRef<THREE.Group | null>(null);
-  const highlightedArcRef = useRef<ArcDatum | null>(null);
-  const highlightOrbProgressRef = useRef<number>(0);
 
   const globeMatRef = useRef<THREE.MeshPhongMaterial | null>(null);
   if (!globeMatRef.current && typeof window !== 'undefined') {
