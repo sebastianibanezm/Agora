@@ -393,6 +393,13 @@
     "ago": "Hace {value}",
     "passed": "Pasó"
   },
+  "search": {
+    "groupBookings": "Reservas",
+    "groupExporters": "Exportadores",
+    "groupNavieras": "Navieras",
+    "groupAlerts": "Alertas",
+    "groupPages": "Páginas"
+  },
   "containers": {
     "title": "Contenedores",
     "containerNumber": "N° de contenedor",
