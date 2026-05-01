@@ -11,7 +11,8 @@
     "notifications": "Notificaciones",
     "todaysQueue": "Cola de hoy",
     "greetingMorning": "Buenos días,",
-    "greetingAfternoon": "Buenas tardes,"
+    "greetingAfternoon": "Buenas tardes,",
+    "settings": "Configuración"
   },
   "common": {
     "costAtRisk": "Costo en riesgo",
@@ -73,7 +74,7 @@
     "lastWeekClosed": "Semana pasada · bookings cerrados",
     "siQuality": "Calidad SI · últimos 30d",
     "siQualityHint": "EXPORTADOR × TIPO ERROR",
-    "siQualityByExporter": "Calidad SI · exportador × tipo error",
+    "siQualityByExporter": "Ahorro histórico de multas",
     "noPendingActions": "Ningún booking requiere acción ahora.",
     "reefer": "Reefer",
     "colBooking": "Embarque",
@@ -84,6 +85,14 @@
     "errorBucketVessel": "Buque",
     "errorBucketCutoff": "Cut-off",
     "errorBucketIncoterm": "Incoterm/Pago",
+    "feeNameConsignee": "Enmienda B/L",
+    "feeNameWeight": "Recargo Peso",
+    "feeNameVessel": "Cambio Buque",
+    "feeNameCutoff": "Multa Cut-off",
+    "feeNameIncoterm": "Enmienda Flete",
+    "feeNameDestination": "Enmienda Destino",
+    "feeNameContainer": "Tarifa Equipo",
+    "feeNameCargo": "Enmienda Carga",
     "colExporter": "Exportador",
     "colCarrier": "Naviera",
     "colRoute": "Ruta",
@@ -96,7 +105,8 @@
     "enTransit": "En tránsito",
     "noActiveShipments": "No hay embarques activos",
     "kpiSubCutoffCount": "{n} cortes en riesgo",
-    "kpiSubDiscrepancyCount": "{n} detectadas"
+    "kpiSubDiscrepancyCount": "{n} detectadas",
+    "cutoff": "Corte"
   },
   "bookings": {
     "title": "Bookings",

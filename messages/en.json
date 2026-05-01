@@ -11,7 +11,8 @@
     "notifications": "Notifications",
     "todaysQueue": "Today's queue",
     "greetingMorning": "Good morning,",
-    "greetingAfternoon": "Good afternoon,"
+    "greetingAfternoon": "Good afternoon,",
+    "settings": "Settings"
   },
   "common": {
     "costAtRisk": "Cost at risk",
@@ -73,7 +74,7 @@
     "lastWeekClosed": "Last week · completed bookings",
     "siQuality": "SI quality · trailing 30d",
     "siQualityHint": "EXPORTER × ERROR TYPE",
-    "siQualityByExporter": "SI quality · exporter × error type",
+    "siQualityByExporter": "Historical penalty savings",
     "noPendingActions": "No bookings need action right now.",
     "reefer": "Reefer",
     "colBooking": "Booking",
@@ -84,6 +85,14 @@
     "errorBucketVessel": "Vessel",
     "errorBucketCutoff": "Cut-off",
     "errorBucketIncoterm": "Incoterm/Pmt",
+    "feeNameConsignee": "B/L Amendment",
+    "feeNameWeight": "Weight Surcharge",
+    "feeNameVessel": "Vessel Change",
+    "feeNameCutoff": "Late Cutoff",
+    "feeNameIncoterm": "Terms Amendment",
+    "feeNameDestination": "Dest. Amendment",
+    "feeNameContainer": "Equipment Fee",
+    "feeNameCargo": "Cargo Amendment",
     "colExporter": "Exporter",
     "colCarrier": "Carrier",
     "colRoute": "Route",
@@ -96,7 +105,8 @@
     "enTransit": "In transit",
     "noActiveShipments": "No active shipments",
     "kpiSubCutoffCount": "{n} cut-offs at risk",
-    "kpiSubDiscrepancyCount": "{n} detected"
+    "kpiSubDiscrepancyCount": "{n} detected",
+    "cutoff": "Cutoff"
   },
   "bookings": {
     "title": "Bookings",
