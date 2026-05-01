@@ -279,6 +279,15 @@ export function ShipmentGlobe({ bookings, height = 468, className, style, highli
       (tex) => { mat.bumpMap = tex; mat.bumpScale = 18; mat.needsUpdate = true; });
     loader.load('https://unpkg.com/three-globe/example/img/earth-water.png',
       (tex) => { mat.specularMap = tex; mat.needsUpdate = true; });
+    loader.load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/waternormals.jpg',
+      (tex) => {
+        tex.wrapS = THREE.RepeatWrapping;
+        tex.wrapT = THREE.RepeatWrapping;
+        tex.repeat.set(4, 2);
+        mat.normalMap = tex;
+        mat.normalScale.set(0.04, 0.04);
+        mat.needsUpdate = true;
+      });
     globeMatRef.current = mat;
   }
 
