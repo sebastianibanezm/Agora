@@ -84,7 +84,7 @@ function NotificationRow({ notification, isRead, onMarkRead, onClose, localizedH
         strokeWidth={1.5}
       />
       <div className="min-w-0 flex-1">
-        <p className={clsx('text-sm leading-snug', isRead ? 'text-ink-3' : 'text-ink-1')}>
+        <p className={clsx('font-sans text-xs leading-snug', isRead ? 'text-ink-3' : 'text-ink-1')}>
           {notification.message}
         </p>
         <p className="mt-0.5 font-mono text-[10px] tracking-wide text-ink-3 uppercase">
