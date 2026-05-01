@@ -93,7 +93,12 @@ export function BookingDocumentPopup({
   }
 
   function handleFileSelected(e: React.ChangeEvent<HTMLInputElement>) {
-    if (!e.target.files?.length) return;
+    // Reset so re-selecting same file triggers onChange again
+    if (fileInputRef.current) fileInputRef.current.value = '';
+    if (!e.target.files?.length) {
+      setReplaceNotice('idle');
+      return;
+    }
     setReplaceNotice('scanning');
     setReplacing(true);
     setTimeout(() => {
@@ -156,8 +161,9 @@ export function BookingDocumentPopup({
             <button
               type="button"
               aria-label="Close"
-              onClick={onClose}
-              className="flex h-7 w-7 items-center justify-center rounded-lg border border-line-soft bg-bg-3 text-ink-3 hover:bg-bg-2"
+              onClick={() => { if (!showConfirm) onClose(); }}
+              disabled={showConfirm}
+              className="flex h-7 w-7 items-center justify-center rounded-lg border border-line-soft bg-bg-3 text-ink-3 hover:bg-bg-2 disabled:opacity-40 disabled:pointer-events-none"
             >
               <X className="h-3.5 w-3.5" />
             </button>
@@ -206,6 +212,7 @@ export function BookingDocumentPopup({
               </div>
               <p className="text-sm font-medium text-ink-1">{t('uploadExporterBl')}</p>
               <label className="cursor-pointer rounded-lg border border-dashed border-line-mid bg-bg-2 px-6 py-3 text-xs text-ink-3 hover:bg-bg-3">
+                {/* Demo placeholder — actual upload handling deferred */}
                 <input type="file" accept=".pdf" className="sr-only" />
                 Click to browse or drag PDF here
               </label>
@@ -299,8 +306,9 @@ export function BookingDocumentPopup({
                 <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
                   {BOOKING_EXTRACTED_FIELDS.map(({ label, field }) => (
                     <div key={field} className="flex flex-col gap-0.5">
-                      <label className="font-mono text-[10px] text-ink-4">{label}</label>
+                      <label htmlFor={`field-${field}`} className="font-mono text-[10px] text-ink-4">{label}</label>
                       <input
+                        id={`field-${field}`}
                         className="w-full rounded-[5px] border border-line-mid bg-bg-1 px-2 py-[5px] text-xs text-ink-1 focus:border-ink-3 focus:outline-none"
                         defaultValue={String(booking[field] ?? '')}
                         onChange={(e) => updateBookingField(booking.id, field, e.target.value)}
