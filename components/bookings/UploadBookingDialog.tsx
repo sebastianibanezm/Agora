@@ -250,7 +250,7 @@ export function UploadBookingDialog({ children }: { children: ReactNode }) {
             onClick={() => fileInputRef.current?.click()}
           >
             <Upload className="h-8 w-8 text-ink-3" />
-            <p className="text-sm text-ink-2">{tDlg('dropzone')}</p>
+            <p className="text-sm text-ink-2">{tDlg('dropzoneMultiple')}</p>
             <input
               ref={fileInputRef}
               data-testid="file-input"

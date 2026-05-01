@@ -58,7 +58,7 @@ describe('UploadBookingDialog', () => {
   it('shows dropzone after trigger click', async () => {
     wrap(<UploadBookingDialog><button>Upload</button></UploadBookingDialog>);
     await userEvent.click(screen.getByText('Upload'));
-    expect(screen.getByText(/Drop a PDF/i)).toBeInTheDocument();
+    expect(screen.getByText(/Drop PDFs/i)).toBeInTheDocument();
   });
 
   it('shows parse error when API returns 400', async () => {
