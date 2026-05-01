@@ -1,5 +1,10 @@
+'use client';
+
+import { useState } from 'react';
+import type { Booking } from '@/types';
 import { PageTransition } from '@/components/shared/PageTransition';
 import { ShipmentGlobe } from '@/components/globe/ShipmentGlobe';
+import { ActiveTransitPanel } from '@/components/dashboard/ActiveTransitPanel';
 import { KpiStripV2 } from '@/components/dashboard/KpiStripV2';
 import { ActionQueueV2 } from '@/components/dashboard/ActionQueueV2';
 import { ApproachingCutoffStrip } from '@/components/dashboard/ApproachingCutoffStrip';
@@ -22,6 +27,11 @@ const ATTENTION_STATUSES = new Set([
 ]);
 
 export default function OperationsDashboard() {
+  const [hoveredBookingId, setHoveredBookingId] = useState<string | null>(null);
+
+  const handleHoverBooking = (booking: Booking | null) => {
+    setHoveredBookingId(booking?.id ?? null);
+  };
   const kpis = getDashboardKpis();
 
   const navieraMap = new Map(navieras.map((n) => [n.id, n]));
@@ -74,7 +84,16 @@ export default function OperationsDashboard() {
   return (
     <PageTransition>
       <div className="flex flex-col gap-4 bg-bg-0 px-4 pt-4 pb-8">
-        <ShipmentGlobe bookings={bookings} height={400} />
+        <div className="flex gap-4 items-stretch">
+          <ShipmentGlobe bookings={bookings} height={468} />
+          <ActiveTransitPanel
+            bookings={bookings}
+            navieras={navieras}
+            height={468}
+            onHoverBooking={handleHoverBooking}
+            hoveredBookingId={hoveredBookingId}
+          />
+        </div>
 
         <KpiStripV2 kpis={kpis} />
 
