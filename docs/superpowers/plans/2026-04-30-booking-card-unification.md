@@ -471,7 +471,6 @@ interface Props {
 export function ActiveTransitPanel({ bookings, navieras, exporters, height, onHoverBooking, hoveredBookingId }: Props) {
   const t = useTranslations('dashboard');
   const navieraMap = new Map(navieras.map((n) => [n.id, n]));
-  const exporterMap = new Map(exporters.map((e) => [e.id, e]));
   const active = bookings.filter((b) => ACTIVE_STATUSES.has(b.status));
 
   return (
@@ -489,7 +488,10 @@ export function ActiveTransitPanel({ bookings, navieras, exporters, height, onHo
       <div className="flex-1 overflow-y-auto px-2 py-2 flex flex-col gap-1.5">
         {active.map((booking) => {
           const naviera = navieraMap.get(booking.navieraId);
-          const exporter = exporterMap.get(booking.exporterId ?? '');
+          // Booking has no exporterId — match by shipper string against exporter name/legalName
+          const exporter = exporters.find(
+            (e) => e.name === booking.shipper || e.legalName === booking.shipper
+          );
           if (!naviera || !exporter) return null;
 
           return (
@@ -516,7 +518,7 @@ export function ActiveTransitPanel({ bookings, navieras, exporters, height, onHo
 }
 ```
 
-**Important:** The code above uses `booking.exporterId`. Verify the field name on the `Booking` type (`agora-app/types/index.ts`) before writing — it may be `exporterId`, `exporterRef`, or similar. Use the correct field name.
+**Note:** `Booking` has no `exporterId` field — the match is done by comparing `booking.shipper` against `exporter.name` and `exporter.legalName`, which is the same pattern used in `page.tsx`.
 
 - [ ] **Step 3: Pass `exporters` in `page.tsx`**
 
