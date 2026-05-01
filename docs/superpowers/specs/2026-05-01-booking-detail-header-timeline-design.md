@@ -20,19 +20,28 @@
 
 **File:** `components/bookings/BookingHeader.tsx`
 
-Remove the `{booking.shipper} → {booking.consignee}` span from the metadata row. The row currently renders:
+Remove the `{booking.shipper} → {booking.consignee}` span from the metadata row.
 
-```
-ExporterChip · NavieraChip · shipper → consignee    [cost-at-risk] [cutoff]
+The current code emits a `·` dot unconditionally after each chip's own conditional block, meaning removing only the shipper span leaves a trailing dot after the last chip. To fix this, restructure the left group to render dots only between consecutive present elements (join-style):
+
+```tsx
+{[
+  exporter && <ExporterChip key="exp" exporter={exporter} />,
+  naviera  && <NavieraChip  key="nav" naviera={naviera} />,
+].filter(Boolean).reduce<React.ReactNode[]>((acc, el, i) =>
+  i === 0 ? [el] : [...acc, <span key={i}>·</span>, el], []
+)}
 ```
 
-After the change it renders:
+After the change the row renders:
 
 ```
 ExporterChip · NavieraChip    [cost-at-risk] [cutoff]
+ExporterChip                  [cost-at-risk] [cutoff]   ← when naviera absent
+                              [cost-at-risk] [cutoff]   ← when both absent
 ```
 
-The dot separator before the shipper/consignee span is also removed. No other changes to the header.
+No trailing dot in any combination. No other changes to the header.
 
 ---
 
@@ -54,7 +63,20 @@ The strip maps to the 7 kanban columns, in order:
 | 5 | Ready to Release | ready_to_release | `bl_validated`                  |
 | 6 | Released        | released          | `bl_released`, `closed`         |
 
-A mapping from `BookingStatus` → step index drives all visual state.
+A mapping from `BookingStatus` → step index drives all visual state. The current component's `ORDER` array omits `si_validated` — the new implementation must include it at step 3.
+
+```ts
+const STATUS_TO_STEP: Record<BookingStatus, number> = {
+  created: 0, awaiting_si: 0,
+  si_received: 1,
+  si_failed: 2,
+  si_validated: 3,
+  esi_sent: 4, draft_bl_received: 4,
+  bl_validated: 5,
+  bl_released: 6, closed: 6,
+  cancelled: -1, // not rendered
+};
+```
 
 #### Layout
 
@@ -78,18 +100,32 @@ A mapping from `BookingStatus` → step index drives all visual state.
 | `reached`      | step index < current step index (happy path) | Green fill, green border                        |
 | `current`      | active step (happy path)                     | Green, larger (14 × 14px), green glow ring      |
 | `failed-current` | active step is SI Failed                   | Red fill, red border, red glow ring             |
-| `ghost`        | SI Failed step when not on that branch       | Near-invisible (transparent bg, dark border, low opacity) |
+| `ghost`        | SI Failed step when not on that branch       | Near-invisible (transparent bg, dark border, low opacity). **Both the dot and the label text are hidden** (e.g. `opacity: 0` or `visibility: hidden`) — the ghost preserves spacing without adding visual noise. |
 
 #### Fill color
 
 - Green (`rgba(74, 222, 128, 0.6)`) on all statuses except `si_failed`.
 - Red (`rgba(239, 68, 68, 0.5)`) when `booking.status === 'si_failed'`.
 
-Fill width is computed in a `useEffect` + `ResizeObserver`:
+Fill width is computed in a `useEffect` + `ResizeObserver`. The observer must be disconnected in the cleanup function to avoid leaks under React strict mode:
 
 ```ts
-const dotCenter = dotRect.left + dotRect.width / 2;
-const fillWidth = ((dotCenter - trackRect.left) / trackRect.width) * 100;
+useEffect(() => {
+  function update() {
+    const dot = dotRef.current;
+    const track = trackRef.current;
+    if (!dot || !track) return;
+    const dotRect = dot.getBoundingClientRect();
+    const trackRect = track.getBoundingClientRect();
+    const dotCenter = dotRect.left + dotRect.width / 2;
+    const pct = ((dotCenter - trackRect.left) / trackRect.width) * 100;
+    setFillPct(Math.max(0, Math.min(100, pct)));
+  }
+  const observer = new ResizeObserver(update);
+  if (trackRef.current) observer.observe(trackRef.current);
+  update();
+  return () => observer.disconnect();
+}, [currentStep]);
 ```
 
 #### Sub-badge
