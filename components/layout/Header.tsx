@@ -12,6 +12,7 @@ interface HeaderProps {
 }
 
 const USER_NAME = 'Felipe Donoso';
+const USER_FIRST_NAME = USER_NAME.split(' ')[0];
 
 export function Header({ breadcrumb }: HeaderProps) {
   const t = useTranslations();
@@ -33,7 +34,7 @@ export function Header({ breadcrumb }: HeaderProps) {
           <span className="text-ink-4">/</span>
           <span className="text-ink-2 normal-case tracking-normal text-xs">
             {greeting}{' '}
-            <span className="font-display italic text-ink-1">{USER_NAME}</span>
+            <span className="font-display italic text-ink-1 text-base">{USER_FIRST_NAME}</span>
           </span>
         </div>
       )}
