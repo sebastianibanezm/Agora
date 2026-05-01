@@ -8,9 +8,11 @@ import {
   Building2,
   Ship,
   BarChart3,
+  User,
 } from 'lucide-react';
 import { useState } from 'react';
 import clsx from 'clsx';
+import Image from 'next/image';
 
 const NAV = [
   { href: '/', key: 'operations', Icon: LayoutDashboard },
@@ -33,10 +35,22 @@ export function Sidebar() {
         expanded ? 'w-56' : 'w-14',
       )}
     >
-      <div className="flex h-14 items-center px-4 font-mono text-sm font-semibold tracking-widest text-mint-500">
-        {expanded ? 'AGORA' : 'AG'}
+      <div className={clsx('flex h-14 items-center', expanded ? 'px-2' : 'justify-center px-0')}>
+        <Image
+          src="/agora-logo-lambda.png"
+          alt="Agora"
+          width={46}
+          height={46}
+          className="shrink-0"
+          priority
+        />
+        {expanded && (
+          <span className="ml-2 font-mono text-sm font-semibold tracking-widest text-mint-500 whitespace-nowrap">
+            AGORA
+          </span>
+        )}
       </div>
-      <nav className="flex flex-col gap-1 px-2">
+      <nav className="flex flex-col gap-1 px-2 mt-10">
         {NAV.map(({ href, key, Icon }) => {
           const active = pathname === href || (href !== '/' && pathname.startsWith(href));
           return (
@@ -44,11 +58,12 @@ export function Sidebar() {
               key={key}
               href={href}
               className={clsx(
-                'flex items-center gap-3 rounded-md px-2 py-2 text-ink-2 transition-colors hover:bg-white/5 hover:text-ink-1',
-                active && 'border-l-2 border-mint-500 bg-white/5 text-ink-1',
+                'flex items-center gap-3 rounded-md py-2 text-ink-2 transition-colors hover:bg-bg-3 hover:text-ink-1',
+                expanded ? 'px-2' : 'justify-center px-0',
+                active && 'bg-bg-3 text-ink-1',
               )}
             >
-              <Icon className="h-4 w-4 shrink-0" />
+              <Icon className="h-[21px] w-[21px] shrink-0" strokeWidth={1.5} />
               <span className={clsx('truncate text-sm', !expanded && 'sr-only')}>
                 {t(key)}
               </span>
@@ -59,22 +74,29 @@ export function Sidebar() {
         <div
           aria-disabled="true"
           title={t('performanceSoon')}
-          className="flex items-center gap-3 rounded-md px-2 py-2 text-ink-4 cursor-not-allowed"
+          className={clsx(
+            'flex items-center gap-3 rounded-md py-2 text-ink-4 cursor-not-allowed',
+            expanded ? 'px-2' : 'justify-center px-0',
+          )}
         >
-          <BarChart3 className="h-4 w-4 shrink-0" />
+          <BarChart3 className="h-[21px] w-[21px] shrink-0" strokeWidth={1.5} />
           <span className={clsx('truncate text-sm', !expanded && 'sr-only')}>
             {t('performance')}
           </span>
         </div>
       </nav>
-      <div
-        className={clsx(
-          'absolute right-0 bottom-3 left-0 px-3 font-mono text-[10px] tracking-widest text-ink-3 uppercase',
-          !expanded && 'sr-only',
-        )}
-      >
-        <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-mint-500" />{' '}
-        {t('agentsRunning', { n: 5 })}
+      <div className={clsx('absolute right-0 bottom-0 left-0 flex flex-col', expanded ? 'px-2' : 'items-center px-0')}>
+        <div className={clsx('flex items-center gap-3 rounded-md py-2 w-full', expanded ? 'px-2' : 'justify-center px-0')}>
+          <div className="h-7 w-7 shrink-0 rounded-full bg-bg-2 border border-white/10 flex items-center justify-center">
+            <User className="h-[18px] w-[18px] text-ink-2" strokeWidth={1.5} />
+          </div>
+          {expanded && (
+            <div className="min-w-0">
+              <div className="text-xs text-ink-1 truncate">Felipe Pavez</div>
+              <div className="font-mono text-[10px] text-ink-3 truncate">InterGlobo</div>
+            </div>
+          )}
+        </div>
       </div>
     </aside>
   );

@@ -189,12 +189,29 @@ export function ShipmentGlobe({ bookings, height = 468, className, style, highli
     controls.enableZoom = false;
     globeRef.current.pointOfView({ lat: -33, lng: -71, altitude: 2.4 }, 0);
 
-    // Low-angle directional light so bump-map terrain casts visible relief.
+    // Terrain relief lighting setup.
     const scene = globeRef.current.scene();
-    const relief = new THREE.DirectionalLight(0xfff5e0, 1.4);
-    relief.position.set(2, 0.6, 1.2).normalize();
-    relief.name = 'relief-light';
-    if (!scene.getObjectByName('relief-light')) scene.add(relief);
+
+    // Dim react-globe.gl's ambient light — it washes out bump map normals at full intensity.
+    scene.traverse((obj) => {
+      if (obj instanceof THREE.AmbientLight) obj.intensity = 0.15;
+    });
+
+    // Raking directional light (~8° above horizon) so ridges cast long shadows.
+    if (!scene.getObjectByName('relief-light')) {
+      const relief = new THREE.DirectionalLight(0xfff5e0, 2.0);
+      relief.position.set(-5, 0.15, 1.5).normalize();
+      relief.name = 'relief-light';
+      scene.add(relief);
+    }
+
+    // Dim fill from the opposite side — prevents shadowed terrain from going pitch black.
+    if (!scene.getObjectByName('relief-fill')) {
+      const fill = new THREE.DirectionalLight(0xc8b89a, 0.25);
+      fill.position.set(5, 0.4, -1.5).normalize();
+      fill.name = 'relief-fill';
+      scene.add(fill);
+    }
   };
 
   const arcs: ArcDatum[] = useMemo(() => {
@@ -255,7 +272,7 @@ export function ShipmentGlobe({ bookings, height = 468, className, style, highli
     loader.load('https://unpkg.com/three-globe/example/img/earth-day.jpg',
       (tex) => { mat.map = tex; mat.needsUpdate = true; });
     loader.load('https://unpkg.com/three-globe/example/img/earth-topology.png',
-      (tex) => { mat.bumpMap = tex; mat.bumpScale = 40; mat.needsUpdate = true; });
+      (tex) => { mat.bumpMap = tex; mat.bumpScale = 18; mat.needsUpdate = true; });
     globeMatRef.current = mat;
   }
 

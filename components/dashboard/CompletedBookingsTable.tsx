@@ -28,7 +28,7 @@ export function CompletedBookingsTable({ rows }: { rows: Row[] }) {
     return null;
   }
   return (
-    <div className="rounded-xl border border-[var(--line-soft)] bg-bg-1">
+    <div className="h-full rounded-xl border border-[var(--line-soft)] bg-bg-1">
       <div className="border-b border-[var(--line-soft)] px-4 py-2.5 font-mono text-[10px] tracking-wider text-ink-3 uppercase">
         {t('lastWeekClosed')}
       </div>

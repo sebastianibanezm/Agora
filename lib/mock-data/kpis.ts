@@ -54,48 +54,50 @@ export function getDashboardMetrics(): DashboardMetrics {
   };
 }
 
-export function getDashboardKpis(): KPI[] {
+type TFn = (key: string, params?: Record<string, string | number>) => string;
+
+export function getDashboardKpis(t: TFn): KPI[] {
   const m = getDashboardMetrics();
   return [
     {
       id: 'active_bookings',
-      label: 'Active Bookings',
+      label: t('kpiActiveBookings'),
       value: String(m.activeBookings.value),
       delta: `${m.activeBookings.deltaPct >= 0 ? '+' : ''}${m.activeBookings.deltaPct}%`,
       deltaDirection: m.activeBookings.deltaPct >= 0 ? 'up' : 'down',
       deltaPositive: m.activeBookings.deltaPct >= 0,
-      sublabel: 'vs last week',
+      sublabel: t('kpiSubVsLastWeek'),
     },
     {
       id: 'awaiting_si',
-      label: 'Awaiting SI',
+      label: t('kpiAwaitingSi'),
       value: String(m.awaitingSi.value),
-      sublabel: `${m.awaitingSi.overdue} overdue`,
+      sublabel: t('kpiSubOverdue', { n: m.awaitingSi.overdue }),
       deltaDirection: m.awaitingSi.overdue > 0 ? 'up' : 'flat',
       deltaPositive: m.awaitingSi.overdue === 0,
     },
     {
       id: 'cutoffs_at_risk_24h',
-      label: 'Cut-offs at risk (24h)',
-      value: String(m.cutoffsAtRisk24h.value),
-      sublabel: `USD ${m.cutoffsAtRisk24h.usdAtRisk.toLocaleString('en-US')} at risk`,
+      label: t('kpiCutoffsAtRisk'),
+      value: `USD ${m.cutoffsAtRisk24h.usdAtRisk.toLocaleString()}`,
+      sublabel: t('kpiSubCutoffCount', { n: m.cutoffsAtRisk24h.value }),
       deltaDirection: m.cutoffsAtRisk24h.value > 0 ? 'up' : 'flat',
       deltaPositive: m.cutoffsAtRisk24h.value === 0,
     },
     {
       id: 'avg_si_turnaround',
-      label: 'Avg SI Turnaround',
+      label: t('kpiAvgSiTurnaround'),
       value: `${m.avgSiTurnaroundHours.value}h`,
       delta: `${m.avgSiTurnaroundHours.deltaHours >= 0 ? '+' : ''}${m.avgSiTurnaroundHours.deltaHours}h`,
       deltaDirection: m.avgSiTurnaroundHours.deltaHours <= 0 ? 'down' : 'up',
       deltaPositive: m.avgSiTurnaroundHours.deltaHours <= 0,
-      sublabel: 'SI receipt → e-SI sent',
+      sublabel: t('kpiSubSiTurnaround'),
     },
     {
       id: 'bl_discrepancies_caught',
-      label: 'BL Discrepancies Caught',
-      value: String(m.blDiscrepanciesCaught.value),
-      sublabel: `USD ${m.blDiscrepanciesCaught.usdAvoided.toLocaleString('en-US')} avoided`,
+      label: t('kpiBlDiscrepancies'),
+      value: `USD ${m.blDiscrepanciesCaught.usdAvoided.toLocaleString()}`,
+      sublabel: t('kpiSubDiscrepancyCount', { n: m.blDiscrepanciesCaught.value }),
       deltaDirection: 'up',
       deltaPositive: true,
     },

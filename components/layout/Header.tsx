@@ -55,7 +55,7 @@ export function Header({ breadcrumb }: HeaderProps) {
         aria-label={t('common.search')}
         className="flex items-center justify-center h-7 w-7 rounded-md text-ink-3 hover:text-ink-1 hover:bg-white/5 transition-colors"
       >
-        <Search className="h-4 w-4" />
+        <Search className="h-[18px] w-[18px]" strokeWidth={1.5} />
       </button>
 
       <NotificationBell />

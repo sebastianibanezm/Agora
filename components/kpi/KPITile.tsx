@@ -33,7 +33,7 @@ export function KPITile({ kpi, onClick }: Props) {
       <div className="flex items-baseline gap-1.5">
         <span
           data-testid="kpi-value"
-          className="font-mono text-[30px] leading-none font-semibold text-ink-1"
+          className="font-heading text-[30px] leading-none font-semibold text-ink-1"
         >
           {kpi.value}
         </span>
