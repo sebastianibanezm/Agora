@@ -7,25 +7,28 @@ import type {
   Alert,
   Booking,
   DraftBL,
+  ExporterBL,
   Exporter,
   Naviera,
   ShippingInstruction,
 } from '@/types';
-import { getContainersByBookingId } from '@/lib/hooks/useDemoStore';
 import { ContainerCard } from './ContainerCard';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
 import { BookingHeader } from './BookingHeader';
 import { BookingLifecycleStrip } from './BookingLifecycleStrip';
-import { SIViewer } from './SIViewer';
-import { ValidationPanel } from './ValidationPanel';
-import { DraftBLViewer } from './DraftBLViewer';
-import { BookingActivityFeed } from './BookingActivityFeed';
-import { useDemoStore, applyBookingOverride, transitionBooking, getNewBookingById } from '@/lib/hooks/useDemoStore';
+import { BookingInfoCards } from './BookingInfoCards';
+import { BookingActivityLog } from './BookingActivityLog';
+import { BookingDocumentCard, type DocumentStatus } from './BookingDocumentCard';
+import { BookingDocumentPopup, type DocType } from './BookingDocumentPopup';
+import {
+  useDemoStore,
+  applyBookingOverride,
+  transitionBooking,
+  getNewBookingById,
+  getContainersByBookingId,
+} from '@/lib/hooks/useDemoStore';
 import { toast } from '@/components/ui/toast';
-import { formatTs } from '@/lib/utils/dates';
-import { Send, Upload, FileCheck2, AlertTriangle, Loader2 } from 'lucide-react';
+import { AlertTriangle, Loader2, Send } from 'lucide-react';
 
 interface Props {
   bookingId: string;
@@ -34,32 +37,9 @@ interface Props {
   naviera?: Naviera;
   si?: ShippingInstruction;
   bl?: DraftBL;
+  exporterBl?: ExporterBL;
   alerts?: Alert[];
   events?: ActivityEvent[];
-}
-
-function GenerateEsiButton({
-  onClick,
-  disabled,
-  transmitting,
-  label,
-  transmittingLabel,
-}: {
-  onClick: () => void;
-  disabled: boolean;
-  transmitting: boolean;
-  label: string;
-  transmittingLabel: string;
-}) {
-  return (
-    <Button onClick={onClick} disabled={disabled}>
-      {transmitting ? (
-        <><Loader2 data-icon="inline-start" className="animate-spin" /> {transmittingLabel}</>
-      ) : (
-        <><Send data-icon="inline-start" /> {label}</>
-      )}
-    </Button>
-  );
 }
 
 export function BookingDetailClient({
@@ -69,20 +49,27 @@ export function BookingDetailClient({
   naviera,
   si,
   bl,
+  exporterBl: initialExporterBl,
   alerts = [],
   events = [],
 }: Props) {
   const t = useTranslations('bookings');
   const locale = useLocale() as 'es' | 'en';
   const storeState = useDemoStore();
+
   const booking = useMemo(() => {
     const base = initialBooking ?? getNewBookingById(bookingId);
     if (!base) return null;
     return applyBookingOverride(base);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialBooking, bookingId, storeState]);
+
   const [transmitting, setTransmitting] = useState(false);
-  const [tab, setTab] = useState<'overview' | 'si' | 'bl' | 'activity'>('overview');
+  const [selectedDoc, setSelectedDoc] = useState<{ type: DocType; id: string } | null>(null);
+  const [exporterBl, setExporterBl] = useState<ExporterBL | undefined>(initialExporterBl);
+  // Local events for demo actions (e.g. document_deleted). Prepended to server events.
+  const [localEvents, setLocalEvents] = useState<ActivityEvent[]>([]);
+  const allEvents = [...localEvents, ...events];
 
   const siHasFails = (si?.validationResults ?? []).some((c) => c.result === 'fail');
   const blHasFails = (bl?.validationResults ?? []).some((c) => c.result === 'fail');
@@ -103,6 +90,21 @@ export function BookingDetailClient({
     toast.success(t('toasts.blReleased', { email: exporter?.contactEmail ?? '' }));
   }
 
+  function handleDocDelete(docType: DocType) {
+    if (docType === 'exporterBl') setExporterBl(undefined);
+    const deletedEvent: ActivityEvent = {
+      id: `EVT-DEL-${Date.now()}`,
+      bookingId: booking!.id,
+      type: 'document_deleted',
+      timestamp: new Date().toISOString(),
+      actor: 'user',
+      actorName: 'Usuario Demo',
+      description: `${DOC_LABELS[docType]} document deleted.`,
+      metadata: { documentType: docType, deletedBy: 'Usuario Demo' },
+    };
+    setLocalEvents((prev) => [deletedEvent, ...prev]);
+  }
+
   if (!booking) {
     return (
       <div className="flex min-h-screen items-center justify-center text-sm text-ink-3">
@@ -111,239 +113,174 @@ export function BookingDetailClient({
     );
   }
 
+  const DOC_LABELS: Record<DocType, string> = {
+    booking: t('docBooking'),
+    si: t('docSI'),
+    bl: t('docDraftBL'),
+    exporterBl: t('docExporterBL'),
+  };
+
+  const bookingDocStatus: DocumentStatus = booking.bookingFileUrl ? 'ok' : 'missing';
+  const siStatus: DocumentStatus = !si ? 'missing' : siHasFails ? 'warn' : 'ok';
+  const blStatus: DocumentStatus = !bl ? 'missing' : blHasFails ? 'warn' : 'ok';
+  const exporterBlStatus: DocumentStatus =
+    !exporterBl || exporterBl.status === 'pending'
+      ? 'missing'
+      : exporterBl.status === 'uploaded'
+        ? 'warn'
+        : 'ok';
+
+  const siPrimaryAction = (
+    <Button
+      size="sm"
+      disabled={siHasFails || transmitting || booking.status === 'esi_sent' || booking.status === 'bl_released'}
+      onClick={handleGenerateEsi}
+    >
+      {transmitting ? (
+        <><Loader2 className="mr-1 h-3 w-3 animate-spin" />{t('transmittingEsi')}</>
+      ) : (
+        <><Send className="mr-1 h-3 w-3" />{t('generateEsi')}</>
+      )}
+    </Button>
+  );
+
+  const blPrimaryAction = (
+    <Button
+      size="sm"
+      disabled={blHasFails || booking.status === 'bl_released'}
+      onClick={handleReleaseBl}
+    >
+      {t('releaseBl')}
+    </Button>
+  );
+
   return (
-    <div className="flex min-h-screen flex-col gap-4 px-4 pt-4 pb-8">
-      <BookingHeader booking={booking} exporter={exporter} naviera={naviera} />
-      <BookingLifecycleStrip current={booking.status} />
+    <>
+      <div className="flex min-h-screen flex-col gap-4 px-4 pt-4 pb-8">
+        <BookingHeader booking={booking} exporter={exporter} naviera={naviera} />
+        <BookingLifecycleStrip current={booking.status} />
 
-      <Tabs value={tab} onValueChange={(v) => setTab(v as typeof tab)} className="flex-1">
-        <TabsList variant="line" className="border-b border-[var(--line-soft)] w-full rounded-none pb-0">
-          <TabsTrigger value="overview" className="gap-1.5">
-            {t('tabOverview')}
-            {alerts.length > 0 && (
-              <span className="flex h-4 min-w-4 items-center justify-center rounded-full bg-severity-watch/20 px-1 font-mono text-[10px] text-severity-watch">
-                {alerts.length}
-              </span>
-            )}
-          </TabsTrigger>
-          <TabsTrigger value="si" className="gap-1.5">
-            {t('tabSI')}
-            {si && siHasFails && (
-              <span className="h-1.5 w-1.5 rounded-full bg-severity-crit" />
-            )}
-            {si && !siHasFails && (
-              <span className="h-1.5 w-1.5 rounded-full bg-severity-ok" />
-            )}
-          </TabsTrigger>
-          <TabsTrigger value="bl" className="gap-1.5">
-            {t('tabBL')}
-            {bl && blHasFails && (
-              <span className="h-1.5 w-1.5 rounded-full bg-severity-crit" />
-            )}
-            {bl && !blHasFails && (
-              <span className="h-1.5 w-1.5 rounded-full bg-severity-ok" />
-            )}
-          </TabsTrigger>
-          <TabsTrigger value="activity">{t('tabActivity')}</TabsTrigger>
-        </TabsList>
+        {/* Alertas */}
+        {alerts.length > 0 && (
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-ink-4">
+              <AlertTriangle className="h-3 w-3 text-severity-watch" />
+              {t('alertsSection')}
+            </div>
+            <ul className="space-y-2">
+              {alerts.map((a) => (
+                <li
+                  key={a.id}
+                  className="rounded-md border border-[rgba(185,122,31,0.25)] border-l-[3px] border-l-severity-watch bg-[rgba(185,122,31,0.06)] px-3 py-2.5"
+                >
+                  <div className="flex items-baseline justify-between gap-2">
+                    <p className="text-sm font-medium text-ink-1">
+                      {locale === 'es' ? (a.titleEs ?? a.title) : a.title}
+                    </p>
+                    <p className="font-mono text-[10px] text-ink-3">
+                      {locale === 'es' ? (a.agentNameEs ?? a.agentName) : a.agentName}
+                    </p>
+                  </div>
+                  <p className="mt-0.5 text-xs text-ink-2">
+                    {locale === 'es' ? (a.messageEs ?? a.message) : a.message}
+                  </p>
+                  {a.suggestedAction && (
+                    <p className="mt-1 text-xs text-severity-ok">
+                      → {locale === 'es' ? (a.suggestedActionEs ?? a.suggestedAction) : a.suggestedAction}
+                    </p>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
-        {/* Persistent route context — visible on all tabs */}
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 border-b border-[var(--line-soft)] px-0 py-2 font-mono text-[11px] text-ink-3">
-          <span className="text-ink-2">
-            {booking.pol.split(',')[0]} → {booking.pod.split(',')[0]}
-          </span>
-          <span>{booking.vesselName} / {booking.voyage}</span>
-          <span>{t('labelEtd')} {formatTs(booking.etd)}</span>
-          <span>{t('labelEta')} {formatTs(booking.eta)}</span>
-          <span>{t('labelCutoff')} {formatTs(booking.cutOff ?? '')}</span>
-          {booking.isReefer && booking.setpointC !== undefined && (
-            <span className="text-trace">{booking.containerType} @ {booking.setpointC} °C</span>
-          )}
+        {/* Ruta y Horario — 2-column: info cards (left) + activity log (right) */}
+        <div className="grid grid-cols-2 items-stretch gap-3">
+          {/* Left: 4 info cards */}
+          <div className="flex flex-col gap-2.5">
+            <BookingInfoCards booking={booking} />
+          </div>
+
+          {/* Right: Actividades log */}
+          <div className="flex h-full flex-col overflow-hidden rounded-lg border border-line-soft bg-bg-2">
+            <p className="flex-shrink-0 border-b border-line-soft px-[14px] py-[9px] font-mono text-[10px] uppercase tracking-widest text-ink-4">
+              {t('sectionActividades')}
+            </p>
+            <div className="min-h-0 flex-1 overflow-y-auto p-[14px_16px]">
+              <BookingActivityLog events={allEvents} />
+            </div>
+          </div>
         </div>
 
-        {/* OVERVIEW */}
-        <TabsContent value="overview" className="mt-3 grid grid-cols-1 gap-4 lg:grid-cols-3">
-          <Card className="lg:col-span-2 p-4 flex flex-col gap-4">
-            {/* Route & Schedule */}
-            <div>
-              <div className="mb-2 font-mono text-[10px] tracking-wider text-ink-4 uppercase">
-                {t('sectionRouteSchedule')}
-              </div>
-              <dl className="grid grid-cols-2 gap-x-6 gap-y-2 text-xs">
-                <div>
-                  <dt className="text-ink-3">{t('labelPolToPod')}</dt>
-                  <dd className="text-ink-1">{booking.pol.split(',')[0]} → {booking.pod.split(',')[0]}</dd>
-                </div>
-                <div>
-                  <dt className="text-ink-3">{t('vessel')}</dt>
-                  <dd className="text-ink-1">{booking.vesselName}</dd>
-                </div>
-                <div>
-                  <dt className="text-ink-3">{t('voyage')}</dt>
-                  <dd className="font-mono text-ink-1">{booking.voyage}</dd>
-                </div>
-                <div>
-                  <dt className="text-ink-3">{t('labelEtdToEta')}</dt>
-                  <dd className="text-ink-1">{formatTs(booking.etd)} → {formatTs(booking.eta)}</dd>
-                </div>
-                <div>
-                  <dt className="text-ink-3">{t('stacking')}</dt>
-                  <dd className="text-ink-1">{formatTs(booking.stackingFrom ?? '')} → {formatTs(booking.stackingTo ?? '')}</dd>
-                </div>
-                <div>
-                  <dt className="text-ink-3">{t('labelCutoff')}</dt>
-                  <dd className="font-mono text-ink-1">{formatTs(booking.cutOff ?? '')}</dd>
-                </div>
-              </dl>
-            </div>
+        {/* Contenedores */}
+        <div>
+          <p className="mb-2 font-mono text-[10px] uppercase tracking-widest text-ink-4">
+            {t('containers', { n: getContainersByBookingId(booking.id).length })}
+          </p>
+          <div className="flex flex-col gap-2">
+            {getContainersByBookingId(booking.id).map((c) => (
+              <ContainerCard key={c.id} container={c} />
+            ))}
+          </div>
+        </div>
 
-            {/* Containers */}
-            <div className="border-t border-[var(--line-soft)] pt-3">
-              <div className="mb-2 font-mono text-[10px] tracking-wider text-ink-4 uppercase">
-                {t('containers', { n: getContainersByBookingId(booking.id).length })}
-              </div>
-              <div className="flex flex-col gap-2">
-                {getContainersByBookingId(booking.id).map((c) => (
-                  <ContainerCard key={c.id} container={c} />
-                ))}
-              </div>
-            </div>
-          </Card>
-
-          <Card className="p-4">
-            <div className="mb-2 font-mono text-[10px] tracking-wider text-ink-3 uppercase">
-              {t('quickActions')}
-            </div>
-            <div className="flex flex-col gap-2">
-              {/* Primary actions */}
-              <GenerateEsiButton
-                onClick={handleGenerateEsi}
-                disabled={!si || siHasFails || transmitting || booking.status === 'esi_sent' || booking.status === 'bl_released'}
-                transmitting={transmitting}
-                label={t('generateEsi')}
-                transmittingLabel={t('transmittingEsi')}
-              />
-              <Button
-                onClick={handleReleaseBl}
-                disabled={!bl || blHasFails || booking.status === 'bl_released' || booking.status === 'closed'}
-                className="w-full"
-              >
-                {t('releaseBl')}
-              </Button>
-
-              {/* Divider */}
-              <div className="my-1 h-px bg-[var(--line-soft)]" />
-
-              {/* Navigation actions */}
-              <Button
-                variant="ghost"
-                disabled={!si}
-                onClick={() => setTab('si')}
-                className="w-full justify-start text-ink-2"
-              >
-                <Upload data-icon="inline-start" /> {t('openSi')}
-              </Button>
-              <Button
-                variant="ghost"
-                disabled={!bl}
-                onClick={() => setTab('bl')}
-                className="w-full justify-start text-ink-2"
-              >
-                <FileCheck2 data-icon="inline-start" /> {t('viewBl')}
-              </Button>
-            </div>
-          </Card>
-
-          {alerts.length > 0 && (
-            <Card className="lg:col-span-3 p-4">
-              <div className="mb-2 flex items-center gap-2 font-mono text-[10px] tracking-wider text-ink-3 uppercase">
-                <AlertTriangle className="h-3 w-3 text-severity-watch" /> {t('alertsSection')}
-              </div>
-              <ul className="space-y-2">
-                {alerts.map((a) => (
-                  <li key={a.id} className="rounded-md border border-[var(--line-soft)] bg-bg-2 p-3">
-                    <div className="flex items-baseline justify-between gap-2">
-                      <div className="text-sm font-medium text-ink-1">{locale === 'es' ? (a.titleEs ?? a.title) : a.title}</div>
-                      <div className="font-mono text-[10px] text-ink-3">{locale === 'es' ? (a.agentNameEs ?? a.agentName) : a.agentName}</div>
-                    </div>
-                    <div className="mt-0.5 text-xs text-ink-2">{locale === 'es' ? (a.messageEs ?? a.message) : a.message}</div>
-                    {a.suggestedAction && (
-                      <div className="mt-1 text-xs text-mint-500">→ {locale === 'es' ? (a.suggestedActionEs ?? a.suggestedAction) : a.suggestedAction}</div>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </Card>
-          )}
-        </TabsContent>
-
-        {/* SHIPPING INSTRUCTION */}
-        <TabsContent value="si" className="mt-3 flex flex-col gap-4">
-          {si ? (
-            <>
-              <SIViewer si={si} locale={locale} />
-              <ValidationPanel
-                checks={si.validationResults}
-                title={t('validationSiTitle')}
-                action={
-                  <GenerateEsiButton
-                    onClick={handleGenerateEsi}
-                    disabled={siHasFails || transmitting || booking.status === 'esi_sent' || booking.status === 'bl_released'}
-                    transmitting={transmitting}
-                    label={t('generateEsi')}
-                    transmittingLabel={t('transmittingEsi')}
-                  />
-                }
-              />
-            </>
-          ) : (
-            <EmptyState
-              title={t('siEmptyTitle', { exporter: exporter?.name ?? booking.shipper })}
-              hint={t('siEmptyHint', { exporter: exporter?.name ?? booking.shipper })}
+        {/* Documentos */}
+        <div>
+          <p className="mb-2.5 font-mono text-[10px] uppercase tracking-widest text-ink-4">
+            {t('sectionDocumentos')}
+          </p>
+          <div className="grid grid-cols-1 gap-2.5 md:grid-cols-2 lg:grid-cols-4">
+            <BookingDocumentCard
+              label={t('docBooking')}
+              status={bookingDocStatus}
+              onClick={() => setSelectedDoc({ type: 'booking', id: booking.id })}
             />
-          )}
-        </TabsContent>
-
-        {/* DRAFT BL */}
-        <TabsContent value="bl" className="mt-3 flex flex-col gap-4">
-          {bl && si ? (
-            <>
-              <DraftBLViewer bl={bl} si={si} />
-              <ValidationPanel
-                checks={bl.validationResults}
-                title={t('validationBlTitle')}
-                action={
-                  <Button onClick={handleReleaseBl} disabled={blHasFails || booking.status === 'bl_released'}>
-                    {t('releaseBl')}
-                  </Button>
-                }
-              />
-            </>
-          ) : (
-            <EmptyState
-              title={t('blEmptyTitle', { naviera: naviera?.shortName ?? '' })}
-              hint={t('blEmptyHint', { when: si?.esiTransmittedAt ? formatTs(si.esiTransmittedAt) : '—' })}
+            <BookingDocumentCard
+              label={t('docSI')}
+              status={siStatus}
+              onClick={() => setSelectedDoc({ type: 'si', id: si?.id ?? booking.id })}
             />
-          )}
-        </TabsContent>
-
-        {/* ACTIVITY */}
-        <TabsContent value="activity" className="mt-3">
-          <BookingActivityFeed events={events} />
-        </TabsContent>
-      </Tabs>
-    </div>
-  );
-}
-
-function EmptyState({ title, hint }: { title: string; hint: string }) {
-  return (
-    <Card className="flex flex-col items-center justify-center gap-3 p-12 text-center">
-      <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--line-soft)] bg-bg-2">
-        <FileCheck2 className="h-5 w-5 text-ink-3" />
+            <BookingDocumentCard
+              label={t('docDraftBL')}
+              status={blStatus}
+              onClick={() => setSelectedDoc({ type: 'bl', id: bl?.id ?? booking.id })}
+            />
+            <BookingDocumentCard
+              label={t('docExporterBL')}
+              status={exporterBlStatus}
+              onClick={() =>
+                setSelectedDoc({
+                  type: 'exporterBl',
+                  id: exporterBl?.id ?? booking.id,
+                })
+              }
+            />
+          </div>
+        </div>
       </div>
-      <div className="text-sm font-medium text-ink-1">{title}</div>
-      <div className="max-w-xs text-xs text-ink-3">{hint}</div>
-    </Card>
+
+      {/* Document popup */}
+      {selectedDoc && (
+        <BookingDocumentPopup
+          docType={selectedDoc.type}
+          docId={selectedDoc.id}
+          booking={booking}
+          si={si}
+          bl={bl}
+          exporterBl={exporterBl}
+          events={allEvents}
+          onClose={() => setSelectedDoc(null)}
+          onDelete={handleDocDelete}
+          primaryAction={
+            selectedDoc.type === 'si'
+              ? siPrimaryAction
+              : selectedDoc.type === 'bl'
+                ? blPrimaryAction
+                : undefined
+          }
+        />
+      )}
+    </>
   );
 }
