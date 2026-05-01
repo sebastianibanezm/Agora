@@ -90,6 +90,13 @@ export function BookingDetailClient({
     toast.success(t('toasts.blReleased', { email: exporter?.contactEmail ?? '' }));
   }
 
+  const DOC_LABELS: Record<DocType, string> = {
+    booking: t('docBooking'),
+    si: t('docSI'),
+    bl: t('docDraftBL'),
+    exporterBl: t('docExporterBL'),
+  };
+
   function handleDocDelete(docType: DocType) {
     if (docType === 'exporterBl') setExporterBl(undefined);
     const deletedEvent: ActivityEvent = {
@@ -112,13 +119,6 @@ export function BookingDetailClient({
       </div>
     );
   }
-
-  const DOC_LABELS: Record<DocType, string> = {
-    booking: t('docBooking'),
-    si: t('docSI'),
-    bl: t('docDraftBL'),
-    exporterBl: t('docExporterBL'),
-  };
 
   const bookingDocStatus: DocumentStatus = booking.bookingFileUrl ? 'ok' : 'missing';
   const siStatus: DocumentStatus = !si ? 'missing' : siHasFails ? 'warn' : 'ok';
