@@ -269,10 +269,14 @@ export function ShipmentGlobe({ bookings, height = 468, className, style, highli
   }, []);
 
   useEffect(() => {
-    if (!globeRef.current || !controlsRef.current) return;
+    if (!globeRef.current) return;
+    // Fetch controls directly each time — guards against controlsRef being stale
+    // (e.g. Strict Mode remount before onGlobeReady fires a second time).
+    const controls = controlsRef.current ?? globeRef.current.controls();
+    if (!controlsRef.current) controlsRef.current = controls;
 
     if (highlightedBooking) {
-      controlsRef.current.autoRotate = false;
+      controls.autoRotate = false;
       const { lat, lng } = slerpLatLng(
         highlightedBooking.polCoords[1], highlightedBooking.polCoords[0],
         highlightedBooking.podCoords[1], highlightedBooking.podCoords[0],
@@ -291,7 +295,7 @@ export function ShipmentGlobe({ bookings, height = 468, className, style, highli
         highlightOrbProgressRef.current = 0;
       }
     } else {
-      controlsRef.current.autoRotate = true;
+      controls.autoRotate = true;
       globeRef.current.pointOfView({ lat: 0, lng: -75, altitude: 2.4 }, 800);
     }
 
@@ -390,7 +394,7 @@ export function ShipmentGlobe({ bookings, height = 468, className, style, highli
         arcStroke={(d: object) => {
           const a = d as ArcDatum;
           if (!highlightedBooking) return 0.6;
-          return a.highlighted ? 0.9 : 0.4;
+          return a.highlighted ? 0.75 : 0.4;
         }}
         arcAltitudeAutoScale={0.4}
         arcLabel={(d: object) => {
