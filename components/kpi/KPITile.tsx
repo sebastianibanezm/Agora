@@ -3,22 +3,29 @@ import clsx from 'clsx';
 
 interface Props {
   kpi: KPI;
+  onClick?: () => void;
 }
 
-export function KPITile({ kpi }: Props) {
+export function KPITile({ kpi, onClick }: Props) {
   const dir = kpi.deltaDirection;
   const positive = kpi.deltaPositive;
   const deltaColor =
     positive === undefined
       ? 'text-ink-3'
       : positive
-        ? 'text-mint-500'
+        ? 'text-severity-ok'
         : 'text-severity-risk';
 
+  const Tag = onClick ? 'button' : 'div';
+
   return (
-    <div
+    <Tag
       data-testid={`kpi-${kpi.id}`}
-      className="relative overflow-hidden rounded-[10px] border border-[var(--line-soft)] bg-bg-1 px-4 py-3.5 transition-colors hover:border-[var(--line-mid)]"
+      onClick={onClick}
+      className={clsx(
+        'relative w-full overflow-hidden rounded-[10px] border border-[var(--line-soft)] bg-bg-1 px-4 py-3.5 text-left transition-colors hover:border-[var(--line-mid)]',
+        onClick && 'cursor-pointer hover:bg-white/[0.02] active:bg-white/[0.04]',
+      )}
     >
       <div className="mb-2 font-mono text-[9.5px] tracking-[0.18em] text-ink-3 uppercase">
         {kpi.label}
@@ -39,10 +46,10 @@ export function KPITile({ kpi }: Props) {
             </span>
           )}
           {kpi.sublabel && (
-            <span className="truncate text-ink-3">{kpi.sublabel}</span>
+            <span className={clsx('truncate', deltaColor)}>{kpi.sublabel}</span>
           )}
         </div>
       )}
-    </div>
+    </Tag>
   );
 }
