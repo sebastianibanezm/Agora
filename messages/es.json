@@ -85,7 +85,16 @@
     "colExporter": "Exportador",
     "colCarrier": "Naviera",
     "colRoute": "Ruta",
-    "colStatus": "Estado"
+    "colStatus": "Estado",
+    "kpiSubVsLastWeek": "vs semana pasada",
+    "kpiSubOverdue": "{n} atrasados",
+    "kpiSubUsdAtRisk": "USD {usd} en riesgo",
+    "kpiSubSiTurnaround": "Recepción SI → e-SI enviado",
+    "kpiSubUsdAvoided": "USD {usd} evitados",
+    "enTransit": "En tránsito",
+    "noActiveShipments": "No hay embarques activos",
+    "kpiSubCutoffCount": "{n} cortes en riesgo",
+    "kpiSubDiscrepancyCount": "{n} detectadas"
   },
   "bookings": {
     "title": "Bookings",
@@ -117,6 +126,7 @@
     "bookingFile": "Confirmación de booking",
     "bookingFileUnavailable": "Archivo no disponible en esta sesión",
     "containers": "Contenedores ({n})",
+    "bookingsSection": "Bookings ({n})",
     "uploadDialog": {
       "title": "Subir Confirmación de Booking",
       "dropzone": "Arrastra un PDF aquí, o haz clic para buscar",

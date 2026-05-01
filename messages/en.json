@@ -85,7 +85,16 @@
     "colExporter": "Exporter",
     "colCarrier": "Carrier",
     "colRoute": "Route",
-    "colStatus": "Status"
+    "colStatus": "Status",
+    "kpiSubVsLastWeek": "vs last week",
+    "kpiSubOverdue": "{n} overdue",
+    "kpiSubUsdAtRisk": "USD {usd} at risk",
+    "kpiSubSiTurnaround": "SI receipt → e-SI sent",
+    "kpiSubUsdAvoided": "USD {usd} avoided",
+    "enTransit": "In transit",
+    "noActiveShipments": "No active shipments",
+    "kpiSubCutoffCount": "{n} cut-offs at risk",
+    "kpiSubDiscrepancyCount": "{n} detected"
   },
   "bookings": {
     "title": "Bookings",
@@ -117,6 +126,7 @@
     "bookingFile": "Booking confirmation",
     "bookingFileUnavailable": "File not available in this session",
     "containers": "Containers ({n})",
+    "bookingsSection": "Bookings ({n})",
     "uploadDialog": {
       "title": "Upload Booking Confirmation",
       "dropzone": "Drop a PDF here, or click to browse",
