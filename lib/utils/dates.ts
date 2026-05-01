@@ -1,5 +1,6 @@
 import { differenceInCalendarDays } from 'date-fns';
 import { getTodayDemo } from '@/lib/mock-data/today';
+import type { AlertSeverity } from '@/types';
 
 export { getTodayDemo };
 
@@ -63,4 +64,13 @@ export function formatShortDate(iso: string, locale: 'es' | 'en'): string {
   return locale === 'es'
     ? `${day} ${SHORT_MONTHS_ES[monthIdx]}`
     : `${SHORT_MONTHS_EN[monthIdx]} ${day}`;
+}
+
+export function getCutoffSeverity(cutoffIso: string, now: Date = getTodayDemo()): AlertSeverity | null {
+  if (!cutoffIso) return null;
+  const delta = hoursUntil(cutoffIso, now);
+  if (delta <= 0) return null;
+  if (delta <= 72) return 'critical';
+  if (delta <= 120) return 'action';
+  return null;
 }

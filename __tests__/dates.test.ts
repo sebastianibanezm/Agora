@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { getTodayDemo, tDayFrom, formatDate, hoursUntil } from '@/lib/utils/dates';
+import { getTodayDemo, tDayFrom, formatDate, hoursUntil, getCutoffSeverity } from '@/lib/utils/dates';
 
 describe('dates', () => {
   it('getTodayDemo is anchored to 2026-04-30T10:00:00-04:00', () => {
@@ -23,5 +23,31 @@ describe('dates', () => {
   it('hoursUntil computes positive hours', () => {
     const cutoff = new Date(getTodayDemo().getTime() + 18 * 3600 * 1000).toISOString();
     expect(hoursUntil(cutoff)).toBeCloseTo(18, 0);
+  });
+});
+
+describe('getCutoffSeverity', () => {
+  it('returns critical when cutoff is within 72h', () => {
+    const cutoff = new Date(getTodayDemo().getTime() + 48 * 3600 * 1000).toISOString();
+    expect(getCutoffSeverity(cutoff)).toBe('critical');
+  });
+
+  it('returns action when cutoff is between 72h and 120h', () => {
+    const cutoff = new Date(getTodayDemo().getTime() + 96 * 3600 * 1000).toISOString();
+    expect(getCutoffSeverity(cutoff)).toBe('action');
+  });
+
+  it('returns null when cutoff is beyond 120h', () => {
+    const cutoff = new Date(getTodayDemo().getTime() + 200 * 3600 * 1000).toISOString();
+    expect(getCutoffSeverity(cutoff)).toBeNull();
+  });
+
+  it('returns null for empty string', () => {
+    expect(getCutoffSeverity('')).toBeNull();
+  });
+
+  it('returns null when cutoff is in the past', () => {
+    const cutoff = new Date(getTodayDemo().getTime() - 3600 * 1000).toISOString();
+    expect(getCutoffSeverity(cutoff)).toBeNull();
   });
 });
