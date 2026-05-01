@@ -212,9 +212,14 @@ export function BookingDetailClient({
 
         {/* Ruta y Horario — 2-column: info cards (left) + activity log (right, capped to left height) */}
         <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
-          {/* Left: 4 info cards — measured via ref to sync right column height */}
-          <div ref={infoCardsRef} className="flex flex-col gap-2.5">
-            <BookingInfoCards booking={booking} />
+          {/* Left: Detalles container — measured via ref to sync right column height */}
+          <div ref={infoCardsRef} className="flex flex-col overflow-hidden rounded-lg border border-line-soft bg-bg-2">
+            <p className="flex-shrink-0 border-b border-line-soft px-[14px] py-[9px] font-mono text-[10px] uppercase tracking-widest text-ink-4">
+              {t('sectionDetalles')}
+            </p>
+            <div className="flex flex-col gap-2.5 p-[14px_16px]">
+              <BookingInfoCards booking={booking} />
+            </div>
           </div>
 
           {/* Right: Actividades log — height locked to left column, scrolls internally */}
