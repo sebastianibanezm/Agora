@@ -438,14 +438,7 @@ export function ShipmentGlobe({ bookings, height = 468, className, style, highli
           return a.highlighted ? 0.55 : 0.4;
         }}
         arcAltitudeAutoScale={0.4}
-        arcLabel={(d: object) => {
-          const a = d as ArcDatum;
-          return `<div style="border-radius:8px;background:#FFFCF1;backdrop-filter:blur(8px);padding:8px 10px;font-size:12px;color:#2B1F12;border:1px solid rgba(43,31,18,0.12);font-family:monospace">
-    <div style="font-weight:600">${a.bookings[0]!.pol.split(',')[0]} → ${a.bookings[0]!.pod.split(',')[0]}</div>
-    <div style="color:#8A7860;font-size:11px;margin-top:3px">${a.bookings.length} active booking${a.bookings.length === 1 ? '' : 's'}</div>
-  </div>`;
-        }}
-        onArcHover={(d: object | null) => setHovered((d as ArcDatum) ?? null)}
+onArcHover={(d: object | null) => setHovered((d as ArcDatum) ?? null)}
         onArcClick={(d: object) => {
           const a = d as ArcDatum;
           if (a.bookings.length === 1) {
