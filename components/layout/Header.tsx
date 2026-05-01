@@ -3,6 +3,7 @@ import { useTranslations } from 'next-intl';
 import { usePathname } from 'next/navigation';
 import { Search } from 'lucide-react';
 import { NotificationBell } from '@/components/layout/NotificationBell';
+import { useCommandPalette } from '@/components/search/CommandPaletteProvider';
 
 interface HeaderProps {
   breadcrumb?: { parent: string; current: string };
@@ -21,6 +22,7 @@ const SECTION_KEYS: Record<string, 'operations' | 'bookings' | 'exporters' | 'na
 export function Header({ breadcrumb }: HeaderProps) {
   const t = useTranslations();
   const pathname = usePathname();
+  const { open } = useCommandPalette();
   const hour = new Date().getHours();
   const greeting = hour < 12 ? t('nav.greetingMorning') : t('nav.greetingAfternoon');
 
@@ -53,9 +55,11 @@ export function Header({ breadcrumb }: HeaderProps) {
       {/* Right cluster */}
       <button
         aria-label={t('common.search')}
-        className="flex items-center justify-center h-7 w-7 rounded-md text-ink-3 hover:text-ink-1 hover:bg-white/5 transition-colors"
+        onClick={open}
+        className="flex items-center gap-1.5 h-7 px-2 rounded-md text-ink-3 hover:text-ink-1 hover:bg-white/5 transition-colors"
       >
         <Search className="h-[18px] w-[18px]" strokeWidth={1.5} />
+        <span aria-hidden="true" className="font-mono text-[10px] text-ink-4">⌘K</span>
       </button>
 
       <NotificationBell />

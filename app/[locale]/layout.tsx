@@ -6,6 +6,8 @@ import { getMessages, setRequestLocale } from 'next-intl/server';
 import { AppShell } from '@/components/layout/AppShell';
 import { Toaster } from '@/components/ui/toast';
 import { routing } from '@/i18n/routing';
+import { CommandPaletteProvider } from '@/components/search/CommandPaletteProvider';
+import { CommandPalette } from '@/components/search/CommandPalette';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
 const mono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono', display: 'swap' });
@@ -32,8 +34,11 @@ export default async function LocaleLayout({ children, params }: Props) {
     <html lang={locale} className={`dark ${inter.variable} ${mono.variable} ${fraunces.variable}`}>
       <body className="bg-bg-0 text-ink-1">
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <AppShell>{children}</AppShell>
-          <Toaster />
+          <CommandPaletteProvider>
+            <AppShell>{children}</AppShell>
+            <Toaster />
+            <CommandPalette />
+          </CommandPaletteProvider>
         </NextIntlClientProvider>
       </body>
     </html>
