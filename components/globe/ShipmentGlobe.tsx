@@ -185,7 +185,7 @@ export function ShipmentGlobe({ bookings, height = 468, className, style, highli
     const controls = globeRef.current.controls();
     controlsRef.current = controls;
     controls.autoRotate = true;
-    controls.autoRotateSpeed = 0.35;
+    controls.autoRotateSpeed = 0.55;
     controls.enableZoom = false;
     globeRef.current.pointOfView({ lat: -33, lng: -71, altitude: 2.4 }, 0);
 
@@ -269,8 +269,8 @@ export function ShipmentGlobe({ bookings, height = 468, className, style, highli
   if (!globeMatRef.current && typeof window !== 'undefined') {
     const mat = new THREE.MeshPhongMaterial({
       color: new THREE.Color('#D4B890'),
-      shininess: 60,
-      specular: new THREE.Color(0x88ccff),
+      shininess: 8,
+      specular: new THREE.Color(0x7799bb),
     });
     const loader = new THREE.TextureLoader();
     loader.load('https://unpkg.com/three-globe/example/img/earth-day.jpg',
@@ -279,13 +279,13 @@ export function ShipmentGlobe({ bookings, height = 468, className, style, highli
       (tex) => { mat.bumpMap = tex; mat.bumpScale = 18; mat.needsUpdate = true; });
     loader.load('https://unpkg.com/three-globe/example/img/earth-water.png',
       (tex) => { mat.specularMap = tex; mat.needsUpdate = true; });
-    loader.load('https://unpkg.com/three@0.184.0/examples/textures/waternormals.jpg',
+    loader.load('/waternormals.jpg',
       (tex) => {
         tex.wrapS = THREE.RepeatWrapping;
         tex.wrapT = THREE.RepeatWrapping;
         tex.repeat.set(4, 2);
         mat.normalMap = tex;
-        mat.normalScale.set(0.04, 0.04);
+        mat.normalScale.set(0.45, 0.45);
         mat.needsUpdate = true;
       });
     globeMatRef.current = mat;
@@ -409,13 +409,13 @@ export function ShipmentGlobe({ bookings, height = 468, className, style, highli
       </div>
 
       <div
-        className="absolute left-0"
-        style={{ top: '50%', transform: `translateY(-50%)`, width: size.h, height: size.h, pointerEvents: 'auto' }}
+        className="absolute"
+        style={{ top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: Math.round(size.h * 1.1), height: Math.round(size.h * 1.1), pointerEvents: 'auto' }}
       >
       <Globe
         ref={globeRef}
-        width={size.h}
-        height={size.h}
+        width={Math.round(size.h * 1.1)}
+        height={Math.round(size.h * 1.1)}
         backgroundColor="rgba(0,0,0,0)"
         showAtmosphere
         onGlobeReady={handleGlobeReady}
