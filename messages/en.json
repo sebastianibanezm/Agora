@@ -9,7 +9,9 @@
     "agentsRunning": "{n} agents running",
     "userMenu": "User menu",
     "notifications": "Notifications",
-    "todaysQueue": "Today's queue"
+    "todaysQueue": "Today's queue",
+    "greetingMorning": "Good morning,",
+    "greetingAfternoon": "Good afternoon,"
   },
   "common": {
     "costAtRisk": "Cost at risk",

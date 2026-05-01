@@ -9,7 +9,9 @@
     "agentsRunning": "{n} agentes activos",
     "userMenu": "Menú de usuario",
     "notifications": "Notificaciones",
-    "todaysQueue": "Cola de hoy"
+    "todaysQueue": "Cola de hoy",
+    "greetingMorning": "Buenos días,",
+    "greetingAfternoon": "Buenas tardes,"
   },
   "common": {
     "costAtRisk": "Costo en riesgo",

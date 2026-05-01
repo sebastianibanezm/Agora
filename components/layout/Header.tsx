@@ -11,8 +11,13 @@ interface HeaderProps {
   breadcrumb?: { parent: string; current: string };
 }
 
+const USER_NAME = 'Felipe Donoso';
+
 export function Header({ breadcrumb }: HeaderProps) {
   const t = useTranslations();
+  const hour = new Date().getHours();
+  const greeting = hour < 12 ? t('nav.greetingMorning') : t('nav.greetingAfternoon');
+
   return (
     <header className="fixed top-0 left-14 right-0 h-14 z-30 glass border-b border-white/10 flex items-center px-4 gap-4">
       {/* Left: breadcrumb */}
@@ -26,7 +31,10 @@ export function Header({ breadcrumb }: HeaderProps) {
         <div className="flex items-center gap-1.5 font-mono text-xs tracking-wider mr-auto">
           <span className="text-ink-3 uppercase">{t('nav.operations')}</span>
           <span className="text-ink-4">/</span>
-          <span className="text-ink-2">{t('nav.todaysQueue')}</span>
+          <span className="text-ink-2 normal-case tracking-normal text-xs">
+            {greeting}{' '}
+            <span className="font-display italic text-ink-1">{USER_NAME}</span>
+          </span>
         </div>
       )}
 
