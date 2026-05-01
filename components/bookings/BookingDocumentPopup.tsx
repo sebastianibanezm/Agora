@@ -151,13 +151,15 @@ export function BookingDocumentPopup({
           </div>
           <div className="flex flex-shrink-0 items-center gap-1.5">
             {primaryAction}
-            <Button
-              size="sm"
-              variant="destructive"
-              onClick={() => setShowConfirm(true)}
-            >
-              {t('popupDeleteDoc')}
-            </Button>
+            {!isUploadMode && (
+              <Button
+                size="sm"
+                variant="destructive"
+                onClick={() => setShowConfirm(true)}
+              >
+                {t('popupDeleteDoc')}
+              </Button>
+            )}
             <button
               type="button"
               aria-label="Close"

@@ -98,10 +98,11 @@ export function BookingDetailClient({
   };
 
   function handleDocDelete(docType: DocType) {
+    if (!booking) return;
     if (docType === 'exporterBl') setExporterBl(undefined);
     const deletedEvent: ActivityEvent = {
       id: `EVT-DEL-${Date.now()}`,
-      bookingId: booking!.id,
+      bookingId: booking.id,
       type: 'document_deleted',
       timestamp: new Date().toISOString(),
       actor: 'user',
@@ -196,7 +197,7 @@ export function BookingDetailClient({
         )}
 
         {/* Ruta y Horario — 2-column: info cards (left) + activity log (right) */}
-        <div className="grid grid-cols-2 items-stretch gap-3">
+        <div className="grid grid-cols-1 items-stretch gap-3 lg:grid-cols-2">
           {/* Left: 4 info cards */}
           <div className="flex flex-col gap-2.5">
             <BookingInfoCards booking={booking} />
