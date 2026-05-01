@@ -1,8 +1,13 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import { renderHook } from '@testing-library/react';
 import { useSearchData } from '@/components/search/useSearchData';
+import { useLocale } from 'next-intl';
 
-vi.mock('next-intl', () => ({ useLocale: () => 'en' }));
+vi.mock('next-intl', () => ({ useLocale: vi.fn().mockReturnValue('en') }));
+
+afterEach(() => {
+  vi.mocked(useLocale).mockReturnValue('en');
+});
 
 describe('useSearchData', () => {
   it('returns an array of SearchItems', () => {
@@ -44,5 +49,14 @@ describe('useSearchData', () => {
     const alerts = result.current.filter(i => i.type === 'alert');
     expect(alerts.length).toBeGreaterThan(0);
     expect(alerts[0].label).toBeTruthy();
+  });
+
+  it('uses Spanish strings when locale is es', () => {
+    vi.mocked(useLocale).mockReturnValue('es');
+    const { result } = renderHook(() => useSearchData());
+    const spanishAlerts = result.current.filter(i => i.type === 'alert');
+    expect(spanishAlerts.length).toBeGreaterThan(0);
+    // Spanish titles contain Spanish words not present in English titles
+    expect(spanishAlerts[0].label).not.toBe('');
   });
 });
