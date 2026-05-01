@@ -56,7 +56,11 @@
     "si_in": "SI in",
     "bl_in": "BL in",
     "si_validated_short": "SI ✓",
-    "bl_validated_short": "BL ✓"
+    "bl_validated_short": "BL ✓",
+    "si_in_review": "SI en revisión",
+    "ready_to_send": "Listo para enviar",
+    "awaiting_draft_bl": "Esperando BL borrador",
+    "ready_to_release": "Listo para liberar"
   },
   "dashboard": {
     "title": "Operaciones",
@@ -124,6 +128,7 @@
     "filterStatus": "Estado",
     "filterExporter": "Exportador",
     "filterNaviera": "Naviera",
+    "filterCountry": "País",
     "filterMarket": "Mercado",
     "filterDateRange": "Rango cut-off",
     "search": "Buscar booking, contenedor, vapor…",
@@ -141,8 +146,6 @@
     "bookingsSection": "Bookings ({n})",
     "uploadDialog": {
       "title": "Subir Confirmación de Booking",
-      "dropzone": "Arrastra un PDF aquí, o haz clic para buscar",
-      "parsing": "Extrayendo datos del booking…",
       "reviewTitle": "Revisa los datos extraídos",
       "reviewHint": "Revisa los campos antes de confirmar. Los campos marcados como pendientes no se encontraron en el PDF.",
       "fieldPending": "Pendiente",
@@ -152,7 +155,12 @@
       "toast": "Booking {number} creado.",
       "unknownCarrier": "Naviera desconocida — selecciona una",
       "parseError": "No se pudo extraer datos de este PDF. Intenta nuevamente.",
-      "tryAgain": "Intentar de nuevo"
+      "tryAgain": "Intentar de nuevo",
+      "dropzoneMultiple": "Arrastra PDFs aquí, o haz clic para buscar",
+      "processingTitle": "Procesando documentos…",
+      "allFailed": "No se pudo extraer datos de ninguno de los PDFs cargados.",
+      "confirmNext": "Confirmar y siguiente",
+      "bookingCounter": "Booking {current} de {total}"
     },
     "empty": "Ningún booking coincide con estos filtros.",
     "densityCompact": "Compacta",

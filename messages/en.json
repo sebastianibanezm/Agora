@@ -56,7 +56,11 @@
     "si_in": "SI in",
     "bl_in": "BL in",
     "si_validated_short": "SI ✓",
-    "bl_validated_short": "BL ✓"
+    "bl_validated_short": "BL ✓",
+    "si_in_review": "SI In Review",
+    "ready_to_send": "Ready to Send",
+    "awaiting_draft_bl": "Awaiting Draft BL",
+    "ready_to_release": "Ready to Release"
   },
   "dashboard": {
     "title": "Operations",
