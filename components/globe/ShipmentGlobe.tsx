@@ -176,7 +176,7 @@ export function ShipmentGlobe({ bookings, height = 468, className, style, highli
 
   useEffect(() => {
     if (!globeRef.current) return;
-    globeRef.current.pointOfView({ lat: 0, lng: -75, altitude: 2.4 }, 0);
+    globeRef.current.pointOfView({ lat: -33, lng: -71, altitude: 2.4 }, 0);
   }, [size.w]);
 
   const handleGlobeReady = () => {
@@ -186,7 +186,7 @@ export function ShipmentGlobe({ bookings, height = 468, className, style, highli
     controls.autoRotate = true;
     controls.autoRotateSpeed = 0.35;
     controls.enableZoom = false;
-    globeRef.current.pointOfView({ lat: 0, lng: -75, altitude: 2.4 }, 0);
+    globeRef.current.pointOfView({ lat: -33, lng: -71, altitude: 2.4 }, 0);
 
     // Low-angle directional light so bump-map terrain casts visible relief.
     const scene = globeRef.current.scene();
@@ -296,7 +296,7 @@ export function ShipmentGlobe({ bookings, height = 468, className, style, highli
       }
     } else {
       controls.autoRotate = true;
-      globeRef.current.pointOfView({ lat: 0, lng: -75, altitude: 2.4 }, 800);
+      globeRef.current.pointOfView({ lat: -33, lng: -71, altitude: 2.4 }, 800);
     }
 
     return () => {
