@@ -78,7 +78,7 @@ export function BookingActivityLog({ events, documentId, emptyMessage }: Props) 
               <div
                 className={`mt-1 h-2.5 w-2.5 flex-shrink-0 rounded-full border ${dotClass(event.type, event.actor)}`}
               />
-              {!isLast && <div className="mt-1 w-px flex-1 bg-line-mid" />}
+              {!isLast && <div className="mt-1 w-px flex-1" style={{ backgroundColor: 'var(--line-mid)' }} />}
             </div>
             {/* Content */}
             <div className={`flex min-w-0 flex-col gap-0.5 ${isLast ? 'pb-0' : 'pb-5'}`}>
