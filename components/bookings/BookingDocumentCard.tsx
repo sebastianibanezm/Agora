@@ -23,22 +23,24 @@ const STATUS_BADGE: Record<DocumentStatus, { className: string }> = {
   },
 };
 
+const STATUS_LABEL_KEY: Record<DocumentStatus, string> = {
+  ok: 'docStatusOk',
+  warn: 'docStatusReview',
+  missing: 'docStatusMissing',
+} as const;
+
 export function BookingDocumentCard({ label, status, onClick }: Props) {
   const t = useTranslations('bookings');
 
   const badge = STATUS_BADGE[status];
 
-  const statusLabel =
-    status === 'ok'
-      ? t('docStatusOk')
-      : status === 'warn'
-        ? t('docStatusReview')
-        : t('docStatusMissing');
+  const statusLabel = t(STATUS_LABEL_KEY[status] as Parameters<typeof t>[0]);
 
   return (
     <button
       type="button"
       onClick={onClick}
+      aria-label={`${label} — ${statusLabel}`}
       className={`w-full rounded-lg border border-line-soft bg-bg-2 p-4 text-left transition-colors hover:bg-bg-3 focus:outline-none focus:ring-2 focus:ring-ink-3/30 ${status === 'missing' ? 'opacity-[0.55]' : ''}`}
     >
       <div
