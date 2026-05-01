@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { useTranslations } from 'next-intl';
-import type { Booking, Exporter, Naviera } from '@/types';
+import { useTranslations, useLocale } from 'next-intl';
+import type { Alert, Booking, Exporter, Naviera } from '@/types';
 import {
   Dialog,
   DialogContent,
@@ -11,12 +11,16 @@ import {
 } from '@/components/ui/dialog';
 import { LifecyclePill } from '@/components/bookings/LifecyclePill';
 import { CutoffCountdown } from '@/components/bookings/CutoffCountdown';
-import { ChevronRight } from 'lucide-react';
+import { ExporterChip } from '@/components/shared/ExporterChip';
+import { NavieraChip } from '@/components/shared/NavieraChip';
+import { AlertTriangle, ChevronRight } from 'lucide-react';
+import clsx from 'clsx';
 
 export interface DrilldownRow {
   booking: Booking;
   exporter: Exporter;
   naviera: Naviera;
+  alert?: Alert;
 }
 
 interface Props {
@@ -26,70 +30,114 @@ interface Props {
   rows: DrilldownRow[];
 }
 
+const STATUS_BORDER: Partial<Record<Booking['status'], string>> = {
+  awaiting_si:       'border-l-severity-watch',
+  si_failed:         'border-l-severity-crit',
+  si_received:       'border-l-severity-info',
+  si_validated:      'border-l-severity-info',
+  esi_sent:          'border-l-trace',
+  draft_bl_received: 'border-l-severity-info',
+  bl_validated:      'border-l-severity-ok',
+};
+
+const ALERT_BORDER: Record<Alert['severity'], string> = {
+  critical: 'border-l-severity-crit',
+  action:   'border-l-severity-watch',
+  watch:    'border-l-severity-info',
+  info:     'border-l-ink-4',
+};
+
 export function KpiDrilldownModal({ open, onClose, title, rows }: Props) {
-  const t = useTranslations('common');
+  const t = useTranslations('bookings');
+  const tCommon = useTranslations('common');
+  const locale = useLocale() as 'es' | 'en';
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="max-w-xl p-0 flex flex-col max-h-[70vh] overflow-hidden">
-        {/* Header */}
-        <DialogHeader className="px-6 pt-6 pb-4 shrink-0">
-          <div className="flex items-baseline justify-between gap-3">
-            <DialogTitle className="font-mono text-[11px] tracking-[0.15em] uppercase text-ink-3">
+      <DialogContent className="max-w-xl p-0 flex flex-col max-h-[72vh] overflow-hidden">
+
+        {/* ── Header ─────────────────────────────────────────────────── */}
+        <DialogHeader className="shrink-0 px-5 pt-5 pb-4">
+          <div className="flex items-end justify-between gap-3">
+            <DialogTitle className="font-display text-xl italic text-ink-1 leading-none tracking-[-0.01em]">
               {title}
             </DialogTitle>
-            <span className="font-mono text-[11px] text-ink-4">{rows.length}</span>
+            {rows.length > 0 && (
+              <span className="font-mono text-[11px] text-ink-4 leading-none mb-0.5">
+                {t('bookingsSection', { n: rows.length })}
+              </span>
+            )}
           </div>
         </DialogHeader>
 
-        {/* Divider */}
-        <div className="mx-6 h-px bg-[var(--line-soft)] shrink-0" />
+        <div className="mx-5 h-px bg-[var(--line-soft)] shrink-0" />
 
-        {/* List */}
-        <div className="overflow-y-auto flex-1 py-2">
+        {/* ── List ───────────────────────────────────────────────────── */}
+        <div className="overflow-y-auto flex-1">
           {rows.length === 0 ? (
-            <div className="px-6 py-10 text-center text-sm text-ink-3">{t('empty')}</div>
+            <div className="px-5 py-12 text-center text-sm text-ink-3">
+              {tCommon('empty')}
+            </div>
           ) : (
-            <ul>
-              {rows.map(({ booking, exporter, naviera }) => (
-                <li key={booking.id}>
-                  <Link
-                    href={`/bookings/${booking.id}`}
-                    onClick={onClose}
-                    className="group flex items-center gap-4 px-6 py-3.5 transition-colors hover:bg-white/[0.04]"
-                  >
-                    {/* Left: exporter + meta */}
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2.5">
-                        <span className="text-sm font-semibold text-ink-1 leading-none">
-                          {exporter.name}
-                        </span>
-                        <LifecyclePill status={booking.status} size="sm" />
-                      </div>
-                      <div className="mt-1.5 flex items-center gap-1.5 font-mono text-[10px] text-ink-3">
-                        <span>{booking.bookingNumber}</span>
-                        <span className="text-ink-4">·</span>
-                        <span>{naviera.shortName}</span>
-                        <span className="text-ink-4">·</span>
-                        <span>{booking.pol.split(',')[0]} → {booking.pod.split(',')[0]}</span>
-                      </div>
-                    </div>
+            <ul className="divide-y divide-[var(--line-soft)]">
+              {rows.map(({ booking, exporter, naviera, alert }) => {
+                const borderClass = alert
+                  ? ALERT_BORDER[alert.severity]
+                  : (STATUS_BORDER[booking.status] ?? 'border-l-ink-4');
 
-                    {/* Right: cutoff */}
-                    {booking.cutOff && (
-                      <CutoffCountdown cutoffIso={booking.cutOff} className="shrink-0 text-[11px]" />
-                    )}
+                return (
+                  <li key={booking.id}>
+                    <Link
+                      href={`/bookings/${booking.id}`}
+                      onClick={onClose}
+                      className={clsx(
+                        'group flex items-center gap-3 border-l-2 px-4 py-3 transition-colors hover:bg-black/[0.025]',
+                        borderClass,
+                      )}
+                    >
+                      <div className="min-w-0 flex-1">
+                        {/* Row 1: booking # + status + chips */}
+                        <div className="flex flex-wrap items-center gap-1.5">
+                          <span className="font-mono text-[11px] font-medium text-ink-2">
+                            {booking.bookingNumber}
+                          </span>
+                          <LifecyclePill status={booking.status} size="sm" />
+                          <ExporterChip exporter={exporter} size="sm" asLink={false} />
+                          <NavieraChip naviera={naviera} size="sm" asLink={false} />
+                        </div>
 
-                    <ChevronRight className="h-3.5 w-3.5 shrink-0 text-ink-4 transition-colors group-hover:text-ink-2" />
-                  </Link>
-                </li>
-              ))}
+                        {/* Row 2: alert (if any) */}
+                        {alert && (
+                          <div className="mt-1 flex items-start gap-1.5">
+                            <AlertTriangle className="mt-px h-3 w-3 shrink-0 text-severity-watch" />
+                            <span className="text-[11px] text-ink-2 leading-snug">
+                              {locale === 'es' ? (alert.titleEs ?? alert.title) : alert.title}
+                            </span>
+                            {alert.costAtRiskUsd != null && (
+                              <span className="ml-1 font-mono text-[10px] text-severity-watch whitespace-nowrap">
+                                · USD {alert.costAtRiskUsd.toLocaleString()}
+                              </span>
+                            )}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Right: cutoff */}
+                      <CutoffCountdown
+                        cutoffIso={booking.cutOff ?? ''}
+                        className="shrink-0"
+                      />
+
+                      <ChevronRight className="h-3.5 w-3.5 shrink-0 text-ink-4 transition-colors group-hover:text-ink-2" />
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           )}
         </div>
 
-        {/* Footer spacer */}
-        <div className="h-2 shrink-0" />
+        <div className="h-3 shrink-0" />
       </DialogContent>
     </Dialog>
   );

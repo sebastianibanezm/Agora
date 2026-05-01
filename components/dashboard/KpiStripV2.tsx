@@ -29,7 +29,8 @@ function resolveRows(ids: string[]): DrilldownRow[] {
     ) ?? exporterMap.get(booking.navieraId);
     const naviera = navieraMap.get(booking.navieraId);
     if (!exporter || !naviera) return [];
-    return [{ booking, exporter, naviera }];
+    const alert = activeAlerts.find((a) => a.bookingId === booking.id);
+    return [{ booking, exporter, naviera, alert }];
   });
 }
 
