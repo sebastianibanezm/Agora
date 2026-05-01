@@ -267,7 +267,11 @@ export function ShipmentGlobe({ bookings, height = 468, className, style, highli
 
   const globeMatRef = useRef<THREE.MeshPhongMaterial | null>(null);
   if (!globeMatRef.current && typeof window !== 'undefined') {
-    const mat = new THREE.MeshPhongMaterial({ color: new THREE.Color('#D4B890'), shininess: 4 });
+    const mat = new THREE.MeshPhongMaterial({
+      color: new THREE.Color('#D4B890'),
+      shininess: 60,
+      specular: new THREE.Color(0x88ccff),
+    });
     const loader = new THREE.TextureLoader();
     loader.load('https://unpkg.com/three-globe/example/img/earth-day.jpg',
       (tex) => { mat.map = tex; mat.needsUpdate = true; });
