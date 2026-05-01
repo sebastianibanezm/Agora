@@ -69,34 +69,36 @@ export function BookingActivityLog({ events, documentId, emptyMessage }: Props) 
 
   return (
     <ol className="flex flex-col">
-      {sorted.map((event, idx) => (
-        <li key={event.id} className="relative flex gap-3 pb-5 last:pb-0">
-          {/* Vertical connector line — anchored top-to-bottom so it works with auto-height li */}
-          {idx < sorted.length - 1 && (
-            <div className="absolute bottom-0 left-[5px] top-[9px] w-px bg-line-soft" />
-          )}
-          {/* Dot — z-10 so it sits above the line */}
-          <div
-            className={`relative z-10 mt-1 h-2.5 w-2.5 flex-shrink-0 rounded-full border ${dotClass(event.type, event.actor)}`}
-          />
-          {/* Content */}
-          <div className="flex min-w-0 flex-col gap-0.5">
-            <p className="text-sm font-medium leading-snug text-ink-1">{toTitleCase(event.type)}</p>
-            <p className="font-mono text-[10px] text-ink-4">{formatTs(event.timestamp)}</p>
-            <p className="mt-0.5 text-xs leading-relaxed text-ink-3">{event.description}</p>
-            <div className="mt-1 flex flex-wrap gap-1">
-              <span className={`inline-block rounded px-1.5 py-px font-mono text-[9px] uppercase tracking-wide ${actorBadgeClass[event.actor]}`}>
-                {event.actorName ?? actorLabel[event.actor]}
-              </span>
-              {event.type === 'document_replaced' && (
-                <span className="inline-block rounded border border-line-mid bg-ink-4/10 px-1.5 py-px font-mono text-[9px] uppercase tracking-wide text-ink-3">
-                  {t('badgeRescanned')}
-                </span>
-              )}
+      {sorted.map((event, idx) => {
+        const isLast = idx === sorted.length - 1;
+        return (
+          <li key={event.id} className="flex gap-3">
+            {/* Dot + connector column */}
+            <div className="flex w-2.5 flex-shrink-0 flex-col items-center">
+              <div
+                className={`mt-1 h-2.5 w-2.5 flex-shrink-0 rounded-full border ${dotClass(event.type, event.actor)}`}
+              />
+              {!isLast && <div className="mt-1 w-px flex-1 bg-line-mid" />}
             </div>
-          </div>
-        </li>
-      ))}
+            {/* Content */}
+            <div className={`flex min-w-0 flex-col gap-0.5 ${isLast ? 'pb-0' : 'pb-5'}`}>
+              <p className="text-sm font-medium leading-snug text-ink-1">{toTitleCase(event.type)}</p>
+              <p className="font-mono text-[10px] text-ink-4">{formatTs(event.timestamp)}</p>
+              <p className="mt-0.5 text-xs leading-relaxed text-ink-3">{event.description}</p>
+              <div className="mt-1 flex flex-wrap gap-1">
+                <span className={`inline-block rounded px-1.5 py-px font-mono text-[9px] uppercase tracking-wide ${actorBadgeClass[event.actor]}`}>
+                  {event.actorName ?? actorLabel[event.actor]}
+                </span>
+                {event.type === 'document_replaced' && (
+                  <span className="inline-block rounded border border-line-mid bg-ink-4/10 px-1.5 py-px font-mono text-[9px] uppercase tracking-wide text-ink-3">
+                    {t('badgeRescanned')}
+                  </span>
+                )}
+              </div>
+            </div>
+          </li>
+        );
+      })}
     </ol>
   );
 }
