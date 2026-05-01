@@ -18,7 +18,7 @@ export function ApproachingCutoffStrip({ items }: Props) {
       </div>
       <div className="flex gap-3 overflow-x-auto p-3">
         {items.map(({ booking, exporter, naviera }) => (
-          <div key={booking.id} className="w-[240px] shrink-0">
+          <div key={booking.id} className="w-[280px] shrink-0">
             <BookingCard
               booking={booking}
               exporter={exporter}
