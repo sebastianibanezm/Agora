@@ -157,6 +157,7 @@ export function ShipmentGlobe({ bookings, height = 468, className, style, highli
   const highlightOrbRef = useRef<THREE.Group | null>(null);
   const highlightedArcRef = useRef<ArcDatum | null>(null);
   const highlightOrbProgressRef = useRef<number>(0);
+  const wasHighlightedRef = useRef(false);
   const router = useRouter();
   const [hovered, setHovered] = useState<ArcDatum | null>(null);
   // canvasH is kept square-ish so the sphere is never squished by aspect ratio.
@@ -276,6 +277,7 @@ export function ShipmentGlobe({ bookings, height = 468, className, style, highli
     if (!controlsRef.current) controlsRef.current = controls;
 
     if (highlightedBooking) {
+      wasHighlightedRef.current = true;
       controls.autoRotate = false;
       const { lat, lng } = slerpLatLng(
         highlightedBooking.polCoords[1], highlightedBooking.polCoords[0],
@@ -294,7 +296,8 @@ export function ShipmentGlobe({ bookings, height = 468, className, style, highli
         highlightOrbRef.current = orb;
         highlightOrbProgressRef.current = 0;
       }
-    } else {
+    } else if (wasHighlightedRef.current) {
+      // Only restore on hover-end — skip on initial mount to let handleGlobeReady own the initial state.
       controls.autoRotate = true;
       globeRef.current.pointOfView({ lat: -33, lng: -71, altitude: 2.4 }, 800);
     }
