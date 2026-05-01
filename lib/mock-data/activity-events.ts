@@ -16,6 +16,7 @@ export const activityEvents: ActivityEvent[] = [
   {
     id: 'EVT-SNG-2',
     bookingId: 'BKG-SNG0502407',
+    documentId: 'SI-SNG0502407',
     type: 'si_received',
     timestamp: '2026-04-19T11:42:00-04:00',
     actor: 'system',
@@ -24,6 +25,7 @@ export const activityEvents: ActivityEvent[] = [
   {
     id: 'EVT-SNG-3',
     bookingId: 'BKG-SNG0502407',
+    documentId: 'SI-SNG0502407',
     type: 'si_validation_run',
     timestamp: '2026-04-19T11:43:00-04:00',
     actor: 'agent',
@@ -33,6 +35,7 @@ export const activityEvents: ActivityEvent[] = [
   {
     id: 'EVT-SNG-4',
     bookingId: 'BKG-SNG0502407',
+    documentId: 'SI-SNG0502407',
     type: 'si_validation_passed',
     timestamp: '2026-04-19T11:44:00-04:00',
     actor: 'agent',
@@ -42,6 +45,7 @@ export const activityEvents: ActivityEvent[] = [
   {
     id: 'EVT-SNG-5',
     bookingId: 'BKG-SNG0502407',
+    documentId: 'SI-SNG0502407',
     type: 'esi_generated',
     timestamp: '2026-04-19T12:08:00-04:00',
     actor: 'agent',
@@ -51,6 +55,7 @@ export const activityEvents: ActivityEvent[] = [
   {
     id: 'EVT-SNG-6',
     bookingId: 'BKG-SNG0502407',
+    documentId: 'SI-SNG0502407',
     type: 'esi_sent',
     timestamp: '2026-04-19T12:11:00-04:00',
     actor: 'agent',
@@ -68,6 +73,7 @@ export const activityEvents: ActivityEvent[] = [
   {
     id: 'EVT-SNG-8',
     bookingId: 'BKG-SNG0502407',
+    documentId: 'BL-SNG0502407',
     type: 'draft_bl_received',
     timestamp: '2026-04-21T16:30:00-04:00',
     actor: 'system',
@@ -76,6 +82,7 @@ export const activityEvents: ActivityEvent[] = [
   {
     id: 'EVT-SNG-9',
     bookingId: 'BKG-SNG0502407',
+    documentId: 'BL-SNG0502407',
     type: 'draft_bl_validation_run',
     timestamp: '2026-04-21T16:31:00-04:00',
     actor: 'agent',
@@ -85,11 +92,29 @@ export const activityEvents: ActivityEvent[] = [
   {
     id: 'EVT-SNG-10',
     bookingId: 'BKG-SNG0502407',
+    documentId: 'BL-SNG0502407',
     type: 'draft_bl_validation_passed',
     timestamp: '2026-04-21T16:32:00-04:00',
     actor: 'agent',
     actorName: 'Draft BL Validator',
     description: 'All 10 comparison checks passed. BL ready for release to exporter.',
+  },
+  {
+    id: 'EVT-SNG-DOC-REPLACED',
+    bookingId: 'BKG-SNG0502407',
+    documentId: 'SI-SNG0502407',
+    type: 'document_replaced',
+    timestamp: '2026-04-20T09:15:00-04:00',
+    actor: 'user',
+    actorName: 'Usuario Demo',
+    description: 'SI re-uploaded after consignee address correction. Document re-scanned and validated successfully. Previous version archived.',
+    metadata: {
+      documentType: 'si',
+      replacedBy: 'Usuario Demo',
+      changedFields: [
+        { field: 'consignee', before: 'QUIRCH FOODS', after: 'QUIRCH FOODS, LLC' },
+      ],
+    },
   },
 
   // ============================================================

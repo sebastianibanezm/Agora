@@ -38,6 +38,13 @@ export const bookings: Booking[] = [
     createdAt: '2026-04-09T15:20:00-04:00',
     alertIds: [],
     costAtRiskUsd: 0,
+    diasLibresOrigen: 5,
+    masterBl: 'SNG0506037',
+    blInterglobo: '9844220',
+    scacNaviera: 'CMDU',
+    scacInterglobo: 'ITGB',
+    depositoRetiro: 'D&C TALCAHUANO',
+    destinoUsa: false,
   },
 
   // ============================================================
