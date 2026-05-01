@@ -142,8 +142,6 @@
     "bookingsSection": "Bookings ({n})",
     "uploadDialog": {
       "title": "Upload Booking Confirmation",
-      "dropzone": "Drop a PDF here, or click to browse",
-      "parsing": "Extracting booking data…",
       "reviewTitle": "Review extracted data",
       "reviewHint": "Check the fields below before confirming. Fields marked as pending were not found in the PDF.",
       "fieldPending": "Pending",

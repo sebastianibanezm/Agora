@@ -48,7 +48,7 @@ interface ParseResponse {
   containers: Array<{ containerNumber?: string; cargoDescription?: string }>;
 }
 
-type FileStatus = 'pending' | 'loading' | 'done' | 'error';
+type FileStatus = 'loading' | 'done' | 'error';
 
 interface FileEntry {
   file: File;
@@ -70,7 +70,6 @@ export function UploadBookingDialog({ children }: { children: ReactNode }) {
   const [phase, setPhase] = useState<Phase>('idle');
   const [files, setFiles] = useState<FileEntry[]>([]);
   const [reviewIndex, setReviewIndex] = useState(0);
-  const [lastCreatedBookingId, setLastCreatedBookingId] = useState<string | null>(null);
   const lastCreatedBookingIdRef = useRef<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -80,7 +79,6 @@ export function UploadBookingDialog({ children }: { children: ReactNode }) {
     setPhase('idle');
     setFiles([]);
     setReviewIndex(0);
-    setLastCreatedBookingId(null);
     lastCreatedBookingIdRef.current = null;
   }
 
@@ -212,11 +210,11 @@ export function UploadBookingDialog({ children }: { children: ReactNode }) {
       });
       // null out blobUrl — ownership transferred to booking
       setFiles(prev => prev.map(f => f === currentEntry ? { ...f, blobUrl: '' } : f));
-      setLastCreatedBookingId(bookingId);
       lastCreatedBookingIdRef.current = bookingId;
       toast.success(tDlg('toast', { number: booking.bookingNumber }));
     } catch {
       toast.error(tDlg('parseError'));
+      return; // don't advance or navigate on error
     }
 
     if (isLastReview) {
@@ -263,32 +261,41 @@ export function UploadBookingDialog({ children }: { children: ReactNode }) {
           </div>
         )}
 
-        {phase === 'processing' && (() => {
-          return (
-            <div className="flex flex-col gap-2 py-4">
-              <p className="mb-2 text-sm text-ink-2">{tDlg('processingTitle')}</p>
-              {files.map((f, i) => (
-                <div key={i} className="flex items-center gap-2 text-xs text-ink-2">
-                  {f.status === 'loading' && <Loader2 className="h-3 w-3 animate-spin text-mint-500" />}
-                  {f.status === 'done' && <span className="text-mint-500">✓</span>}
-                  {f.status === 'error' && <span className="text-severity-crit">✕</span>}
-                  <span>{f.file.name}</span>
-                </div>
-              ))}
-              {allFailed && (
-                <div className="mt-4 flex flex-col items-center gap-3 text-center">
-                  <p className="text-sm text-severity-crit">{tDlg('allFailed')}</p>
-                  <button
-                    onClick={reset}
-                    className="rounded-md bg-bg-2 px-3 py-1.5 text-xs text-ink-1 hover:bg-bg-3"
-                  >
-                    {tDlg('tryAgain')}
-                  </button>
-                </div>
-              )}
+        {phase === 'processing' && !allFailed && (
+          <div className="flex flex-col gap-2 py-4">
+            <p className="mb-2 text-sm text-ink-2">{tDlg('processingTitle')}</p>
+            {files.map((f, i) => (
+              <div key={i} className="flex items-center gap-2 text-xs text-ink-2">
+                {f.status === 'loading' && <Loader2 className="h-3 w-3 animate-spin text-mint-500" />}
+                {f.status === 'done' && <span className="text-mint-500">✓</span>}
+                {f.status === 'error' && <span className="text-severity-crit">✕</span>}
+                <span>{f.file.name}</span>
+              </div>
+            ))}
+          </div>
+        )}
+        {phase === 'processing' && allFailed && (
+          <div className="flex flex-col gap-2 py-4">
+            <p className="mb-2 text-sm text-ink-2">{tDlg('processingTitle')}</p>
+            {files.map((f, i) => (
+              <div key={i} className="flex items-center gap-2 text-xs text-ink-2">
+                {f.status === 'loading' && <Loader2 className="h-3 w-3 animate-spin text-mint-500" />}
+                {f.status === 'done' && <span className="text-mint-500">✓</span>}
+                {f.status === 'error' && <span className="text-severity-crit">✕</span>}
+                <span>{f.file.name}</span>
+              </div>
+            ))}
+            <div className="mt-4 flex flex-col items-center gap-3 text-center">
+              <p className="text-sm text-severity-crit">{tDlg('allFailed')}</p>
+              <button
+                onClick={reset}
+                className="rounded-md bg-bg-2 px-3 py-1.5 text-xs text-ink-1 hover:bg-bg-3"
+              >
+                {tDlg('tryAgain')}
+              </button>
             </div>
-          );
-        })()}
+          </div>
+        )}
 
         {phase === 'review' && currentEntry?.parsed && (
           <div className="flex max-h-[70vh] flex-col gap-5 overflow-y-auto pr-1">
