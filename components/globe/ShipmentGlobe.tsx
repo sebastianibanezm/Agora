@@ -342,6 +342,13 @@ export function ShipmentGlobe({ bookings, height = 468, className, style, highli
         obj.position.set(pos.x, pos.y, pos.z);
       }
 
+      if (highlightedArcRef.current && highlightOrbRef.current && globeRef.current) {
+        const newT = (highlightOrbProgressRef.current + dt * 0.000165) % 1;
+        highlightOrbProgressRef.current = newT;
+        const pos = orbPosition(highlightedArcRef.current, newT, globeRef.current);
+        highlightOrbRef.current.position.set(pos.x, pos.y, pos.z);
+      }
+
       rafId = requestAnimationFrame(tick);
     };
 
@@ -375,8 +382,16 @@ export function ShipmentGlobe({ bookings, height = 468, className, style, highli
         atmosphereColor="#C8A870"
         atmosphereAltitude={0.15}
         arcsData={arcs}
-        arcColor={(d: object) => hexToRgba((d as ArcDatum).color, 0.35)}
-        arcStroke={() => 0.6}
+        arcColor={(d: object) => {
+          const a = d as ArcDatum;
+          if (!highlightedBooking) return hexToRgba(a.color, 0.35);
+          return a.highlighted ? hexToRgba(a.color, 0.9) : hexToRgba(a.color, 0.08);
+        }}
+        arcStroke={(d: object) => {
+          const a = d as ArcDatum;
+          if (!highlightedBooking) return 0.6;
+          return a.highlighted ? 1.4 : 0.4;
+        }}
         arcAltitudeAutoScale={0.4}
         arcLabel={(d: object) => {
           const a = d as ArcDatum;
