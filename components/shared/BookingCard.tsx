@@ -69,6 +69,7 @@ export function BookingCard({
       href={`/bookings/${booking.id}`}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
+      data-severity={severity ?? undefined}
       className={clsx(
         'block rounded-lg border bg-bg-2 px-3 py-2 transition-colors',
         severity ? ['border-l-2', SEVERITY_BORDER[severity]] : '',
@@ -103,7 +104,7 @@ export function BookingCard({
           <ExporterChip exporter={exporter} size="sm" asLink={false} className="max-w-full" />
         </div>
         <div className="flex items-center gap-1.5 shrink-0">
-          {booking.isReefer && <span className="text-[10px] text-trace">❄</span>}
+          {booking.isReefer && <span data-testid="reefer-icon" className="text-[10px] text-trace">❄</span>}
           <span className="rounded border border-[var(--line-soft)] bg-bg-1 px-[5px] py-px font-mono text-[9px] text-ink-3">
             {booking.containerType}
           </span>
