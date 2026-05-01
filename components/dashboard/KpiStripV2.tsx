@@ -91,7 +91,6 @@ export function KpiStripV2() {
           open={openKpiId !== null}
           onClose={() => setOpenKpiId(null)}
           title={openKpi.label}
-          sublabel={openKpi.sublabel}
           rows={rows}
         />
       )}
