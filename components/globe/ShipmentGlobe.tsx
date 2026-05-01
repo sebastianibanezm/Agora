@@ -101,6 +101,30 @@ function createOrbGroup(color: string): THREE.Group {
   return group;
 }
 
+function createHighlightOrbGroup(color: string): THREE.Group {
+  const baseColor = new THREE.Color(color);
+  const group = new THREE.Group();
+  const glowLayers: Array<{ r: number; opacity: number }> = [
+    { r: 1.1,  opacity: 0.06 },
+    { r: 0.72, opacity: 0.16 },
+    { r: 0.42, opacity: 0.45 },
+  ];
+  for (const { r, opacity } of glowLayers) {
+    const mat = new THREE.MeshBasicMaterial({
+      color: baseColor,
+      transparent: true,
+      opacity,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    });
+    group.add(new THREE.Mesh(new THREE.SphereGeometry(r, 8, 8), mat));
+  }
+  const coreColor = baseColor.clone().lerp(new THREE.Color(0xffffff), 0.55);
+  const coreMat = new THREE.MeshBasicMaterial({ color: coreColor, depthWrite: false });
+  group.add(new THREE.Mesh(new THREE.SphereGeometry(0.18, 12, 12), coreMat));
+  return group;
+}
+
 function orbPosition(
   arc: ArcDatum,
   t: number,
@@ -154,6 +178,7 @@ export function ShipmentGlobe({ bookings, height = 468, className, style, highli
   const handleGlobeReady = () => {
     if (!globeRef.current) return;
     const controls = globeRef.current.controls();
+    controlsRef.current = controls;
     controls.autoRotate = true;
     controls.autoRotateSpeed = 0.35;
     controls.enableZoom = false;
@@ -217,6 +242,10 @@ export function ShipmentGlobe({ bookings, height = 468, className, style, highli
 
   const orbProgressRef = useRef<Map<string, number>>(new Map());
   const orbObjectsRef = useRef<Map<string, THREE.Object3D>>(new Map());
+  const controlsRef = useRef<ReturnType<GlobeMethods['controls']> | null>(null);
+  const highlightOrbRef = useRef<THREE.Group | null>(null);
+  const highlightedArcRef = useRef<ArcDatum | null>(null);
+  const highlightOrbProgressRef = useRef<number>(0);
 
   const globeMatRef = useRef<THREE.MeshPhongMaterial | null>(null);
   if (!globeMatRef.current && typeof window !== 'undefined') {
