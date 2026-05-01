@@ -269,6 +269,48 @@ export function ShipmentGlobe({ bookings, height = 468, className, style, highli
   }, []);
 
   useEffect(() => {
+    if (!globeRef.current || !controlsRef.current) return;
+
+    if (highlightedBooking) {
+      controlsRef.current.autoRotate = false;
+      const { lat, lng } = slerpLatLng(
+        highlightedBooking.polCoords[1], highlightedBooking.polCoords[0],
+        highlightedBooking.podCoords[1], highlightedBooking.podCoords[0],
+        0.5,
+      );
+      globeRef.current.pointOfView({ lat, lng, altitude: 2.4 }, 800);
+
+      const matchedArc = arcs.find((a) => a.highlighted) ?? null;
+      highlightedArcRef.current = matchedArc;
+      if (matchedArc) {
+        const orb = createHighlightOrbGroup(matchedArc.color);
+        const pos = orbPosition(matchedArc, 0, globeRef.current);
+        orb.position.set(pos.x, pos.y, pos.z);
+        globeRef.current.scene().add(orb);
+        highlightOrbRef.current = orb;
+        highlightOrbProgressRef.current = 0;
+      }
+    } else {
+      controlsRef.current.autoRotate = true;
+      globeRef.current.pointOfView({ lat: 0, lng: -75, altitude: 2.4 }, 800);
+    }
+
+    return () => {
+      if (highlightOrbRef.current && globeRef.current) {
+        globeRef.current.scene().remove(highlightOrbRef.current);
+        highlightOrbRef.current.traverse((obj) => {
+          if (obj instanceof THREE.Mesh) {
+            obj.geometry.dispose();
+            (obj.material as THREE.Material).dispose();
+          }
+        });
+      }
+      highlightOrbRef.current = null;
+      highlightedArcRef.current = null;
+    };
+  }, [highlightedBooking, arcs]);
+
+  useEffect(() => {
     const next = new Map<string, number>();
     arcs.forEach((arc, i) => {
       next.set(arc.laneKey, orbProgressRef.current.get(arc.laneKey) ?? i / Math.max(arcs.length, 1));
