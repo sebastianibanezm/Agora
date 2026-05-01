@@ -232,75 +232,70 @@ export const activityEvents: ActivityEvent[] = [
   },
 ];
 
-// Status transitions that imply prior activity events, newest first.
-const STATUS_EVENTS: Partial<Record<BookingStatus, Array<{ offset: number; type: ActivityEvent['type']; actor: ActivityEvent['actor']; description: string }>>> = {
-  awaiting_si: [
-    { offset: 0, type: 'booking_created', actor: 'system', description: 'Booking PDF uploaded and parsed. Awaiting Shipping Instruction from exporter.' },
-  ],
-  si_received: [
-    { offset: 60, type: 'si_received', actor: 'system', description: 'SI received via portal.' },
-    { offset: 0, type: 'booking_created', actor: 'system', description: 'Booking PDF uploaded and parsed.' },
-  ],
-  si_validated: [
-    { offset: 120, type: 'si_validation_passed', actor: 'agent', description: 'All SI checks passed.' },
-    { offset: 60, type: 'si_received', actor: 'system', description: 'SI received via portal.' },
-    { offset: 0, type: 'booking_created', actor: 'system', description: 'Booking PDF uploaded and parsed.' },
-  ],
-  si_failed: [
-    { offset: 90, type: 'si_validation_failed', actor: 'agent', description: 'SI validation failed — one or more checks did not pass.' },
-    { offset: 60, type: 'si_received', actor: 'system', description: 'SI received via portal.' },
-    { offset: 0, type: 'booking_created', actor: 'system', description: 'Booking PDF uploaded and parsed.' },
-  ],
-  esi_sent: [
-    { offset: 180, type: 'esi_sent', actor: 'agent', description: 'e-SI transmitted to carrier via API.' },
-    { offset: 120, type: 'si_validation_passed', actor: 'agent', description: 'All SI checks passed.' },
-    { offset: 60, type: 'si_received', actor: 'system', description: 'SI received via portal.' },
-    { offset: 0, type: 'booking_created', actor: 'system', description: 'Booking PDF uploaded and parsed.' },
-  ],
-  draft_bl_received: [
-    { offset: 300, type: 'draft_bl_received', actor: 'system', description: 'Draft BL received from carrier.' },
-    { offset: 180, type: 'esi_sent', actor: 'agent', description: 'e-SI transmitted to carrier via API.' },
-    { offset: 60, type: 'si_received', actor: 'system', description: 'SI received via portal.' },
-    { offset: 0, type: 'booking_created', actor: 'system', description: 'Booking PDF uploaded and parsed.' },
-  ],
-  bl_validated: [
-    { offset: 360, type: 'draft_bl_validation_passed', actor: 'agent', description: 'All BL comparison checks passed.' },
-    { offset: 300, type: 'draft_bl_received', actor: 'system', description: 'Draft BL received from carrier.' },
-    { offset: 180, type: 'esi_sent', actor: 'agent', description: 'e-SI transmitted to carrier via API.' },
-    { offset: 60, type: 'si_received', actor: 'system', description: 'SI received via portal.' },
-    { offset: 0, type: 'booking_created', actor: 'system', description: 'Booking PDF uploaded and parsed.' },
-  ],
-  bl_released: [
-    { offset: 420, type: 'bl_released_to_exporter', actor: 'user', description: 'BL released to exporter.' },
-    { offset: 360, type: 'draft_bl_validation_passed', actor: 'agent', description: 'All BL comparison checks passed.' },
-    { offset: 300, type: 'draft_bl_received', actor: 'system', description: 'Draft BL received from carrier.' },
-    { offset: 60, type: 'si_received', actor: 'system', description: 'SI received via portal.' },
-    { offset: 0, type: 'booking_created', actor: 'system', description: 'Booking PDF uploaded and parsed.' },
-  ],
-  closed: [
-    { offset: 500, type: 'bl_released_to_exporter', actor: 'user', description: 'BL released. Booking closed.' },
-    { offset: 360, type: 'draft_bl_validation_passed', actor: 'agent', description: 'All BL comparison checks passed.' },
-    { offset: 300, type: 'draft_bl_received', actor: 'system', description: 'Draft BL received from carrier.' },
-    { offset: 60, type: 'si_received', actor: 'system', description: 'SI received via portal.' },
-    { offset: 0, type: 'booking_created', actor: 'system', description: 'Booking PDF uploaded and parsed.' },
-  ],
+type EventTemplate = { offset: number; type: ActivityEvent['type']; actor: ActivityEvent['actor']; description: string };
+
+// Full event chain per status — offset in minutes from booking.createdAt, newest last.
+const CHAIN: EventTemplate[] = [
+  { offset:   0, type: 'booking_created',             actor: 'system', description: 'Booking PDF uploaded and parsed. Awaiting Shipping Instruction from exporter.' },
+  { offset:  60, type: 'si_received',                 actor: 'system', description: 'SI received via portal.' },
+  { offset:  62, type: 'si_validation_run',            actor: 'agent',  description: 'Running validation checks against booking master data.' },
+  { offset:  65, type: 'si_validation_passed',         actor: 'agent',  description: 'All checks passed. SI cleared for e-SI generation.' },
+  { offset:  67, type: 'esi_generated',                actor: 'agent',  description: 'e-SI message generated in DCSA format.' },
+  { offset:  70, type: 'esi_sent',                     actor: 'agent',  description: 'e-SI transmitted to carrier via API.' },
+  { offset:  75, type: 'esi_acknowledged',             actor: 'agent',  description: 'Carrier acknowledged receipt of e-SI.' },
+  { offset: 240, type: 'draft_bl_received',            actor: 'system', description: 'Draft BL received from carrier.' },
+  { offset: 242, type: 'draft_bl_validation_run',      actor: 'agent',  description: 'Running comparison checks between BL and SI.' },
+  { offset: 245, type: 'draft_bl_validation_passed',   actor: 'agent',  description: 'All 8 BL comparison checks passed.' },
+  { offset: 260, type: 'bl_released_to_exporter',      actor: 'user',   description: 'BL released to exporter.' },
+];
+
+const CHAIN_INDEX: Record<ActivityEvent['type'], number> = Object.fromEntries(
+  CHAIN.map((e, i) => [e.type, i])
+) as Record<ActivityEvent['type'], number>;
+
+// Last chain step that should be visible for each booking status.
+const STATUS_CHAIN_CUTOFF: Partial<Record<BookingStatus, ActivityEvent['type']>> = {
+  created:             'booking_created',
+  awaiting_si:         'booking_created',
+  si_received:         'si_received',
+  si_validated:        'si_validation_passed',
+  si_failed:           'si_validation_run',   // run but failed — show run step
+  esi_sent:            'esi_sent',
+  draft_bl_received:   'draft_bl_received',
+  bl_validated:        'draft_bl_validation_passed',
+  bl_released:         'bl_released_to_exporter',
+  closed:              'bl_released_to_exporter',
+  cancelled:           'booking_created',
 };
 
 function synthesizeEvents(bookingId: string): ActivityEvent[] {
   const booking = bookings.find((b) => b.id === bookingId);
   if (!booking) return [];
-  const templates = STATUS_EVENTS[booking.status] ?? [
-    { offset: 0, type: 'booking_created' as const, actor: 'system' as const, description: 'Booking PDF uploaded and parsed.' },
-  ];
+
+  // For si_failed: swap the passed step for a failed step.
+  const isSiFailed = booking.status === 'si_failed';
+  const cutoffType = STATUS_CHAIN_CUTOFF[booking.status] ?? 'booking_created';
+  const cutoffIdx = CHAIN_INDEX[cutoffType] ?? 0;
+
   const base = new Date(booking.createdAt).getTime();
-  return templates.map((tpl, i) => ({
-    id: `EVT-SYN-${bookingId}-${i}`,
-    bookingId,
-    type: tpl.type,
-    timestamp: new Date(base + tpl.offset * 60_000).toISOString(),
-    actor: tpl.actor,
-    description: tpl.description,
-  }));
+  return CHAIN.slice(0, cutoffIdx + 1).map((tpl, i) => {
+    const type: ActivityEvent['type'] =
+      isSiFailed && tpl.type === 'si_validation_run' && i === cutoffIdx
+        ? 'si_validation_failed'
+        : tpl.type;
+    const description =
+      type === 'si_validation_failed'
+        ? 'SI validation failed — one or more checks did not pass. Action required.'
+        : tpl.description;
+    return {
+      id: `EVT-SYN-${bookingId}-${i}`,
+      bookingId,
+      type,
+      timestamp: new Date(base + tpl.offset * 60_000).toISOString(),
+      actor: tpl.actor,
+      description,
+    };
+  });
 }
 
 export function getActivityForBooking(bookingId: string): ActivityEvent[] {

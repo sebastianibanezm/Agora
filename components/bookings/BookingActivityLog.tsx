@@ -12,6 +12,8 @@ const DOT_CLASS: Record<string, string> = {
   draft_bl_validation_passed: 'bg-severity-ok border-severity-ok',
   bl_released_to_exporter: 'bg-severity-ok border-severity-ok',
   esi_acknowledged: 'bg-severity-ok border-severity-ok',
+  si_validation_failed: 'bg-severity-crit border-severity-crit',
+  draft_bl_validation_failed: 'bg-severity-crit border-severity-crit',
 };
 
 function dotClass(type: string, actor: ActivityEvent['actor']): string {
@@ -21,9 +23,16 @@ function dotClass(type: string, actor: ActivityEvent['actor']): string {
   return 'bg-bg-3 border-line-mid';
 }
 
+function toTitleCase(type: string): string {
+  return type
+    .split('_')
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ');
+}
+
 interface Props {
   events: ActivityEvent[];
-  documentId?: string; // when provided, filter to only events with this documentId
+  documentId?: string;
   emptyMessage?: string;
 }
 
@@ -62,17 +71,17 @@ export function BookingActivityLog({ events, documentId, emptyMessage }: Props) 
     <ol className="flex flex-col">
       {sorted.map((event, idx) => (
         <li key={event.id} className="relative flex gap-3 pb-5 last:pb-0">
-          {/* Vertical line */}
+          {/* Vertical connector line — anchored top-to-bottom so it works with auto-height li */}
           {idx < sorted.length - 1 && (
-            <div className="absolute left-[5px] top-3 h-full w-px bg-line-soft" />
+            <div className="absolute bottom-0 left-[5px] top-[9px] w-px bg-line-soft" />
           )}
-          {/* Dot */}
+          {/* Dot — z-10 so it sits above the line */}
           <div
             className={`relative z-10 mt-1 h-2.5 w-2.5 flex-shrink-0 rounded-full border ${dotClass(event.type, event.actor)}`}
           />
           {/* Content */}
           <div className="flex min-w-0 flex-col gap-0.5">
-            <p className="text-sm font-medium leading-snug text-ink-1">{event.type.replace(/_/g, ' ')}</p>
+            <p className="text-sm font-medium leading-snug text-ink-1">{toTitleCase(event.type)}</p>
             <p className="font-mono text-[10px] text-ink-4">{formatTs(event.timestamp)}</p>
             <p className="mt-0.5 text-xs leading-relaxed text-ink-3">{event.description}</p>
             <div className="mt-1 flex flex-wrap gap-1">
