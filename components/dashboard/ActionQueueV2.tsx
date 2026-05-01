@@ -1,7 +1,12 @@
+'use client';
+
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import type { Alert, Booking, Exporter, Naviera } from '@/types';
 import { BookingCard } from '@/components/shared/BookingCard';
+
+const VISIBLE_COUNT = 4;
 
 interface QueueItem {
   booking: Booking;
@@ -16,6 +21,21 @@ interface Props {
 
 export function ActionQueueV2({ items }: Props) {
   const t = useTranslations('dashboard');
+  const listRef = useRef<HTMLDivElement>(null);
+  const [maxHeight, setMaxHeight] = useState<number | undefined>(undefined);
+
+  useEffect(() => {
+    if (!listRef.current || items.length <= VISIBLE_COUNT) return;
+
+    const children = Array.from(listRef.current.children) as HTMLElement[];
+    if (children.length < VISIBLE_COUNT) return;
+
+    const containerTop = listRef.current.getBoundingClientRect().top;
+    const nthBottom = children[VISIBLE_COUNT - 1].getBoundingClientRect().bottom;
+    const padding = parseFloat(getComputedStyle(listRef.current).paddingBottom);
+
+    setMaxHeight(nthBottom - containerTop + padding);
+  }, [items]);
 
   if (items.length === 0) {
     return (
@@ -38,8 +58,12 @@ export function ActionQueueV2({ items }: Props) {
           {t('actionQueueViewAll', { n: items.length })}
         </Link>
       </div>
-      <div className="flex flex-col gap-2 p-2">
-        {items.slice(0, 7).map(({ booking, exporter, naviera, alert }) => (
+      <div
+        ref={listRef}
+        className="flex flex-col gap-2 overflow-y-auto p-2"
+        style={maxHeight !== undefined ? { maxHeight } : undefined}
+      >
+        {items.map(({ booking, exporter, naviera, alert }) => (
           <BookingCard
             key={booking.id}
             booking={booking}
