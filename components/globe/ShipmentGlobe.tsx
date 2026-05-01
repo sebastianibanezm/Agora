@@ -394,7 +394,7 @@ export function ShipmentGlobe({ bookings, height = 468, className, style, highli
         arcStroke={(d: object) => {
           const a = d as ArcDatum;
           if (!highlightedBooking) return 0.6;
-          return a.highlighted ? 0.75 : 0.4;
+          return a.highlighted ? 0.55 : 0.4;
         }}
         arcAltitudeAutoScale={0.4}
         arcLabel={(d: object) => {
