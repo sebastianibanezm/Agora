@@ -37,18 +37,15 @@ export function LandingNav() {
       {/* Brand */}
       <div className="inline-flex items-center gap-[9px] pr-[14px] pl-1">
         <div
-          className="w-[38px] h-[38px] rounded-[9px] flex items-center justify-center overflow-hidden flex-shrink-0"
-          style={{
-            background: '#F8F2E4',
-            border: '1px solid rgba(248,242,228,0.30)',
-          }}
+          className="w-[38px] h-[38px] flex items-center justify-center flex-shrink-0"
         >
           <Image
             src="/landing/lambda-logo.png"
             alt="Agora"
-            width={22}
-            height={22}
+            width={34}
+            height={34}
             className="object-contain"
+            style={{ filter: 'invert(1)' }}
           />
         </div>
         <span

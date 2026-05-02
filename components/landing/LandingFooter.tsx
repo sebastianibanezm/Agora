@@ -33,8 +33,8 @@ export function LandingFooter() {
           {/* Brand column */}
           <div>
             <div className="flex items-center gap-[10px] mb-3">
-              <div className="w-[30px] h-[30px] rounded-[7px] flex items-center justify-center overflow-hidden" style={{ background: '#F8F2E4', border: '1px solid rgba(60,42,22,0.12)' }}>
-                <Image src="/landing/lambda-logo.png" alt="Agora" width={18} height={18} className="object-contain" />
+              <div className="w-[30px] h-[30px] flex items-center justify-center">
+                <Image src="/landing/lambda-logo.png" alt="Agora" width={28} height={28} className="object-contain" style={{ mixBlendMode: 'multiply' }} />
               </div>
               <span className="italic text-[20px]" style={{ fontFamily: 'var(--font-family-old-standard)', color: '#2B1F12' }}>Agora</span>
             </div>
