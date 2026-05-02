@@ -46,7 +46,7 @@ describe('LandingNav', () => {
 
   it('calls router.replace and router.refresh when locale toggle is clicked', () => {
     render(<LandingNav />)
-    const toggleBtn = screen.getByRole('button')
+    const toggleBtn = screen.getByRole('button', { name: /ES\s*\/\s*EN/i })
     fireEvent.click(toggleBtn)
     expect(mockReplace).toHaveBeenCalledWith('/')
     expect(mockRefresh).toHaveBeenCalled()
