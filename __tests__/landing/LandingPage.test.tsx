@@ -3,7 +3,6 @@ import { vi } from 'vitest'
 import LandingPage from '@/app/[locale]/(marketing)/page'
 
 // Mock all landing components
-vi.mock('@/components/landing/LandingNav', () => ({ LandingNav: () => <div data-testid="landing-nav" /> }))
 vi.mock('@/components/landing/LandingHero', () => ({ LandingHero: () => <div data-testid="landing-hero" /> }))
 vi.mock('@/components/landing/LandingProblem', () => ({ LandingProblem: () => <div data-testid="landing-problem" /> }))
 vi.mock('@/components/landing/LandingPillars', () => ({ LandingPillars: () => <div data-testid="landing-pillars" /> }))
@@ -13,9 +12,8 @@ vi.mock('@/components/landing/LandingContact', () => ({ LandingContact: () => <d
 vi.mock('@/components/landing/LandingFooter', () => ({ LandingFooter: () => <div data-testid="landing-footer" /> }))
 
 describe('LandingPage', () => {
-  it('renders all 8 landing sections', async () => {
+  it('renders all 7 landing sections', async () => {
     render(await LandingPage())
-    expect(screen.getByTestId('landing-nav')).toBeInTheDocument()
     expect(screen.getByTestId('landing-hero')).toBeInTheDocument()
     expect(screen.getByTestId('landing-problem')).toBeInTheDocument()
     expect(screen.getByTestId('landing-pillars')).toBeInTheDocument()
@@ -35,12 +33,6 @@ describe('LandingPage', () => {
     expect(main).toContainElement(screen.getByTestId('landing-product'))
     expect(main).toContainElement(screen.getByTestId('landing-stats'))
     expect(main).toContainElement(screen.getByTestId('landing-contact'))
-  })
-
-  it('renders nav outside main', async () => {
-    const { container } = render(await LandingPage())
-    const main = container.querySelector('main')
-    expect(main).not.toContainElement(screen.getByTestId('landing-nav'))
   })
 
   it('renders footer outside main', async () => {

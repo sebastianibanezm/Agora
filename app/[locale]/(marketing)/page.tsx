@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import { LandingNav } from '@/components/landing/LandingNav'
 import { LandingHero } from '@/components/landing/LandingHero'
 import { LandingProblem } from '@/components/landing/LandingProblem'
 import { LandingPillars } from '@/components/landing/LandingPillars'
@@ -17,7 +16,6 @@ export const metadata: Metadata = {
 export default function LandingPage() {
   return (
     <>
-      <LandingNav />
       <main>
         <LandingHero />
         <LandingProblem />

@@ -11,7 +11,6 @@ export function LandingContact() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    console.log('Contact form submitted')
   }
 
   return (
