@@ -171,25 +171,6 @@ export function LandingHero() {
         </div>
       </div>
 
-      {/* Scroll cue */}
-      <div
-        className="absolute z-10 flex flex-col items-center gap-[6px]"
-        style={{
-          bottom: '24px',
-          right: '40px',
-          fontFamily: 'var(--font-family-mono)',
-          fontSize: '9.5px',
-          color: 'rgba(248,242,228,0.35)',
-          letterSpacing: '0.14em',
-          textTransform: 'uppercase',
-        }}
-      >
-        <div
-          className="w-px h-6"
-          style={{ background: 'linear-gradient(180deg, rgba(248,242,228,0.38), transparent)' }}
-        />
-        {t('hero.scroll')}
-      </div>
 
       <style>{`
         @keyframes pulse {
