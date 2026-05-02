@@ -514,8 +514,8 @@
     },
     "product": {
       "eyebrow": "03 — La plataforma",
-      "title": "Diseñado para",
-      "titleLine2": "operadores reales",
+      "title": "Todo lo que importa,",
+      "titleLine2": "en un solo panel",
       "lede": "Un panel de operaciones que condensa todo lo que importa — envíos activos, alertas, documentos pendientes — sin ruido, sin fricciones.",
       "anno1": "3D Globe — rutas activas",
       "anno2": "Cola de acción priorizada",
@@ -528,7 +528,7 @@
       "stat1Src": "El tiempo promedio disponible para reaccionar ante un problema documental antes del cut-off naviero.",
       "stat2Num": "94%",
       "stat2Label": "Reducción en tiempo de coordinación",
-      "stat2Src": "Operadores con Agora reportan hasta un 94% menos de tiempo dedicado a seguimiento manual por embarque.",
+      "stat2Src": "Según operadores en acceso temprano. Basado en tiempo dedicado a seguimiento manual por embarque antes y después de Agora.",
       "stat3Num": "0",
       "stat3Label": "Reclamos por frío fuera de rango",
       "stat3Src": "Temporadas cereza 2025–2026 con Agora. Trazabilidad completa, protocolos verificados, clientes informados."
@@ -544,7 +544,7 @@
       "step2Body": "Te mostramos Agora con tus propios datos — tus rutas, tus navieras, tu temporada.",
       "step3Title": "Onboarding en 48h",
       "step3Body": "Si calzamos, tu equipo está operativo antes de que empiece el próximo embarque.",
-      "formTitle": "Ponte en Contacto",
+      "formTitle": "Cuéntanos sobre tus envíos",
       "formSub": "Sin compromisos — te respondemos en menos de un día hábil.",
       "labelFirstName": "Nombre",
       "labelLastName": "Apellido",
@@ -576,7 +576,7 @@
       "linkPrivacy": "Privacidad",
       "linkTerms": "Términos de uso",
       "linkSecurity": "Seguridad",
-      "copyright": "© 2027 Agora Technologies SpA · Santiago, Chile"
+      "copyright": "© 2026 Agora Technologies SpA · Santiago, Chile"
     }
   }
 }

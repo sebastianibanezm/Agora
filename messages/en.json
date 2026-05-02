@@ -514,8 +514,8 @@
     },
     "product": {
       "eyebrow": "03 — The platform",
-      "title": "Designed for",
-      "titleLine2": "real operators",
+      "title": "Everything that matters,",
+      "titleLine2": "in one panel",
       "lede": "An operations panel that condenses everything that matters — active shipments, alerts, pending documents — without noise, without friction.",
       "anno1": "3D Globe — active routes",
       "anno2": "Prioritized action queue",
@@ -528,7 +528,7 @@
       "stat1Src": "The average time available to react to a documentation issue before the carrier cut-off.",
       "stat2Num": "94%",
       "stat2Label": "Reduction in coordination time",
-      "stat2Src": "Operators using Agora report up to 94% less time spent on manual tracking per shipment.",
+      "stat2Src": "Based on early-access operators. Measured as time spent on manual shipment tracking before and after Agora.",
       "stat3Num": "0",
       "stat3Label": "Cold chain claims out of range",
       "stat3Src": "Cherry seasons 2025–2026 with Agora. Full traceability, verified protocols, informed customers."
@@ -544,7 +544,7 @@
       "step2Body": "We show you Agora with your own data — your routes, your carriers, your season.",
       "step3Title": "Onboarding in 48h",
       "step3Body": "If we're a fit, your team is live before the next shipment begins.",
-      "formTitle": "Get in Touch",
+      "formTitle": "Tell us about your shipments",
       "formSub": "No commitment — we'll respond within one business day.",
       "labelFirstName": "First name",
       "labelLastName": "Last name",
@@ -576,7 +576,7 @@
       "linkPrivacy": "Privacy",
       "linkTerms": "Terms of use",
       "linkSecurity": "Security",
-      "copyright": "© 2027 Agora Technologies SpA · Santiago, Chile"
+      "copyright": "© 2026 Agora Technologies SpA · Santiago, Chile"
     }
   }
 }

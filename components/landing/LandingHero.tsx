@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import { useTranslations } from 'next-intl'
+import { ArrowRight } from 'lucide-react'
 import { LandingNav } from './LandingNav'
 
 export function LandingHero() {
@@ -148,7 +149,7 @@ export function LandingHero() {
               onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = '#fff')}
               onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = '#F8F2E4')}
             >
-              {t('hero.ctaPrimary')} <span>→</span>
+              {t('hero.ctaPrimary')} <ArrowRight size={14} strokeWidth={1.8} />
             </a>
           </div>
         </div>
