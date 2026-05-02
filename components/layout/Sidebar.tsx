@@ -15,7 +15,7 @@ import clsx from 'clsx';
 import Image from 'next/image';
 
 const NAV = [
-  { href: '/', key: 'operations', Icon: LayoutDashboard },
+  { href: '/app', key: 'operations', Icon: LayoutDashboard },
   { href: '/bookings', key: 'bookings', Icon: ContainerIcon },
   { href: '/exporters', key: 'exporters', Icon: Building2 },
   { href: '/navieras', key: 'navieras', Icon: Ship },
@@ -36,7 +36,7 @@ export function Sidebar() {
       )}
     >
       <Link
-        href="/"
+        href="/app"
         className={clsx('flex w-full h-14 items-center', expanded ? 'px-2' : 'justify-center px-0')}
       >
         <Image
@@ -55,7 +55,7 @@ export function Sidebar() {
       </Link>
       <nav className="flex flex-col gap-1 px-2 mt-[48px]">
         {NAV.map(({ href, key, Icon }) => {
-          const active = pathname === href || (href !== '/' && pathname.startsWith(href));
+          const active = pathname === href || (href !== '/app' && pathname.startsWith(href));
           return (
             <Link
               key={key}
