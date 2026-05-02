@@ -40,7 +40,7 @@ export function LandingNav() {
           }}
         >
           <Image
-            src="/agora-logo.png"
+            src="/landing/lambda-logo.png"
             alt="Agora"
             width={22}
             height={22}

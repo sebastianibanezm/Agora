@@ -117,7 +117,7 @@ export function LandingHero() {
           >
             {t('hero.headline')}
             <br />
-            <span style={{ fontStyle: 'italic', color: '#B97A1F' }}>
+            <span style={{ fontFamily: 'var(--font-family-fraunces)', fontStyle: 'italic', color: '#B97A1F' }}>
               {t('hero.headlineAccent')}
             </span>
           </h1>
