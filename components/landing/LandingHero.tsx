@@ -150,23 +150,6 @@ export function LandingHero() {
             >
               {t('hero.ctaPrimary')} <span>→</span>
             </a>
-            <a
-              href="#product"
-              className="inline-flex items-center gap-[7px] text-[13px] font-normal transition-colors duration-150 cursor-pointer"
-              style={{
-                height: '40px',
-                padding: '0 20px',
-                borderRadius: '999px',
-                background: 'rgba(248,242,228,0.08)',
-                backdropFilter: 'blur(8px)',
-                WebkitBackdropFilter: 'blur(8px)',
-                color: '#F8F2E4',
-                border: '1px solid rgba(248,242,228,0.28)',
-                textDecoration: 'none',
-              }}
-            >
-              {t('hero.ctaSecondary')}
-            </a>
           </div>
         </div>
       </div>
