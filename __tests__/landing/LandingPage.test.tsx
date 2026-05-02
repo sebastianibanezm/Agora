@@ -30,6 +30,10 @@ describe('LandingPage', () => {
     const main = container.querySelector('main')
     expect(main).toBeInTheDocument()
     expect(main).toContainElement(screen.getByTestId('landing-hero'))
+    expect(main).toContainElement(screen.getByTestId('landing-problem'))
+    expect(main).toContainElement(screen.getByTestId('landing-pillars'))
+    expect(main).toContainElement(screen.getByTestId('landing-product'))
+    expect(main).toContainElement(screen.getByTestId('landing-stats'))
     expect(main).toContainElement(screen.getByTestId('landing-contact'))
   })
 
@@ -37,5 +41,11 @@ describe('LandingPage', () => {
     const { container } = render(await LandingPage())
     const main = container.querySelector('main')
     expect(main).not.toContainElement(screen.getByTestId('landing-nav'))
+  })
+
+  it('renders footer outside main', async () => {
+    const { container } = render(await LandingPage())
+    const main = container.querySelector('main')
+    expect(main).not.toContainElement(screen.getByTestId('landing-footer'))
   })
 })
