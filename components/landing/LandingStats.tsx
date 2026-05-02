@@ -1,14 +1,17 @@
 'use client'
 
+import React from 'react'
 import { useTranslations } from 'next-intl'
+import { useFadeIn } from '@/hooks/useFadeIn'
 
 const STATS = ['stat1', 'stat2', 'stat3'] as const
 
 export function LandingStats() {
   const t = useTranslations('landing')
+  const ref = useFadeIn()
 
   return (
-    <section style={{ borderTop: '1px solid rgba(60,42,22,0.08)', borderBottom: '1px solid rgba(60,42,22,0.08)' }}>
+    <section ref={ref as React.RefObject<HTMLElement>} style={{ borderTop: '1px solid rgba(60,42,22,0.08)', borderBottom: '1px solid rgba(60,42,22,0.08)', opacity: 0, transform: 'translateY(24px)', transition: 'opacity 0.55s ease-out, transform 0.55s ease-out' }}>
       <div className="grid grid-cols-1 md:grid-cols-3">
         {STATS.map((key, i) => (
           <div

@@ -1,20 +1,23 @@
 'use client'
 
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { useTranslations } from 'next-intl'
+import { ArrowRight } from 'lucide-react'
+import { useFadeIn } from '@/hooks/useFadeIn'
 
 const VOLUME_OPTIONS = ['1–20', '20–100', '100–500', '500+'] as const
 
 export function LandingContact() {
   const t = useTranslations('landing')
   const [volume, setVolume] = useState<string | null>(null)
+  const ref = useFadeIn()
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
   }
 
   return (
-    <section id="contact" className="py-[140px]" style={{ borderTop: '1px solid rgba(60,42,22,0.08)' }}>
+    <section ref={ref as React.RefObject<HTMLElement>} id="contact" className="py-[140px]" style={{ borderTop: '1px solid rgba(60,42,22,0.08)', opacity: 0, transform: 'translateY(24px)', transition: 'opacity 0.55s ease-out, transform 0.55s ease-out' }}>
       <div className="max-w-[1160px] mx-auto px-12">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-20 items-start">
 
@@ -84,7 +87,7 @@ export function LandingContact() {
                   <input
                     type={f === 'Email' ? 'email' : 'text'}
                     placeholder={t(`contact.placeholder${f}` as any)}
-                    className="h-[42px] px-[14px] rounded-[8px] text-[14px] outline-none w-full"
+                    className="h-[42px] px-[14px] rounded-[8px] text-[14px] outline-none w-full transition-shadow duration-150"
                     style={{ background: '#FCF7EA', border: '1px solid rgba(60,42,22,0.14)', color: '#2B1F12' }}
                     onFocus={(e) => { e.currentTarget.style.borderColor = '#5A4A38'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(43,31,18,0.07)' }}
                     onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(60,42,22,0.14)'; e.currentTarget.style.boxShadow = 'none' }}
@@ -141,7 +144,7 @@ export function LandingContact() {
                 onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = '#1F1609')}
                 onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = '#2B1F12')}
               >
-                {t('contact.submitBtn')} <span>→</span>
+                {t('contact.submitBtn')} <ArrowRight size={14} strokeWidth={1.8} />
               </button>
 
               <p className="text-center mt-[14px] text-[10px] tracking-[0.04em]" style={{ fontFamily: 'var(--font-family-mono)', color: '#B5A586' }}>

@@ -1,13 +1,16 @@
 'use client'
 
+import React from 'react'
 import Image from 'next/image'
 import { useTranslations } from 'next-intl'
+import { useFadeIn } from '@/hooks/useFadeIn'
 
 export function LandingProduct() {
   const t = useTranslations('landing')
+  const ref = useFadeIn()
 
   return (
-    <section id="product" className="py-[120px]" style={{ borderTop: '1px solid rgba(60,42,22,0.08)' }}>
+    <section ref={ref as React.RefObject<HTMLElement>} id="product" className="py-[120px]" style={{ borderTop: '1px solid rgba(60,42,22,0.08)', opacity: 0, transform: 'translateY(24px)', transition: 'opacity 0.55s ease-out, transform 0.55s ease-out' }}>
       <div className="max-w-[1160px] mx-auto px-12">
         <div className="text-center max-w-[720px] mx-auto mb-16">
           <span className="block mb-[18px] text-[10px] uppercase tracking-[0.18em]" style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860' }}>

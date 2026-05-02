@@ -1,7 +1,9 @@
 'use client'
 
+import React from 'react'
 import { useTranslations } from 'next-intl'
 import { ThermometerSnowflake, FileWarning, Users } from 'lucide-react'
+import { useFadeIn } from '@/hooks/useFadeIn'
 
 const CARDS = [
   { key: '1', Icon: ThermometerSnowflake, severity: '#8B2A1F' },
@@ -11,12 +13,14 @@ const CARDS = [
 
 export function LandingProblem() {
   const t = useTranslations('landing.problem')
+  const ref = useFadeIn()
 
   return (
     <section
+      ref={ref as React.RefObject<HTMLElement>}
       id="problem"
       className="py-[120px]"
-      style={{ borderTop: '1px solid rgba(60,42,22,0.08)' }}
+      style={{ borderTop: '1px solid rgba(60,42,22,0.08)', opacity: 0, transform: 'translateY(24px)', transition: 'opacity 0.55s ease-out, transform 0.55s ease-out' }}
     >
       <div className="max-w-[1160px] mx-auto px-12">
         {/* Section head */}

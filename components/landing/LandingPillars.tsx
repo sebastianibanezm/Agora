@@ -1,7 +1,9 @@
 'use client'
 
+import React from 'react'
 import { useTranslations } from 'next-intl'
 import { AlertTriangle } from 'lucide-react'
+import { useFadeIn } from '@/hooks/useFadeIn'
 
 // ── Pillar visual: Visibility timeline ──────────────────────────
 function VisibilityVisual() {
@@ -120,9 +122,10 @@ const PILLARS = [
 
 export function LandingPillars() {
   const t = useTranslations('landing.pillars')
+  const ref = useFadeIn()
 
   return (
-    <section id="solutions" className="py-[120px]" style={{ borderTop: '1px solid rgba(60,42,22,0.08)' }}>
+    <section ref={ref as React.RefObject<HTMLElement>} id="solutions" className="py-[120px]" style={{ borderTop: '1px solid rgba(60,42,22,0.08)', opacity: 0, transform: 'translateY(24px)', transition: 'opacity 0.55s ease-out, transform 0.55s ease-out' }}>
       <div className="max-w-[1160px] mx-auto px-12">
         <div className="text-center max-w-[720px] mx-auto mb-16">
           <span className="block mb-[18px] text-[10px] uppercase tracking-[0.18em]" style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860' }}>

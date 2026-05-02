@@ -1,8 +1,10 @@
 'use client'
 
+import React from 'react'
 import Image from 'next/image'
 import { useTranslations, useLocale } from 'next-intl'
 import { useRouter, usePathname } from 'next/navigation'
+import { useFadeIn } from '@/hooks/useFadeIn'
 
 const PLATFORM_LINKS = ['linkVisibility', 'linkAlerts', 'linkDocs', 'linkIntegrations'] as const
 const COMPANY_LINKS = ['linkAbout', 'linkClients', 'linkBlog', 'linkContact'] as const
@@ -13,6 +15,7 @@ export function LandingFooter() {
   const locale = useLocale()
   const router = useRouter()
   const pathname = usePathname()
+  const ref = useFadeIn()
 
   function toggleLocale() {
     const next = locale === 'es' ? 'en' : 'es'
@@ -23,7 +26,7 @@ export function LandingFooter() {
   }
 
   return (
-    <footer style={{ background: '#FCF7EA', borderTop: '1px solid rgba(60,42,22,0.08)', padding: '72px 0 36px' }}>
+    <footer ref={ref as React.RefObject<HTMLElement>} style={{ background: '#FCF7EA', borderTop: '1px solid rgba(60,42,22,0.08)', padding: '72px 0 36px', opacity: 0, transform: 'translateY(24px)', transition: 'opacity 0.55s ease-out, transform 0.55s ease-out' }}>
       <div className="max-w-[1160px] mx-auto px-12">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr] gap-12 mb-14">
 
@@ -31,7 +34,7 @@ export function LandingFooter() {
           <div>
             <div className="flex items-center gap-[10px] mb-3">
               <div className="w-[30px] h-[30px] rounded-[7px] flex items-center justify-center overflow-hidden" style={{ background: '#2B1F12' }}>
-                <Image src="/agora-logo.png" alt="Agora" width={18} height={18} className="object-contain" style={{ filter: 'invert(1) brightness(10)' }} />
+                <Image src="/landing/lambda-logo.png" alt="Agora" width={18} height={18} className="object-contain" style={{ filter: 'invert(1) brightness(10)' }} />
               </div>
               <span className="italic text-[20px]" style={{ fontFamily: 'var(--font-family-old-standard)', color: '#2B1F12' }}>Agora</span>
             </div>
