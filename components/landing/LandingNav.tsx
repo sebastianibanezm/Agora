@@ -39,8 +39,8 @@ export function LandingNav() {
         <div
           className="w-[38px] h-[38px] rounded-[9px] flex items-center justify-center overflow-hidden flex-shrink-0"
           style={{
-            background: 'rgba(248,242,228,0.13)',
-            border: '1px solid rgba(248,242,228,0.20)',
+            background: '#F8F2E4',
+            border: '1px solid rgba(248,242,228,0.30)',
           }}
         >
           <Image
@@ -49,7 +49,6 @@ export function LandingNav() {
             width={22}
             height={22}
             className="object-contain"
-            style={{ filter: 'invert(1) brightness(10)' }}
           />
         </div>
         <span
