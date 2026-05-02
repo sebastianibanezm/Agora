@@ -39,6 +39,7 @@
   --font-family-sans: var(--font-inter), Inter, system-ui, sans-serif;
   --font-family-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
   --font-family-display: var(--font-fraunces), "Fraunces", Georgia, serif;
+  --font-family-old-standard: var(--font-old-standard), 'Times New Roman', serif;
 
   /* Shadcn / Tailwind inline tokens (kept for component compatibility) */
   --color-background: var(--background);
