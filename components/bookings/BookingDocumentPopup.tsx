@@ -229,9 +229,9 @@ export function BookingDocumentPopup({
         ) : (
           <div className="grid min-h-0 flex-1 grid-cols-2 overflow-hidden">
             {/* Left: document preview */}
-            <div className="flex flex-col gap-2.5 overflow-y-auto border-r border-line-soft p-3.5">
+            <div className="flex min-h-0 flex-col border-r border-line-soft">
               {/* Action buttons */}
-              <div className="flex items-center justify-between gap-2">
+              <div className="flex flex-shrink-0 items-center justify-between gap-2 p-3.5 pb-2">
                 <Button
                   size="sm"
                   variant="outline"
@@ -241,7 +241,6 @@ export function BookingDocumentPopup({
                   {t('popupExpandPdf')}
                 </Button>
                 <div className="flex gap-1.5">
-                  {/* Download — use <a> since Button has no asChild */}
                   {fileUrl ? (
                     <a
                       href={fileUrl}
@@ -278,21 +277,20 @@ export function BookingDocumentPopup({
               </div>
 
               {replaceNotice !== 'idle' && (
-                <p className="rounded-md border border-severity-watch/25 bg-severity-watch/8 px-2.5 py-1.5 text-[10px] text-ink-3">
+                <p className="mx-3.5 mb-2 flex-shrink-0 rounded-md border border-severity-watch/25 bg-severity-watch/8 px-2.5 py-1.5 text-[10px] text-ink-3">
                   {replaceNotice === 'pending' ? t('popupReplaceNotice') : t('popupReplaceScanning')}
                 </p>
               )}
 
-              {/* PDF preview */}
+              {/* PDF — fills remaining height exactly, no whitespace */}
               {fileUrl ? (
                 <iframe
                   src={fileUrl}
                   title={docLabel}
-                  className="w-full rounded-sm border-0"
-                  style={{ height: '60vh' }}
+                  className="min-h-0 w-full flex-1 border-0"
                 />
               ) : (
-                <div className="flex items-center justify-center rounded-sm bg-bg-2 py-12 text-xs text-ink-4 italic">
+                <div className="flex flex-1 items-center justify-center text-xs text-ink-4 italic">
                   {t('docHistoryEmpty')}
                 </div>
               )}

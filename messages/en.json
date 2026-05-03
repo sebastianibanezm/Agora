@@ -259,7 +259,7 @@
     "docStatusPending": "Pending",
     "docStatusMissing": "Missing",
     "docStatusReview": "Review",
-    "popupExpandPdf": "Expand",
+    "popupExpandPdf": "Expand PDF",
     "popupDownloadPdf": "Download",
     "popupReplacePdf": "Replace",
     "popupDeleteDoc": "Delete",
