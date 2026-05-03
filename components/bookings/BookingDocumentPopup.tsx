@@ -229,7 +229,7 @@ export function BookingDocumentPopup({
         ) : (
           <div className="grid min-h-0 flex-1 grid-cols-2 overflow-hidden">
             {/* Left: document preview */}
-            <div className="flex min-h-0 flex-col border-r border-line-soft">
+            <div className="flex flex-col overflow-y-auto border-r border-line-soft">
               {/* Action buttons */}
               <div className="flex flex-shrink-0 items-center justify-between gap-2 p-3.5 pb-2">
                 <Button
@@ -282,15 +282,16 @@ export function BookingDocumentPopup({
                 </p>
               )}
 
-              {/* PDF — fills remaining height exactly, no whitespace */}
+              {/* PDF — aspect ratio matches A4 so the full page is visible */}
               {fileUrl ? (
                 <iframe
                   src={fileUrl}
                   title={docLabel}
-                  className="min-h-0 w-full flex-1 border-0"
+                  className="w-full border-0 px-3.5 pb-3.5"
+                  style={{ aspectRatio: '1 / 1.414' }}
                 />
               ) : (
-                <div className="flex flex-1 items-center justify-center text-xs text-ink-4 italic">
+                <div className="flex h-40 items-center justify-center text-xs text-ink-4 italic">
                   {t('docHistoryEmpty')}
                 </div>
               )}
