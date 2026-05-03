@@ -484,7 +484,7 @@
     "statusOk": "OK",
     "statusWarn": "Atención",
     "statusFail": "Fallido",
-    "statusMissing": "missing"
+    "statusMissing": "Sin documento"
   },
   "landing": {
     "nav": {
