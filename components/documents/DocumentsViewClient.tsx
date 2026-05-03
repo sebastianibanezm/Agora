@@ -10,6 +10,7 @@ import { BookingDocumentPopup } from '@/components/bookings/BookingDocumentPopup
 import { DocumentsGroupedList } from '@/components/documents/DocumentsGroupedList';
 import { MultiSelectDropdown } from '@/components/shared/MultiSelectDropdown';
 import { deleteBookingDocument } from '@/lib/hooks/useDemoStore';
+import { getPodFlag } from '@/lib/utils/flags';
 
 interface Props {
   rows: DocumentsRow[];
@@ -20,6 +21,15 @@ interface Props {
 interface SelectedDoc {
   bookingId: string;
   docType: DocType;
+}
+
+function resolveDocId(row: DocumentsRow, docType: DocType): string {
+  switch (docType) {
+    case 'booking':    return row.booking.id;
+    case 'si':         return row.si?.id ?? row.booking.id;
+    case 'bl':         return row.bl?.id ?? row.booking.id;
+    case 'exporterBl': return row.exporterBl?.id ?? row.booking.id;
+  }
 }
 
 export function DocumentsViewClient({ rows, exporters, navieras }: Props) {
@@ -83,7 +93,8 @@ export function DocumentsViewClient({ rows, exporters, navieras }: Props) {
     for (const { booking } of rows) {
       const country = booking.pod.split(',').at(-1)?.trim() ?? '';
       if (country && !seen.has(country)) {
-        seen.set(country, country);
+        const flag = getPodFlag(booking.pod);
+        seen.set(country, flag ? `${flag} ${country}` : country);
       }
     }
     return Array.from(seen.entries())
@@ -106,15 +117,6 @@ export function DocumentsViewClient({ rows, exporters, navieras }: Props) {
   const popupRow = selectedDoc
     ? rows.find((r) => r.booking.id === selectedDoc.bookingId) ?? null
     : null;
-
-  function resolveDocId(row: DocumentsRow, docType: DocType): string {
-    switch (docType) {
-      case 'booking':    return row.booking.id;
-      case 'si':         return row.si?.id ?? row.booking.id;
-      case 'bl':         return row.bl?.id ?? row.booking.id;
-      case 'exporterBl': return row.exporterBl?.id ?? row.booking.id;
-    }
-  }
 
   function handleDocDelete(docType: DocType) {
     if (!selectedDoc) return;
