@@ -6,6 +6,7 @@ import {
   LayoutDashboard,
   Container as ContainerIcon,
   Building2,
+  FileStack,
   Ship,
   BarChart3,
   User,
@@ -17,6 +18,7 @@ import Image from 'next/image';
 const NAV = [
   { href: '/app', key: 'operations', Icon: LayoutDashboard },
   { href: '/bookings', key: 'bookings', Icon: ContainerIcon },
+  { href: '/documents', key: 'documents', Icon: FileStack },
   { href: '/exporters', key: 'exporters', Icon: Building2 },
   { href: '/navieras', key: 'navieras', Icon: Ship },
 ] as const;
