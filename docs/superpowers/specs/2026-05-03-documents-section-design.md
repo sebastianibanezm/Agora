@@ -50,6 +50,16 @@ interface DocumentsRow {
 }
 ```
 
+**Exporter resolution:** `Booking` has no `exporterId` field. Resolve via `exporters.find(e => e.name === booking.shipper || e.legalName === booking.shipper)`. Drop rows where the exporter cannot be resolved (same pattern as `bookings/page.tsx`).
+
+**Naviera resolution:** `navieras.find(n => n.id === booking.navieraId)` — booking has `navieraId`.
+
+**SI / BL resolution:** `shippingInstructions.find(s => s.id === booking.siId)`, `draftBLs.find(b => b.id === booking.draftBlId)`.
+
+**ExporterBL resolution:** `exporterBLs.find(e => e.bookingId === booking.id)` — ExporterBL records have a `bookingId` field linking them to a booking.
+
+**Events:** `activityEvents.filter(e => e.bookingId === booking.id)`.
+
 ---
 
 ## 4. Filter Bar
@@ -112,7 +122,7 @@ border-b border-[var(--line-soft)] bg-bg-0/60 hover:bg-bg-0/80 cursor-pointer px
 ```
 
 Contents (flex, gap-2):
-- Severity dot `h-[7px] w-[7px] rounded-full` — colour maps to booking status using same `dotClass` logic as `BookingsListClient`
+- Severity dot `h-[7px] w-[7px] rounded-full` — colour derived by finding the first entry in the `GROUPS` array (from `BookingsListClient`) whose `statuses` includes `booking.status`, and using its `dotClass`. Default to `bg-ink-4` if no match.
 - Booking number — `<Link href="/bookings/[id]">` — `font-mono text-[11px] font-semibold text-ink-1 hover:underline` — clicking navigates, does **not** toggle collapse
 - Exporter · vessel · POD — `text-[11px] text-ink-3`
 - Doc count badge — `rounded bg-bg-2 px-[5px] py-px font-mono text-[10px] text-ink-4`
@@ -181,13 +191,13 @@ Resolve `booking`, `si`, `bl`, `exporterBl`, `events` from the rows array using 
 />
 ```
 
-`handleDocDelete` calls `deleteBookingDocument(bookingId, docType)` from `useDemoStore`, then clears `selected`.
+`handleDocDelete` imports and calls `deleteBookingDocument(bookingId, docType)` directly from `'@/lib/hooks/useDemoStore'` (it is a named export, not a hook method), then clears `selected`.
 
-`resolvedDocId` follows the same mapping as `BookingDetailClient`:
+`resolvedDocId` follows the same mapping as `BookingDetailClient`, with `?? booking.id` fallback on all cases so `docId` is never `undefined` (the prop is typed `string`):
 - `booking` → `booking.id`
-- `si` → `si.id` (or `booking.siId`)
-- `bl` → `bl.id` (or `booking.draftBlId`)
-- `exporterBl` → `exporterBl.id`
+- `si` → `si?.id ?? booking.id`
+- `bl` → `bl?.id ?? booking.id`
+- `exporterBl` → `exporterBl?.id ?? booking.id`
 
 ---
 
@@ -195,7 +205,7 @@ Resolve `booking`, `si`, `bl`, `exporterBl`, `events` from the rows array using 
 
 - **No rows after filtering** — `py-12 text-center text-sm text-ink-3` — "Sin documentos para los filtros seleccionados."
 - **Group with all rows missing** — group visible but collapsed by default; rows shown at 50% opacity when expanded
-- **Tipo documento filter hides all rows in a group** — group header hidden entirely
+- **Tipo documento filter hides all rows in a group** — group header hidden entirely, **except** groups with zero present documents which remain visible (collapsed) regardless of any doc-type filter
 
 ---
 
@@ -207,5 +217,7 @@ Resolve `booking`, `si`, `bl`, `exporterBl`, `events` from the rows array using 
 | Create | `components/documents/DocumentsViewClient.tsx` |
 | Create | `components/documents/DocumentsGroupedList.tsx` |
 | Modify | `components/layout/Sidebar.tsx` — add Documentos nav item |
+| Modify | `messages/es.json` — add `"documents": "Documentos"` under `"nav"` key |
+| Modify | `messages/en.json` — add `"documents": "Documents"` under `"nav"` key |
 
 No changes to `BookingDocumentPopup`, `useDemoStore`, or any existing mock data.
