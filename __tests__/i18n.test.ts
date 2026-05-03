@@ -12,6 +12,7 @@ describe('i18n', () => {
     'dashboard',
     'containers',
     'bookings',
+    'documents',
     'siViewer',
     'validation',
     'blViewer',
@@ -49,5 +50,10 @@ describe('i18n', () => {
     expect(mod.routing.defaultLocale).toBe('es');
     expect(mod.routing.locales).toContain('es');
     expect(mod.routing.locales).toContain('en');
+  });
+
+  it('nav.documents exists in both locales', () => {
+    expect(en.nav.documents).toBeDefined();
+    expect(es.nav.documents).toBeDefined();
   });
 });

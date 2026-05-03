@@ -4,6 +4,7 @@
     "bookings": "Bookings",
     "exporters": "Exportadores",
     "navieras": "Navieras",
+    "documents": "Documentos",
     "performance": "Rendimiento",
     "performanceSoon": "Disponible en V2",
     "agentsRunning": "{n} agentes activos",
@@ -465,6 +466,25 @@
     "cargoDescription": "Descripción de carga",
     "notAssigned": "Sin asignar",
     "unitKg": "kg"
+  },
+  "documents": {
+    "title": "Documentos",
+    "search": "Buscar embarque, exportador…",
+    "filterExporter": "Exportador",
+    "filterNaviera": "Naviera",
+    "filterCountry": "País destino",
+    "filterDocType": "Tipo documento",
+    "reefer": "Reefer",
+    "empty": "Sin documentos para los filtros seleccionados.",
+    "docTypeBooking": "Booking",
+    "docTypeSi": "SI",
+    "docTypeBl": "Draft BL",
+    "docTypeExporterBl": "Exp. BL",
+    "sinDocumento": "Sin documento",
+    "statusOk": "OK",
+    "statusWarn": "Atención",
+    "statusFail": "Fallido",
+    "statusMissing": "missing"
   },
   "landing": {
     "nav": {
