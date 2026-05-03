@@ -30,9 +30,9 @@ const makeRow = (id: string, exporterId: string, navieraId: string, isReefer = f
     freightTerm: 'COLLECT', emissionType: 'Seawaybill', vesselName: 'Vessel',
     pol: 'San Antonio, CL', etd: '', eta: '', cutOff: '', stackingFrom: '',
     stackingTo: '', containerIds: [], alertIds: [], costAtRiskUsd: 0, createdAt: '',
-  } as DocumentsRow['booking'],
+  } as unknown as DocumentsRow['booking'],
   exporter: { id: exporterId, name: exporterId, legalName: exporterId, country: 'CL', logoUrl: '' } as DocumentsRow['exporter'],
-  naviera: { id: navieraId, name: navieraId, shortName: navieraId, scac: 'TEST', logoUrl: '' } as DocumentsRow['naviera'],
+  naviera: { id: navieraId, name: navieraId, shortName: navieraId, code: navieraId, logoUrl: '' } as unknown as DocumentsRow['naviera'],
   si: undefined, bl: undefined, exporterBl: undefined, events: [],
 });
 
@@ -42,8 +42,8 @@ const exporters = [
 ] as DocumentsRow['exporter'][];
 
 const navieras = [
-  { id: 'NAV-A', name: 'NAV-A', shortName: 'NAV-A', scac: 'NAVA', logoUrl: '' },
-] as DocumentsRow['naviera'][];
+  { id: 'NAV-A', name: 'NAV-A', shortName: 'NAV-A', code: 'NA', logoUrl: '' },
+] as unknown as DocumentsRow['naviera'][];
 
 const rows = [
   makeRow('BKG-001', 'EXP-A', 'NAV-A'),

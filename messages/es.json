@@ -474,6 +474,7 @@
     "filterNaviera": "Naviera",
     "filterCountry": "País destino",
     "filterDocType": "Tipo documento",
+    "filterStatus": "Estado",
     "reefer": "Reefer",
     "empty": "Sin documentos para los filtros seleccionados.",
     "docTypeBooking": "Booking",

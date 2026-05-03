@@ -474,6 +474,7 @@
     "filterNaviera": "Carrier",
     "filterCountry": "Destination",
     "filterDocType": "Doc type",
+    "filterStatus": "Status",
     "reefer": "Reefer",
     "empty": "No documents match the selected filters.",
     "docTypeBooking": "Booking",

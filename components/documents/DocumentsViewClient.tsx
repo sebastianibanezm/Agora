@@ -7,7 +7,7 @@ import type { Exporter, Naviera } from '@/types';
 import type { DocumentsRow } from '@/app/[locale]/(app)/documents/page';
 import type { DocType } from '@/components/bookings/BookingDocumentPopup';
 import { BookingDocumentPopup } from '@/components/bookings/BookingDocumentPopup';
-import { DocumentsGroupedList } from '@/components/documents/DocumentsGroupedList';
+import { DocumentsGroupedList, type DocStatus } from '@/components/documents/DocumentsGroupedList';
 import { MultiSelectDropdown } from '@/components/shared/MultiSelectDropdown';
 import { deleteBookingDocument } from '@/lib/hooks/useDemoStore';
 import { getPodFlag } from '@/lib/utils/flags';
@@ -41,6 +41,7 @@ export function DocumentsViewClient({ rows, exporters, navieras }: Props) {
   const [navieraFilters, setNavieraFilters] = useState<Set<string>>(new Set());
   const [countryFilters, setCountryFilters] = useState<Set<string>>(new Set());
   const [docTypeFilters, setDocTypeFilters] = useState<Set<string>>(new Set());
+  const [statusFilters, setStatusFilters] = useState<Set<string>>(new Set());
   const [reeferOnly, setReeferOnly] = useState(false);
   const [selectedDoc, setSelectedDoc] = useState<SelectedDoc | null>(null);
 
@@ -74,6 +75,7 @@ export function DocumentsViewClient({ rows, exporters, navieras }: Props) {
     setNavieraFilters(new Set());
     setCountryFilters(new Set());
     setDocTypeFilters(new Set());
+    setStatusFilters(new Set());
     setReeferOnly(false);
   };
 
@@ -83,6 +85,7 @@ export function DocumentsViewClient({ rows, exporters, navieras }: Props) {
     navieraFilters.size > 0 ||
     countryFilters.size > 0 ||
     docTypeFilters.size > 0 ||
+    statusFilters.size > 0 ||
     reeferOnly;
 
   const exporterOptions = exporters.map((e) => ({ value: e.id, label: e.name }));
@@ -109,8 +112,19 @@ export function DocumentsViewClient({ rows, exporters, navieras }: Props) {
     { value: 'exporterBl', label: t('docTypeExporterBl') },
   ];
 
+  const statusOptions: { value: string; label: string }[] = [
+    { value: 'ok',      label: `✓ ${t('statusOk')}` },
+    { value: 'warn',    label: `⚠ ${t('statusWarn')}` },
+    { value: 'fail',    label: `✗ ${t('statusFail')}` },
+    { value: 'missing', label: `— ${t('statusMissing')}` },
+  ];
+
   const visibleDocTypes = docTypeFilters.size > 0
     ? (docTypeFilters as Set<DocType>)
+    : undefined;
+
+  const activeStatusFilter = statusFilters.size > 0
+    ? (statusFilters as Set<DocStatus>)
     : undefined;
 
   // Resolve popup row and docId
@@ -169,6 +183,13 @@ export function DocumentsViewClient({ rows, exporters, navieras }: Props) {
             placeholder={t('filterDocType')}
           />
 
+          <MultiSelectDropdown
+            options={statusOptions}
+            selected={statusFilters}
+            onChange={setStatusFilters}
+            placeholder={t('filterStatus')}
+          />
+
           {/* Reefer */}
           <label className="flex cursor-pointer items-center gap-1.5 rounded-md border border-[var(--line-soft)] bg-bg-1 px-2 py-[7px] text-xs text-ink-2 transition-colors hover:text-ink-1">
             <input
@@ -198,6 +219,7 @@ export function DocumentsViewClient({ rows, exporters, navieras }: Props) {
         <DocumentsGroupedList
           rows={filtered}
           visibleDocTypes={visibleDocTypes}
+          statusFilter={activeStatusFilter}
           onDocClick={setSelectedDoc}
         />
       </div>

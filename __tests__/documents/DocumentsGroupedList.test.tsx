@@ -23,7 +23,7 @@ const makeRow = (overrides: Partial<DocumentsRow['booking']> = {}): DocumentsRow
     ...overrides,
   } as DocumentsRow['booking'],
   exporter: { id: 'EXP-001', name: 'Comfrut', legalName: 'Comfrut S.A.', country: 'CL', logoUrl: '' } as DocumentsRow['exporter'],
-  naviera: { id: 'NAV-MSC', name: 'MSC', shortName: 'MSC', scac: 'MSCU', logoUrl: '' } as DocumentsRow['naviera'],
+  naviera: { id: 'NAV-MSC', name: 'MSC', shortName: 'MSC', code: 'MSC', logoUrl: '' } as unknown as DocumentsRow['naviera'],
   si: undefined,
   bl: undefined,
   exporterBl: undefined,
