@@ -283,10 +283,19 @@ export function BookingDocumentPopup({
                 </p>
               )}
 
-              {/* HTML replica */}
-              <div className="rounded-sm bg-white shadow-sm">
-                <BookingDocPreview docType={docType} booking={booking} si={si} bl={bl} />
-              </div>
+              {/* PDF preview */}
+              {fileUrl ? (
+                <iframe
+                  src={fileUrl}
+                  title={docLabel}
+                  className="w-full rounded-sm border-0"
+                  style={{ height: '60vh' }}
+                />
+              ) : (
+                <div className="flex items-center justify-center rounded-sm bg-bg-2 py-12 text-xs text-ink-4 italic">
+                  {t('docHistoryEmpty')}
+                </div>
+              )}
             </div>
 
             {/* Right: document history */}
@@ -335,45 +344,3 @@ export function BookingDocumentPopup({
   );
 }
 
-// ── Minimal HTML replica ───────────────────────────────────────────────────────
-
-function BookingDocPreview({
-  docType,
-  booking,
-  si,
-  bl,
-}: {
-  docType: DocType;
-  booking: Booking;
-  si?: ShippingInstruction;
-  bl?: DraftBL;
-}) {
-  if (docType === 'booking') {
-    return (
-      <div className="space-y-3 p-4 text-[10px] text-gray-700">
-        <div className="border-b pb-2 text-center">
-          <p className="text-xs font-bold uppercase tracking-widest">Booking Confirmation</p>
-          <p>{booking.bookingNumber}</p>
-        </div>
-        <dl className="grid grid-cols-2 gap-x-4 gap-y-1">
-          <dt className="font-semibold">Shipper</dt><dd>{booking.shipper}</dd>
-          <dt className="font-semibold">Consignee</dt><dd>{booking.consignee}</dd>
-          <dt className="font-semibold">Vessel</dt><dd>{booking.vesselName}</dd>
-          <dt className="font-semibold">Voyage</dt><dd>{booking.voyage}</dd>
-          <dt className="font-semibold">POL</dt><dd>{booking.pol}</dd>
-          <dt className="font-semibold">POD</dt><dd>{booking.pod}</dd>
-          <dt className="font-semibold">ETD</dt><dd>{booking.etd}</dd>
-          <dt className="font-semibold">ETA</dt><dd>{booking.eta}</dd>
-        </dl>
-      </div>
-    );
-  }
-  // Silence unused-variable warnings for si/bl in non-booking cases
-  void si;
-  void bl;
-  return (
-    <div className="p-4 text-[10px] text-gray-500 italic">
-      Preview not available for this document type.
-    </div>
-  );
-}
