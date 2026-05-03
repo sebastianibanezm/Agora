@@ -129,9 +129,9 @@ export function DocumentsGroupedList({ rows, visibleDocTypes, onDocClick }: Prop
 
   return (
     <div className="flex flex-col gap-0 rounded-xl border border-[var(--line-soft)] bg-bg-1 overflow-hidden">
-      {/* Table header */}
+      {/* Table header — Fix 1: added bg-bg-0, px-4 → px-3 */}
       <div
-        className="grid gap-3 px-4 py-2 border-b border-[var(--line-soft)]"
+        className="grid gap-3 px-3 py-2 border-b border-[var(--line-soft)] bg-bg-0"
         style={{ gridTemplateColumns: '1fr 90px 80px 72px' }}
       >
         <span className="font-mono text-[9.5px] tracking-wider text-ink-3 uppercase">Documento</span>
@@ -156,15 +156,19 @@ export function DocumentsGroupedList({ rows, visibleDocTypes, onDocClick }: Prop
           if (allMissing) return null;
         }
 
+        // Fix 5: compute podShort
+        const podShort = row.booking.pod.split(',')[0];
+
         return (
           <div key={row.booking.id} className="border-b border-[var(--line-soft)] last:border-0">
-            {/* Group header */}
+            {/* Group header — Fix 2: bg-bg-0/60, hover:bg-bg-0/80; Fix 3: px-4 → px-3 */}
             <button
               data-testid={`group-header-${row.booking.id}`}
               onClick={() => toggleCollapse(row.booking.id)}
-              className="w-full flex items-center gap-2 px-4 py-2 hover:bg-bg-2 transition-colors text-left"
+              className="w-full flex items-center gap-2 px-3 py-2 bg-bg-0/60 hover:bg-bg-0/80 transition-colors text-left"
             >
-              <span className={clsx('w-2 h-2 rounded-full shrink-0', dotClass)} />
+              {/* Fix 4: w-2 h-2 → h-[7px] w-[7px] */}
+              <span className={clsx('h-[7px] w-[7px] rounded-full shrink-0', dotClass)} />
               <Link
                 href={`/bookings/${row.booking.id}`}
                 onClick={(e) => e.stopPropagation()}
@@ -172,6 +176,14 @@ export function DocumentsGroupedList({ rows, visibleDocTypes, onDocClick }: Prop
               >
                 {row.booking.bookingNumber}
               </Link>
+              {/* Fix 5: exporter · vessel · POD text */}
+              <span className="text-[11px] text-ink-3">
+                — {row.exporter.name} · {row.booking.vesselName} · {podShort}
+              </span>
+              {/* Fix 6: doc count badge */}
+              <span className="rounded bg-bg-2 px-[5px] py-px font-mono text-[10px] text-ink-4">
+                {visibleTypes.length}
+              </span>
               <span className="ml-auto text-ink-3 flex items-center">
                 <ChevronDown
                   size={14}
@@ -186,12 +198,6 @@ export function DocumentsGroupedList({ rows, visibleDocTypes, onDocClick }: Prop
               const status = getDocStatus(docType, row);
               const isMissing = !filename;
 
-              const statusLabel =
-                status === 'ok'      ? `✓ ${t('statusOk')}` :
-                status === 'warn'    ? `⚠ ${t('statusWarn')}` :
-                status === 'fail'    ? `✗ ${t('statusFail')}` :
-                                       `— ${t('statusMissing')}`;
-
               return (
                 <div
                   key={docType}
@@ -201,7 +207,11 @@ export function DocumentsGroupedList({ rows, visibleDocTypes, onDocClick }: Prop
                   onClick={() => onDocClick({ bookingId: row.booking.id, docType })}
                   onKeyDown={(e) => e.key === 'Enter' && onDocClick({ bookingId: row.booking.id, docType })}
                   className={clsx(
-                    'grid gap-3 px-4 py-2 cursor-pointer hover:bg-bg-2 transition-colors items-center',
+                    // Fix 7: hover:bg-bg-2 → hover:bg-white/5
+                    // Fix 8: border-b border-[var(--line-soft)] last:border-b-0
+                    // Fix 9: px-4 → px-3
+                    // Fix 10: [&>*]:py-1.5
+                    'grid gap-3 px-3 [&>*]:py-1.5 cursor-pointer hover:bg-white/5 transition-colors items-center border-b border-[var(--line-soft)] last:border-b-0',
                     isMissing && 'opacity-50',
                   )}
                   style={{ gridTemplateColumns: '1fr 90px 80px 72px' }}
@@ -210,7 +220,8 @@ export function DocumentsGroupedList({ rows, visibleDocTypes, onDocClick }: Prop
                   <div className="flex items-center gap-2 min-w-0">
                     <span
                       className={clsx(
-                        'shrink-0 rounded border px-1.5 py-0.5 text-[9px] font-mono font-medium',
+                        // Fix 11: text-[9px] → text-[10px]
+                        'shrink-0 rounded border px-1.5 py-0.5 text-[10px] font-mono font-medium',
                         TYPE_BADGE_CLASS[docType],
                       )}
                     >
@@ -221,7 +232,8 @@ export function DocumentsGroupedList({ rows, visibleDocTypes, onDocClick }: Prop
                         {filename}
                       </span>
                     ) : (
-                      <span className="font-mono text-[11px] text-ink-4 italic">
+                      // Fix 12: add font-sans
+                      <span className="font-mono font-sans text-[11px] text-ink-4 italic">
                         {t('sinDocumento')}
                       </span>
                     )}
@@ -233,8 +245,18 @@ export function DocumentsGroupedList({ rows, visibleDocTypes, onDocClick }: Prop
                   {/* Naviera */}
                   <span className="text-[11px] text-ink-2 truncate">{row.naviera.shortName}</span>
 
-                  {/* Status */}
-                  <span className="font-mono text-[10px] text-ink-2">{statusLabel}</span>
+                  {/* Status — Fix 13: per-status color classes, remove text-ink-2 font-mono */}
+                  <span className={clsx('text-[11px]', {
+                    'text-severity-ok':    status === 'ok',
+                    'text-severity-watch': status === 'warn',
+                    'text-severity-crit':  status === 'fail',
+                    'text-ink-4':          status === 'missing',
+                  })}>
+                    {status === 'ok'      && `✓ ${t('statusOk')}`}
+                    {status === 'warn'    && `⚠ ${t('statusWarn')}`}
+                    {status === 'fail'    && `✗ ${t('statusFail')}`}
+                    {status === 'missing' && `— ${t('statusMissing')}`}
+                  </span>
                 </div>
               );
             })}
