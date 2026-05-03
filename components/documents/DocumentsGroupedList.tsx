@@ -110,10 +110,9 @@ export function DocumentsGroupedList({ rows, visibleDocTypes, onDocClick }: Prop
   const t = useTranslations('documents');
 
   // Groups with no present docs start collapsed
-  const initialCollapsed = new Set(
-    rows.filter((r) => !hasPresentDocs(r)).map((r) => r.booking.id),
+  const [collapsed, setCollapsed] = useState<Set<string>>(
+    () => new Set(rows.filter((r) => !hasPresentDocs(r)).map((r) => r.booking.id)),
   );
-  const [collapsed, setCollapsed] = useState<Set<string>>(initialCollapsed);
 
   const toggleCollapse = (id: string) => {
     setCollapsed((prev) => {
@@ -126,6 +125,11 @@ export function DocumentsGroupedList({ rows, visibleDocTypes, onDocClick }: Prop
   if (rows.length === 0) {
     return <div className="py-12 text-center text-sm text-ink-3">{t('empty')}</div>;
   }
+
+  // Determine which doc types to render after visibleDocTypes filter
+  const visibleTypes = visibleDocTypes
+    ? DOC_TYPES.filter((dt) => visibleDocTypes.has(dt))
+    : DOC_TYPES;
 
   return (
     <div className="flex flex-col gap-0 rounded-xl border border-[var(--line-soft)] bg-bg-1 overflow-hidden">
@@ -143,11 +147,6 @@ export function DocumentsGroupedList({ rows, visibleDocTypes, onDocClick }: Prop
       {rows.map((row) => {
         const isCollapsed = collapsed.has(row.booking.id);
         const dotClass = getDotClass(row.booking.status);
-
-        // Determine which doc types to render after visibleDocTypes filter
-        const visibleTypes = visibleDocTypes
-          ? DOC_TYPES.filter((dt) => visibleDocTypes.has(dt))
-          : DOC_TYPES;
 
         // If visibleDocTypes is set, hide groups where ALL visible rows are missing
         // (unless the group has zero docs overall — those stay visible)
@@ -233,7 +232,7 @@ export function DocumentsGroupedList({ rows, visibleDocTypes, onDocClick }: Prop
                       </span>
                     ) : (
                       // Fix 12: add font-sans
-                      <span className="font-mono font-sans text-[11px] text-ink-4 italic">
+                      <span className="font-sans text-[11px] text-ink-4 italic">
                         {t('sinDocumento')}
                       </span>
                     )}
