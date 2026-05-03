@@ -29,8 +29,8 @@ export default async function DocumentsPage({ params }: Props) {
   const t = await getTranslations('documents');
 
   const navieraMap = new Map(navieras.map((n) => [n.id, n]));
-  const siMap = new Map(shippingInstructions.map((s) => [s.bookingId, s]));
-  const blMap = new Map(draftBls.map((b) => [b.bookingId, b]));
+  const siMap = new Map(shippingInstructions.map((s) => [s.id, s]));
+  const blMap = new Map(draftBls.map((b) => [b.id, b]));
   const exporterBlMap = new Map(exporterBls.map((e) => [e.bookingId, e]));
   const eventsByBooking = activityEvents.reduce<Map<string, ActivityEvent[]>>((acc, e) => {
     const list = acc.get(e.bookingId) ?? [];
@@ -40,7 +40,6 @@ export default async function DocumentsPage({ params }: Props) {
   }, new Map());
 
   const rows = bookings
-    .filter((b) => b.status !== 'cancelled')
     .map((booking): DocumentsRow | null => {
       const exporter = exporters.find(
         (e) => e.name === booking.shipper || e.legalName === booking.shipper,
@@ -51,8 +50,8 @@ export default async function DocumentsPage({ params }: Props) {
         booking,
         exporter,
         naviera,
-        si: siMap.get(booking.id),
-        bl: blMap.get(booking.id),
+        si: booking.siId ? siMap.get(booking.siId) : undefined,
+        bl: booking.draftBlId ? blMap.get(booking.draftBlId) : undefined,
         exporterBl: exporterBlMap.get(booking.id),
         events: eventsByBooking.get(booking.id) ?? [],
       };
