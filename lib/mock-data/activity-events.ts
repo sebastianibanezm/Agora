@@ -8,6 +8,7 @@ export const activityEvents: ActivityEvent[] = [
   {
     id: 'EVT-SNG-1',
     bookingId: 'BKG-SNG0502407',
+    documentId: 'BKG-SNG0502407',
     type: 'booking_created',
     timestamp: '2026-04-09T15:20:00-04:00',
     actor: 'user',
@@ -124,6 +125,7 @@ export const activityEvents: ActivityEvent[] = [
   {
     id: 'EVT-4419-1',
     bookingId: 'BKG-MSCSAI4419',
+    documentId: 'BKG-MSCSAI4419',
     type: 'booking_created',
     timestamp: '2026-04-18T11:00:00-04:00',
     actor: 'user',
@@ -133,6 +135,7 @@ export const activityEvents: ActivityEvent[] = [
   {
     id: 'EVT-4419-2',
     bookingId: 'BKG-MSCSAI4419',
+    documentId: 'SI-MSCSAI4419',
     type: 'si_received',
     timestamp: '2026-04-29T14:20:00-04:00',
     actor: 'system',
@@ -141,6 +144,7 @@ export const activityEvents: ActivityEvent[] = [
   {
     id: 'EVT-4419-3',
     bookingId: 'BKG-MSCSAI4419',
+    documentId: 'SI-MSCSAI4419',
     type: 'si_validation_run',
     timestamp: '2026-04-29T14:21:00-04:00',
     actor: 'agent',
@@ -150,6 +154,7 @@ export const activityEvents: ActivityEvent[] = [
   {
     id: 'EVT-4419-4',
     bookingId: 'BKG-MSCSAI4419',
+    documentId: 'SI-MSCSAI4419',
     type: 'si_validation_failed',
     timestamp: '2026-04-29T14:22:00-04:00',
     actor: 'agent',
@@ -159,6 +164,7 @@ export const activityEvents: ActivityEvent[] = [
   {
     id: 'EVT-4419-5',
     bookingId: 'BKG-MSCSAI4419',
+    documentId: 'SI-MSCSAI4419',
     type: 'alert_fired',
     timestamp: '2026-04-29T14:25:00-04:00',
     actor: 'agent',
@@ -172,6 +178,7 @@ export const activityEvents: ActivityEvent[] = [
   {
     id: 'EVT-4408-1',
     bookingId: 'BKG-MSCSAI4408',
+    documentId: 'BKG-MSCSAI4408',
     type: 'booking_created',
     timestamp: '2026-04-09T11:00:00-04:00',
     actor: 'user',
@@ -181,6 +188,7 @@ export const activityEvents: ActivityEvent[] = [
   {
     id: 'EVT-4408-2',
     bookingId: 'BKG-MSCSAI4408',
+    documentId: 'SI-MSCSAI4408',
     type: 'si_received',
     timestamp: '2026-04-22T10:30:00-04:00',
     actor: 'system',
@@ -189,6 +197,7 @@ export const activityEvents: ActivityEvent[] = [
   {
     id: 'EVT-4408-3',
     bookingId: 'BKG-MSCSAI4408',
+    documentId: 'SI-MSCSAI4408',
     type: 'si_validation_passed',
     timestamp: '2026-04-22T10:32:00-04:00',
     actor: 'agent',
@@ -198,6 +207,7 @@ export const activityEvents: ActivityEvent[] = [
   {
     id: 'EVT-4408-4',
     bookingId: 'BKG-MSCSAI4408',
+    documentId: 'SI-MSCSAI4408',
     type: 'esi_sent',
     timestamp: '2026-04-22T11:04:00-04:00',
     actor: 'agent',
@@ -207,6 +217,7 @@ export const activityEvents: ActivityEvent[] = [
   {
     id: 'EVT-4408-5',
     bookingId: 'BKG-MSCSAI4408',
+    documentId: 'BL-MSCSAI4408',
     type: 'draft_bl_received',
     timestamp: '2026-04-30T07:15:00-04:00',
     actor: 'system',
@@ -215,6 +226,7 @@ export const activityEvents: ActivityEvent[] = [
   {
     id: 'EVT-4408-6',
     bookingId: 'BKG-MSCSAI4408',
+    documentId: 'BL-MSCSAI4408',
     type: 'draft_bl_validation_failed',
     timestamp: '2026-04-30T07:17:00-04:00',
     actor: 'agent',
@@ -224,6 +236,7 @@ export const activityEvents: ActivityEvent[] = [
   {
     id: 'EVT-4408-7',
     bookingId: 'BKG-MSCSAI4408',
+    documentId: 'BL-MSCSAI4408',
     type: 'alert_fired',
     timestamp: '2026-04-30T07:18:00-04:00',
     actor: 'agent',
@@ -290,6 +303,7 @@ function synthesizeEvents(bookingId: string): ActivityEvent[] {
     return {
       id: `EVT-SYN-${bookingId}-${i}`,
       bookingId,
+      documentId: bookingId,
       type,
       timestamp: new Date(base + tpl.offset * 60_000).toISOString(),
       actor: tpl.actor,
