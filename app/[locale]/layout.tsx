@@ -17,6 +17,7 @@ const oldStandard = Old_Standard_TT({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://www.agenteagora.com'),
   title: 'Shipment Intelligence',
   description: 'Plataforma operacional para exportaciones.',
   openGraph: {
