@@ -18,16 +18,16 @@ const oldStandard = Old_Standard_TT({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.agenteagora.com'),
-  title: 'Shipment Intelligence',
+  title: 'Agora - Shipment Intelligence',
   description: 'Plataforma operacional para exportaciones.',
   openGraph: {
-    title: 'Shipment Intelligence',
+    title: 'Agora - Shipment Intelligence',
     description: 'Plataforma operacional para exportaciones.',
     images: [{ url: 'https://www.agenteagora.com/og-image.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Shipment Intelligence',
+    title: 'Agora - Shipment Intelligence',
     description: 'Plataforma operacional para exportaciones.',
     images: ['https://www.agenteagora.com/og-image.png'],
   },
