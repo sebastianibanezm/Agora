@@ -16,7 +16,21 @@ const oldStandard = Old_Standard_TT({
   display: 'swap',
 })
 
-export const metadata: Metadata = { title: 'Agora', description: 'Export operations platform' }
+export const metadata: Metadata = {
+  title: 'Shipment Intelligence',
+  description: 'Plataforma operacional para exportaciones.',
+  openGraph: {
+    title: 'Shipment Intelligence',
+    description: 'Plataforma operacional para exportaciones.',
+    images: [{ url: '/og-image.png', width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Shipment Intelligence',
+    description: 'Plataforma operacional para exportaciones.',
+    images: ['/og-image.png'],
+  },
+}
 
 export function generateStaticParams() {
   return routing.locales.map(locale => ({ locale }))
