@@ -22,13 +22,13 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Shipment Intelligence',
     description: 'Plataforma operacional para exportaciones.',
-    images: [{ url: '/og-image.png', width: 1200, height: 630 }],
+    images: [{ url: 'https://www.agenteagora.com/og-image.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Shipment Intelligence',
     description: 'Plataforma operacional para exportaciones.',
-    images: ['/og-image.png'],
+    images: ['https://www.agenteagora.com/og-image.png'],
   },
 }
 
