@@ -1,0 +1,40 @@
+# Agora — Shipment Intelligence para Exportadores
+
+## Qué es Agora
+
+Agora es una plataforma de shipment intelligence para exportadores de fruta y frutos secos. Ayuda a equipos operativos a detectar problemas antes de que se transformen en multas, mantener documentos sincronizados y dar visibilidad completa de cada embarque en tiempo real.
+
+Está diseñada para empresas exportadoras con alto volumen documental y operaciones complejas: múltiples navieras, productores, agencias y mercados de destino.
+
+## El problema que resuelve
+
+Cada envío mueve decenas de documentos, actores y fechas críticas. Sin visibilidad unificada, los problemas llegan cuando ya no hay tiempo para reaccionar:
+
+- **Desvíos detectados tarde.** Problemas de temperatura o documentación se descubren en destino. A ese punto el daño ya está hecho: reclamos, rechazos, pérdida de cliente.
+- **Documentos fuera de sincronía.** Correos, WhatsApp, portales navieros, Excel. Cada documento vive en un silo. Un solo archivo pendiente puede detener el despacho o el cobro.
+- **Coordinación sin contexto.** Agencia, naviera, productor, importador — cada uno tiene su versión del estado. Sin una fuente única de verdad, cada llamada empieza desde cero.
+
+## Qué ofrece
+
+1. **Visibilidad completa de cada envío.** Estado en tiempo real de todos los contenedores — posición, etapa documental, temperatura — en un solo panel.
+2. **Alertas con contexto, no solo ruido.** Alertas accionables con el contexto exacto para decidir rápido: qué pasó, qué implica, qué hacer.
+3. **Documentación siempre sincronizada.** BL, facturas, fitosanitarios, certificados — en una matriz de readiness unificada. Sabes qué falta, quién lo tiene y cuánto tiempo queda.
+
+## Resultados
+
+- **18h** — tiempo promedio disponible para reaccionar ante un problema documental antes del cut-off naviero
+- **94%** — reducción en tiempo de coordinación manual por embarque (operadores en acceso temprano)
+- **0** — reclamos por frío fuera de rango en temporadas cereza 2025–2026 con Agora
+
+## Para quién es
+
+- Exportadoras de fruta fresca y frutos secos con operaciones activas
+- Equipos con alto volumen de coordinación por correo y WhatsApp
+- Operaciones con frecuentes excepciones documentales o logísticas
+- Empresas que exportan a múltiples mercados con distintos requisitos
+
+## Empresa
+
+Agora Technologies SpA — Santiago, Chile
+Web: https://www.agenteagora.com
+Contacto: https://www.agenteagora.com/#contacto
