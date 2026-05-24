@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import { ParallaxImage } from './ParallaxImage'
 import { useFadeIn } from '@/hooks/useFadeIn'
