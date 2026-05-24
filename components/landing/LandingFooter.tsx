@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import Image from 'next/image'
 import { useTranslations, useLocale } from 'next-intl'
 import { ParallaxImage } from './ParallaxImage'
@@ -11,6 +11,17 @@ export function LandingFooter() {
   const locale = useLocale()
   const router = useRouter()
   const pathname = usePathname()
+  const textCardRef = useRef<HTMLDivElement>(null)
+  const [logoCardSize, setLogoCardSize] = useState<number | null>(null)
+
+  useEffect(() => {
+    if (!textCardRef.current) return
+    const observer = new ResizeObserver(entries => {
+      setLogoCardSize(entries[0].borderBoxSize[0].blockSize)
+    })
+    observer.observe(textCardRef.current)
+    return () => observer.disconnect()
+  }, [])
 
   function toggleLocale() {
     const next = locale === 'es' ? 'en' : 'es'
@@ -55,17 +66,15 @@ export function LandingFooter() {
 
           {/* Logo card */}
           <div
-            className="relative overflow-hidden flex items-center justify-center"
+            className="relative overflow-hidden flex items-center justify-center flex-shrink-0"
             style={{
               background: 'rgba(43,31,18,0.28)',
               backdropFilter: 'blur(36px) saturate(180%)',
               WebkitBackdropFilter: 'blur(36px) saturate(180%)',
               border: '1px solid rgba(248,242,228,0.20)',
               borderRadius: '18px',
-              aspectRatio: '1 / 1',
-              alignSelf: 'stretch',
-              minWidth: '0',
-              flex: '0 0 auto',
+              width: logoCardSize ? `${logoCardSize}px` : '80px',
+              height: logoCardSize ? `${logoCardSize}px` : '80px',
               boxShadow: '0 16px 48px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.09)',
             }}
           >
@@ -87,6 +96,7 @@ export function LandingFooter() {
 
           {/* Text card */}
           <div
+            ref={textCardRef}
             className="relative overflow-hidden flex flex-col justify-center"
             style={{
               background: 'rgba(43,31,18,0.28)',
