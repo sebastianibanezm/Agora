@@ -61,26 +61,6 @@ export function LandingContact() {
               {t('contact.sub')}
             </p>
 
-            {/* Social proof line */}
-            <div
-              className="inline-flex items-center gap-[7px] mb-8"
-              style={{ display: 'flex' }}
-            >
-              <div
-                className="w-[5px] h-[5px] rounded-full flex-shrink-0"
-                style={{ background: '#4F7A3C' }}
-              />
-              <span
-                style={{
-                  fontFamily: 'var(--font-family-mono)',
-                  fontSize: '11px',
-                  color: '#8A7860',
-                }}
-              >
-                {t('contact.proof')}
-              </span>
-            </div>
-
             {/* Process steps */}
             <div className="flex flex-col gap-[18px]">
               {(['1', '2', '3'] as const).map((n) => (
