@@ -100,9 +100,9 @@ export function LandingProblem() {
       }}
     >
       <div className="max-w-[1160px] mx-auto px-5 sm:px-8 lg:px-12">
-        {/* Asymmetric section head */}
-        <div className="grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-16 mb-20 items-start">
-          <div>
+        {/* Section head */}
+        <div className="mb-20">
+          <div className="w-full lg:w-1/2">
             <span
               className="block mb-3 text-[10px] uppercase tracking-[0.18em]"
               style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860' }}
@@ -124,14 +124,12 @@ export function LandingProblem() {
               {t('titleLine2')}
             </h2>
           </div>
-          <div className="lg:pt-[42px]">
-            <p
-              className="text-[16px] leading-[1.65] m-0"
-              style={{ color: '#5A4A38', maxWidth: '52ch' }}
-            >
-              {t('lede')}
-            </p>
-          </div>
+          <p
+            className="text-[16px] leading-[1.65] m-0 mt-8"
+            style={{ color: '#5A4A38', maxWidth: '52ch' }}
+          >
+            {t('lede')}
+          </p>
         </div>
 
         {/* Cards 1 & 2 — side by side */}
