@@ -62,7 +62,8 @@ export function LandingFooter() {
               WebkitBackdropFilter: 'blur(36px) saturate(180%)',
               border: '1px solid rgba(248,242,228,0.20)',
               borderRadius: '18px',
-              padding: '22px',
+              aspectRatio: '1 / 1',
+              alignSelf: 'stretch',
               boxShadow: '0 16px 48px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.09)',
             }}
           >
@@ -75,10 +76,10 @@ export function LandingFooter() {
             <Image
               src="/landing/lambda-logo.png"
               alt="Agora"
-              width={36}
-              height={36}
+              width={60}
+              height={60}
               className="object-contain"
-              style={{ filter: 'brightness(0) invert(1)' }}
+              style={{ filter: 'brightness(0) invert(1)', width: '58%', height: '58%' }}
             />
           </div>
 

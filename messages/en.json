@@ -580,7 +580,7 @@
       "feature3Body": "Who has what, and what changed"
     },
     "ecosystem": {
-      "statement": "Agora is an intelligence layer that integrates with your systems and adapts to your processes to automate and organize the document workflow, connecting Commercial, Comex, Planning, and Finance in a single intelligent platform."
+      "statement": "Agora is an intelligent export platform that integrates with your systems and adapts to your processes to automate and organize the document workflow, connecting Commercial, Comex, Planning, and Finance in one place."
     },
     "financial": {
       "eyebrow": "Finance",
@@ -632,7 +632,7 @@
       "formNote": "Your information is confidential and never shared with third parties."
     },
     "footer": {
-      "tagline": "The intelligent operational layer for exports.",
+      "tagline": "The intelligent operational platform for exports.",
       "colPlatform": "Platform",
       "linkVisibility": "Visibility",
       "linkAlerts": "Alerts",
