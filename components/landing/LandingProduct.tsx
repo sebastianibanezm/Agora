@@ -23,8 +23,9 @@ export function LandingProduct() {
     >
       <div className="max-w-[1160px] mx-auto px-5 sm:px-8 lg:px-12">
         {/* Section head */}
-        <div className="mb-16">
-          <div className="w-full lg:w-1/2">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center mb-16">
+          {/* Left: eyebrow + title + description */}
+          <div>
             <span
               className="block mb-3 text-[10px] uppercase tracking-[0.18em]"
               style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860' }}
@@ -45,13 +46,37 @@ export function LandingProduct() {
               <br />
               {t('product.titleLine2')}
             </h2>
+            <p
+              className="text-[16px] leading-[1.65] m-0 mt-8"
+              style={{ color: '#5A4A38', maxWidth: '52ch' }}
+            >
+              {t('product.lede')}
+            </p>
           </div>
-          <p
-            className="text-[16px] leading-[1.65] m-0 mt-8"
-            style={{ color: '#5A4A38', maxWidth: '52ch' }}
+
+          {/* Right: image */}
+          <div
+            className="relative w-full overflow-hidden"
+            style={{
+              borderRadius: '16px',
+              aspectRatio: '4 / 3',
+              boxShadow: '0 24px 64px rgba(43,31,18,0.18), 0 0 0 1px rgba(43,31,18,0.06)',
+            }}
           >
-            {t('product.lede')}
-          </p>
+            <Image
+              src="/landing/platform-bg.png"
+              alt=""
+              fill
+              className="object-cover"
+              style={{ objectPosition: 'center 25%' }}
+            />
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background: 'linear-gradient(to bottom, transparent 60%, rgba(43,31,18,0.14) 100%)',
+              }}
+            />
+          </div>
         </div>
 
         {/* Feature spec table */}
