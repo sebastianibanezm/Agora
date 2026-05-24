@@ -7,7 +7,6 @@ interface Props {
   src: string
   alt?: string
   objectPosition?: string
-  /** How many pixels the image drifts per 1px of scroll. 0.2 = clearly visible. */
   strength?: number
   priority?: boolean
 }
@@ -27,32 +26,18 @@ export function ParallaxImage({
     const inner = innerRef.current
     if (!container || !inner) return
 
-    // Oversize the image vertically by a fixed pixel amount so edges
-    // never show through the overflow-hidden container as it drifts.
-    const OVERSCAN_PX = 120
-
-    inner.style.position = 'absolute'
-    inner.style.left = '0'
-    inner.style.right = '0'
-    inner.style.top = `-${OVERSCAN_PX}px`
-    inner.style.height = `calc(100% + ${OVERSCAN_PX * 2}px)`
-    inner.style.willChange = 'transform'
-
     let rafId: number
-    let lastScrollY = -1
+    let lastY = -1
 
     const tick = () => {
-      const scrollY = window.scrollY
-      if (scrollY !== lastScrollY) {
-        lastScrollY = scrollY
-        const rect = container.getBoundingClientRect()
+      const y = window.scrollY
+      if (y !== lastY) {
+        lastY = y
+        const { top, height } = container.getBoundingClientRect()
         const vh = window.innerHeight
-        // progress: 0 when top of element is at bottom of viewport,
-        //           1 when bottom of element is at top of viewport
-        const progress = Math.max(0, Math.min(1, (vh - rect.top) / (vh + rect.height)))
-        // drift upward as progress increases (classic slow-background parallax)
-        const driftPx = -((progress * 2 - 1) * strength * rect.height)
-        inner.style.transform = `translateY(${driftPx.toFixed(1)}px)`
+        const progress = Math.max(0, Math.min(1, (vh - top) / (vh + height)))
+        const drift = -((progress * 2 - 1) * strength * height)
+        inner.style.transform = `translateY(${drift.toFixed(1)}px)`
       }
       rafId = requestAnimationFrame(tick)
     }
@@ -63,8 +48,23 @@ export function ParallaxImage({
 
   return (
     <div ref={containerRef} className="absolute inset-0 overflow-hidden">
-      {/* inner sized and positioned entirely by the useEffect above */}
-      <div ref={innerRef}>
+      {/*
+        Layout set here in JSX — not in useEffect — so next/image fill
+        has a positioned parent from the first render, and the transform
+        applied by JS actually moves the image.
+        top/bottom: -120px oversize so edges never show during drift.
+      */}
+      <div
+        ref={innerRef}
+        style={{
+          position: 'absolute',
+          top: '-120px',
+          bottom: '-120px',
+          left: 0,
+          right: 0,
+          willChange: 'transform',
+        }}
+      >
         <Image
           src={src}
           alt={alt}
