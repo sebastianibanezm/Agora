@@ -495,34 +495,34 @@
       "cta": "Get in Touch"
     },
     "hero": {
-      "eyebrow": "Shipment Intelligence",
+      "eyebrow": "Export Intelligence",
       "headline": "Your exports,",
       "headlineAccent": "always under control",
-      "sub": "Catch deviations before they become claims. Synchronized documents, team always in context.",
+      "sub": "Automate your document workflow, eliminate all penalties from errors, and accelerate invoicing and financial reconciliation with Agora, the agentic operational platform for exporters.",
       "ctaPrimary": "Get in Touch",
       "ctaSecondary": "See Demo",
       "scroll": "Scroll"
     },
     "problem": {
       "eyebrow": "01 — The problem",
-      "title": "Export operations",
-      "titleLine2": "run on friction",
-      "lede": "Chilean exporters coordinate critical workflows across email, WhatsApp, Excel, carrier portals, and people's heads. It works — barely. And it costs real money when it doesn't.",
-      "card1Title": "Documents assembled by hand, every time",
-      "card1Body": "The shipping instruction, BL corrections, packing lists, and certificates are rebuilt from scratch for each shipment — pulled from emails, WhatsApp messages, and Excel files. One wrong field triggers fees, delays, or cargo rejection.",
+      "title": "Eliminate the friction",
+      "titleLine2": "from your export process",
+      "lede": "The export process hasn't changed in the last 20 years. Critical information lives scattered across email, WhatsApp, Excel spreadsheets, and your ERP — costing you money and efficiency every day. There is a better solution.",
+      "card1Title": "Manual documents, full of errors",
+      "card1Body": "The shipping instruction, BL corrections, packing lists, and certificates are rebuilt from scratch for each shipment — pulled from emails, WhatsApp messages, and Excel files. One wrong field triggers penalties, delays, demurrage, or cargo rejection.",
       "card1Cite": "BL correction: USD 100–150. Demurrage: USD 400+/day",
       "card2Title": "Exceptions found when it's too late",
       "card2Body": "A mismatched consignee, a wrong weight, a missing document — by the time these surface, the container is already at port. Most teams discover problems through a carrier rejection, not before.",
       "card2Cite": "Losses from thousands to tens of thousands per incident",
-      "card3Title": "Status lives in everyone's head",
-      "card3Body": "The team chases status in parallel: calls to the carrier, emails to the forwarder, manual checks in the ERP. Without a shared operational layer, every question starts from zero — every time.",
+      "card3Title": "You don't own your institutional knowledge",
+      "card3Body": "Without a shared operational layer, when someone on your team leaves, their knowledge — and your processes — leave with them.",
       "card3Cite": "Hours of coordination lost per shipment, per week"
     },
     "pillars": {
       "eyebrow": "02 — Solution",
-      "title": "An operational layer",
-      "titleLine2": "over your real workflow",
-      "lede": "Agora doesn't replace your channels. It connects to them — reading what flows through email, WhatsApp, and your existing systems and turning it into structured, trackable operations.",
+      "title": "An intelligent operational layer",
+      "titleLine2": "for your exports",
+      "lede": "Agora integrates with your systems to automate document capture and generation, cross-checking data and eliminating errors throughout the entire process.",
       "p1Num": "01",
       "p1Title": "Information captured from where work happens",
       "p1Body": "Agora reads emails, WhatsApp messages, and documents to extract and organize shipment data automatically. Booking confirmations, SI changes, carrier updates — structured by operation, not scattered across inboxes.",
@@ -550,11 +550,7 @@
       "feature3Body": "Who has what, and what changed"
     },
     "ecosystem": {
-      "eyebrow": "Ecosystem",
-      "statement": "Agora doesn't replace your channels. It connects to what flows through email, WhatsApp, carrier portals, and your ERP — and turns it into structured, trackable operations.",
-      "groupCarriers": "Carriers",
-      "groupTerminals": "Terminals",
-      "groupAuthorities": "Compliance"
+      "statement": "Agora is an intelligence layer that integrates with your systems and adapts to your processes to automate and organize the document workflow, connecting Commercial, Comex, Planning, and Finance in a single intelligent platform."
     },
     "stats": {
       "eyebrow": "The cost of getting it wrong",
@@ -578,8 +574,8 @@
       "step1Body": "A 30-minute call to understand your current process, where errors happen, and what coordination costs you most.",
       "step2Title": "Demo with your data",
       "step2Body": "We run Agora on your real operations — your routes, your carriers, your documents.",
-      "step3Title": "Live within a week",
-      "step3Body": "Onboarding is fast. Your team operates before the next shipment cycle begins.",
+      "step3Title": "Dedicated onboarding",
+      "step3Body": "Supported from day one by a professional expert team.",
       "formTitle": "Tell us about your operations",
       "formSub": "No commitment — we'll respond within one business day.",
       "labelFirstName": "First name",
@@ -597,7 +593,7 @@
       "formNote": "Your information is confidential and never shared with third parties."
     },
     "footer": {
-      "tagline": "The operational layer for Chilean exporters.",
+      "tagline": "The intelligent operational layer for exports.",
       "colPlatform": "Platform",
       "linkVisibility": "Visibility",
       "linkAlerts": "Alerts",

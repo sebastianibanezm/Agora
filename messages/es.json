@@ -495,34 +495,34 @@
       "cta": "Ponte en Contacto"
     },
     "hero": {
-      "eyebrow": "Shipment Intelligence",
+      "eyebrow": "Export Intelligence",
       "headline": "Tus exportaciones,",
       "headlineAccent": "siempre bajo control",
-      "sub": "Detecta problemas antes de que se transformen en multas. Documentos sincronizados, equipo siempre en contexto.",
+      "sub": "Automatiza tu flujo documental, elimina todas las multas por errores y expedita la cobranza y la conciliación financiera con Agora, la plataforma operacional agéntica para exportaciones.",
       "ctaPrimary": "Ponte en Contacto",
       "ctaSecondary": "Ver Demo",
       "scroll": "Scroll"
     },
     "problem": {
       "eyebrow": "01 — El problema",
-      "title": "La operación exportadora",
-      "titleLine2": "funciona con fricción",
-      "lede": "Las exportadoras chilenas coordinan flujos críticos entre correo, WhatsApp, Excel, portales navieros y el conocimiento de cada persona. Funciona — apenas. Y cuando no funciona, cuesta caro.",
-      "card1Title": "Documentos armados a mano, cada vez",
-      "card1Body": "El instructivo de embarque, las correcciones de BL, packing lists y certificados se construyen desde cero para cada operación — juntando correos, mensajes de WhatsApp y archivos de Excel. Un campo mal ingresado dispara multas, atrasos o rechazo de carga.",
+      "title": "Elimina la fricción",
+      "titleLine2": "de tu proceso de exportación",
+      "lede": "El proceso de exportación no ha cambiado en los últimos 20 años. La información crítica de tu proceso vive dispersa en distintos canales como correos, WhatsApp, planillas Excel y tu ERP, lo que te está generando pérdidas en dinero y eficiencia. Existe una mejor solución.",
+      "card1Title": "Documentos manuales y con errores",
+      "card1Body": "El instructivo de embarque, las correcciones de BL, packing lists y certificados se construyen desde cero para cada operación — juntando correos, mensajes de WhatsApp y archivos de Excel. Un campo mal ingresado dispara multas, atrasos, demurrage o rechazo de carga.",
       "card1Cite": "Corrección de BL: USD 100–150. Demurrage: USD 400+/día",
       "card2Title": "Excepciones descubiertas cuando ya es tarde",
       "card2Body": "Consignatario mal escrito, peso incorrecto, documento faltante — cuando esto aparece, el contenedor ya está en puerto. La mayoría de los equipos se entera por el rechazo de la naviera, no antes.",
       "card2Cite": "Pérdidas desde miles hasta decenas de miles de USD por incidente",
-      "card3Title": "El estado vive en la cabeza de cada uno",
-      "card3Body": "El equipo persigue información en paralelo: llama a la naviera, escribe al agente, revisa el ERP manualmente. Sin una capa operacional compartida, cada pregunta empieza desde cero — siempre.",
+      "card3Title": "No eres dueño del conocimiento institucional",
+      "card3Body": "Al no operar con una capa operacional compartida, cuando alguien de tu equipo se va, sus conocimientos, y tus procesos, se van con esa persona.",
       "card3Cite": "Horas de coordinación perdidas por embarque, por semana"
     },
     "pillars": {
       "eyebrow": "02 — Solución",
-      "title": "Una capa operacional",
-      "titleLine2": "sobre el flujo real",
-      "lede": "Agora no reemplaza tus canales. Se conecta a ellos — leyendo lo que ya fluye por correo, WhatsApp y tus sistemas actuales, y convirtiéndolo en operaciones estructuradas y trazables.",
+      "title": "Una capa operacional inteligente",
+      "titleLine2": "para tus exportaciones",
+      "lede": "Agora se integra con tus sistemas para automatizar la captura y generación de documentos, cruzando datos y eliminando los errores a lo largo de todo el proceso.",
       "p1Num": "01",
       "p1Title": "Información capturada desde donde ocurre el trabajo",
       "p1Body": "Agora lee correos, mensajes de WhatsApp y documentos para extraer y organizar datos de embarque automáticamente. Confirmaciones de booking, cambios de instructivo, actualizaciones navieras — estructurados por operación, no dispersos en bandejas de entrada.",
@@ -550,11 +550,7 @@
       "feature3Body": "Quién tiene qué y qué cambió"
     },
     "ecosystem": {
-      "eyebrow": "Ecosistema",
-      "statement": "Agora no reemplaza tus canales. Se conecta a lo que fluye entre correo, WhatsApp, portales de navieras y tu ERP — y lo convierte en operaciones estructuradas y trazables.",
-      "groupCarriers": "Navieras",
-      "groupTerminals": "Terminales",
-      "groupAuthorities": "Organismos"
+      "statement": "Agora es una capa de inteligencia que se integra a tus sistemas y se adapta a tus procesos para automatizar y ordenar el flujo documental, conectando el área Comercial, Comex, Planificación y Finanzas en una sola plataforma inteligente."
     },
     "stats": {
       "eyebrow": "El costo de equivocarse",
@@ -578,8 +574,8 @@
       "step1Body": "Una llamada de 30 minutos para entender tu proceso actual, dónde ocurren los errores y qué coordinación te cuesta más.",
       "step2Title": "Demo con tus datos",
       "step2Body": "Corremos Agora sobre tus operaciones reales — tus rutas, tus navieras, tus documentos.",
-      "step3Title": "Operativo en una semana",
-      "step3Body": "El onboarding es rápido. Tu equipo opera antes del próximo ciclo de embarques.",
+      "step3Title": "Onboarding dedicado",
+      "step3Body": "Acompañamiento desde el día 1 por un equipo profesional experto.",
       "formTitle": "Cuéntanos sobre tus operaciones",
       "formSub": "Sin compromisos — te respondemos en menos de un día hábil.",
       "labelFirstName": "Nombre",
@@ -597,7 +593,7 @@
       "formNote": "Tu información es confidencial y nunca se comparte con terceros."
     },
     "footer": {
-      "tagline": "La capa operacional para exportadoras chilenas.",
+      "tagline": "La capa operacional inteligente para las exportaciones.",
       "colPlatform": "Plataforma",
       "linkVisibility": "Visibilidad",
       "linkAlerts": "Alertas",
