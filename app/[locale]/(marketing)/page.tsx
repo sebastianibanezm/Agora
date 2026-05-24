@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { LandingHero } from '@/components/landing/LandingHero'
+import { LandingEcosystem } from '@/components/landing/LandingEcosystem'
 import { LandingProblem } from '@/components/landing/LandingProblem'
 import { LandingPillars } from '@/components/landing/LandingPillars'
 import { LandingProduct } from '@/components/landing/LandingProduct'
@@ -8,9 +9,9 @@ import { LandingContact } from '@/components/landing/LandingContact'
 import { LandingFooter } from '@/components/landing/LandingFooter'
 
 export const metadata: Metadata = {
-  title: 'Agora — Shipment Intelligence para Exportadores',
+  title: 'Agora — Export Intelligence para Exportadores',
   description:
-    'Detecta desvíos, sincroniza documentos y mantén a tu equipo en contexto. La plataforma de trazabilidad para exportadores de fruta.',
+    'Coordina documentos, detecta excepciones y mantén a tu equipo en contexto. La capa operacional para exportadoras chilenas.',
 }
 
 export default function LandingPage() {
@@ -18,6 +19,7 @@ export default function LandingPage() {
     <>
       <main>
         <LandingHero />
+        <LandingEcosystem />
         <LandingProblem />
         <LandingPillars />
         <LandingProduct />

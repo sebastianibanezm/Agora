@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { useTranslations } from 'next-intl'
-import { AlertTriangle } from 'lucide-react'
+import { AlertTriangle, Check, Minus } from 'lucide-react'
 import { useFadeIn } from '@/hooks/useFadeIn'
 
 // ── Pillar visual: Visibility timeline ──────────────────────────
@@ -73,9 +73,12 @@ function AlertVisual() {
           ))}
         </div>
       </div>
-      <div className="text-[12px] p-[12px] rounded-[8px]" style={{ background: '#FCF7EA', border: '1px solid rgba(60,42,22,0.08)', borderLeft: '2px solid #4F7A3C' }}>
-        <span style={{ color: '#4F7A3C', fontWeight: 600 }}>✓ Excursión no crítica</span>
-        <span style={{ color: '#5A4A38' }}> — dentro del margen permitido por protocolo USDA.</span>
+      <div className="text-[12px] p-[12px] rounded-[8px] flex items-start gap-[8px]" style={{ background: 'rgba(79,122,60,0.06)', border: '1px solid rgba(79,122,60,0.25)' }}>
+        <Check size={12} strokeWidth={2} style={{ color: '#4F7A3C', flexShrink: 0, marginTop: '1px' }} />
+        <div>
+          <span style={{ color: '#4F7A3C', fontWeight: 600 }}>Excursión no crítica</span>
+          <span style={{ color: '#5A4A38' }}> — dentro del margen permitido por protocolo USDA.</span>
+        </div>
       </div>
     </div>
   )
@@ -96,9 +99,9 @@ function DocsVisual() {
       <p className="text-[10px] uppercase tracking-[0.06em] mb-3" style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860' }}>Matriz documental</p>
       <div className="flex flex-col gap-[6px]">
         {docs.map((doc) => (
-          <div key={doc.name} className="flex items-center gap-2 text-[11px] px-[10px] py-[7px] rounded-[7px]" style={{ fontFamily: 'var(--font-family-mono)', color: doc.status === 'warn' ? '#B97A1F' : '#5A4A38', background: '#FFFCF1', border: `1px solid ${doc.status === 'warn' ? 'rgba(185,122,31,0.20)' : 'rgba(60,42,22,0.08)'}`, borderLeft: doc.status === 'warn' ? '2px solid #B97A1F' : undefined, opacity: doc.status === 'pending' ? 0.5 : 1 }}>
-            <div className="w-[15px] h-[15px] rounded-[3px] flex items-center justify-center text-[9px] text-white flex-shrink-0" style={{ background: doc.status === 'ok' ? '#4F7A3C' : doc.status === 'warn' ? '#B97A1F' : '#B5A586' }}>
-              {doc.status === 'ok' ? '✓' : doc.status === 'warn' ? '!' : '○'}
+          <div key={doc.name} className="flex items-center gap-2 text-[11px] px-[10px] py-[7px] rounded-[7px]" style={{ fontFamily: 'var(--font-family-mono)', color: doc.status === 'warn' ? '#B97A1F' : '#5A4A38', background: doc.status === 'warn' ? 'rgba(185,122,31,0.06)' : '#FFFCF1', border: `1px solid ${doc.status === 'warn' ? 'rgba(185,122,31,0.28)' : 'rgba(60,42,22,0.08)'}`, opacity: doc.status === 'pending' ? 0.5 : 1 }}>
+            <div className="w-[15px] h-[15px] rounded-[3px] flex items-center justify-center flex-shrink-0" style={{ background: doc.status === 'ok' ? '#4F7A3C' : doc.status === 'warn' ? '#B97A1F' : '#B5A586' }}>
+              {doc.status === 'ok' ? <Check size={9} strokeWidth={2.5} color="white" /> : doc.status === 'warn' ? <AlertTriangle size={9} strokeWidth={2.5} color="white" /> : <Minus size={9} strokeWidth={2.5} color="white" />}
             </div>
             <span className="flex-1 truncate">{doc.name}</span>
             <span style={{ color: '#8A7860', fontSize: '10px' }}>{doc.meta}</span>
@@ -125,29 +128,101 @@ export function LandingPillars() {
   const ref = useFadeIn()
 
   return (
-    <section ref={ref as React.RefObject<HTMLElement>} id="solutions" className="py-[120px]" style={{ borderTop: '1px solid rgba(60,42,22,0.08)', opacity: 0, transform: 'translateY(24px)', transition: 'opacity 0.55s ease-out, transform 0.55s ease-out' }}>
+    <section
+      ref={ref as React.RefObject<HTMLElement>}
+      id="solutions"
+      className="py-[120px]"
+      style={{
+        borderTop: '1px solid rgba(60,42,22,0.08)',
+        opacity: 0,
+        transform: 'translateY(24px)',
+        transition: 'opacity 0.55s ease-out, transform 0.55s ease-out',
+      }}
+    >
       <div className="max-w-[1160px] mx-auto px-12">
-        <div className="text-center max-w-[720px] mx-auto mb-16">
-          <span className="block mb-[18px] text-[10px] uppercase tracking-[0.18em]" style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860' }}>
-            {t('eyebrow')}
-          </span>
-          <h2 className="italic font-normal mb-[18px]" style={{ fontFamily: 'var(--font-family-display)', fontSize: 'clamp(36px, 4vw, 52px)', lineHeight: 1.06, letterSpacing: '-0.015em', color: '#2B1F12' }}>
-            {t('title')}<br />{t('titleLine2')}
-          </h2>
-          <p className="text-[16px] leading-[1.65] m-0" style={{ color: '#5A4A38' }}>{t('lede')}</p>
+        {/* Asymmetric section head */}
+        <div className="grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-16 mb-20 items-start">
+          {/* Left: eyebrow + h2 */}
+          <div>
+            <span
+              className="block mb-3 text-[10px] uppercase tracking-[0.18em]"
+              style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860' }}
+            >
+              {t('eyebrow')}
+            </span>
+            <h2
+              className="italic font-normal m-0"
+              style={{
+                fontFamily: 'var(--font-family-display)',
+                fontSize: 'clamp(36px, 4vw, 52px)',
+                lineHeight: 1.06,
+                letterSpacing: '-0.015em',
+                color: '#2B1F12',
+              }}
+            >
+              {t('title')}
+              <br />
+              {t('titleLine2')}
+            </h2>
+          </div>
+
+          {/* Right: lede */}
+          <div className="lg:pt-[42px]">
+            <p
+              className="text-[16px] leading-[1.65] m-0"
+              style={{ color: '#5A4A38' }}
+            >
+              {t('lede')}
+            </p>
+          </div>
         </div>
 
-        <div className="flex flex-col gap-24">
-          {PILLARS.map(({ numKey, titleKey, bodyKey, Visual, reverse }) => (
-            <div key={numKey} className={`grid grid-cols-1 lg:grid-cols-2 gap-20 items-center ${reverse ? 'lg:[&>*:first-child]:order-2 lg:[&>*:last-child]:order-1' : ''}`}>
+        {/* Pillar rows */}
+        <div className="flex flex-col">
+          {PILLARS.map(({ numKey, titleKey, bodyKey, Visual, reverse }, index) => (
+            <div
+              key={numKey}
+              className={`grid grid-cols-1 lg:grid-cols-2 gap-20 items-center ${reverse ? 'lg:[&>*:first-child]:order-2 lg:[&>*:last-child]:order-1' : ''}`}
+              style={
+                index > 0
+                  ? { paddingTop: '80px', borderTop: '1px solid rgba(60,42,22,0.06)' }
+                  : { paddingTop: '0' }
+              }
+            >
               <div>
-                <div className="inline-block text-[10px] uppercase tracking-[0.18em] px-2 py-[3px] rounded-[4px] mb-4" style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860', border: '1px solid rgba(60,42,22,0.08)', background: '#FFFCF1' }}>
+                <div
+                  className="mb-5"
+                  style={{
+                    fontFamily: 'var(--font-family-mono)',
+                    fontSize: '11px',
+                    letterSpacing: '0.16em',
+                    textTransform: 'uppercase',
+                    color: '#B5A586',
+                  }}
+                >
                   {t(numKey)}
                 </div>
-                <h3 className="italic font-normal mb-4" style={{ fontFamily: 'var(--font-family-display)', fontSize: 'clamp(26px, 2.4vw, 36px)', lineHeight: 1.14, color: '#2B1F12' }}>
+                <h3
+                  className="italic font-normal mb-4"
+                  style={{
+                    fontFamily: 'var(--font-family-display)',
+                    fontSize: 'clamp(26px, 2.4vw, 34px)',
+                    lineHeight: 1.1,
+                    color: '#2B1F12',
+                    margin: '0 0 16px 0',
+                  }}
+                >
                   {t(titleKey)}
                 </h3>
-                <p className="text-[15px] leading-[1.68] m-0" style={{ color: '#5A4A38', maxWidth: '44ch' }}>
+                <p
+                  className="m-0"
+                  style={{
+                    fontSize: '15px',
+                    color: '#5A4A38',
+                    maxWidth: '44ch',
+                    lineHeight: 1.70,
+                  }}
+                >
                   {t(bodyKey)}
                 </p>
               </div>
