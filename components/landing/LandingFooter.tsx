@@ -3,6 +3,7 @@
 import React from 'react'
 import Image from 'next/image'
 import { useTranslations, useLocale } from 'next-intl'
+import { ParallaxImage } from './ParallaxImage'
 import { useRouter, usePathname } from 'next/navigation'
 
 export function LandingFooter() {
@@ -22,13 +23,7 @@ export function LandingFooter() {
     <footer className="relative w-full overflow-hidden" style={{ minHeight: '420px' }}>
       {/* Background image */}
       <div className="absolute inset-0 z-0">
-        <Image
-          src="/landing/footer-bg.png"
-          alt=""
-          fill
-          className="object-cover"
-          style={{ objectPosition: 'center 55%' }}
-        />
+        <ParallaxImage src="/landing/footer-bg.png" objectPosition="center 55%" strength={0.06} />
         {/* Dark gradient overlay — heavier at bottom so content is legible */}
         <div
           className="absolute inset-0"

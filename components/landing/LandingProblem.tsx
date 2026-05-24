@@ -1,8 +1,8 @@
 'use client'
 
 import React from 'react'
-import Image from 'next/image'
 import { useTranslations } from 'next-intl'
+import { ParallaxImage } from './ParallaxImage'
 import { FileWarning, AlertTriangle, Users } from 'lucide-react'
 import { useFadeIn } from '@/hooks/useFadeIn'
 
@@ -142,14 +142,7 @@ export function LandingProblem() {
               boxShadow: '0 24px 64px rgba(43,31,18,0.18), 0 0 0 1px rgba(43,31,18,0.06)',
             }}
           >
-            <Image
-              src="/landing/problem-bg.png"
-              alt=""
-              fill
-              className="object-cover"
-              style={{ objectPosition: 'center 20%' }}
-            />
-            {/* Subtle warm vignette bottom */}
+            <ParallaxImage src="/landing/problem-bg.png" objectPosition="center 20%" strength={0.08} />
             <div
               className="absolute inset-0 pointer-events-none"
               style={{

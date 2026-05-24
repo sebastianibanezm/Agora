@@ -1,9 +1,9 @@
 'use client'
 
-import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import { ArrowRight } from 'lucide-react'
 import { LandingNav } from './LandingNav'
+import { ParallaxImage } from './ParallaxImage'
 
 export function LandingHero() {
   const t = useTranslations('landing')
@@ -15,13 +15,11 @@ export function LandingHero() {
     >
       {/* Background image */}
       <div className="absolute inset-0 z-0">
-        <Image
+        <ParallaxImage
           src="/landing/hero-bg.png"
-          alt=""
-          fill
+          objectPosition="center 38%"
+          strength={0.05}
           priority
-          className="object-cover"
-          style={{ objectPosition: 'center 38%' }}
         />
         {/* Gradient overlay */}
         <div
