@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl'
 import { ArrowRight } from 'lucide-react'
 import { useFadeIn } from '@/hooks/useFadeIn'
 
-const VOLUME_OPTIONS = ['1–20', '20–100', '100–500', '500+'] as const
+const VOLUME_OPTIONS = ['100–500', '500–1000', '1000–3000', '3000+'] as const
 
 export function LandingContact() {
   const t = useTranslations('landing')
@@ -201,7 +201,8 @@ export function LandingContact() {
                   className="block text-[10px] uppercase tracking-[0.12em] font-medium mb-[6px]"
                   style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860' }}
                 >
-                  {t('contact.labelVolume')}
+                  {t('contact.labelVolume')}{' '}
+                  <span style={{ color: '#8B2A1F' }}>*</span>
                 </span>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-[6px]">
                   {VOLUME_OPTIONS.map((opt) => (
@@ -222,36 +223,6 @@ export function LandingContact() {
                     </button>
                   ))}
                 </div>
-              </div>
-
-              {/* Message */}
-              <div className="flex flex-col gap-[6px] mb-4">
-                <label
-                  className="text-[10px] uppercase tracking-[0.12em] font-medium"
-                  style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860' }}
-                >
-                  {t('contact.labelMessage')}{' '}
-                  <span style={{ color: '#8B2A1F' }}>*</span>
-                </label>
-                <textarea
-                  placeholder={t('contact.placeholderMessage')}
-                  rows={4}
-                  className="px-[14px] py-3 rounded-[8px] text-[14px] outline-none w-full resize-y"
-                  style={{
-                    background: '#FCF7EA',
-                    border: '1px solid rgba(60,42,22,0.14)',
-                    color: '#2B1F12',
-                    minHeight: '88px',
-                  }}
-                  onFocus={(e) => {
-                    e.currentTarget.style.borderColor = '#5A4A38'
-                    e.currentTarget.style.boxShadow = '0 0 0 3px rgba(43,31,18,0.07)'
-                  }}
-                  onBlur={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(60,42,22,0.14)'
-                    e.currentTarget.style.boxShadow = 'none'
-                  }}
-                />
               </div>
 
               {/* Submit */}
