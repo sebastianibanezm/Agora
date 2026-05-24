@@ -233,17 +233,23 @@ function ComercialVisual() {
 }
 
 // ── Feature lists ─────────────────────────────────────────────────
+const TAB_KEY_MAP = {
+  comex:     'product.tabComex',
+  finanzas:  'product.tabFinanzas',
+  comercial: 'product.tabComercial',
+} as const
+
 const FINANZAS_FEATURES = [
-  { key: 'finanzas1', Icon: ReceiptText },
-  { key: 'finanzas2', Icon: Check },
-  { key: 'finanzas3', Icon: TrendingUp },
-] as const
+  { labelKey: 'product.finanzas1Label' as const, bodyKey: 'product.finanzas1Body' as const, Icon: ReceiptText },
+  { labelKey: 'product.finanzas2Label' as const, bodyKey: 'product.finanzas2Body' as const, Icon: Check },
+  { labelKey: 'product.finanzas3Label' as const, bodyKey: 'product.finanzas3Body' as const, Icon: TrendingUp },
+]
 
 const COMERCIAL_FEATURES = [
-  { key: 'comercial1', Icon: BarChart2 },
-  { key: 'comercial2', Icon: DollarSign },
-  { key: 'comercial3', Icon: Activity },
-] as const
+  { labelKey: 'product.comercial1Label' as const, bodyKey: 'product.comercial1Body' as const, Icon: BarChart2 },
+  { labelKey: 'product.comercial2Label' as const, bodyKey: 'product.comercial2Body' as const, Icon: DollarSign },
+  { labelKey: 'product.comercial3Label' as const, bodyKey: 'product.comercial3Body' as const, Icon: Activity },
+]
 
 // ── Main component ────────────────────────────────────────────────
 export function LandingProduct() {
@@ -253,7 +259,7 @@ export function LandingProduct() {
 
   return (
     <section
-      ref={ref as React.RefObject<HTMLElement>}
+      ref={ref}
       id="product"
       className="py-[120px]"
       style={{
@@ -323,36 +329,29 @@ export function LandingProduct() {
 
           {/* Tab bar */}
           <div className="flex" style={{ borderBottom: '1px solid rgba(60,42,22,0.08)' }}>
-            {(['comex', 'finanzas', 'comercial'] as const).map((tab) => {
-              const keyMap = {
-                comex:     'product.tabComex',
-                finanzas:  'product.tabFinanzas',
-                comercial: 'product.tabComercial',
-              } as const
-              return (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  style={{
-                    fontFamily: 'var(--font-family-mono)',
-                    fontSize: '10px',
-                    padding: '10px 16px',
-                    color: activeTab === tab ? '#2B1F12' : '#8A7860',
-                    fontWeight: activeTab === tab ? 500 : 400,
-                    background: 'transparent',
-                    border: 'none',
-                    borderBottom: activeTab === tab ? '2px solid #2B1F12' : '2px solid transparent',
-                    cursor: 'pointer',
-                    marginBottom: '-1px',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.10em',
-                    transition: 'color 0.15s',
-                  }}
-                >
-                  {t(keyMap[tab])}
-                </button>
-              )
-            })}
+            {(['comex', 'finanzas', 'comercial'] as const).map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                style={{
+                  fontFamily: 'var(--font-family-mono)',
+                  fontSize: '10px',
+                  padding: '10px 16px',
+                  color: activeTab === tab ? '#2B1F12' : '#8A7860',
+                  fontWeight: activeTab === tab ? 500 : 400,
+                  background: 'transparent',
+                  border: 'none',
+                  borderBottom: activeTab === tab ? '2px solid #2B1F12' : '2px solid transparent',
+                  cursor: 'pointer',
+                  marginBottom: '-1px',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.10em',
+                  transition: 'color 0.15s',
+                }}
+              >
+                {t(TAB_KEY_MAP[tab])}
+              </button>
+            ))}
           </div>
 
           {/* Tab panels */}
@@ -419,9 +418,9 @@ export function LandingProduct() {
                     {t('product.finanzasLede')}
                   </p>
                   <div className="flex flex-col">
-                    {FINANZAS_FEATURES.map(({ key, Icon }, index) => (
+                    {FINANZAS_FEATURES.map(({ labelKey, bodyKey, Icon }, index) => (
                       <div
-                        key={key}
+                        key={labelKey}
                         className="flex gap-5 py-7"
                         style={index > 0 ? { borderTop: '1px solid rgba(60,42,22,0.06)' } : {}}
                       >
@@ -436,10 +435,10 @@ export function LandingProduct() {
                             className="font-medium mb-[6px]"
                             style={{ fontSize: '15px', color: '#2B1F12', lineHeight: 1.3 }}
                           >
-                            {t(`product.${key}Label` as any)}
+                            {t(labelKey)}
                           </div>
                           <p className="m-0" style={{ fontSize: '14px', color: '#5A4A38', lineHeight: 1.65 }}>
-                            {t(`product.${key}Body` as any)}
+                            {t(bodyKey)}
                           </p>
                         </div>
                       </div>
@@ -466,9 +465,9 @@ export function LandingProduct() {
                     {t('product.comercialLede')}
                   </p>
                   <div className="flex flex-col">
-                    {COMERCIAL_FEATURES.map(({ key, Icon }, index) => (
+                    {COMERCIAL_FEATURES.map(({ labelKey, bodyKey, Icon }, index) => (
                       <div
-                        key={key}
+                        key={labelKey}
                         className="flex gap-5 py-7"
                         style={index > 0 ? { borderTop: '1px solid rgba(60,42,22,0.06)' } : {}}
                       >
@@ -483,10 +482,10 @@ export function LandingProduct() {
                             className="font-medium mb-[6px]"
                             style={{ fontSize: '15px', color: '#2B1F12', lineHeight: 1.3 }}
                           >
-                            {t(`product.${key}Label` as any)}
+                            {t(labelKey)}
                           </div>
                           <p className="m-0" style={{ fontSize: '14px', color: '#5A4A38', lineHeight: 1.65 }}>
-                            {t(`product.${key}Body` as any)}
+                            {t(bodyKey)}
                           </p>
                         </div>
                       </div>
