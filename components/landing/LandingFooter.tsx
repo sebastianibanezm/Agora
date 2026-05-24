@@ -55,57 +55,78 @@ export function LandingFooter() {
       {/* Content */}
       <div className="relative z-10 max-w-[1160px] mx-auto px-5 sm:px-8 lg:px-12 py-16 flex flex-col justify-between" style={{ minHeight: '420px' }}>
 
-        {/* Brand glass card — top */}
-        <div
-          className="relative overflow-hidden self-start"
-          style={{
-            background: 'rgba(43,31,18,0.28)',
-            backdropFilter: 'blur(36px) saturate(180%)',
-            WebkitBackdropFilter: 'blur(36px) saturate(180%)',
-            border: '1px solid rgba(248,242,228,0.20)',
-            borderRadius: '18px',
-            padding: '22px 26px 20px',
-            boxShadow: '0 16px 48px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.09)',
-          }}
-        >
-          {/* Inner highlight sheen */}
+        {/* Brand glass cards — top */}
+        <div className="flex items-stretch gap-3 self-start">
+
+          {/* Logo card */}
           <div
-            className="absolute top-0 left-0 right-0 h-px pointer-events-none"
+            className="relative overflow-hidden flex items-center justify-center flex-shrink-0"
             style={{
-              background: 'linear-gradient(90deg, transparent 0%, rgba(248,242,228,0.30) 40%, rgba(248,242,228,0.12) 70%, transparent 100%)',
+              background: 'rgba(43,31,18,0.28)',
+              backdropFilter: 'blur(36px) saturate(180%)',
+              WebkitBackdropFilter: 'blur(36px) saturate(180%)',
+              border: '1px solid rgba(248,242,228,0.20)',
+              borderRadius: '18px',
+              padding: '22px',
+              boxShadow: '0 16px 48px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.09)',
             }}
-          />
-          <div className="flex items-center gap-[9px] mb-4">
-            <div className="w-[26px] h-[26px] flex items-center justify-center flex-shrink-0">
-              <Image
-                src="/landing/lambda-logo.png"
-                alt="Agora"
-                width={24}
-                height={24}
-                className="object-contain"
-                style={{ filter: 'brightness(0) invert(1)' }}
-              />
-            </div>
+          >
+            <div
+              className="absolute top-0 left-0 right-0 h-px pointer-events-none"
+              style={{
+                background: 'linear-gradient(90deg, transparent 0%, rgba(248,242,228,0.30) 40%, rgba(248,242,228,0.12) 70%, transparent 100%)',
+              }}
+            />
+            <Image
+              src="/landing/lambda-logo.png"
+              alt="Agora"
+              width={36}
+              height={36}
+              className="object-contain"
+              style={{ filter: 'brightness(0) invert(1)' }}
+            />
+          </div>
+
+          {/* Text card */}
+          <div
+            className="relative overflow-hidden flex flex-col justify-center"
+            style={{
+              background: 'rgba(43,31,18,0.28)',
+              backdropFilter: 'blur(36px) saturate(180%)',
+              WebkitBackdropFilter: 'blur(36px) saturate(180%)',
+              border: '1px solid rgba(248,242,228,0.20)',
+              borderRadius: '18px',
+              padding: '22px 26px',
+              boxShadow: '0 16px 48px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.09)',
+            }}
+          >
+            <div
+              className="absolute top-0 left-0 right-0 h-px pointer-events-none"
+              style={{
+                background: 'linear-gradient(90deg, transparent 0%, rgba(248,242,228,0.30) 40%, rgba(248,242,228,0.12) 70%, transparent 100%)',
+              }}
+            />
             <span
-              className="italic text-[19px]"
+              className="italic text-[19px] mb-2"
               style={{ fontFamily: 'var(--font-family-old-standard)', color: '#F8F2E4', letterSpacing: '0.01em' }}
             >
               Agora
             </span>
+            <div
+              className="italic"
+              style={{
+                fontFamily: 'var(--font-family-display)',
+                fontWeight: 300,
+                fontSize: 'clamp(15px, 1.6vw, 22px)',
+                lineHeight: 1.25,
+                color: 'rgba(248,242,228,0.82)',
+                maxWidth: '340px',
+              }}
+            >
+              {t('footer.tagline')}
+            </div>
           </div>
-          <div
-            className="italic"
-            style={{
-              fontFamily: 'var(--font-family-display)',
-              fontWeight: 300,
-              fontSize: 'clamp(18px, 2vw, 26px)',
-              lineHeight: 1.2,
-              color: 'rgba(248,242,228,0.92)',
-              maxWidth: '400px',
-            }}
-          >
-            {t('footer.tagline')}
-          </div>
+
         </div>
 
         {/* Bottom bar glass pill */}
