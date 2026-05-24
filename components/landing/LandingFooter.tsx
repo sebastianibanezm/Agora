@@ -55,7 +55,7 @@ export function LandingFooter() {
 
           {/* Logo card */}
           <div
-            className="relative overflow-hidden flex items-center justify-center flex-shrink-0"
+            className="relative overflow-hidden flex items-center justify-center"
             style={{
               background: 'rgba(43,31,18,0.28)',
               backdropFilter: 'blur(36px) saturate(180%)',
@@ -64,6 +64,8 @@ export function LandingFooter() {
               borderRadius: '18px',
               aspectRatio: '1 / 1',
               alignSelf: 'stretch',
+              minWidth: '0',
+              flex: '0 0 auto',
               boxShadow: '0 16px 48px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.09)',
             }}
           >
@@ -76,10 +78,10 @@ export function LandingFooter() {
             <Image
               src="/landing/lambda-logo.png"
               alt="Agora"
-              width={60}
-              height={60}
+              width={52}
+              height={52}
               className="object-contain"
-              style={{ filter: 'brightness(0) invert(1)', width: '58%', height: '58%' }}
+              style={{ filter: 'brightness(0) invert(1)', width: '52px', height: '52px' }}
             />
           </div>
 
