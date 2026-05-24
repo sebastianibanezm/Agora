@@ -4,6 +4,7 @@ import LandingPage from '@/app/[locale]/(marketing)/page'
 
 // Mock all landing components
 vi.mock('@/components/landing/LandingHero', () => ({ LandingHero: () => <div data-testid="landing-hero" /> }))
+vi.mock('@/components/landing/LandingEcosystem', () => ({ LandingEcosystem: () => <div data-testid="landing-ecosystem" /> }))
 vi.mock('@/components/landing/LandingProblem', () => ({ LandingProblem: () => <div data-testid="landing-problem" /> }))
 vi.mock('@/components/landing/LandingPillars', () => ({ LandingPillars: () => <div data-testid="landing-pillars" /> }))
 vi.mock('@/components/landing/LandingProduct', () => ({ LandingProduct: () => <div data-testid="landing-product" /> }))

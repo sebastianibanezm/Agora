@@ -4,7 +4,6 @@ import { LandingEcosystem } from '@/components/landing/LandingEcosystem'
 import { LandingProblem } from '@/components/landing/LandingProblem'
 import { LandingPillars } from '@/components/landing/LandingPillars'
 import { LandingProduct } from '@/components/landing/LandingProduct'
-import { LandingFinancial } from '@/components/landing/LandingFinancial'
 import { LandingStats } from '@/components/landing/LandingStats'
 import { LandingContact } from '@/components/landing/LandingContact'
 import { LandingFooter } from '@/components/landing/LandingFooter'
@@ -24,7 +23,6 @@ export default function LandingPage() {
         <LandingProblem />
         <LandingPillars />
         <LandingProduct />
-        <LandingFinancial />
         <LandingStats />
         <LandingContact />
       </main>
