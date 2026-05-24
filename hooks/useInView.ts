@@ -1,7 +1,8 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
-export function useFadeIn(threshold = 0.12) {
-  const ref = useRef<HTMLElement>(null)
+export function useInView<T extends HTMLElement = HTMLElement>(threshold = 0.15) {
+  const ref = useRef<T>(null)
+  const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
     const el = ref.current
@@ -9,9 +10,7 @@ export function useFadeIn(threshold = 0.12) {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry?.isIntersecting) {
-          el.style.opacity = '1'
-          el.style.transform = 'translateY(0)'
-          el.dataset.visible = 'true'
+          setIsVisible(true)
           observer.disconnect()
         }
       },
@@ -21,5 +20,5 @@ export function useFadeIn(threshold = 0.12) {
     return () => observer.disconnect()
   }, [threshold])
 
-  return ref
+  return [ref, isVisible] as const
 }

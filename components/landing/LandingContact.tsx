@@ -86,7 +86,7 @@ export function LandingContact() {
               {(['1', '2', '3'] as const).map((n) => (
                 <div
                   key={n}
-                  className="flex gap-4 items-start pt-[18px]"
+                  className="flex gap-4 items-start pt-[18px] stagger-item"
                   style={{ borderTop: '1px solid rgba(60,42,22,0.08)' }}
                 >
                   <div
@@ -210,7 +210,7 @@ export function LandingContact() {
                       type="button"
                       data-active={volume === opt ? 'true' : undefined}
                       onClick={() => setVolume(opt)}
-                      className="h-[38px] flex items-center justify-center rounded-[7px] text-[11.5px] transition-colors duration-150 cursor-pointer"
+                      className="h-[38px] flex items-center justify-center rounded-[7px] text-[11.5px] cursor-pointer btn-press"
                       style={{
                         fontFamily: 'var(--font-family-mono)',
                         background: volume === opt ? '#2B1F12' : '#FCF7EA',
@@ -257,7 +257,7 @@ export function LandingContact() {
               {/* Submit */}
               <button
                 type="submit"
-                className="w-full h-[46px] rounded-[10px] text-[14px] font-medium flex items-center justify-center gap-2 transition-colors duration-150 cursor-pointer mt-[6px]"
+                className="w-full h-[46px] rounded-[10px] text-[14px] font-medium flex items-center justify-center gap-2 cursor-pointer mt-[6px] btn-press"
                 style={{ background: '#2B1F12', color: '#F8F2E4', border: 'none' }}
                 onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = '#1F1609')}
                 onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = '#2B1F12')}

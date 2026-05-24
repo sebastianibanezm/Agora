@@ -22,10 +22,9 @@ export function LandingProduct() {
       }}
     >
       <div className="max-w-[1160px] mx-auto px-5 sm:px-8 lg:px-12">
-        {/* Asymmetric section head */}
-        <div className="grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-16 mb-16 items-start">
-          {/* Left: eyebrow + h2 */}
-          <div>
+        {/* Section head */}
+        <div className="mb-16">
+          <div className="w-full lg:w-1/2">
             <span
               className="block mb-3 text-[10px] uppercase tracking-[0.18em]"
               style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860' }}
@@ -47,16 +46,12 @@ export function LandingProduct() {
               {t('product.titleLine2')}
             </h2>
           </div>
-
-          {/* Right: lede */}
-          <div className="lg:pt-[42px]">
-            <p
-              className="text-[16px] leading-[1.65] m-0"
-              style={{ color: '#5A4A38', maxWidth: '52ch' }}
-            >
-              {t('product.lede')}
-            </p>
-          </div>
+          <p
+            className="text-[16px] leading-[1.65] m-0 mt-8"
+            style={{ color: '#5A4A38', maxWidth: '52ch' }}
+          >
+            {t('product.lede')}
+          </p>
         </div>
 
         {/* Feature spec table */}
@@ -68,7 +63,7 @@ export function LandingProduct() {
           ].map((feature) => (
             <div
               key={feature.num}
-              className="grid items-baseline gap-x-8 py-[13px]"
+              className="grid items-baseline gap-x-8 py-[13px] stagger-item"
               style={{
                 gridTemplateColumns: '36px 1fr 1.6fr',
                 borderBottom: '1px solid rgba(60,42,22,0.08)',

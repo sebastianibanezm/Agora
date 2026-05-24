@@ -59,7 +59,7 @@ export function LandingHero() {
         }}
       >
         <div
-          className="relative overflow-hidden"
+          className="relative overflow-hidden hero-el hero-el-0"
           style={{
             background: 'rgba(43,31,18,0.28)',
             backdropFilter: 'blur(36px) saturate(180%)',
@@ -80,7 +80,7 @@ export function LandingHero() {
 
           {/* Eyebrow */}
           <div
-            className="inline-flex items-center gap-[9px] mb-[18px]"
+            className="inline-flex items-center gap-[9px] mb-[18px] hero-el hero-el-1"
             style={{
               padding: '4px 12px 4px 8px',
               background: 'rgba(248,242,228,0.08)',
@@ -106,7 +106,7 @@ export function LandingHero() {
 
           {/* Headline */}
           <h1
-            className="m-0"
+            className="m-0 hero-el hero-el-2"
             style={{
               fontFamily: 'var(--font-family-old-standard)',
               fontSize: 'clamp(30px, 2.8vw, 44px)',
@@ -125,17 +125,17 @@ export function LandingHero() {
 
           {/* Sub */}
           <p
-            className="mt-[14px] text-[14px] leading-[1.60] font-normal"
+            className="mt-[14px] text-[14px] leading-[1.60] font-normal hero-el hero-el-3"
             style={{ color: 'rgba(248,242,228,0.78)' }}
           >
             {t('hero.sub')}
           </p>
 
           {/* CTAs */}
-          <div className="mt-5 flex items-center gap-[10px] flex-wrap">
+          <div className="mt-5 flex items-center gap-[10px] flex-wrap hero-el hero-el-4">
             <a
               href="#contact"
-              className="inline-flex items-center gap-[7px] font-medium text-[13px] transition-colors duration-150 cursor-pointer"
+              className="inline-flex items-center gap-[7px] font-medium text-[13px] cursor-pointer btn-press"
               style={{
                 height: '40px',
                 padding: '0 20px',

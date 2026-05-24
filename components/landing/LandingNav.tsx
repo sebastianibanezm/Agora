@@ -89,7 +89,7 @@ export function LandingNav() {
       {/* Primary CTA — desktop only */}
       <a
         href="#contact"
-        className="hidden md:inline-flex ml-1 px-[18px] py-[9px] rounded-full text-[12px] font-medium items-center gap-[6px] transition-colors duration-150 cursor-pointer"
+        className="hidden md:inline-flex ml-1 px-[18px] py-[9px] rounded-full text-[12px] font-medium items-center gap-[6px] cursor-pointer btn-press"
         style={{
           background: '#F8F2E4',
           color: '#2B1F12',
@@ -115,45 +115,50 @@ export function LandingNav() {
       </button>
     </nav>
 
-    {/* Mobile dropdown */}
-    {open && (
-      <div
-        className="fixed left-1/2 -translate-x-1/2 z-40 flex flex-col py-2 md:hidden"
-        style={{
-          top: '76px',
-          width: 'min(320px, calc(100vw - 32px))',
-          background: 'rgba(43,31,18,0.72)',
-          backdropFilter: 'blur(24px) saturate(180%)',
-          WebkitBackdropFilter: 'blur(24px) saturate(180%)',
-          border: '1px solid rgba(248,242,228,0.18)',
-          borderRadius: '16px',
-          boxShadow: '0 16px 48px rgba(0,0,0,0.40)',
-        }}
-      >
-        {(['solutions', 'howItWorks', 'company'] as const).map((key) => (
-          <a
-            key={key}
-            href={key === 'company' ? '#contact' : key === 'howItWorks' ? '#problem' : '#solutions'}
-            onClick={() => setOpen(false)}
-            className="px-5 py-3 text-[14px] transition-colors duration-150 cursor-pointer"
-            style={{ color: 'rgba(248,242,228,0.80)', textDecoration: 'none' }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = '#F8F2E4')}
-            onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(248,242,228,0.80)')}
-          >
-            {t(key)}
-          </a>
-        ))}
-        <div style={{ height: '1px', background: 'rgba(248,242,228,0.10)', margin: '4px 0' }} />
+    {/* Mobile dropdown — always rendered, animated via opacity/transform */}
+    <div
+      className="fixed left-1/2 -translate-x-1/2 z-40 flex flex-col py-2 md:hidden"
+      style={{
+        top: '76px',
+        width: 'min(320px, calc(100vw - 32px))',
+        background: 'rgba(43,31,18,0.72)',
+        backdropFilter: 'blur(24px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+        border: '1px solid rgba(248,242,228,0.18)',
+        borderRadius: '16px',
+        boxShadow: '0 16px 48px rgba(0,0,0,0.40)',
+        transformOrigin: 'top center',
+        opacity: open ? 1 : 0,
+        transform: open ? 'scale(1) translateY(0)' : 'scale(0.97) translateY(-6px)',
+        pointerEvents: open ? 'auto' : 'none',
+        transition: open
+          ? 'opacity 150ms cubic-bezier(0.23,1,0.32,1), transform 150ms cubic-bezier(0.23,1,0.32,1)'
+          : 'opacity 100ms ease-in, transform 100ms ease-in',
+      }}
+    >
+      {(['solutions', 'howItWorks', 'company'] as const).map((key) => (
         <a
-          href="#contact"
+          key={key}
+          href={key === 'company' ? '#contact' : key === 'howItWorks' ? '#problem' : '#solutions'}
           onClick={() => setOpen(false)}
-          className="mx-3 my-2 px-4 py-[10px] rounded-[10px] text-[14px] font-medium text-center transition-colors duration-150 cursor-pointer"
-          style={{ background: '#F8F2E4', color: '#2B1F12', textDecoration: 'none' }}
+          className="px-5 py-3 text-[14px] transition-colors duration-150 cursor-pointer"
+          style={{ color: 'rgba(248,242,228,0.80)', textDecoration: 'none' }}
+          onMouseEnter={(e) => (e.currentTarget.style.color = '#F8F2E4')}
+          onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(248,242,228,0.80)')}
         >
-          {t('cta')}
+          {t(key)}
         </a>
-      </div>
-    )}
+      ))}
+      <div style={{ height: '1px', background: 'rgba(248,242,228,0.10)', margin: '4px 0' }} />
+      <a
+        href="#contact"
+        onClick={() => setOpen(false)}
+        className="mx-3 my-2 px-4 py-[10px] rounded-[10px] text-[14px] font-medium text-center cursor-pointer btn-press"
+        style={{ background: '#F8F2E4', color: '#2B1F12', textDecoration: 'none' }}
+      >
+        {t('cta')}
+      </a>
+    </div>
     </>
   )
 }

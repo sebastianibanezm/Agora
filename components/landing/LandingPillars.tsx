@@ -4,6 +4,7 @@ import React from 'react'
 import { useTranslations } from 'next-intl'
 import { AlertTriangle, Check, Minus } from 'lucide-react'
 import { useFadeIn } from '@/hooks/useFadeIn'
+import { useInView } from '@/hooks/useInView'
 
 type T = ReturnType<typeof useTranslations<'landing.pillars'>>
 
@@ -18,8 +19,14 @@ function VisibilityVisual({ t }: { t: T }) {
     { key: 'vis1Step6', done: false },
   ]
 
+  const [containerRef, isVisible] = useInView<HTMLDivElement>(0.3)
+
   return (
-    <div className="rounded-[16px] p-6" style={{ background: '#FCF7EA', border: '1px solid rgba(60,42,22,0.08)', boxShadow: '0 8px 32px rgba(43,31,18,0.08)' }}>
+    <div
+      ref={containerRef}
+      className="rounded-[16px] p-6"
+      style={{ background: '#FCF7EA', border: '1px solid rgba(60,42,22,0.08)', boxShadow: '0 8px 32px rgba(43,31,18,0.08)' }}
+    >
       <p className="text-[10px] uppercase tracking-[0.06em] mb-[14px]" style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860' }}>
         {t('vis1Status')}
       </p>
@@ -32,7 +39,7 @@ function VisibilityVisual({ t }: { t: T }) {
               style={{
                 background: s.done ? '#4F7A3C' : s.active ? '#B97A1F' : '#F8F2E4',
                 border: `1.5px solid ${s.done ? '#4F7A3C' : s.active ? '#B97A1F' : '#B5A586'}`,
-                boxShadow: s.active ? '0 0 0 3px rgba(185,122,31,0.22)' : undefined,
+                animation: s.active ? 'pulseAmber 2s ease-in-out infinite' : undefined,
               }}
             />
             <span
@@ -49,8 +56,18 @@ function VisibilityVisual({ t }: { t: T }) {
         ))}
       </div>
       <div className="grid grid-cols-3 gap-2 mt-[14px]">
-        {[['ETA', '14 ene', '#2B1F12'], ['Temp', '−1.2°C', '#4F7A3C'], ['Docs', '14/18', '#2B1F12']].map(([label, value, color]) => (
-          <div key={label} className="rounded-[8px] p-[10px]" style={{ background: '#FFFCF1', border: '1px solid rgba(60,42,22,0.08)' }}>
+        {[['ETA', '14 ene', '#2B1F12'], ['Temp', '−1.2°C', '#4F7A3C'], ['Docs', '14/18', '#2B1F12']].map(([label, value, color], i) => (
+          <div
+            key={label}
+            className="rounded-[8px] p-[10px]"
+            style={{
+              background: '#FFFCF1',
+              border: '1px solid rgba(60,42,22,0.08)',
+              opacity: isVisible ? 1 : 0,
+              transform: isVisible ? 'translateY(0)' : 'translateY(6px)',
+              transition: `opacity 320ms cubic-bezier(0.23,1,0.32,1) ${i * 60 + 200}ms, transform 320ms cubic-bezier(0.23,1,0.32,1) ${i * 60 + 200}ms`,
+            }}
+          >
             <div className="text-[9px] uppercase tracking-[0.06em] mb-1" style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860' }}>{label}</div>
             <div className="italic text-[16px]" style={{ fontFamily: 'var(--font-family-display)', color }}>{value}</div>
           </div>
@@ -65,9 +82,18 @@ function VisibilityVisual({ t }: { t: T }) {
 
 // ── Pillar visual: Alert card ────────────────────────────────────
 function AlertVisual({ t }: { t: T }) {
+  const [containerRef, isVisible] = useInView<HTMLDivElement>(0.3)
+
   return (
-    <div className="rounded-[16px] p-6" style={{ background: '#FCF7EA', border: '1px solid rgba(60,42,22,0.08)', boxShadow: '0 8px 32px rgba(43,31,18,0.08)' }}>
-      <div className="rounded-[10px] p-4 mb-[10px]" style={{ background: '#FFFCF1', border: '1px solid rgba(60,42,22,0.08)' }}>
+    <div
+      ref={containerRef}
+      className="rounded-[16px] p-6"
+      style={{ background: '#FCF7EA', border: '1px solid rgba(60,42,22,0.08)', boxShadow: '0 8px 32px rgba(43,31,18,0.08)' }}
+    >
+      <div
+        className={`rounded-[10px] p-4 mb-[10px]${isVisible ? ' alert-shake' : ''}`}
+        style={{ background: '#FFFCF1', border: '1px solid rgba(60,42,22,0.08)' }}
+      >
         <div className="flex items-center gap-2 mb-2">
           <AlertTriangle size={15} strokeWidth={1.5} style={{ color: '#B97A1F', flexShrink: 0 }} />
           <span className="font-semibold text-[13px]" style={{ color: '#2B1F12' }}>{t('vis2AlertTitle')}</span>
@@ -105,11 +131,17 @@ function DocsVisual({ t }: { t: T }) {
     { nameKey: 'vis3Doc6', metaKey: 'vis3Doc6Meta', status: 'pending' },
   ] as const
 
+  const [containerRef, isVisible] = useInView<HTMLDivElement>(0.3)
+
   return (
-    <div className="rounded-[16px] p-6" style={{ background: '#FCF7EA', border: '1px solid rgba(60,42,22,0.08)', boxShadow: '0 8px 32px rgba(43,31,18,0.08)' }}>
+    <div
+      ref={containerRef}
+      className="rounded-[16px] p-6"
+      style={{ background: '#FCF7EA', border: '1px solid rgba(60,42,22,0.08)', boxShadow: '0 8px 32px rgba(43,31,18,0.08)' }}
+    >
       <p className="text-[10px] uppercase tracking-[0.06em] mb-3" style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860' }}>{t('vis3Title')}</p>
       <div className="flex flex-col gap-[6px]">
-        {docs.map((doc) => (
+        {docs.map((doc, index) => (
           <div
             key={doc.nameKey}
             className="flex items-center gap-2 text-[11px] px-[10px] py-[7px] rounded-[7px]"
@@ -118,7 +150,9 @@ function DocsVisual({ t }: { t: T }) {
               color: doc.status === 'warn' ? '#B97A1F' : '#5A4A38',
               background: doc.status === 'warn' ? 'rgba(185,122,31,0.06)' : '#FFFCF1',
               border: `1px solid ${doc.status === 'warn' ? 'rgba(185,122,31,0.28)' : 'rgba(60,42,22,0.08)'}`,
-              opacity: doc.status === 'pending' ? 0.5 : 1,
+              opacity: isVisible ? (doc.status === 'pending' ? 0.5 : 1) : 0,
+              transform: isVisible ? 'translateY(0)' : 'translateY(5px)',
+              transition: `opacity 300ms cubic-bezier(0.23,1,0.32,1) ${index * 45}ms, transform 300ms cubic-bezier(0.23,1,0.32,1) ${index * 45}ms`,
             }}
           >
             <div
@@ -168,9 +202,9 @@ export function LandingPillars() {
       }}
     >
       <div className="max-w-[1160px] mx-auto px-5 sm:px-8 lg:px-12">
-        {/* Asymmetric section head */}
-        <div className="grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-16 mb-20 items-start">
-          <div>
+        {/* Section head */}
+        <div className="mb-20">
+          <div className="w-full lg:w-1/2">
             <span
               className="block mb-3 text-[10px] uppercase tracking-[0.18em]"
               style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860' }}
@@ -192,11 +226,9 @@ export function LandingPillars() {
               {t('titleLine2')}
             </h2>
           </div>
-          <div className="lg:pt-[42px]">
-            <p className="text-[16px] leading-[1.65] m-0" style={{ color: '#5A4A38' }}>
-              {t('lede')}
-            </p>
-          </div>
+          <p className="text-[16px] leading-[1.65] m-0 mt-8" style={{ color: '#5A4A38', maxWidth: '52ch' }}>
+            {t('lede')}
+          </p>
         </div>
 
         {/* Pillar rows */}
