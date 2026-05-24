@@ -8,7 +8,7 @@ interface Props {
   src: string
   alt?: string
   objectPosition?: string
-  /** 0.06 = very subtle (hero/footer), 0.08 = section images */
+  /** 0.07 = subtle hero, 0.12 = section images, 0.08 = footer */
   strength?: number
   priority?: boolean
 }
@@ -17,7 +17,7 @@ export function ParallaxImage({
   src,
   alt = '',
   objectPosition = 'center',
-  strength = 0.08,
+  strength = 0.12,
   priority = false,
 }: Props) {
   const ref = useRef<HTMLDivElement>(null)
@@ -25,15 +25,16 @@ export function ParallaxImage({
     target: ref,
     offset: ['start end', 'end start'],
   })
-  // drift range in % of the (slightly oversized) motion layer
+
   const range = strength * 100
   const y = useTransform(scrollYProgress, [0, 1], [`-${range}%`, `${range}%`])
-  // scale up enough so drifting edges never show through the overflow-hidden parent
+  // overscale so drifting edges never show through overflow-hidden parent
   const scale = 1 + strength * 2
 
   return (
-    <div ref={ref} className="absolute inset-0">
-      <motion.div style={{ y, scale, position: 'absolute', inset: 0 }}>
+    <div ref={ref} className="absolute inset-0 overflow-hidden">
+      {/* Keep positioning in className — only motion values in style */}
+      <motion.div className="absolute inset-0" style={{ y, scale }}>
         <Image
           src={src}
           alt={alt}

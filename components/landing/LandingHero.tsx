@@ -18,7 +18,7 @@ export function LandingHero() {
         <ParallaxImage
           src="/landing/hero-bg.png"
           objectPosition="center 38%"
-          strength={0.05}
+          strength={0.07}
           priority
         />
         {/* Gradient overlay */}

@@ -23,7 +23,7 @@ export function LandingFooter() {
     <footer className="relative w-full overflow-hidden" style={{ minHeight: '420px' }}>
       {/* Background image */}
       <div className="absolute inset-0 z-0">
-        <ParallaxImage src="/landing/footer-bg.png" objectPosition="center 55%" strength={0.06} />
+        <ParallaxImage src="/landing/footer-bg.png" objectPosition="center 55%" strength={0.08} />
         {/* Dark gradient overlay — heavier at bottom so content is legible */}
         <div
           className="absolute inset-0"
