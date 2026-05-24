@@ -5,11 +5,83 @@ import { useTranslations } from 'next-intl'
 import { FileWarning, AlertTriangle, Users } from 'lucide-react'
 import { useFadeIn } from '@/hooks/useFadeIn'
 
-const CARDS = [
+const CARDS_TOP = [
   { key: '1', Icon: FileWarning, severity: '#B97A1F' },
   { key: '2', Icon: AlertTriangle, severity: '#8B2A1F' },
-  { key: '3', Icon: Users, severity: '#5A6B85' },
 ] as const
+
+const CARD_BOTTOM = { key: '3', Icon: Users, severity: '#5A6B85' } as const
+
+function ProblemCard({
+  cardKey,
+  Icon,
+  severity,
+  t,
+}: {
+  cardKey: string
+  Icon: React.ElementType
+  severity: string
+  t: ReturnType<typeof useTranslations<'landing.problem'>>
+}) {
+  return (
+    <div>
+      <div className="flex items-center gap-3 mb-4">
+        <span
+          style={{
+            fontFamily: 'var(--font-family-mono)',
+            fontSize: '11px',
+            letterSpacing: '0.12em',
+            color: '#B5A586',
+          }}
+        >
+          0{cardKey}
+        </span>
+        <div
+          className="w-[34px] h-[34px] rounded-[8px] flex items-center justify-center flex-shrink-0"
+          style={{
+            background: '#FFFCF1',
+            border: '1px solid rgba(60,42,22,0.10)',
+            borderTop: `2px solid ${severity}`,
+            color: severity,
+          }}
+        >
+          <Icon size={14} strokeWidth={1.5} />
+        </div>
+      </div>
+      <h3
+        className="italic font-normal mt-0 mb-3"
+        style={{
+          fontFamily: 'var(--font-family-display)',
+          fontSize: 'clamp(20px, 2vw, 26px)',
+          lineHeight: 1.12,
+          color: '#2B1F12',
+        }}
+      >
+        {t(`card${cardKey}Title` as any)}
+      </h3>
+      <p
+        style={{
+          fontSize: '14px',
+          color: '#5A4A38',
+          lineHeight: 1.68,
+          margin: '0 0 14px 0',
+        }}
+      >
+        {t(`card${cardKey}Body` as any)}
+      </p>
+      <div
+        className="italic"
+        style={{
+          fontFamily: 'var(--font-family-mono)',
+          fontSize: '10px',
+          color: '#B5A586',
+        }}
+      >
+        — {t(`card${cardKey}Cite` as any)}
+      </div>
+    </div>
+  )
+}
 
 export function LandingProblem() {
   const t = useTranslations('landing.problem')
@@ -27,10 +99,9 @@ export function LandingProblem() {
         transition: 'opacity 0.55s ease-out, transform 0.55s ease-out',
       }}
     >
-      <div className="max-w-[1160px] mx-auto px-12">
+      <div className="max-w-[1160px] mx-auto px-5 sm:px-8 lg:px-12">
         {/* Asymmetric section head */}
         <div className="grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-16 mb-20 items-start">
-          {/* Left: eyebrow + h2 */}
           <div>
             <span
               className="block mb-3 text-[10px] uppercase tracking-[0.18em]"
@@ -53,8 +124,6 @@ export function LandingProblem() {
               {t('titleLine2')}
             </h2>
           </div>
-
-          {/* Right: lede */}
           <div className="lg:pt-[42px]">
             <p
               className="text-[16px] leading-[1.65] m-0"
@@ -65,80 +134,96 @@ export function LandingProblem() {
           </div>
         </div>
 
-        {/* Problem rows */}
-        {CARDS.map(({ key, Icon, severity }, index) => (
+        {/* Cards 1 & 2 — side by side */}
+        <div
+          className="grid grid-cols-1 md:grid-cols-[1fr_1px_1fr]"
+          style={{ borderTop: '1px solid rgba(60,42,22,0.08)', paddingTop: '44px', paddingBottom: '44px' }}
+        >
+          <div className="pb-10 md:pb-0 md:pr-16">
+            <ProblemCard cardKey="1" Icon={FileWarning} severity="#B97A1F" t={t} />
+          </div>
+          {/* Divider — horizontal on mobile, vertical on desktop */}
           <div
-            key={key}
-            className="grid grid-cols-1 md:grid-cols-[80px_1fr] gap-x-10 gap-y-4"
-            style={{
-              borderTop: '1px solid rgba(60,42,22,0.08)',
-              paddingTop: '44px',
-              paddingBottom: '44px',
-            }}
-          >
-            {/* Left column: number + icon */}
-            <div className="flex flex-col gap-3">
+            className="h-px w-full md:h-auto md:w-px my-0 md:mx-0"
+            style={{ background: 'rgba(60,42,22,0.08)' }}
+          />
+          <div className="pt-10 md:pt-0 md:pl-16">
+            <ProblemCard cardKey="2" Icon={AlertTriangle} severity="#8B2A1F" t={t} />
+          </div>
+        </div>
+
+        {/* Card 3 — full width, editorial treatment */}
+        <div
+          className="rounded-[14px] p-8 lg:p-12"
+          style={{
+            background: '#FCF7EA',
+            border: '1px solid rgba(60,42,22,0.10)',
+            borderLeft: '3px solid #5A6B85',
+          }}
+        >
+          <div className="grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-8 lg:gap-16 items-start">
+            {/* Left: number + icon */}
+            <div className="flex items-center gap-3 lg:flex-col lg:items-start lg:gap-3">
               <span
                 style={{
                   fontFamily: 'var(--font-family-mono)',
-                  fontSize: '12px',
+                  fontSize: '11px',
                   letterSpacing: '0.12em',
                   color: '#B5A586',
                 }}
               >
-                0{key}
+                03
               </span>
               <div
-                className="w-[36px] h-[36px] rounded-[8px] flex items-center justify-center"
+                className="w-[34px] h-[34px] rounded-[8px] flex items-center justify-center flex-shrink-0"
                 style={{
                   background: '#FFFCF1',
                   border: '1px solid rgba(60,42,22,0.10)',
-                  borderTop: `2px solid ${severity}`,
-                  color: severity,
+                  borderTop: '2px solid #5A6B85',
+                  color: '#5A6B85',
                 }}
               >
-                <Icon size={15} strokeWidth={1.5} />
+                <Users size={14} strokeWidth={1.5} />
               </div>
             </div>
-
-            {/* Right column: title + body + cite */}
-            <div>
+            {/* Right: copy */}
+            <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-6 lg:gap-16 items-start">
               <h3
-                className="italic font-normal mt-0 mb-3"
+                className="italic font-normal m-0"
                 style={{
                   fontFamily: 'var(--font-family-display)',
-                  fontSize: 'clamp(22px, 2.4vw, 28px)',
-                  lineHeight: 1.12,
+                  fontSize: 'clamp(26px, 2.8vw, 36px)',
+                  lineHeight: 1.1,
                   color: '#2B1F12',
                 }}
               >
-                {t(`card${key}Title` as any)}
+                {t('card3Title')}
               </h3>
-              <p
-                className="mb-4"
-                style={{
-                  fontSize: '15px',
-                  color: '#5A4A38',
-                  maxWidth: '54ch',
-                  lineHeight: 1.68,
-                  margin: '0 0 16px 0',
-                }}
-              >
-                {t(`card${key}Body` as any)}
-              </p>
-              <div
-                className="italic"
-                style={{
-                  fontFamily: 'var(--font-family-mono)',
-                  fontSize: '10.5px',
-                  color: '#B5A586',
-                }}
-              >
-                — {t(`card${key}Cite` as any)}
+              <div>
+                <p
+                  style={{
+                    fontSize: '15px',
+                    color: '#5A4A38',
+                    lineHeight: 1.70,
+                    margin: '0 0 14px 0',
+                  }}
+                >
+                  {t('card3Body')}
+                </p>
+                <div
+                  className="italic"
+                  style={{
+                    fontFamily: 'var(--font-family-mono)',
+                    fontSize: '10px',
+                    color: '#B5A586',
+                  }}
+                >
+                  — {t('card3Cite')}
+                </div>
               </div>
             </div>
           </div>
-        ))}
+        </div>
       </div>
     </section>
   )

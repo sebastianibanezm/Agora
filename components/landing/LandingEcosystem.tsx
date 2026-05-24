@@ -18,7 +18,7 @@ export function LandingEcosystem() {
         transition: 'opacity 0.55s ease-out, transform 0.55s ease-out',
       }}
     >
-      <div className="max-w-[1160px] mx-auto px-12 py-[80px]">
+      <div className="max-w-[1160px] mx-auto px-5 sm:px-8 lg:px-12 py-[80px]">
         <p
           className="italic m-0"
           style={{

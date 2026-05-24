@@ -21,7 +21,7 @@ export function LandingProduct() {
         transition: 'opacity 0.55s ease-out, transform 0.55s ease-out',
       }}
     >
-      <div className="max-w-[1160px] mx-auto px-12">
+      <div className="max-w-[1160px] mx-auto px-5 sm:px-8 lg:px-12">
         {/* Asymmetric section head */}
         <div className="grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-16 mb-16 items-start">
           {/* Left: eyebrow + h2 */}

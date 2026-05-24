@@ -21,7 +21,7 @@ export function LandingStats() {
         transition: 'opacity 0.55s ease-out, transform 0.55s ease-out',
       }}
     >
-      <div className="max-w-[1160px] mx-auto px-12" style={{ paddingTop: '88px', paddingBottom: '88px' }}>
+      <div className="max-w-[1160px] mx-auto px-5 sm:px-8 lg:px-12" style={{ paddingTop: '88px', paddingBottom: '88px' }}>
         {/* Top row: eyebrow + horizontal rule */}
         <div className="flex items-center gap-6 mb-14">
           <span
