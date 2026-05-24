@@ -235,8 +235,8 @@ export function LandingFinancial() {
       style={{
         borderTop: '1px solid rgba(60,42,22,0.08)',
         opacity: 0,
-        transform: 'translateY(24px)',
-        transition: 'opacity 0.55s ease-out, transform 0.55s ease-out',
+        transform: 'translateY(44px)',
+        transition: 'opacity 0.72s cubic-bezier(0.23,1,0.32,1), transform 0.72s cubic-bezier(0.23,1,0.32,1)',
       }}
     >
       <div className="max-w-[1160px] mx-auto px-5 sm:px-8 lg:px-12">

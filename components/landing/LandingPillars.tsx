@@ -64,8 +64,8 @@ function VisibilityVisual({ t }: { t: T }) {
               background: '#FFFCF1',
               border: '1px solid rgba(60,42,22,0.08)',
               opacity: isVisible ? 1 : 0,
-              transform: isVisible ? 'translateY(0)' : 'translateY(6px)',
-              transition: `opacity 320ms cubic-bezier(0.23,1,0.32,1) ${i * 60 + 200}ms, transform 320ms cubic-bezier(0.23,1,0.32,1) ${i * 60 + 200}ms`,
+              transform: isVisible ? 'translateY(0)' : 'translateY(14px)',
+              transition: `opacity 500ms cubic-bezier(0.23,1,0.32,1) ${i * 100 + 250}ms, transform 500ms cubic-bezier(0.23,1,0.32,1) ${i * 100 + 250}ms`,
             }}
           >
             <div className="text-[9px] uppercase tracking-[0.06em] mb-1" style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860' }}>{label}</div>
@@ -151,8 +151,8 @@ function DocsVisual({ t }: { t: T }) {
               background: doc.status === 'warn' ? 'rgba(185,122,31,0.06)' : '#FFFCF1',
               border: `1px solid ${doc.status === 'warn' ? 'rgba(185,122,31,0.28)' : 'rgba(60,42,22,0.08)'}`,
               opacity: isVisible ? (doc.status === 'pending' ? 0.5 : 1) : 0,
-              transform: isVisible ? 'translateY(0)' : 'translateY(5px)',
-              transition: `opacity 300ms cubic-bezier(0.23,1,0.32,1) ${index * 45}ms, transform 300ms cubic-bezier(0.23,1,0.32,1) ${index * 45}ms`,
+              transform: isVisible ? 'translateY(0)' : 'translateY(12px)',
+              transition: `opacity 480ms cubic-bezier(0.23,1,0.32,1) ${index * 75}ms, transform 480ms cubic-bezier(0.23,1,0.32,1) ${index * 75}ms`,
             }}
           >
             <div
@@ -197,8 +197,8 @@ export function LandingPillars() {
       style={{
         borderTop: '1px solid rgba(60,42,22,0.08)',
         opacity: 0,
-        transform: 'translateY(24px)',
-        transition: 'opacity 0.55s ease-out, transform 0.55s ease-out',
+        transform: 'translateY(44px)',
+        transition: 'opacity 0.72s cubic-bezier(0.23,1,0.32,1), transform 0.72s cubic-bezier(0.23,1,0.32,1)',
       }}
     >
       <div className="max-w-[1160px] mx-auto px-5 sm:px-8 lg:px-12">

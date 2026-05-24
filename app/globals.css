@@ -233,44 +233,44 @@ body::after {
 
 /* Hero orchestrated entrance */
 @keyframes heroFadeUp {
-  from { opacity: 0; transform: translateY(14px); }
+  from { opacity: 0; transform: translateY(22px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 .hero-el {
   opacity: 0;
-  animation: heroFadeUp 560ms cubic-bezier(0.23, 1, 0.32, 1) both;
+  animation: heroFadeUp 650ms cubic-bezier(0.23, 1, 0.32, 1) both;
 }
 .hero-el-0 { animation-delay: 80ms; }
-.hero-el-1 { animation-delay: 240ms; }
-.hero-el-2 { animation-delay: 380ms; }
-.hero-el-3 { animation-delay: 500ms; }
-.hero-el-4 { animation-delay: 640ms; }
+.hero-el-1 { animation-delay: 260ms; }
+.hero-el-2 { animation-delay: 420ms; }
+.hero-el-3 { animation-delay: 560ms; }
+.hero-el-4 { animation-delay: 720ms; }
 
 /* Stagger children — triggered when parent has data-visible="true" */
 @keyframes fadeSlideIn {
-  from { opacity: 0; transform: translateY(8px); }
+  from { opacity: 0; transform: translateY(22px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 [data-visible="true"] .stagger-item {
-  animation: fadeSlideIn 420ms cubic-bezier(0.23, 1, 0.32, 1) both;
+  animation: fadeSlideIn 650ms cubic-bezier(0.23, 1, 0.32, 1) both;
 }
-[data-visible="true"] .stagger-item:nth-child(1) { animation-delay: 120ms; }
-[data-visible="true"] .stagger-item:nth-child(2) { animation-delay: 200ms; }
-[data-visible="true"] .stagger-item:nth-child(3) { animation-delay: 280ms; }
-[data-visible="true"] .stagger-item:nth-child(4) { animation-delay: 360ms; }
-[data-visible="true"] .stagger-item:nth-child(5) { animation-delay: 440ms; }
-[data-visible="true"] .stagger-item:nth-child(6) { animation-delay: 520ms; }
+[data-visible="true"] .stagger-item:nth-child(1) { animation-delay: 140ms; }
+[data-visible="true"] .stagger-item:nth-child(2) { animation-delay: 280ms; }
+[data-visible="true"] .stagger-item:nth-child(3) { animation-delay: 420ms; }
+[data-visible="true"] .stagger-item:nth-child(4) { animation-delay: 560ms; }
+[data-visible="true"] .stagger-item:nth-child(5) { animation-delay: 700ms; }
+[data-visible="true"] .stagger-item:nth-child(6) { animation-delay: 840ms; }
 
 /* Pillar visual: alert push-notification shake */
 @keyframes alertShake {
   0%, 100% { transform: translateX(0); }
-  20%      { transform: translateX(-2.5px); }
-  40%      { transform: translateX(2.5px); }
-  60%      { transform: translateX(-1.5px); }
-  80%      { transform: translateX(1.5px); }
+  20%      { transform: translateX(-3px); }
+  40%      { transform: translateX(3px); }
+  60%      { transform: translateX(-2px); }
+  80%      { transform: translateX(2px); }
 }
 .alert-shake {
-  animation: alertShake 380ms cubic-bezier(0.23, 1, 0.32, 1) 380ms both;
+  animation: alertShake 420ms cubic-bezier(0.23, 1, 0.32, 1) 480ms both;
 }
 
 /* Amber status dot pulse */
@@ -281,11 +281,11 @@ body::after {
 
 /* Stats: stagger columns */
 [data-visible="true"] .stat-item {
-  animation: fadeSlideIn 480ms cubic-bezier(0.23, 1, 0.32, 1) both;
+  animation: fadeSlideIn 650ms cubic-bezier(0.23, 1, 0.32, 1) both;
 }
 [data-visible="true"] .stat-item:nth-child(1) { animation-delay: 140ms; }
-[data-visible="true"] .stat-item:nth-child(2) { animation-delay: 260ms; }
-[data-visible="true"] .stat-item:nth-child(3) { animation-delay: 380ms; }
+[data-visible="true"] .stat-item:nth-child(2) { animation-delay: 280ms; }
+[data-visible="true"] .stat-item:nth-child(3) { animation-delay: 420ms; }
 
 /* Accessibility */
 @media (prefers-reduced-motion: reduce) {
