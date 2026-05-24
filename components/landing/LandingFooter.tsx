@@ -83,7 +83,7 @@ export function LandingFooter() {
                 width={24}
                 height={24}
                 className="object-contain"
-                style={{ filter: 'invert(1)' }}
+                style={{ filter: 'brightness(0) invert(1)' }}
               />
             </div>
             <span

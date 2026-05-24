@@ -45,7 +45,7 @@ export function LandingNav() {
             width={34}
             height={34}
             className="object-contain"
-            style={{ filter: 'invert(1)' }}
+            style={{ filter: 'brightness(0) invert(1)' }}
           />
         </div>
         <span
