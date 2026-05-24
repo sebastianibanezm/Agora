@@ -7,7 +7,7 @@ interface Props {
   src: string
   alt?: string
   objectPosition?: string
-  /** 0.07 = subtle hero, 0.12 = section images, 0.08 = footer */
+  /** How many pixels the image drifts per 1px of scroll. 0.2 = clearly visible. */
   strength?: number
   priority?: boolean
 }
@@ -16,7 +16,7 @@ export function ParallaxImage({
   src,
   alt = '',
   objectPosition = 'center',
-  strength = 0.12,
+  strength = 0.2,
   priority = false,
 }: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -27,66 +27,44 @@ export function ParallaxImage({
     const inner = innerRef.current
     if (!container || !inner) return
 
-    let rafId = 0
-    let ticking = false
+    // Oversize the image vertically by a fixed pixel amount so edges
+    // never show through the overflow-hidden container as it drifts.
+    const OVERSCAN_PX = 120
 
-    const update = () => {
-      ticking = false
-      const rect = container.getBoundingClientRect()
-      const viewportH =
-        window.innerHeight || document.documentElement.clientHeight
-      const total = rect.height + viewportH
-      if (total <= 0) return
+    inner.style.position = 'absolute'
+    inner.style.left = '0'
+    inner.style.right = '0'
+    inner.style.top = `-${OVERSCAN_PX}px`
+    inner.style.height = `calc(100% + ${OVERSCAN_PX * 2}px)`
+    inner.style.willChange = 'transform'
 
-      // 0 when container's top edge first enters bottom of viewport,
-      // 1 when its bottom edge has just left the top of viewport.
-      const raw = (viewportH - rect.top) / total
-      const progress = raw < 0 ? 0 : raw > 1 ? 1 : raw
+    let rafId: number
+    let lastScrollY = -1
 
-      // Map [0, 1] -> [-1, 1] and scale by strength * height (px).
-      // Negate so the image drifts UPWARD as the user scrolls DOWN.
-      const drift = -((progress * 2 - 1) * strength * rect.height)
-      inner.style.transform = `translate3d(0, ${drift.toFixed(2)}px, 0)`
+    const tick = () => {
+      const scrollY = window.scrollY
+      if (scrollY !== lastScrollY) {
+        lastScrollY = scrollY
+        const rect = container.getBoundingClientRect()
+        const vh = window.innerHeight
+        // progress: 0 when top of element is at bottom of viewport,
+        //           1 when bottom of element is at top of viewport
+        const progress = Math.max(0, Math.min(1, (vh - rect.top) / (vh + rect.height)))
+        // drift upward as progress increases (classic slow-background parallax)
+        const driftPx = -((progress * 2 - 1) * strength * rect.height)
+        inner.style.transform = `translateY(${driftPx.toFixed(1)}px)`
+      }
+      rafId = requestAnimationFrame(tick)
     }
 
-    const onScroll = () => {
-      if (ticking) return
-      ticking = true
-      rafId = window.requestAnimationFrame(update)
-    }
-
-    update()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    window.addEventListener('resize', onScroll, { passive: true })
-
-    return () => {
-      window.removeEventListener('scroll', onScroll)
-      window.removeEventListener('resize', onScroll)
-      if (rafId) window.cancelAnimationFrame(rafId)
-    }
+    rafId = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(rafId)
   }, [strength])
-
-  // Oversize the inner wrapper so the image always fully covers the container
-  // regardless of drift position. Max drift = strength * height, so we extend
-  // by 2 * strength * height vertically (split top/bottom), plus a small safety
-  // margin to avoid sub-pixel edge bleed.
-  const overscanPct = Math.max(0, strength) * 200 + 4 // % of container height
-  const halfOverscan = overscanPct / 2
 
   return (
     <div ref={containerRef} className="absolute inset-0 overflow-hidden">
-      <div
-        ref={innerRef}
-        style={{
-          position: 'absolute',
-          left: 0,
-          right: 0,
-          top: `-${halfOverscan}%`,
-          height: `calc(100% + ${overscanPct}%)`,
-          willChange: 'transform',
-          transform: 'translate3d(0, 0, 0)',
-        }}
-      >
+      {/* inner sized and positioned entirely by the useEffect above */}
+      <div ref={innerRef}>
         <Image
           src={src}
           alt={alt}
