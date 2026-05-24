@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import { AlertTriangle, Check, Minus } from 'lucide-react'
 import { useFadeIn } from '@/hooks/useFadeIn'
@@ -203,8 +204,9 @@ export function LandingPillars() {
     >
       <div className="max-w-[1160px] mx-auto px-5 sm:px-8 lg:px-12">
         {/* Section head */}
-        <div className="mb-20">
-          <div className="w-full lg:w-1/2">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center mb-20">
+          {/* Left: eyebrow + title + description */}
+          <div>
             <span
               className="block mb-3 text-[10px] uppercase tracking-[0.18em]"
               style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860' }}
@@ -225,10 +227,34 @@ export function LandingPillars() {
               <br />
               {t('titleLine2')}
             </h2>
+            <p className="text-[16px] leading-[1.65] m-0 mt-8" style={{ color: '#5A4A38', maxWidth: '52ch' }}>
+              {t('lede')}
+            </p>
           </div>
-          <p className="text-[16px] leading-[1.65] m-0 mt-8" style={{ color: '#5A4A38', maxWidth: '52ch' }}>
-            {t('lede')}
-          </p>
+
+          {/* Right: image */}
+          <div
+            className="relative w-full overflow-hidden"
+            style={{
+              borderRadius: '16px',
+              aspectRatio: '4 / 3',
+              boxShadow: '0 24px 64px rgba(43,31,18,0.18), 0 0 0 1px rgba(43,31,18,0.06)',
+            }}
+          >
+            <Image
+              src="/landing/solution-bg.png"
+              alt=""
+              fill
+              className="object-cover"
+              style={{ objectPosition: 'center 30%' }}
+            />
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background: 'linear-gradient(to bottom, transparent 60%, rgba(43,31,18,0.14) 100%)',
+              }}
+            />
+          </div>
         </div>
 
         {/* Pillar rows */}
