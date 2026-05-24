@@ -1,14 +1,255 @@
 'use client'
 
-import React from 'react'
-import Image from 'next/image'
+import React, { useState } from 'react'
 import { useTranslations } from 'next-intl'
+import { ReceiptText, Check, TrendingUp, BarChart2, DollarSign, Activity } from 'lucide-react'
 import { ParallaxImage } from './ParallaxImage'
 import { useFadeIn } from '@/hooks/useFadeIn'
 
+type Tab = 'comex' | 'finanzas' | 'comercial'
+
+// ── Comex visual: document checklist ─────────────────────────────
+function ComexVisual() {
+  const docs = [
+    { name: 'Instructivo COMEX', status: 'ok' as const,      label: '✓ Enviado'  },
+    { name: 'Draft BL',          status: 'warn' as const,    label: '⚠ Revisar'  },
+    { name: 'Certificado SAG',   status: 'ok' as const,      label: '✓ Emitido'  },
+    { name: 'Certificado de Origen', status: 'pending' as const, label: 'Pendiente' },
+    { name: 'Packing List',      status: 'ok' as const,      label: '✓ Listo'    },
+  ]
+
+  const statusStyle = {
+    ok:      { bg: 'rgba(79,122,60,0.10)',  color: '#4F7A3C', border: 'rgba(60,42,22,0.08)'      },
+    warn:    { bg: 'rgba(185,122,31,0.12)', color: '#B97A1F', border: 'rgba(185,122,31,0.22)'    },
+    pending: { bg: 'rgba(60,42,22,0.06)',   color: '#8A7860', border: 'rgba(60,42,22,0.08)'      },
+  }
+
+  return (
+    <div
+      className="rounded-[16px] p-6"
+      style={{ background: '#FCF7EA', border: '1px solid rgba(60,42,22,0.08)', boxShadow: '0 8px 32px rgba(43,31,18,0.08)' }}
+    >
+      <p
+        className="text-[10px] uppercase tracking-[0.06em] mb-4"
+        style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860' }}
+      >
+        Embarque BK-2024-0841 · Activo
+      </p>
+      <div className="flex flex-col gap-[6px]">
+        {docs.map((doc) => {
+          const s = statusStyle[doc.status]
+          return (
+            <div
+              key={doc.name}
+              className="flex items-center justify-between rounded-[8px] px-[12px] py-[10px]"
+              style={{ background: '#FFFCF1', border: `1px solid ${s.border}` }}
+            >
+              <span style={{ fontSize: '12px', color: '#5A4A38' }}>{doc.name}</span>
+              <span
+                className="inline-flex items-center px-[8px] py-[2px] rounded-full"
+                style={{
+                  background: s.bg,
+                  color: s.color,
+                  fontFamily: 'var(--font-family-mono)',
+                  fontSize: '9px',
+                  fontWeight: 600,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.08em',
+                }}
+              >
+                {doc.label}
+              </span>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+// ── Financial visual: cobranza pipeline + reconciliation ──────────
+function FinancialVisual() {
+  const pos = [
+    { ref: 'BK-2024-0841', client: 'Frigorífico del Norte S.A.',   amount: 'USD 48.200', status: 'risk'  as const, statusLabel: 'Cobrar hoy',   dueLabel: 'Vencido · 3 días' },
+    { ref: 'BK-2024-0867', client: 'Exportadora del Sur Ltda.',    amount: 'USD 31.750', status: 'watch' as const, statusLabel: 'Próxima',       dueLabel: 'Vence en 4 días'  },
+    { ref: 'BK-2024-0792', client: 'Agropecuaria Mendoza S.A.',    amount: 'USD 62.400', status: 'ok'    as const, statusLabel: 'Cobrado',       dueLabel: 'Pago recibido'    },
+  ]
+
+  const pill = {
+    risk:  { bg: 'rgba(200,60,60,0.10)',  color: '#C83C3C', border: 'rgba(200,60,60,0.22)'  },
+    watch: { bg: 'rgba(185,122,31,0.12)', color: '#B97A1F', border: 'rgba(185,122,31,0.22)' },
+    ok:    { bg: 'rgba(79,122,60,0.12)',  color: '#4F7A3C', border: 'rgba(60,42,22,0.08)'   },
+  }
+
+  return (
+    <div
+      className="rounded-[16px] p-6"
+      style={{ background: '#FCF7EA', border: '1px solid rgba(60,42,22,0.08)', boxShadow: '0 8px 32px rgba(43,31,18,0.08)' }}
+    >
+      <p
+        className="text-[10px] uppercase tracking-[0.06em] mb-4"
+        style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860' }}
+      >
+        Cobranza activa
+      </p>
+
+      <div className="flex flex-col gap-[6px]">
+        {pos.map((po) => {
+          const c = pill[po.status]
+          return (
+            <div
+              key={po.ref}
+              className="rounded-[10px] px-[12px] py-[10px]"
+              style={{ background: '#FFFCF1', border: `1px solid ${c.border}` }}
+            >
+              <div className="flex items-center justify-between mb-[5px]">
+                <span style={{ fontFamily: 'var(--font-family-mono)', fontSize: '10px', color: '#8A7860', letterSpacing: '0.06em' }}>
+                  {po.ref}
+                </span>
+                <span
+                  className="inline-flex items-center gap-[5px] px-[8px] py-[2px] rounded-full"
+                  style={{ background: c.bg, color: c.color, fontFamily: 'var(--font-family-mono)', fontSize: '9px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em' }}
+                >
+                  <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: c.color, display: 'inline-block', flexShrink: 0 }} />
+                  {po.statusLabel}
+                </span>
+              </div>
+              <div className="flex items-end justify-between">
+                <span style={{ fontSize: '12px', color: '#5A4A38' }}>{po.client}</span>
+                <span className="italic" style={{ fontFamily: 'var(--font-family-display)', fontSize: '16px', color: '#2B1F12' }}>
+                  {po.amount}
+                </span>
+              </div>
+              <div style={{ fontFamily: 'var(--font-family-mono)', fontSize: '9px', color: c.color, marginTop: '2px' }}>
+                {po.dueLabel}
+              </div>
+            </div>
+          )
+        })}
+      </div>
+
+      <div className="mt-4 pt-4" style={{ borderTop: '1px solid rgba(60,42,22,0.08)' }}>
+        <p
+          className="text-[10px] uppercase tracking-[0.06em] mb-[10px]"
+          style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860' }}
+        >
+          Conciliación automática
+        </p>
+        <div className="flex items-stretch gap-2">
+          <div className="flex-1 rounded-[8px] p-[10px]" style={{ background: '#FFFCF1', border: '1px solid rgba(60,42,22,0.08)' }}>
+            <div style={{ fontFamily: 'var(--font-family-mono)', fontSize: '9px', color: '#8A7860', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '4px' }}>
+              Recibido
+            </div>
+            <div className="italic" style={{ fontFamily: 'var(--font-family-display)', fontSize: '18px', color: '#2B1F12' }}>
+              USD 48.200
+            </div>
+          </div>
+          <div className="flex items-center justify-center px-1" style={{ color: '#B5A586', fontFamily: 'var(--font-family-mono)', fontSize: '14px' }}>
+            →
+          </div>
+          <div className="flex-1 rounded-[8px] p-[10px]" style={{ background: 'rgba(79,122,60,0.06)', border: '1px solid rgba(79,122,60,0.25)' }}>
+            <div style={{ fontFamily: 'var(--font-family-mono)', fontSize: '9px', color: '#4F7A3C', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 600, marginBottom: '4px' }}>
+              Cuadra
+            </div>
+            <div className="flex items-center gap-1">
+              <Check size={12} strokeWidth={2.5} style={{ color: '#4F7A3C', flexShrink: 0 }} />
+              <span style={{ fontSize: '11px', color: '#4F7A3C', fontWeight: 600 }}>Cierre automático</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ── Comercial visual: client ranking cards ────────────────────────
+function ComercialVisual() {
+  const clients = [
+    {
+      name: 'Pacific Fresh Ltd.',
+      market: 'Reino Unido · EU',
+      score: 94,
+      scoreColor: '#4F7A3C',
+      scoreBg: 'rgba(79,122,60,0.10)',
+      otif: '94%',
+      precio: 'USD 4.20',
+      dias: '31 d',
+    },
+    {
+      name: 'Nanjing Import Co.',
+      market: 'China · Asia',
+      score: 61,
+      scoreColor: '#B97A1F',
+      scoreBg: 'rgba(185,122,31,0.10)',
+      otif: '78%',
+      precio: 'USD 3.85',
+      dias: '48 d',
+    },
+  ]
+
+  return (
+    <div
+      className="rounded-[16px] p-6"
+      style={{ background: '#FCF7EA', border: '1px solid rgba(60,42,22,0.08)', boxShadow: '0 8px 32px rgba(43,31,18,0.08)' }}
+    >
+      <p
+        className="text-[10px] uppercase tracking-[0.06em] mb-4"
+        style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860' }}
+      >
+        Ranking de clientes — Temporada 2024
+      </p>
+      <div className="flex flex-col gap-[8px]">
+        {clients.map((c) => (
+          <div
+            key={c.name}
+            className="rounded-[10px] px-[12px] py-[10px]"
+            style={{ background: '#FFFCF1', border: '1px solid rgba(60,42,22,0.08)' }}
+          >
+            <div className="flex items-center justify-between mb-[10px]">
+              <div>
+                <div style={{ fontSize: '13px', color: '#2B1F12', fontWeight: 500 }}>{c.name}</div>
+                <div style={{ fontSize: '10px', color: '#8A7860', marginTop: '2px' }}>{c.market}</div>
+              </div>
+              <div
+                className="inline-flex items-center px-[8px] py-[4px] rounded-[6px]"
+                style={{ background: c.scoreBg, color: c.scoreColor, fontFamily: 'var(--font-family-mono)', fontSize: '12px', fontWeight: 600 }}
+              >
+                {c.score} / 100
+              </div>
+            </div>
+            <div className="grid grid-cols-3 gap-2">
+              {([['OTIF', c.otif], ['Precio neto/kg', c.precio], ['Pago prom.', c.dias]] as const).map(([label, value]) => (
+                <div key={label} className="rounded-[6px] p-[8px] text-center" style={{ background: '#F8F2E4' }}>
+                  <div style={{ fontFamily: 'var(--font-family-mono)', fontSize: '12px', color: '#2B1F12', fontWeight: 600 }}>{value}</div>
+                  <div style={{ fontFamily: 'var(--font-family-mono)', fontSize: '9px', color: '#8A7860', textTransform: 'uppercase', letterSpacing: '0.06em', marginTop: '2px' }}>{label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// ── Feature lists ─────────────────────────────────────────────────
+const FINANZAS_FEATURES = [
+  { key: 'finanzas1', Icon: ReceiptText },
+  { key: 'finanzas2', Icon: Check },
+  { key: 'finanzas3', Icon: TrendingUp },
+] as const
+
+const COMERCIAL_FEATURES = [
+  { key: 'comercial1', Icon: BarChart2 },
+  { key: 'comercial2', Icon: DollarSign },
+  { key: 'comercial3', Icon: Activity },
+] as const
+
+// ── Main component ────────────────────────────────────────────────
 export function LandingProduct() {
   const t = useTranslations('landing')
   const ref = useFadeIn()
+  const [activeTab, setActiveTab] = useState<Tab>('comex')
 
   return (
     <section
@@ -23,9 +264,9 @@ export function LandingProduct() {
       }}
     >
       <div className="max-w-[1160px] mx-auto px-5 sm:px-8 lg:px-12">
-        {/* Section head */}
+
+        {/* Section header: text left, parallax image right */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center mb-16">
-          {/* Left: eyebrow + title + description */}
           <div>
             <span
               className="block mb-3 text-[10px] uppercase tracking-[0.18em]"
@@ -55,7 +296,6 @@ export function LandingProduct() {
             </p>
           </div>
 
-          {/* Right: image */}
           <div className="relative w-full">
             <ParallaxImage
               variant="frame"
@@ -78,92 +318,189 @@ export function LandingProduct() {
           </div>
         </div>
 
-        {/* Feature spec table */}
-        <div className="mb-12" style={{ borderTop: '1px solid rgba(60,42,22,0.08)' }}>
-          {[
-            { num: '01', label: t('product.feature1Label'), body: t('product.feature1Body') },
-            { num: '02', label: t('product.feature2Label'), body: t('product.feature2Body') },
-            { num: '03', label: t('product.feature3Label'), body: t('product.feature3Body') },
-          ].map((feature) => (
-            <div
-              key={feature.num}
-              className="grid items-baseline gap-x-8 py-[13px] stagger-item"
-              style={{
-                gridTemplateColumns: '36px 1fr 1.6fr',
-                borderBottom: '1px solid rgba(60,42,22,0.08)',
-              }}
-            >
-              <span
-                style={{
-                  fontFamily: 'var(--font-family-mono)',
-                  fontSize: '10px',
-                  color: '#B5A586',
-                  letterSpacing: '0.12em',
-                }}
-              >
-                {feature.num}
-              </span>
-              <span className="font-medium" style={{ fontSize: '13.5px', color: '#2B1F12' }}>
-                {feature.label}
-              </span>
-              <span style={{ fontSize: '13px', color: '#5A4A38', lineHeight: 1.5 }}>
-                {feature.body}
-              </span>
-            </div>
-          ))}
-        </div>
+        {/* Tabs */}
+        <div style={{ borderTop: '1px solid rgba(60,42,22,0.08)' }}>
 
-        {/* Screenshot with annotations */}
-        <div className="relative mx-auto" style={{ maxWidth: '100%' }}>
-          {/* Annotation chips — hidden on mobile */}
-          <div className="hidden lg:block">
-            <Annotation label={t('product.anno1')} style={{ top: '12%', left: '-2%', transform: 'translateX(-100%) translateX(-8px)' }} amber={false} />
-            <Annotation label={t('product.anno2')} style={{ top: '50%', right: '-2%', transform: 'translateX(100%) translateX(8px)' }} amber={true} />
-            <Annotation label={t('product.anno3')} style={{ bottom: '18%', left: '-2%', transform: 'translateX(-100%) translateX(-8px)' }} amber={false} />
+          {/* Tab bar */}
+          <div className="flex" style={{ borderBottom: '1px solid rgba(60,42,22,0.08)' }}>
+            {(['comex', 'finanzas', 'comercial'] as const).map((tab) => {
+              const keyMap = {
+                comex:     'product.tabComex',
+                finanzas:  'product.tabFinanzas',
+                comercial: 'product.tabComercial',
+              } as const
+              return (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  style={{
+                    fontFamily: 'var(--font-family-mono)',
+                    fontSize: '10px',
+                    padding: '10px 16px',
+                    color: activeTab === tab ? '#2B1F12' : '#8A7860',
+                    fontWeight: activeTab === tab ? 500 : 400,
+                    background: 'transparent',
+                    border: 'none',
+                    borderBottom: activeTab === tab ? '2px solid #2B1F12' : '2px solid transparent',
+                    cursor: 'pointer',
+                    marginBottom: '-1px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.10em',
+                    transition: 'color 0.15s',
+                  }}
+                >
+                  {t(keyMap[tab])}
+                </button>
+              )
+            })}
           </div>
 
-          <div
-            className="overflow-hidden w-full"
-            style={{
-              border: '1px solid rgba(60,42,22,0.16)',
-              borderRadius: '16px',
-              boxShadow: '0 40px 80px rgba(43,31,18,0.18), 0 0 0 1px rgba(43,31,18,0.06)',
-            }}
-          >
-            <Image
-              src="/landing/dashboard.png"
-              alt={t('product.dashboardAlt')}
-              width={1200}
-              height={750}
-              className="w-full h-auto block"
-            />
+          {/* Tab panels */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start py-14">
+
+            {activeTab === 'comex' && (
+              <>
+                <div>
+                  <h3
+                    className="font-semibold mb-[6px]"
+                    style={{ fontSize: '15px', color: '#2B1F12' }}
+                  >
+                    {t('product.comexHed')}
+                  </h3>
+                  <p
+                    className="m-0 mb-6"
+                    style={{ fontSize: '14px', color: '#5A4A38', lineHeight: 1.65, maxWidth: '44ch' }}
+                  >
+                    {t('product.comexLede')}
+                  </p>
+                  <div style={{ borderTop: '1px solid rgba(60,42,22,0.08)' }}>
+                    {(
+                      [
+                        { num: '01', label: t('product.feature1Label'), body: t('product.feature1Body') },
+                        { num: '02', label: t('product.feature2Label'), body: t('product.feature2Body') },
+                        { num: '03', label: t('product.feature3Label'), body: t('product.feature3Body') },
+                      ] as const
+                    ).map((f) => (
+                      <div
+                        key={f.num}
+                        className="grid items-baseline gap-x-8 py-[13px]"
+                        style={{ gridTemplateColumns: '36px 1fr 1.6fr', borderBottom: '1px solid rgba(60,42,22,0.08)' }}
+                      >
+                        <span style={{ fontFamily: 'var(--font-family-mono)', fontSize: '10px', color: '#B5A586', letterSpacing: '0.12em' }}>
+                          {f.num}
+                        </span>
+                        <span className="font-medium" style={{ fontSize: '13.5px', color: '#2B1F12' }}>
+                          {f.label}
+                        </span>
+                        <span style={{ fontSize: '13px', color: '#5A4A38', lineHeight: 1.5 }}>
+                          {f.body}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <ComexVisual />
+              </>
+            )}
+
+            {activeTab === 'finanzas' && (
+              <>
+                <div>
+                  <h3
+                    className="font-semibold mb-[6px]"
+                    style={{ fontSize: '15px', color: '#2B1F12' }}
+                  >
+                    {t('product.finanzasHed')}
+                  </h3>
+                  <p
+                    className="m-0 mb-6"
+                    style={{ fontSize: '14px', color: '#5A4A38', lineHeight: 1.65, maxWidth: '44ch' }}
+                  >
+                    {t('product.finanzasLede')}
+                  </p>
+                  <div className="flex flex-col">
+                    {FINANZAS_FEATURES.map(({ key, Icon }, index) => (
+                      <div
+                        key={key}
+                        className="flex gap-5 py-7"
+                        style={index > 0 ? { borderTop: '1px solid rgba(60,42,22,0.06)' } : {}}
+                      >
+                        <div
+                          className="w-[36px] h-[36px] rounded-[8px] flex items-center justify-center flex-shrink-0 mt-[2px]"
+                          style={{ background: '#F0E8D8', border: '1px solid rgba(60,42,22,0.10)' }}
+                        >
+                          <Icon size={16} strokeWidth={1.5} style={{ color: '#5A4A38' }} />
+                        </div>
+                        <div>
+                          <div
+                            className="font-medium mb-[6px]"
+                            style={{ fontSize: '15px', color: '#2B1F12', lineHeight: 1.3 }}
+                          >
+                            {t(`product.${key}Label` as any)}
+                          </div>
+                          <p className="m-0" style={{ fontSize: '14px', color: '#5A4A38', lineHeight: 1.65 }}>
+                            {t(`product.${key}Body` as any)}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <FinancialVisual />
+              </>
+            )}
+
+            {activeTab === 'comercial' && (
+              <>
+                <div>
+                  <h3
+                    className="font-semibold mb-[6px]"
+                    style={{ fontSize: '15px', color: '#2B1F12' }}
+                  >
+                    {t('product.comercialHed')}
+                  </h3>
+                  <p
+                    className="m-0 mb-6"
+                    style={{ fontSize: '14px', color: '#5A4A38', lineHeight: 1.65, maxWidth: '44ch' }}
+                  >
+                    {t('product.comercialLede')}
+                  </p>
+                  <div className="flex flex-col">
+                    {COMERCIAL_FEATURES.map(({ key, Icon }, index) => (
+                      <div
+                        key={key}
+                        className="flex gap-5 py-7"
+                        style={index > 0 ? { borderTop: '1px solid rgba(60,42,22,0.06)' } : {}}
+                      >
+                        <div
+                          className="w-[36px] h-[36px] rounded-[8px] flex items-center justify-center flex-shrink-0 mt-[2px]"
+                          style={{ background: '#F0E8D8', border: '1px solid rgba(60,42,22,0.10)' }}
+                        >
+                          <Icon size={16} strokeWidth={1.5} style={{ color: '#5A4A38' }} />
+                        </div>
+                        <div>
+                          <div
+                            className="font-medium mb-[6px]"
+                            style={{ fontSize: '15px', color: '#2B1F12', lineHeight: 1.3 }}
+                          >
+                            {t(`product.${key}Label` as any)}
+                          </div>
+                          <p className="m-0" style={{ fontSize: '14px', color: '#5A4A38', lineHeight: 1.65 }}>
+                            {t(`product.${key}Body` as any)}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <ComercialVisual />
+              </>
+            )}
+
           </div>
         </div>
+
       </div>
     </section>
-  )
-}
-
-function Annotation({ label, style, amber }: { label: string; style: React.CSSProperties; amber: boolean }) {
-  return (
-    <div
-      className="absolute inline-flex items-center gap-[6px]"
-      style={{
-        fontFamily: 'var(--font-family-mono)',
-        fontSize: '10px',
-        letterSpacing: '0.04em',
-        color: '#2B1F12',
-        background: '#F8F2E4',
-        border: '1px solid rgba(60,42,22,0.16)',
-        padding: '5px 10px',
-        borderRadius: '6px',
-        whiteSpace: 'nowrap',
-        boxShadow: '0 4px 14px rgba(43,31,18,0.10)',
-        ...style,
-      }}
-    >
-      <span className="w-[6px] h-[6px] rounded-full flex-shrink-0" style={{ background: amber ? '#B97A1F' : '#4F7A3C' }} />
-      {label}
-    </div>
   )
 }
