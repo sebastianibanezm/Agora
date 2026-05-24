@@ -233,18 +233,22 @@ export function LandingPillars() {
           </div>
 
           {/* Right: image */}
-          <div
-            className="relative w-full overflow-hidden"
-            style={{
-              borderRadius: '16px',
-              aspectRatio: '4 / 3',
-              boxShadow: '0 24px 64px rgba(43,31,18,0.18), 0 0 0 1px rgba(43,31,18,0.06)',
-            }}
-          >
-            <ParallaxImage src="/landing/solution-bg.png" objectPosition="center 30%" strength={0.08} />
+          <div className="relative w-full">
+            <ParallaxImage
+              variant="frame"
+              src="/landing/solution-bg.png"
+              objectPosition="center 30%"
+              strength={0.12}
+              style={{
+                borderRadius: '16px',
+                aspectRatio: '4 / 3',
+                boxShadow: '0 24px 64px rgba(43,31,18,0.18), 0 0 0 1px rgba(43,31,18,0.06)',
+              }}
+            />
             <div
               className="absolute inset-0 pointer-events-none"
               style={{
+                borderRadius: '16px',
                 background: 'linear-gradient(to bottom, transparent 60%, rgba(43,31,18,0.14) 100%)',
               }}
             />

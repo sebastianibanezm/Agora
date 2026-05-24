@@ -3,7 +3,7 @@
 import React, { useRef, useState, useEffect } from 'react'
 import Image from 'next/image'
 import { useTranslations, useLocale } from 'next-intl'
-import { ParallaxImage } from './ParallaxImage'
+import { ParallaxImage, useParallaxTimeline } from './ParallaxImage'
 import { useRouter, usePathname } from 'next/navigation'
 
 export function LandingFooter() {
@@ -17,7 +17,9 @@ export function LandingFooter() {
   useEffect(() => {
     if (!textCardRef.current) return
     const observer = new ResizeObserver(entries => {
-      setLogoCardSize(entries[0].borderBoxSize[0].blockSize)
+      const entry = entries[0]
+      if (!entry) return
+      setLogoCardSize(entry.borderBoxSize[0]?.blockSize ?? null)
     })
     observer.observe(textCardRef.current)
     return () => observer.disconnect()
@@ -30,11 +32,21 @@ export function LandingFooter() {
     router.refresh()
   }
 
+  const { timelineName, rootStyle } = useParallaxTimeline()
+
   return (
-    <footer className="relative w-full overflow-hidden" style={{ minHeight: '420px' }}>
+    <footer
+      className="parallax-root relative w-full overflow-hidden"
+      style={{ minHeight: '420px', ...rootStyle }}
+    >
       {/* Background image */}
       <div className="absolute inset-0 z-0">
-        <ParallaxImage src="/landing/footer-bg.png" objectPosition="center 55%" strength={0.08} />
+        <ParallaxImage
+          src="/landing/footer-bg.png"
+          objectPosition="center 55%"
+          strength={0.10}
+          timelineName={timelineName}
+        />
         {/* Dark gradient overlay — heavier at bottom so content is legible */}
         <div
           className="absolute inset-0"

@@ -3,22 +3,24 @@
 import { useTranslations } from 'next-intl'
 import { ArrowRight } from 'lucide-react'
 import { LandingNav } from './LandingNav'
-import { ParallaxImage } from './ParallaxImage'
+import { ParallaxImage, useParallaxTimeline } from './ParallaxImage'
 
 export function LandingHero() {
   const t = useTranslations('landing')
+  const { timelineName, rootStyle } = useParallaxTimeline()
 
   return (
     <section
-      className="relative w-full overflow-hidden"
-      style={{ minHeight: '100vh', background: '#2B1F12' }}
+      className="parallax-root relative w-full overflow-hidden"
+      style={{ minHeight: '100vh', background: '#2B1F12', ...rootStyle }}
     >
       {/* Background image */}
       <div className="absolute inset-0 z-0">
         <ParallaxImage
           src="/landing/hero-bg.png"
           objectPosition="center 38%"
-          strength={0.07}
+          strength={0.12}
+          timelineName={timelineName}
           priority
         />
         {/* Gradient overlay */}
