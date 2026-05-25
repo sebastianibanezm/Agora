@@ -35,6 +35,20 @@ Cada envío mueve decenas de documentos, actores y fechas críticas. Sin visibil
 
 ## Empresa
 
-Agora Technologies SpA — Santiago, Chile
+Agente Agora LLC — Latinoamerica, Estados Unidos
 Web: https://www.agenteagora.com
 Contacto: https://www.agenteagora.com/#contacto
+
+## Keywords
+
+Términos clave del dominio relacionados con Agora:
+
+BL, Bill of Lading, DUS, Declaración Única de Salida, fitosanitario, certificado fitosanitario, SAG, demurrage, cut-off naviero, packing list, naviera, booking, booking confirmation, consignatario, carta de crédito, instrucción de embarque, corrección de BL, despacho, contenedor, temperatura, cadena de frío, exportación fruta, fruta fresca, frutos secos, exportación Chile, agente de aduana, agente naviero
+
+## Lo que Agora no es
+
+- No es un agente de carga (freight forwarder): Agora no opera embarques ni negocia fletes.
+- No es un agente de aduana: Agora no gestiona trámites aduaneros directamente.
+- No es un TMS (Transportation Management System): Agora no optimiza rutas ni gestiona flotas.
+- No es un ERP: Agora no reemplaza sistemas contables ni de gestión empresarial.
+- No es un portal naviero: Agora se integra con portales navieros, pero no los reemplaza.
