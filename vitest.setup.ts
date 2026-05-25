@@ -1,4 +1,13 @@
 import '@testing-library/jest-dom';
+import { vi } from 'vitest';
+
+// Mock next/font/google to prevent runtime errors in tests
+vi.mock('next/font/google', () => ({
+  Inter: () => ({ variable: '--font-inter' }),
+  JetBrains_Mono: () => ({ variable: '--font-mono' }),
+  Fraunces: () => ({ variable: '--font-fraunces' }),
+  Old_Standard_TT: () => ({ variable: '--font-old-standard' }),
+}));
 
 // jsdom doesn't implement CSS.supports
 if (typeof CSS === 'undefined') {
