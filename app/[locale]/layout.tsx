@@ -18,19 +18,45 @@ const oldStandard = Old_Standard_TT({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.agenteagora.com'),
-  title: 'Agora - Export Intelligence',
-  description: 'Plataforma operacional para exportaciones.',
+  title: {
+    default: 'Agora — Export Intelligence para Exportadores',
+    template: '%s | Agora',
+  },
+  description:
+    'Agora es la plataforma operacional para exportadores de fruta y frutos secos. Automatiza documentos, detecta excepciones antes del cut-off y da visibilidad en tiempo real a todo tu equipo.',
+  keywords: [
+    'exportaciones Chile',
+    'plataforma exportaciones',
+    'export intelligence',
+    'documentos exportación',
+    'fruta exportación',
+    'logística exportaciones',
+    'BL',
+    'bill of lading',
+    'shipment intelligence',
+  ],
+  alternates: {
+    canonical: 'https://www.agenteagora.com',
+    languages: {
+      es: 'https://www.agenteagora.com',
+      en: 'https://www.agenteagora.com',
+    },
+  },
   openGraph: {
-    title: 'Agora - Export Intelligence',
-    description: 'Plataforma operacional para exportaciones.',
+    title: 'Agora — Export Intelligence para Exportadores',
+    description:
+      'Plataforma operacional para exportadores de fruta y frutos secos. Automatiza documentos, detecta excepciones antes del cut-off y da visibilidad en tiempo real a todo tu equipo.',
     images: [{ url: 'https://www.agenteagora.com/og-image.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Agora - Export Intelligence',
-    description: 'Plataforma operacional para exportaciones.',
+    title: 'Agora — Export Intelligence para Exportadores',
+    description:
+      'Plataforma operacional para exportadores de fruta y frutos secos. Automatiza documentos, detecta excepciones antes del cut-off y da visibilidad en tiempo real a todo tu equipo.',
     images: ['https://www.agenteagora.com/og-image.png'],
   },
+  // Replace the empty string with your Google Search Console verification code after setup
+  // verification: { google: 'PASTE_GSC_CODE_HERE' },
 }
 
 export function generateStaticParams() {
