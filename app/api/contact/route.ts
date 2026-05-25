@@ -183,7 +183,7 @@ export async function POST(req: NextRequest) {
                 Empresa: company,
                 'Volumen (embarques/mes)': volume,
                 'Enviado el': new Date().toISOString(),
-                Estado: 'Nuevo',
+                Status: 'Todo',
               },
             },
           ],
