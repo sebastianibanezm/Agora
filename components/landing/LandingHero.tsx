@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
 import { useTranslations } from 'next-intl'
 import { ArrowRight } from 'lucide-react'
 import { LandingNav } from './LandingNav'
@@ -8,21 +9,46 @@ import { ParallaxImage, useParallaxTimeline } from './ParallaxImage'
 export function LandingHero() {
   const t = useTranslations('landing')
   const { timelineName, rootStyle } = useParallaxTimeline()
+  const videoRef = useRef<HTMLVideoElement>(null)
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.playbackRate = 0.65
+    }
+  }, [])
 
   return (
     <section
       className="parallax-root relative w-full overflow-hidden"
       style={{ minHeight: '100vh', background: '#2B1F12', ...rootStyle }}
     >
-      {/* Background image */}
+      {/* Background: video on desktop, image fallback on mobile */}
       <div className="absolute inset-0 z-0">
-        <ParallaxImage
-          src="/landing/hero-bg.png"
-          objectPosition="center 38%"
-          strength={0.12}
-          timelineName={timelineName}
-          priority
-        />
+        {/* Video — hidden on mobile via CSS */}
+        <video
+          ref={videoRef}
+          autoPlay
+          muted
+          loop
+          playsInline
+          poster="/landing/hero-bg.png"
+          className="hero-video absolute inset-0 w-full h-full object-cover"
+          style={{ objectPosition: 'center 38%' }}
+        >
+          <source src="/landing/hero-bg.mp4" type="video/mp4" />
+        </video>
+
+        {/* Static image fallback — shown only on mobile */}
+        <div className="hero-image-fallback absolute inset-0">
+          <ParallaxImage
+            src="/landing/hero-bg.png"
+            objectPosition="center 38%"
+            strength={0.12}
+            timelineName={timelineName}
+            priority
+          />
+        </div>
+
         {/* Gradient overlay */}
         <div
           className="absolute inset-0"
@@ -160,6 +186,16 @@ export function LandingHero() {
         @keyframes pulse {
           0%, 100% { opacity: 1; }
           50% { opacity: 0.3; }
+        }
+        .hero-video { display: block; }
+        .hero-image-fallback { display: none; }
+        @media (max-width: 767px) {
+          .hero-video { display: none; }
+          .hero-image-fallback { display: block; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .hero-video { display: none; }
+          .hero-image-fallback { display: block; }
         }
       `}</style>
     </section>
