@@ -13,7 +13,7 @@ export function LandingHero() {
 
   useEffect(() => {
     if (videoRef.current) {
-      videoRef.current.playbackRate = 0.65
+      videoRef.current.playbackRate = 0.5
     }
   }, [])
 
