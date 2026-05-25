@@ -4,14 +4,14 @@ import robots from '@/app/robots'
 describe('robots', () => {
   it('allows all user agents at root', () => {
     const result = robots()
-    const rules = Array.isArray(result.rules) ? result.rules[0] : result.rules
+    const rules = result.rules[0]
     expect(rules.userAgent).toBe('*')
     expect(rules.allow).toBe('/')
   })
 
   it('disallows /app/ and /api/ paths', () => {
     const result = robots()
-    const rules = Array.isArray(result.rules) ? result.rules[0] : result.rules
+    const rules = result.rules[0]
     expect(rules.disallow).toContain('/app/')
     expect(rules.disallow).toContain('/api/')
   })
