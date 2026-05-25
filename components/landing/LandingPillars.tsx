@@ -57,7 +57,7 @@ function VisibilityVisual({ t }: { t: T }) {
         ))}
       </div>
       <div className="grid grid-cols-3 gap-2 mt-[14px]">
-        {[['ETA', '14 ene', '#2B1F12'], ['Temp', '−1.2°C', '#4F7A3C'], ['Docs', '14/18', '#2B1F12']].map(([label, value, color], i) => (
+        {[['ETA', '14 ene', '#2B1F12'], ['Payment', 'CIF', '#4F7A3C'], ['Docs', '14/18', '#2B1F12']].map(([label, value, color], i) => (
           <div
             key={label}
             className="rounded-[8px] p-[10px]"

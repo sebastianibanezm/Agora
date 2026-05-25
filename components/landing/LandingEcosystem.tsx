@@ -18,16 +18,16 @@ export function LandingEcosystem() {
         transition: 'opacity 0.72s cubic-bezier(0.23,1,0.32,1), transform 0.72s cubic-bezier(0.23,1,0.32,1)',
       }}
     >
-      <div className="max-w-[1160px] mx-auto px-5 sm:px-8 lg:px-12 py-[80px]">
+      <div className="max-w-[860px] mx-auto px-5 sm:px-8 lg:px-12 py-[80px] text-center">
         <p
-          className="italic m-0"
+          className="italic m-0 mx-auto"
           style={{
             fontFamily: 'var(--font-family-display)',
-            fontSize: 'clamp(18px, 1.8vw, 24px)',
-            lineHeight: 1.25,
+            fontSize: 'clamp(20px, 2vw, 28px)',
+            lineHeight: 1.45,
             color: '#5A4A38',
             fontWeight: 300,
-            maxWidth: '56ch',
+            maxWidth: '68ch',
           }}
         >
           {t('statement')}
