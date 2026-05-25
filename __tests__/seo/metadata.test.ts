@@ -23,3 +23,24 @@ describe('global metadata', () => {
     expect(metadata.metadataBase?.toString()).toBe('https://www.agenteagora.com/')
   })
 })
+
+import { metadata as landingMetadata } from '@/app/[locale]/(marketing)/page'
+
+describe('landing page metadata', () => {
+  it('has openGraph title', () => {
+    expect(landingMetadata.openGraph?.title).toBeTruthy()
+  })
+
+  it('openGraph description is specific to landing page copy', () => {
+    expect(landingMetadata.openGraph?.description).toMatch(/flujo documental|exportaciones/)
+  })
+
+  it('has openGraph image', () => {
+    const images = landingMetadata.openGraph?.images
+    expect(images).toBeTruthy()
+  })
+
+  it('has twitter card', () => {
+    expect(landingMetadata.twitter?.card).toBe('summary_large_image')
+  })
+})
