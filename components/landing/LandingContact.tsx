@@ -7,13 +7,36 @@ import { useFadeIn } from '@/hooks/useFadeIn'
 
 const VOLUME_OPTIONS = ['100–500', '500–1000', '1000–3000', '3000+'] as const
 
+type Status = 'idle' | 'loading' | 'success' | 'error'
+
 export function LandingContact() {
   const t = useTranslations('landing')
   const [volume, setVolume] = useState<string | null>(null)
+  const [status, setStatus] = useState<Status>('idle')
   const ref = useFadeIn()
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
+    if (!volume) return
+    setStatus('loading')
+
+    const fd = new FormData(e.currentTarget)
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firstName: fd.get('firstName'),
+          lastName: fd.get('lastName'),
+          company: fd.get('company'),
+          email: fd.get('email'),
+          volume,
+        }),
+      })
+      setStatus(res.ok ? 'success' : 'error')
+    } catch {
+      setStatus('error')
+    }
   }
 
   return (
@@ -110,6 +133,25 @@ export function LandingContact() {
               {t('contact.formSub')}
             </p>
 
+            {status === 'success' ? (
+              <div className="flex flex-col items-center justify-center py-12 text-center gap-4">
+                <div
+                  className="w-[48px] h-[48px] rounded-full flex items-center justify-center"
+                  style={{ background: 'rgba(79,122,60,0.12)', color: '#4F7A3C' }}
+                >
+                  <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M4 11.5l5 5 9-9" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                </div>
+                <h3
+                  className="italic font-normal m-0"
+                  style={{ fontFamily: 'var(--font-family-display)', fontSize: '22px', color: '#2B1F12' }}
+                >
+                  ¡Recibimos tu solicitud!
+                </h3>
+                <p className="text-[14px] leading-[1.65] m-0" style={{ color: '#5A4A38', maxWidth: '34ch' }}>
+                  Te enviamos un correo de confirmación. Nos pondremos en contacto en las próximas horas.
+                </p>
+              </div>
+            ) : (
             <form onSubmit={handleSubmit}>
               {/* Name row */}
               <div className="grid grid-cols-2 gap-3 mb-4">
@@ -124,6 +166,8 @@ export function LandingContact() {
                     </label>
                     <input
                       type="text"
+                      name={f === 'FirstName' ? 'firstName' : 'lastName'}
+                      required
                       placeholder={t(`contact.placeholder${f}` as any)}
                       className="h-[42px] px-[14px] rounded-[8px] text-[14px] outline-none w-full transition-shadow duration-150"
                       style={{
@@ -156,6 +200,8 @@ export function LandingContact() {
                   </label>
                   <input
                     type={f === 'Email' ? 'email' : 'text'}
+                    name={f.toLowerCase()}
+                    required
                     placeholder={t(`contact.placeholder${f}` as any)}
                     className="h-[42px] px-[14px] rounded-[8px] text-[14px] outline-none w-full transition-shadow duration-150"
                     style={{
@@ -205,15 +251,27 @@ export function LandingContact() {
                 </div>
               </div>
 
+              {status === 'error' && (
+                <p className="text-[12px] mb-3 text-center" style={{ color: '#8B2A1F' }}>
+                  Hubo un error al enviar. Intenta nuevamente o escríbenos directamente.
+                </p>
+              )}
+
               {/* Submit */}
               <button
                 type="submit"
+                disabled={status === 'loading'}
                 className="w-full h-[46px] rounded-[10px] text-[14px] font-medium flex items-center justify-center gap-2 cursor-pointer mt-[6px] btn-press"
-                style={{ background: '#2B1F12', color: '#F8F2E4', border: 'none' }}
-                onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = '#1F1609')}
-                onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = '#2B1F12')}
+                style={{
+                  background: status === 'loading' ? '#5A4A38' : '#2B1F12',
+                  color: '#F8F2E4',
+                  border: 'none',
+                  opacity: status === 'loading' ? 0.7 : 1,
+                }}
+                onMouseEnter={(e) => { if (status !== 'loading') (e.currentTarget as HTMLElement).style.background = '#1F1609' }}
+                onMouseLeave={(e) => { if (status !== 'loading') (e.currentTarget as HTMLElement).style.background = '#2B1F12' }}
               >
-                {t('contact.submitBtn')} <ArrowRight size={14} strokeWidth={1.8} />
+                {status === 'loading' ? 'Enviando…' : <>{t('contact.submitBtn')} <ArrowRight size={14} strokeWidth={1.8} /></>}
               </button>
 
               <p
@@ -223,6 +281,7 @@ export function LandingContact() {
                 {t('contact.formNote')}
               </p>
             </form>
+            )}
           </div>
         </div>
       </div>
