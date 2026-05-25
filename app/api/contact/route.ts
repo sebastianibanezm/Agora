@@ -113,7 +113,7 @@ function buildEmailHtml({
                 <tr>
                   <td style="padding:14px 20px;">
                     <p style="margin:0 0 3px;font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:#B5A586;">Volumen de exportaciones</p>
-                    <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#2B1F12;font-weight:500;">${volume} <span style="font-family:'Courier New',Courier,monospace;font-size:11px;color:#8A7860;font-weight:400;">embarques / mes</span></p>
+                    <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#2B1F12;font-weight:500;">${volume} <span style="font-family:'Courier New',Courier,monospace;font-size:11px;color:#8A7860;font-weight:400;">embarques / año</span></p>
                   </td>
                 </tr>
 
@@ -181,7 +181,7 @@ export async function POST(req: NextRequest) {
                 Apellido: lastName,
                 Email: email,
                 Empresa: company,
-                'Volumen (embarques/mes)': volume,
+                'Volumen (embarques/año)': volume,
                 'Enviado el': new Date().toISOString(),
                 Status: 'Todo',
               },
