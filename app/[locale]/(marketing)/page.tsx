@@ -1,4 +1,6 @@
 import type { Metadata } from 'next'
+import { getMessages } from 'next-intl/server'
+import { SITE_URL, LOCALE_URLS } from '@/lib/seo'
 import { LandingHero } from '@/components/landing/LandingHero'
 import { LandingProof } from '@/components/landing/LandingProof'
 import { LandingProblem } from '@/components/landing/LandingProblem'
@@ -10,27 +12,35 @@ import { LandingContact } from '@/components/landing/LandingContact'
 import { LandingFaq } from '@/components/landing/LandingFaq'
 import { LandingFooter } from '@/components/landing/LandingFooter'
 
-export const metadata: Metadata = {
-  title: 'Agora — Export Intelligence para Exportadores',
-  description:
-    'Coordina documentos, detecta excepciones y mantén a tu equipo en contexto. La capa operacional para exportadoras.',
-  openGraph: {
-    title: 'Agora — Export Intelligence para Exportadores',
-    description:
-      'Automatiza tu flujo documental, elimina multas por errores y expedita la cobranza. La plataforma operacional agéntica para exportaciones.',
-    url: 'https://www.agenteagora.com',
-    siteName: 'Agora',
-    images: [{ url: 'https://www.agenteagora.com/og-image.png', width: 1200, height: 630 }],
-    locale: 'es_CL',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Agora — Export Intelligence para Exportadores',
-    description:
-      'Automatiza tu flujo documental, elimina multas por errores y expedita la cobranza.',
-    images: ['https://www.agenteagora.com/og-image.png'],
-  },
+type MetaMessages = {
+  landing: { meta: { title: string; description: string; ogDescription: string } }
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params
+  const messages = (await getMessages({ locale })) as unknown as MetaMessages
+  const meta = messages.landing.meta
+  const canonical = LOCALE_URLS[locale] ?? SITE_URL
+
+  return {
+    title: { absolute: meta.title },
+    description: meta.description,
+    openGraph: {
+      title: meta.title,
+      description: meta.ogDescription,
+      url: canonical,
+      siteName: 'Agora',
+      images: [{ url: `${SITE_URL}/og-image.jpg`, width: 1200, height: 630 }],
+      locale: locale === 'es' ? 'es_CL' : 'en_US',
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: meta.title,
+      description: meta.ogDescription,
+      images: [`${SITE_URL}/og-image.jpg`],
+    },
+  }
 }
 
 export default function LandingPage() {

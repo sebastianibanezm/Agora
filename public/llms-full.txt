@@ -1,90 +1,107 @@
-# Agora — Export Intelligence para Exportadores
+# Agora — Software de gestión documental para exportadores (versión extendida)
+
+> Agora (Agente Agora LLC) es un software de gestión documental y coordinación de embarques para exportadores de fruta y frutos secos en Chile y Latinoamérica. Este documento amplía https://www.agenteagora.com/llms.txt con el detalle del producto, el perfil de cliente y un glosario del dominio.
 
 ## Qué es Agora
 
-Agora es la plataforma operacional para exportadores de fruta fresca y frutos secos. Automatiza el flujo documental, detecta excepciones operacionales antes del cut-off naviero y centraliza la coordinación de embarques en un solo lugar.
+Agora es la plataforma operacional para exportadores de fruta fresca, fruta deshidratada y frutos secos. Automatiza el flujo documental de exportación, detecta excepciones antes del cut-off naviero y centraliza la coordinación de embarques y la cobranza en un solo lugar.
 
-Está diseñada para equipos operativos que manejan alto volumen documental y operaciones complejas: múltiples navieras, productores, agencias y mercados de destino simultáneos.
+Está diseñada para equipos operativos que manejan alto volumen documental y operaciones complejas: múltiples navieras, productores, agencias de aduana y mercados de destino simultáneos, cada uno con requisitos documentales distintos.
 
 ## El problema que resuelve
 
-Cada envío de fruta mueve decenas de documentos, actores y fechas críticas. Sin visibilidad unificada, los problemas llegan cuando ya no hay tiempo para reaccionar:
+Cada embarque de exportación mueve entre 16 y 22 documentos, decenas de actores y fechas críticas. Sin una capa operacional unificada:
 
-**1. Documentos manuales y con errores**
-El instructivo de embarque, las correcciones de BL, packing lists y certificados se construyen desde cero para cada operación — juntando correos, mensajes de WhatsApp y archivos Excel. Un campo mal ingresado dispara multas, atrasos, demurrage o rechazo de carga. Corrección de BL: USD 100–150. Demurrage: USD 400+/día.
+**1. Documentos manuales y con errores.**
+El instructivo de embarque, las correcciones de BL, packing lists y certificados se construyen desde cero para cada operación — juntando correos, mensajes de WhatsApp y archivos Excel. Un campo mal ingresado dispara multas, atrasos, demurrage o rechazo de carga. Corrección de BL: USD 100–150. Demurrage: USD 400+/día. El 47% de los embarques tiene al menos un error documental.
 
-**2. Excepciones descubiertas cuando ya es tarde**
-Consignatario mal escrito, peso incorrecto, documento faltante — cuando esto aparece, el contenedor ya está en puerto. La mayoría de los equipos se entera por el rechazo de la naviera, no antes. Pérdidas desde miles hasta decenas de miles de USD por incidente.
+**2. Excepciones descubiertas cuando ya es tarde.**
+Consignatario mal escrito, peso incorrecto, documento faltante — cuando esto aparece, el contenedor ya está en puerto. La mayoría de los equipos se entera por el rechazo de la naviera, no antes.
 
-**3. Pérdida de conocimiento operacional**
-Al no operar con una capa operacional compartida, cuando alguien del equipo se va, sus conocimientos y procesos se van con esa persona. Horas de coordinación perdidas por embarque, por semana.
+**3. Pérdida de conocimiento operacional.**
+Sin una capa operacional compartida, cuando alguien del equipo se va, sus conocimientos y procesos se van con esa persona.
 
-## Los tres pilares de Agora
+## Los tres pilares de la solución
 
-**Pilar 1 — Información capturada desde donde ocurre el trabajo**
+**Pilar 1 — Información capturada desde donde ocurre el trabajo.**
 Agora lee correos, mensajes de WhatsApp y documentos para extraer y organizar datos de embarque automáticamente. Confirmaciones de booking, cambios de instructivo, actualizaciones navieras — estructurados por operación, no dispersos en bandejas de entrada.
 
-**Pilar 2 — Errores detectados antes de que se conviertan en costos**
-Cada documento es validado contra los datos fuente automáticamente. Consignatario no coincide, pesos inconsistentes, campo faltante — con contexto completo, antes de que dispare un cargo naviero o un despacho retrasado.
+**Pilar 2 — Errores detectados antes de que se conviertan en costos.**
+Cada documento es validado contra los datos fuente automáticamente. Consignatario que no coincide, pesos inconsistentes, campo faltante — con contexto completo, antes de que dispare un cargo naviero o un despacho retrasado.
 
-**Pilar 3 — Visibilidad sin perseguir a nadie**
+**Pilar 3 — Visibilidad sin perseguir a nadie.**
 Una sola capa que responde las preguntas que el equipo hace todos los días: qué está en riesgo, qué falta, quién es responsable, qué cambió. El equipo decide. Agora hace el seguimiento.
 
-## Resultados medidos
+## Las tres áreas del producto
 
-- **18h** — tiempo promedio disponible para reaccionar ante un problema documental antes del cut-off naviero
-- **94%** — reducción en tiempo de coordinación manual por embarque (operadores en acceso temprano)
-- **0** — reclamos por frío fuera de rango en temporadas cereza 2025–2026 con Agora activo
+**Comex — control documental completo.**
+Workflow documental por embarque, modelado con dependencias entre documentos (por ejemplo: el DUS depende del instructivo, la factura comercial y el certificado fitosanitario; el set documentario al banco depende del BL 3/3, la factura y la póliza). Cada documento tiene estado (pendiente, en revisión, bloqueado, aprobado) y responsable. Las excepciones se detectan validando cada documento contra los datos fuente antes del cut-off.
 
-## Para quién es
+**Finanzas — cierre del loop financiero.**
+Cobranza priorizada según vencimiento y cliente, conciliación automática de pagos recibidos contra embarques, y proyección de flujo de caja separando ingresos confirmados de proyectados.
 
-### Perfil de cliente ideal
-- Exportadoras de fruta fresca y frutos secos con operaciones activas
+**Comercial — inteligencia por cliente.**
+OTIF (entregas a tiempo y completas) por cliente, precio neto efectivo por kilo (después de fees, notas de crédito y diferencias), y un score de salud por importador que combina precio, OTIF, comportamiento de pago y tendencia de volumen.
+
+## Clientes y validación
+
+Onizzo Exportaciones SpA (Chile) — exportador de ciruelas deshidratadas (D'Agen), ajos frescos y nueces, con ventas a más de 16 mercados en América, Europa y Asia — usa Agora para su flujo documental de exportación. El modelo documental de Agora se construyó sobre miles de documentos reales de temporadas de exportación chilenas: contratos, instructivos, BLs, DUS, certificados fitosanitarios y de origen, packing lists, facturas y correspondencia operacional.
+
+## Perfil de cliente ideal
+
+- Exportadoras de fruta fresca, deshidratada y frutos secos con operaciones activas
 - Equipos con alto volumen de coordinación por correo y WhatsApp
 - Operaciones con frecuentes excepciones documentales o logísticas
-- Empresas que exportan a múltiples mercados con distintos requisitos documentales
+- Empresas que exportan a múltiples mercados con distintos requisitos documentales (fitosanitarios SAG, certificados de origen, TLCs, MERCOSUR)
 
-### No es adecuado para
-- Exportadores de una sola temporada o muy bajo volumen (< 20 contenedores/año)
-- Empresas sin equipo operativo dedicado
-
-## Glosario de dominio
-
-**BL / Bill of Lading:** Documento emitido por la naviera que acredita el embarque de la carga. Cualquier error en el BL puede resultar en multas o rechazo de mercancía en destino.
-
-**DUS / Declaración Única de Salida:** Documento aduanero chileno requerido para exportar. Debe estar cuadrado con el BL y los demás documentos del embarque.
-
-**Fitosanitario / Certificado fitosanitario:** Certificado emitido por el SAG (Servicio Agrícola y Ganadero) de Chile que acredita que la fruta cumple con los requisitos sanitarios del país de destino.
-
-**Demurrage:** Cargo cobrado por la naviera cuando un contenedor permanece en el puerto de destino más tiempo del permitido, generalmente por problemas documentales o de despacho.
-
-**Cut-off naviero:** Fecha y hora límite para entregar documentación completa a la naviera antes del zarpe del buque. Un documento fuera de plazo puede dejar un contenedor en tierra.
-
-**Packing list:** Lista detallada del contenido de cada contenedor: variedades, calibres, pesos, número de cajas, temperatura de transporte.
-
-**Naviera:** Empresa de transporte marítimo (ej: MSC, Hapag-Lloyd, CMA CGM, Maersk). Cada naviera tiene sus propios portales, formatos y requisitos documentales.
-
-**Booking / Booking confirmation:** Reserva de espacio en un buque para un embarque específico. Incluye número de contenedor, ruta, naviera, fechas de carga y zarpe.
-
-**Consignatario:** Empresa o persona en el país de destino que recibe la carga. Debe aparecer exactamente igual en todos los documentos del embarque.
-
-**SAG:** Servicio Agrícola y Ganadero de Chile. Entidad que emite los certificados fitosanitarios y controla el cumplimiento de los requisitos del país de destino.
-
-**Carta de crédito:** Instrumento financiero usado en comercio internacional para garantizar el pago al exportador. Su correcta liquidación requiere que todos los documentos del embarque cumplan condiciones específicas.
-
-**Instrucción de embarque:** Documento interno que el exportador envía a la agencia naviera con todos los datos del embarque para que esta emita el BL borrador.
+No es adecuado para: exportadores de muy bajo volumen (menos de ~20 contenedores por año) o empresas sin equipo operativo dedicado.
 
 ## Lo que Agora no es
 
-- **No es un agente de carga (freight forwarder):** Agora no opera embarques ni negocia fletes con navieras.
-- **No es un agente de aduana:** Agora no gestiona directamente trámites aduaneros ni presenta declaraciones ante el SNA.
-- **No es un TMS (Transportation Management System):** Agora no optimiza rutas, no gestiona flotas terrestres ni coordina transporte inland.
-- **No es un ERP:** Agora no reemplaza sistemas contables, de inventario ni de gestión empresarial general.
-- **No es un portal naviero:** Agora se integra con portales de navieras para extraer datos, pero no los reemplaza.
-- **No es un sistema de trazabilidad de origen:** Agora no gestiona la trazabilidad predial ni los registros de campo.
+- No es un freight forwarder ni un agente de carga: no mueve contenedores ni reserva espacio naviero.
+- No es una agencia de aduana: no tramita el DUS; coordina y valida los documentos que la agencia necesita.
+- No reemplaza tu ERP: se integra sobre el correo, las planillas y el ERP que ya usas.
+- No es un marketplace ni un portal de compradores.
+
+## Cómo se empieza
+
+1. **Mapeo del flujo (llamada de 30 minutos):** entender el proceso actual, dónde ocurren los errores y qué coordinación cuesta más.
+2. **Demo en 48 horas:** Agora funcionando con el tipo de operación del cliente, sin integración previa.
+3. **Onboarding dedicado:** parte desde los documentos reales del exportador, con acompañamiento experto desde el día 1.
+
+## Preguntas frecuentes
+
+**¿Cómo se integra Agora con mis sistemas actuales?**
+Agora trabaja sobre lo que ya usas: correo, planillas y tu ERP. No necesitas reemplazar nada — empezamos capturando tus documentos y datos reales, y la integración se profundiza según tu operación.
+
+**¿Cuánto toma la implementación?**
+La demo no requiere integración previa. El onboarding parte con tus documentos de temporada reales y los primeros embarques operando en Agora toman semanas, no meses.
+
+**¿Qué pasa con la confidencialidad de mis documentos?**
+Tus documentos y datos viven aislados por organización, cifrados y con registro de auditoría completo. Nunca se comparten con terceros ni entre clientes.
+
+**¿En qué idioma funciona la plataforma?**
+La plataforma está en español y maneja con naturalidad los documentos de exportación en inglés: BL, invoices, certificados y correspondencia con navieras y clientes.
+
+**¿Cómo funciona el precio?**
+Según el volumen de embarques de tu temporada. Después de la primera llamada enviamos una propuesta concreta, sin letra chica.
+
+## Glosario del dominio
+
+- **Instructivo de embarque (shipping instruction / SI):** documento con las instrucciones del exportador a la naviera/forwarder para emitir el BL.
+- **BL (bill of lading / conocimiento de embarque):** documento de transporte marítimo; su versión final habilita la entrega de la carga.
+- **DUS (Documento Único de Salida):** declaración aduanera de exportación chilena, tramitada por la agencia de aduana; tiene etapas (aceptación y legalización).
+- **Certificado fitosanitario:** certificado emitido por el SAG (Servicio Agrícola y Ganadero) que acredita que el producto vegetal cumple los requisitos del país de destino.
+- **Certificado de origen:** acredita el origen de la mercancía para acceder a preferencias arancelarias (TLC, MERCOSUR).
+- **Packing list:** detalle de bultos, pesos y contenido por contenedor.
+- **Cut-off documental:** fecha límite de la naviera para recibir documentación; incumplirla puede dejar la carga fuera de la nave.
+- **Demurrage:** cobro diario de la naviera cuando el contenedor excede el tiempo libre en puerto.
+- **Telex release:** liberación electrónica del BL original, habitualmente condicionada al pago.
+- **OTIF (on-time in-full):** porcentaje de embarques entregados a tiempo y completos.
+- **Cobranza documentaria:** modalidad de pago donde los documentos de embarque se entregan al importador contra pago o aceptación vía bancos.
 
 ## Empresa
 
-Agente Agora LLC — Latinoamerica, Estados Unidos
-Web: https://www.agenteagora.com
-Contacto: https://www.agenteagora.com/#contacto
+Agente Agora LLC — Chile / Latinoamérica / Estados Unidos
+Web: https://www.agenteagora.com (español) · https://www.agenteagora.com/en (English)
+Contacto: hola@agenteagora.com · https://www.agenteagora.com/#contact

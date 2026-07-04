@@ -38,9 +38,9 @@ describe('llms-full.txt', () => {
   })
 
   it('includes concrete stats', () => {
-    expect(llmsFull).toMatch(/18h/)
-    expect(llmsFull).toMatch(/94%/)
-    expect(llmsFull).toMatch(/cereza 2025/)
+    expect(llmsFull).toMatch(/47%/)
+    expect(llmsFull).toMatch(/USD 400/)
+    expect(llmsFull).toMatch(/16 y 22|16–22/)
   })
 
   it('includes a domain glossary', () => {

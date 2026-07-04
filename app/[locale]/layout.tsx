@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import { hasLocale, NextIntlClientProvider } from 'next-intl'
 import { getMessages, setRequestLocale } from 'next-intl/server'
 import { routing } from '@/i18n/routing'
+import { SITE_URL, LOCALE_URLS } from '@/lib/seo'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' })
 const mono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono', display: 'swap' })
@@ -16,47 +17,69 @@ const oldStandard = Old_Standard_TT({
   display: 'swap',
 })
 
-export const metadata: Metadata = {
-  metadataBase: new URL('https://www.agenteagora.com'),
-  title: {
-    default: 'Agora — Export Intelligence para Exportadores',
-    template: '%s | Agora',
-  },
-  description:
-    'Agora es la plataforma operacional para exportadores de fruta y frutos secos. Automatiza documentos, detecta excepciones antes del cut-off y da visibilidad en tiempo real a todo tu equipo.',
-  keywords: [
-    'exportaciones Chile',
-    'plataforma exportaciones',
-    'export intelligence',
-    'documentos exportación',
-    'fruta exportación',
-    'logística exportaciones',
-    'BL',
+const KEYWORDS: Record<string, string[]> = {
+  es: [
+    'software gestión documental exportación',
+    'software para exportadores',
+    'documentos de exportación',
+    'instructivo de embarque',
+    'software comercio exterior Chile',
+    'exportación fruta Chile',
     'bill of lading',
-    'shipment intelligence',
+    'DUS',
+    'certificado fitosanitario',
   ],
-  alternates: {
-    canonical: 'https://www.agenteagora.com',
-    languages: {
-      es: 'https://www.agenteagora.com',
-      en: 'https://www.agenteagora.com',
+  en: [
+    'export document management software',
+    'export documentation platform',
+    'shipping instruction software',
+    'fruit export software',
+    'bill of lading management',
+  ],
+}
+
+type MetaMessages = {
+  landing: { meta: { title: string; titleDefault: string; description: string; ogDescription: string } }
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params
+  const messages = (await getMessages({ locale })) as unknown as MetaMessages
+  const meta = messages.landing.meta
+  const canonical = LOCALE_URLS[locale] ?? SITE_URL
+
+  return {
+    metadataBase: new URL(SITE_URL),
+    title: {
+      default: meta.titleDefault,
+      template: '%s | Agora',
     },
-  },
-  openGraph: {
-    title: 'Agora — Export Intelligence para Exportadores',
-    description:
-      'Plataforma operacional para exportadores de fruta y frutos secos. Automatiza documentos, detecta excepciones antes del cut-off y da visibilidad en tiempo real a todo tu equipo.',
-    images: [{ url: 'https://www.agenteagora.com/og-image.png', width: 1200, height: 630 }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Agora — Export Intelligence para Exportadores',
-    description:
-      'Plataforma operacional para exportadores de fruta y frutos secos. Automatiza documentos, detecta excepciones antes del cut-off y da visibilidad en tiempo real a todo tu equipo.',
-    images: ['https://www.agenteagora.com/og-image.png'],
-  },
-  // Replace the empty string with your Google Search Console verification code after setup
-  // verification: { google: 'PASTE_GSC_CODE_HERE' },
+    description: meta.description,
+    keywords: KEYWORDS[locale] ?? KEYWORDS.es,
+    alternates: {
+      canonical,
+      languages: {
+        es: LOCALE_URLS.es,
+        en: LOCALE_URLS.en,
+        'x-default': LOCALE_URLS.es,
+      },
+    },
+    openGraph: {
+      title: meta.titleDefault,
+      description: meta.ogDescription,
+      url: canonical,
+      siteName: 'Agora',
+      images: [{ url: `${SITE_URL}/og-image.jpg`, width: 1200, height: 630 }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: meta.titleDefault,
+      description: meta.ogDescription,
+      images: [`${SITE_URL}/og-image.jpg`],
+    },
+    // Replace the empty string with your Google Search Console verification code after setup
+    // verification: { google: 'PASTE_GSC_CODE_HERE' },
+  }
 }
 
 export function generateStaticParams() {

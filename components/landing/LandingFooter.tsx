@@ -22,7 +22,9 @@ export function LandingFooter() {
   function toggleLocale() {
     const next = locale === 'es' ? 'en' : 'es'
     document.cookie = `AGORA_LOCALE=${next}; path=/; samesite=lax`
-    router.replace(pathname)
+    // localePrefix 'as-needed': es lives at /, en under /en
+    const basePath = pathname.replace(/^\/en(?=\/|$)/, '') || '/'
+    router.replace(next === 'en' ? `/en${basePath === '/' ? '' : basePath}` : basePath)
     router.refresh()
   }
 

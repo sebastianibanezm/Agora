@@ -681,6 +681,12 @@
       "a4": "The platform is in Spanish and handles English export documents natively: BLs, invoices, certificates, and correspondence with carriers and clients.",
       "q5": "How does pricing work?",
       "a5": "Based on your season's shipment volume. After the first call we send you a concrete proposal — no fine print."
+    },
+    "meta": {
+      "title": "Export document management software for exporters | Agora",
+      "titleDefault": "Agora — The operational platform for exporters",
+      "description": "Automate your export documents —shipping instructions, BLs, customs declarations, certificates—, catch errors before the carrier cut-off and speed up collections. Built for fruit and nut exporters. Book a demo.",
+      "ogDescription": "The platform that automates your export document workflow: fewer penalties, less demurrage, faster collections."
     }
   }
 }

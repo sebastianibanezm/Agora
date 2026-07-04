@@ -18,7 +18,9 @@ export function LandingNav() {
     // AGORA_LOCALE is the project-configured cookie name in i18n/routing.ts
     // (localeCookie: { name: 'AGORA_LOCALE', sameSite: 'lax' })
     document.cookie = `AGORA_LOCALE=${next}; path=/; samesite=lax`
-    router.replace(pathname)
+    // localePrefix 'as-needed': es lives at /, en under /en
+    const basePath = pathname.replace(/^\/en(?=\/|$)/, '') || '/'
+    router.replace(next === 'en' ? `/en${basePath === '/' ? '' : basePath}` : basePath)
     router.refresh()
   }
 

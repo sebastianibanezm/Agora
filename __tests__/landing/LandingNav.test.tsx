@@ -52,7 +52,7 @@ describe('LandingNav', () => {
     render(<LandingNav />)
     const toggleBtn = screen.getByRole('button', { name: /ES\s*\/\s*EN/i })
     fireEvent.click(toggleBtn)
-    expect(mockReplace).toHaveBeenCalledWith('/')
+    expect(mockReplace).toHaveBeenCalledWith('/en')
     expect(mockRefresh).toHaveBeenCalled()
   })
 })

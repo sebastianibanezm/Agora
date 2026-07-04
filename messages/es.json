@@ -681,6 +681,12 @@
       "a4": "La plataforma está en español y maneja con naturalidad los documentos de exportación en inglés: BL, invoices, certificados y correspondencia con navieras y clientes.",
       "q5": "¿Cómo funciona el precio?",
       "a5": "Según el volumen de embarques de tu temporada. Después de la primera llamada te enviamos una propuesta concreta, sin letra chica."
+    },
+    "meta": {
+      "title": "Software de gestión documental para exportadores | Agora",
+      "titleDefault": "Agora — Plataforma operacional para exportadores",
+      "description": "Automatiza los documentos de exportación —instructivo de embarque, BL, DUS, certificados—, detecta errores antes del cut-off naviero y acelera la cobranza. Hecho para exportadores de fruta y frutos secos. Agenda una demo.",
+      "ogDescription": "La plataforma que automatiza el flujo documental de tus exportaciones: menos multas, menos demurrage, cobranza más rápida."
     }
   }
 }

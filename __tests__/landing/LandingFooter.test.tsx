@@ -54,7 +54,7 @@ describe('LandingFooter', () => {
     render(<LandingFooter />)
     const toggleBtn = screen.getByRole('button')
     fireEvent.click(toggleBtn)
-    expect(mockReplace).toHaveBeenCalledWith('/')
+    expect(mockReplace).toHaveBeenCalledWith('/en')
     expect(mockRefresh).toHaveBeenCalled()
   })
 })
