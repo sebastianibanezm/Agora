@@ -12,6 +12,7 @@ vi.mock('@/components/landing/LandingHowItWorks', () => ({ LandingHowItWorks: ()
 vi.mock('@/components/landing/LandingCtaBand', () => ({ LandingCtaBand: () => <div data-testid="landing-cta-band" /> }))
 vi.mock('@/components/landing/LandingContact', () => ({ LandingContact: () => <div data-testid="landing-contact" /> }))
 vi.mock('@/components/landing/LandingFaq', () => ({ LandingFaq: () => <div data-testid="landing-faq" /> }))
+vi.mock('@/components/landing/LandingResources', () => ({ LandingResources: () => <div data-testid="landing-resources" /> }))
 vi.mock('@/components/landing/LandingFooter', () => ({ LandingFooter: () => <div data-testid="landing-footer" /> }))
 
 const SECTION_IDS = [
@@ -24,6 +25,7 @@ const SECTION_IDS = [
   'landing-how-it-works',
   'landing-contact',
   'landing-faq',
+  'landing-resources',
 ] as const
 
 describe('LandingPage', () => {

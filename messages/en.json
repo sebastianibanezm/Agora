@@ -640,7 +640,8 @@
       "linkHow": "How it works",
       "linkFaq": "FAQ",
       "madeIn": "From Chile for Latin America",
-      "email": "hola@agenteagora.com"
+      "email": "hola@agenteagora.com",
+      "linkResources": "Resources"
     },
     "proof": {
       "eyebrow": "Trusted by",
@@ -687,6 +688,16 @@
       "titleDefault": "Agora — The operational platform for exporters",
       "description": "Automate your export documents —shipping instructions, BLs, customs declarations, certificates—, catch errors before the carrier cut-off and speed up collections. Built for fruit and nut exporters. Book a demo.",
       "ogDescription": "The platform that automates your export document workflow: fewer penalties, less demurrage, faster collections."
+    },
+    "resources": {
+      "eyebrow": "Resources",
+      "title": "Analysis for exporters",
+      "featuredLabel": "New analysis",
+      "articleTitle": "Ley 21.719: the new regulation forcing Chilean agro-exporters to get their data in order",
+      "articleHook": "Chile's new data protection law takes effect December 1, 2026, with fines up to 20,000 UTM. What it means for exporters and packing plants — and where to start. (Article in Spanish.)",
+      "cta": "Read the analysis",
+      "hubCta": "Browse all resources",
+      "heroAlt": "Container terminal with export containers at sunset"
     }
   }
 }

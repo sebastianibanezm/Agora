@@ -3,6 +3,7 @@ import { LandingProof } from '@/components/landing/LandingProof'
 import { LandingHowItWorks } from '@/components/landing/LandingHowItWorks'
 import { LandingCtaBand } from '@/components/landing/LandingCtaBand'
 import { LandingFaq } from '@/components/landing/LandingFaq'
+import { LandingResources } from '@/components/landing/LandingResources'
 
 vi.mock('next-intl', () => ({ useTranslations: () => (key: string) => key }))
 vi.mock('next/image', () => ({ default: (props: { alt: string }) => <img alt={props.alt} /> }))
@@ -54,5 +55,14 @@ describe('LandingFaq', () => {
     const first = container.querySelector('details')!
     first.open = true
     expect(screen.getByText('a1')).toBeInTheDocument()
+  })
+})
+
+describe('LandingResources', () => {
+  it('renders the featured article card linking to the Ley 21.719 analysis', () => {
+    render(<LandingResources />)
+    const card = screen.getByText('articleTitle').closest('a')
+    expect(card).toHaveAttribute('href', '/recursos/ley-21719-proteccion-de-datos-agro')
+    expect(screen.getByText('hubCta').closest('a')).toHaveAttribute('href', '/recursos')
   })
 })

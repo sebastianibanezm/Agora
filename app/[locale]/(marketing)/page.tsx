@@ -10,6 +10,7 @@ import { LandingHowItWorks } from '@/components/landing/LandingHowItWorks'
 import { LandingCtaBand } from '@/components/landing/LandingCtaBand'
 import { LandingContact } from '@/components/landing/LandingContact'
 import { LandingFaq } from '@/components/landing/LandingFaq'
+import { LandingResources } from '@/components/landing/LandingResources'
 import { LandingFooter } from '@/components/landing/LandingFooter'
 
 type MetaMessages = {
@@ -56,6 +57,7 @@ export default function LandingPage() {
         <LandingHowItWorks />
         <LandingContact />
         <LandingFaq />
+        <LandingResources />
       </main>
       <LandingFooter />
     </>

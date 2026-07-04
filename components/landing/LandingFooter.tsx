@@ -8,6 +8,7 @@ import { useRouter, usePathname } from 'next/navigation'
 
 const PLATFORM_LINKS = [
   { key: 'linkSolutions', href: '#solutions' },
+  { key: 'linkResources', href: '/recursos' },
   { key: 'linkPlatform', href: '#product' },
   { key: 'linkHow', href: '#how-it-works' },
   { key: 'linkFaq', href: '#faq' },
