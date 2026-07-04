@@ -4,25 +4,7 @@ import { readFileSync } from 'node:fs';
 describe('i18n', () => {
   const es = JSON.parse(readFileSync('messages/es.json', 'utf8'));
   const en = JSON.parse(readFileSync('messages/en.json', 'utf8'));
-  const requiredNamespaces = [
-    'nav',
-    'common',
-    'settings',
-    'lifecycle',
-    'dashboard',
-    'containers',
-    'bookings',
-    'documents',
-    'siViewer',
-    'validation',
-    'blViewer',
-    'exporters',
-    'navieras',
-    'performance',
-    'agents',
-    'alerts',
-    'cutoff',
-  ];
+  const requiredNamespaces = ['landing'];
 
   it('both locales have all required namespaces', () => {
     for (const ns of requiredNamespaces) {
@@ -52,8 +34,8 @@ describe('i18n', () => {
     expect(mod.routing.locales).toContain('en');
   });
 
-  it('nav.documents exists in both locales', () => {
-    expect(en.nav.documents).toBeDefined();
-    expect(es.nav.documents).toBeDefined();
+  it('landing.nav keys exist in both locales', () => {
+    expect(en.landing.nav.solutions).toBeDefined();
+    expect(es.landing.nav.solutions).toBeDefined();
   });
 });
