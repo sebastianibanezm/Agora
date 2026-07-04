@@ -4,36 +4,44 @@ import LandingPage from '@/app/[locale]/(marketing)/page'
 
 // Mock all landing components
 vi.mock('@/components/landing/LandingHero', () => ({ LandingHero: () => <div data-testid="landing-hero" /> }))
-vi.mock('@/components/landing/LandingEcosystem', () => ({ LandingEcosystem: () => <div data-testid="landing-ecosystem" /> }))
+vi.mock('@/components/landing/LandingProof', () => ({ LandingProof: () => <div data-testid="landing-proof" /> }))
 vi.mock('@/components/landing/LandingProblem', () => ({ LandingProblem: () => <div data-testid="landing-problem" /> }))
 vi.mock('@/components/landing/LandingPillars', () => ({ LandingPillars: () => <div data-testid="landing-pillars" /> }))
 vi.mock('@/components/landing/LandingProduct', () => ({ LandingProduct: () => <div data-testid="landing-product" /> }))
-vi.mock('@/components/landing/LandingStats', () => ({ LandingStats: () => <div data-testid="landing-stats" /> }))
+vi.mock('@/components/landing/LandingHowItWorks', () => ({ LandingHowItWorks: () => <div data-testid="landing-how-it-works" /> }))
+vi.mock('@/components/landing/LandingCtaBand', () => ({ LandingCtaBand: () => <div data-testid="landing-cta-band" /> }))
 vi.mock('@/components/landing/LandingContact', () => ({ LandingContact: () => <div data-testid="landing-contact" /> }))
+vi.mock('@/components/landing/LandingFaq', () => ({ LandingFaq: () => <div data-testid="landing-faq" /> }))
 vi.mock('@/components/landing/LandingFooter', () => ({ LandingFooter: () => <div data-testid="landing-footer" /> }))
 
+const SECTION_IDS = [
+  'landing-hero',
+  'landing-proof',
+  'landing-problem',
+  'landing-pillars',
+  'landing-product',
+  'landing-how-it-works',
+  'landing-cta-band',
+  'landing-contact',
+  'landing-faq',
+] as const
+
 describe('LandingPage', () => {
-  it('renders all 7 landing sections', async () => {
-    render(await LandingPage())
-    expect(screen.getByTestId('landing-hero')).toBeInTheDocument()
-    expect(screen.getByTestId('landing-problem')).toBeInTheDocument()
-    expect(screen.getByTestId('landing-pillars')).toBeInTheDocument()
-    expect(screen.getByTestId('landing-product')).toBeInTheDocument()
-    expect(screen.getByTestId('landing-stats')).toBeInTheDocument()
-    expect(screen.getByTestId('landing-contact')).toBeInTheDocument()
-    expect(screen.getByTestId('landing-footer')).toBeInTheDocument()
+  it('renders all 9 landing sections in order', async () => {
+    const { container } = render(await LandingPage())
+    const rendered = Array.from(container.querySelectorAll('[data-testid^="landing-"]')).map(
+      (el) => el.getAttribute('data-testid')
+    )
+    expect(rendered).toEqual([...SECTION_IDS, 'landing-footer'])
   })
 
-  it('wraps sections 2-7 in a main element', async () => {
+  it('wraps all sections in a main element', async () => {
     const { container } = render(await LandingPage())
     const main = container.querySelector('main')
     expect(main).toBeInTheDocument()
-    expect(main).toContainElement(screen.getByTestId('landing-hero'))
-    expect(main).toContainElement(screen.getByTestId('landing-problem'))
-    expect(main).toContainElement(screen.getByTestId('landing-pillars'))
-    expect(main).toContainElement(screen.getByTestId('landing-product'))
-    expect(main).toContainElement(screen.getByTestId('landing-stats'))
-    expect(main).toContainElement(screen.getByTestId('landing-contact'))
+    for (const id of SECTION_IDS) {
+      expect(main).toContainElement(screen.getByTestId(id))
+    }
   })
 
   it('renders footer outside main', async () => {

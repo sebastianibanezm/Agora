@@ -1,71 +1,10 @@
 'use client'
 
-import React, { useState } from 'react'
+import React from 'react'
 import { useTranslations } from 'next-intl'
 import { ReceiptText, Check, TrendingUp, BarChart2, DollarSign, Activity } from 'lucide-react'
-import { ParallaxImage } from './ParallaxImage'
-import { useFadeIn } from '@/hooks/useFadeIn'
-
-type Tab = 'comex' | 'finanzas' | 'comercial'
-
-// ── Comex visual: document checklist ─────────────────────────────
-function ComexVisual() {
-  const docs = [
-    { name: 'Instructivo COMEX', status: 'ok' as const,      label: '✓ Enviado'  },
-    { name: 'Draft BL',          status: 'warn' as const,    label: '⚠ Revisar'  },
-    { name: 'Certificado SAG',   status: 'ok' as const,      label: '✓ Emitido'  },
-    { name: 'Certificado de Origen', status: 'pending' as const, label: 'Pendiente' },
-    { name: 'Packing List',      status: 'ok' as const,      label: '✓ Listo'    },
-  ]
-
-  const statusStyle = {
-    ok:      { bg: 'rgba(79,122,60,0.10)',  color: '#4F7A3C', border: 'rgba(60,42,22,0.08)'      },
-    warn:    { bg: 'rgba(185,122,31,0.12)', color: '#B97A1F', border: 'rgba(185,122,31,0.22)'    },
-    pending: { bg: 'rgba(60,42,22,0.06)',   color: '#8A7860', border: 'rgba(60,42,22,0.08)'      },
-  }
-
-  return (
-    <div
-      className="rounded-[16px] p-6"
-      style={{ background: '#FCF7EA', border: '1px solid rgba(60,42,22,0.08)', boxShadow: '0 8px 32px rgba(43,31,18,0.08)' }}
-    >
-      <p
-        className="text-[10px] uppercase tracking-[0.06em] mb-4"
-        style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860' }}
-      >
-        Embarque BK-2024-0841 · Activo
-      </p>
-      <div className="flex flex-col gap-[6px]">
-        {docs.map((doc) => {
-          const s = statusStyle[doc.status]
-          return (
-            <div
-              key={doc.name}
-              className="flex items-center justify-between rounded-[8px] px-[12px] py-[10px]"
-              style={{ background: '#FFFCF1', border: `1px solid ${s.border}` }}
-            >
-              <span style={{ fontSize: '12px', color: '#5A4A38' }}>{doc.name}</span>
-              <span
-                className="inline-flex items-center px-[8px] py-[2px] rounded-full"
-                style={{
-                  background: s.bg,
-                  color: s.color,
-                  fontFamily: 'var(--font-family-mono)',
-                  fontSize: '9px',
-                  fontWeight: 600,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.08em',
-                }}
-              >
-                {doc.label}
-              </span>
-            </div>
-          )
-        })}
-      </div>
-    </div>
-  )
-}
+import { useReveal } from '@/hooks/useReveal'
+import { BrowserFrame } from './BrowserFrame'
 
 // ── Financial visual: cobranza pipeline + reconciliation ──────────
 function FinancialVisual() {
@@ -233,12 +172,6 @@ function ComercialVisual() {
 }
 
 // ── Feature lists ─────────────────────────────────────────────────
-const TAB_KEY_MAP = {
-  comex:     'product.tabComex',
-  finanzas:  'product.tabFinanzas',
-  comercial: 'product.tabComercial',
-} as const
-
 const FINANZAS_FEATURES = [
   { labelKey: 'product.finanzas1Label' as const, bodyKey: 'product.finanzas1Body' as const, Icon: ReceiptText },
   { labelKey: 'product.finanzas2Label' as const, bodyKey: 'product.finanzas2Body' as const, Icon: Check },
@@ -251,29 +184,94 @@ const COMERCIAL_FEATURES = [
   { labelKey: 'product.comercial3Label' as const, bodyKey: 'product.comercial3Body' as const, Icon: Activity },
 ]
 
+function BlockHeader({ label, hed, lede }: { label: string; hed: string; lede: string }) {
+  return (
+    <>
+      <span
+        className="inline-flex items-center gap-2 mb-4 text-[10px] uppercase tracking-[0.14em] px-3 py-[5px] rounded-full"
+        style={{
+          fontFamily: 'var(--font-family-mono)',
+          color: '#5A4A38',
+          background: '#F1E8D5',
+          border: '1px solid rgba(60,42,22,0.10)',
+        }}
+      >
+        {label}
+      </span>
+      <h3
+        className="italic font-normal mt-0 mb-3"
+        style={{
+          fontFamily: 'var(--font-family-display)',
+          fontSize: 'clamp(24px, 2.2vw, 32px)',
+          lineHeight: 1.1,
+          color: '#2B1F12',
+        }}
+      >
+        {hed}
+      </h3>
+      <p
+        className="m-0 mb-6"
+        style={{ fontSize: '14.5px', color: '#5A4A38', lineHeight: 1.65, maxWidth: '46ch' }}
+      >
+        {lede}
+      </p>
+    </>
+  )
+}
+
+type FeatureItem = { label: string; body: string; Icon: React.ElementType }
+
+function FeatureRows({ items }: { items: FeatureItem[] }) {
+  return (
+    <div className="flex flex-col">
+      {items.map(({ label, body, Icon }, index) => (
+        <div
+          key={label}
+          className="flex gap-5 py-6"
+          style={index > 0 ? { borderTop: '1px solid rgba(60,42,22,0.06)' } : undefined}
+        >
+          <div
+            className="w-[36px] h-[36px] rounded-[8px] flex items-center justify-center flex-shrink-0 mt-[2px]"
+            style={{ background: '#F0E8D8', border: '1px solid rgba(60,42,22,0.10)' }}
+          >
+            <Icon size={16} strokeWidth={1.5} style={{ color: '#5A4A38' }} />
+          </div>
+          <div>
+            <div
+              className="font-medium mb-[6px]"
+              style={{ fontSize: '15px', color: '#2B1F12', lineHeight: 1.3 }}
+            >
+              {label}
+            </div>
+            <p className="m-0" style={{ fontSize: '14px', color: '#5A4A38', lineHeight: 1.65 }}>
+              {body}
+            </p>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 // ── Main component ────────────────────────────────────────────────
 export function LandingProduct() {
   const t = useTranslations('landing')
-  const ref = useFadeIn()
-  const [activeTab, setActiveTab] = useState<Tab>('comex')
+  const headRef = useReveal<HTMLDivElement>(0.15)
+  const comexRef = useReveal<HTMLDivElement>(0.15)
+  const finanzasRef = useReveal<HTMLDivElement>(0.15)
+  const comercialRef = useReveal<HTMLDivElement>(0.15)
 
   return (
     <section
-      ref={ref}
       id="product"
       className="py-[120px]"
-      style={{
-        borderTop: '1px solid rgba(60,42,22,0.08)',
-        opacity: 0,
-        transform: 'translateY(44px)',
-        transition: 'opacity 0.72s cubic-bezier(0.23,1,0.32,1), transform 0.72s cubic-bezier(0.23,1,0.32,1)',
-      }}
+      style={{ borderTop: '1px solid rgba(60,42,22,0.08)' }}
     >
       <div className="max-w-[1160px] mx-auto px-5 sm:px-8 lg:px-12">
 
-        {/* Section header: text left, parallax image right */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center mb-16">
-          <div>
+        {/* Section head + real product screenshot */}
+        <div ref={headRef} className="reveal mb-24">
+          <div className="max-w-[720px] mb-14 stagger-item">
             <span
               className="block mb-3 text-[10px] uppercase tracking-[0.18em]"
               style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860' }}
@@ -295,207 +293,91 @@ export function LandingProduct() {
               {t('product.titleLine2')}
             </h2>
             <p
-              className="text-[16px] leading-[1.65] m-0 mt-8"
+              className="text-[16px] leading-[1.65] m-0 mt-6"
               style={{ color: '#5A4A38', maxWidth: '52ch' }}
             >
               {t('product.lede')}
             </p>
           </div>
-
-          <div className="relative w-full">
-            <ParallaxImage
-              variant="frame"
-              src="/landing/platform-bg.png"
-              objectPosition="center 25%"
-              strength={0.12}
-              style={{
-                borderRadius: '16px',
-                aspectRatio: '4 / 3',
-                boxShadow: '0 24px 64px rgba(43,31,18,0.18), 0 0 0 1px rgba(43,31,18,0.06)',
-              }}
-            />
-            <div
-              className="absolute inset-0 pointer-events-none"
-              style={{
-                borderRadius: '16px',
-                background: 'linear-gradient(to bottom, transparent 60%, rgba(43,31,18,0.14) 100%)',
-              }}
+          <div className="stagger-item">
+            <BrowserFrame
+              src="/landing/app-dashboard.png"
+              alt={t('product.shotDashboardAlt')}
+              caption={t('product.shotCaption')}
             />
           </div>
         </div>
 
-        {/* Tabs */}
-        <div style={{ borderTop: '1px solid rgba(60,42,22,0.08)' }}>
-
-          {/* Tab bar */}
-          <div className="flex" style={{ borderBottom: '1px solid rgba(60,42,22,0.08)' }}>
-            {(['comex', 'finanzas', 'comercial'] as const).map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                style={{
-                  fontFamily: 'var(--font-family-mono)',
-                  fontSize: '10px',
-                  padding: '10px 16px',
-                  color: activeTab === tab ? '#2B1F12' : '#8A7860',
-                  fontWeight: activeTab === tab ? 500 : 400,
-                  background: 'transparent',
-                  border: 'none',
-                  borderBottom: activeTab === tab ? '2px solid #2B1F12' : '2px solid transparent',
-                  cursor: 'pointer',
-                  marginBottom: '-1px',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.10em',
-                  transition: 'color 0.15s',
-                }}
-              >
-                {t(TAB_KEY_MAP[tab])}
-              </button>
-            ))}
+        {/* Comex — real workflow screenshot */}
+        <div
+          ref={comexRef}
+          className="reveal grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-12 lg:gap-16 items-center"
+          style={{ borderTop: '1px solid rgba(60,42,22,0.06)', paddingTop: '80px' }}
+        >
+          <div className="stagger-item">
+            <BlockHeader label={t('product.blockComex')} hed={t('product.comexHed')} lede={t('product.comexLede')} />
+            <div style={{ borderTop: '1px solid rgba(60,42,22,0.08)' }}>
+              {(
+                [
+                  { num: '01', label: t('product.feature1Label'), body: t('product.feature1Body') },
+                  { num: '02', label: t('product.feature2Label'), body: t('product.feature2Body') },
+                  { num: '03', label: t('product.feature3Label'), body: t('product.feature3Body') },
+                ] as const
+              ).map((f) => (
+                <div
+                  key={f.num}
+                  className="grid items-baseline gap-x-5 py-[13px]"
+                  style={{ gridTemplateColumns: '28px auto 1fr', borderBottom: '1px solid rgba(60,42,22,0.08)' }}
+                >
+                  <span style={{ fontFamily: 'var(--font-family-mono)', fontSize: '10px', color: '#B5A586', letterSpacing: '0.12em' }}>
+                    {f.num}
+                  </span>
+                  <span className="font-medium" style={{ fontSize: '13.5px', color: '#2B1F12' }}>
+                    {f.label}
+                  </span>
+                  <span className="text-right" style={{ fontSize: '12.5px', color: '#8A7860', lineHeight: 1.5 }}>
+                    {f.body}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
+          <div className="stagger-item">
+            <BrowserFrame
+              src="/landing/app-workflow.png"
+              alt={t('product.shotWorkflowAlt')}
+              caption={t('product.shotCaption')}
+            />
+          </div>
+        </div>
 
-          {/* Tab panels */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start py-14">
+        {/* Finanzas */}
+        <div
+          ref={finanzasRef}
+          className="reveal grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center"
+          style={{ borderTop: '1px solid rgba(60,42,22,0.06)', paddingTop: '80px', marginTop: '80px' }}
+        >
+          <div className="lg:order-2 stagger-item">
+            <BlockHeader label={t('product.blockFinanzas')} hed={t('product.finanzasHed')} lede={t('product.finanzasLede')} />
+            <FeatureRows items={FINANZAS_FEATURES.map(({ labelKey, bodyKey, Icon }) => ({ label: t(labelKey), body: t(bodyKey), Icon }))} />
+          </div>
+          <div className="lg:order-1 stagger-item">
+            <FinancialVisual />
+          </div>
+        </div>
 
-            {activeTab === 'comex' && (
-              <>
-                <div>
-                  <h3
-                    className="font-semibold mb-[6px]"
-                    style={{ fontSize: '15px', color: '#2B1F12' }}
-                  >
-                    {t('product.comexHed')}
-                  </h3>
-                  <p
-                    className="m-0 mb-6"
-                    style={{ fontSize: '14px', color: '#5A4A38', lineHeight: 1.65, maxWidth: '44ch' }}
-                  >
-                    {t('product.comexLede')}
-                  </p>
-                  <div style={{ borderTop: '1px solid rgba(60,42,22,0.08)' }}>
-                    {(
-                      [
-                        { num: '01', label: t('product.feature1Label'), body: t('product.feature1Body') },
-                        { num: '02', label: t('product.feature2Label'), body: t('product.feature2Body') },
-                        { num: '03', label: t('product.feature3Label'), body: t('product.feature3Body') },
-                      ] as const
-                    ).map((f) => (
-                      <div
-                        key={f.num}
-                        className="grid items-baseline gap-x-8 py-[13px]"
-                        style={{ gridTemplateColumns: '36px 1fr 1.6fr', borderBottom: '1px solid rgba(60,42,22,0.08)' }}
-                      >
-                        <span style={{ fontFamily: 'var(--font-family-mono)', fontSize: '10px', color: '#B5A586', letterSpacing: '0.12em' }}>
-                          {f.num}
-                        </span>
-                        <span className="font-medium" style={{ fontSize: '13.5px', color: '#2B1F12' }}>
-                          {f.label}
-                        </span>
-                        <span style={{ fontSize: '13px', color: '#5A4A38', lineHeight: 1.5 }}>
-                          {f.body}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <ComexVisual />
-              </>
-            )}
-
-            {activeTab === 'finanzas' && (
-              <>
-                <div>
-                  <h3
-                    className="font-semibold mb-[6px]"
-                    style={{ fontSize: '15px', color: '#2B1F12' }}
-                  >
-                    {t('product.finanzasHed')}
-                  </h3>
-                  <p
-                    className="m-0 mb-6"
-                    style={{ fontSize: '14px', color: '#5A4A38', lineHeight: 1.65, maxWidth: '44ch' }}
-                  >
-                    {t('product.finanzasLede')}
-                  </p>
-                  <div className="flex flex-col">
-                    {FINANZAS_FEATURES.map(({ labelKey, bodyKey, Icon }, index) => (
-                      <div
-                        key={labelKey}
-                        className="flex gap-5 py-7"
-                        style={index > 0 ? { borderTop: '1px solid rgba(60,42,22,0.06)' } : {}}
-                      >
-                        <div
-                          className="w-[36px] h-[36px] rounded-[8px] flex items-center justify-center flex-shrink-0 mt-[2px]"
-                          style={{ background: '#F0E8D8', border: '1px solid rgba(60,42,22,0.10)' }}
-                        >
-                          <Icon size={16} strokeWidth={1.5} style={{ color: '#5A4A38' }} />
-                        </div>
-                        <div>
-                          <div
-                            className="font-medium mb-[6px]"
-                            style={{ fontSize: '15px', color: '#2B1F12', lineHeight: 1.3 }}
-                          >
-                            {t(labelKey)}
-                          </div>
-                          <p className="m-0" style={{ fontSize: '14px', color: '#5A4A38', lineHeight: 1.65 }}>
-                            {t(bodyKey)}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <FinancialVisual />
-              </>
-            )}
-
-            {activeTab === 'comercial' && (
-              <>
-                <div>
-                  <h3
-                    className="font-semibold mb-[6px]"
-                    style={{ fontSize: '15px', color: '#2B1F12' }}
-                  >
-                    {t('product.comercialHed')}
-                  </h3>
-                  <p
-                    className="m-0 mb-6"
-                    style={{ fontSize: '14px', color: '#5A4A38', lineHeight: 1.65, maxWidth: '44ch' }}
-                  >
-                    {t('product.comercialLede')}
-                  </p>
-                  <div className="flex flex-col">
-                    {COMERCIAL_FEATURES.map(({ labelKey, bodyKey, Icon }, index) => (
-                      <div
-                        key={labelKey}
-                        className="flex gap-5 py-7"
-                        style={index > 0 ? { borderTop: '1px solid rgba(60,42,22,0.06)' } : {}}
-                      >
-                        <div
-                          className="w-[36px] h-[36px] rounded-[8px] flex items-center justify-center flex-shrink-0 mt-[2px]"
-                          style={{ background: '#F0E8D8', border: '1px solid rgba(60,42,22,0.10)' }}
-                        >
-                          <Icon size={16} strokeWidth={1.5} style={{ color: '#5A4A38' }} />
-                        </div>
-                        <div>
-                          <div
-                            className="font-medium mb-[6px]"
-                            style={{ fontSize: '15px', color: '#2B1F12', lineHeight: 1.3 }}
-                          >
-                            {t(labelKey)}
-                          </div>
-                          <p className="m-0" style={{ fontSize: '14px', color: '#5A4A38', lineHeight: 1.65 }}>
-                            {t(bodyKey)}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <ComercialVisual />
-              </>
-            )}
-
+        {/* Comercial */}
+        <div
+          ref={comercialRef}
+          className="reveal grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center"
+          style={{ borderTop: '1px solid rgba(60,42,22,0.06)', paddingTop: '80px', marginTop: '80px' }}
+        >
+          <div className="stagger-item">
+            <BlockHeader label={t('product.blockComercial')} hed={t('product.comercialHed')} lede={t('product.comercialLede')} />
+            <FeatureRows items={COMERCIAL_FEATURES.map(({ labelKey, bodyKey, Icon }) => ({ label: t(labelKey), body: t(bodyKey), Icon }))} />
+          </div>
+          <div className="stagger-item">
+            <ComercialVisual />
           </div>
         </div>
 

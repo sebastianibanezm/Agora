@@ -33,9 +33,13 @@ describe('LandingNav', () => {
     expect(screen.getByText('Agora')).toBeInTheDocument()
   })
 
-  it('renders the primary CTA', () => {
+  it('renders the primary CTA (desktop and mobile menu)', () => {
     render(<LandingNav />)
-    expect(screen.getByText('cta')).toBeInTheDocument()
+    const ctas = screen.getAllByText('cta')
+    expect(ctas.length).toBeGreaterThanOrEqual(1)
+    for (const cta of ctas) {
+      expect(cta.closest('a')).toHaveAttribute('href', '#contact')
+    }
   })
 
   it('renders language toggle with ES and EN', () => {

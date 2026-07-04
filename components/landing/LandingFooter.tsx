@@ -1,29 +1,23 @@
 'use client'
 
-import React, { useRef, useState, useEffect } from 'react'
+import React from 'react'
 import Image from 'next/image'
 import { useTranslations, useLocale } from 'next-intl'
 import { ParallaxImage, useParallaxTimeline } from './ParallaxImage'
 import { useRouter, usePathname } from 'next/navigation'
+
+const PLATFORM_LINKS = [
+  { key: 'linkSolutions', href: '#solutions' },
+  { key: 'linkPlatform', href: '#product' },
+  { key: 'linkHow', href: '#how-it-works' },
+  { key: 'linkFaq', href: '#faq' },
+] as const
 
 export function LandingFooter() {
   const t = useTranslations('landing')
   const locale = useLocale()
   const router = useRouter()
   const pathname = usePathname()
-  const textCardRef = useRef<HTMLDivElement>(null)
-  const [logoCardSize, setLogoCardSize] = useState<number | null>(null)
-
-  useEffect(() => {
-    if (!textCardRef.current) return
-    const observer = new ResizeObserver(entries => {
-      const entry = entries[0]
-      if (!entry) return
-      setLogoCardSize(entry.borderBoxSize[0]?.blockSize ?? null)
-    })
-    observer.observe(textCardRef.current)
-    return () => observer.disconnect()
-  }, [])
 
   function toggleLocale() {
     const next = locale === 'es' ? 'en' : 'es'
@@ -34,10 +28,27 @@ export function LandingFooter() {
 
   const { timelineName, rootStyle } = useParallaxTimeline()
 
+  const glassCard: React.CSSProperties = {
+    background: 'rgba(43,31,18,0.30)',
+    backdropFilter: 'blur(36px) saturate(180%)',
+    WebkitBackdropFilter: 'blur(36px) saturate(180%)',
+    border: '1px solid rgba(248,242,228,0.20)',
+    borderRadius: '18px',
+    boxShadow: '0 16px 48px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.09)',
+  }
+
+  const colHead: React.CSSProperties = {
+    fontFamily: 'var(--font-family-mono)',
+    fontSize: '10px',
+    textTransform: 'uppercase',
+    letterSpacing: '0.16em',
+    color: 'rgba(248,242,228,0.55)',
+  }
+
   return (
     <footer
       className="parallax-root relative w-full overflow-hidden"
-      style={{ minHeight: '420px', ...rootStyle }}
+      style={{ ...rootStyle }}
     >
       {/* Background image */}
       <div className="absolute inset-0 z-0">
@@ -47,12 +58,11 @@ export function LandingFooter() {
           strength={0.10}
           timelineName={timelineName}
         />
-        {/* Dark gradient overlay — heavier at bottom so content is legible */}
         <div
           className="absolute inset-0"
           style={{
             background: `
-              linear-gradient(to bottom, rgba(43,31,18,0.35) 0%, rgba(43,31,18,0.55) 50%, rgba(43,31,18,0.80) 100%),
+              linear-gradient(to bottom, rgba(43,31,18,0.35) 0%, rgba(43,31,18,0.55) 50%, rgba(43,31,18,0.82) 100%),
               linear-gradient(135deg, rgba(43,31,18,0.40) 0%, rgba(43,31,18,0.10) 60%, rgba(43,31,18,0.25) 100%)
             `,
           }}
@@ -71,134 +81,113 @@ export function LandingFooter() {
       />
 
       {/* Content */}
-      <div className="relative z-10 max-w-[1160px] mx-auto px-5 sm:px-8 lg:px-12 py-16 flex flex-col justify-between" style={{ minHeight: '420px' }}>
+      <div className="relative z-10 max-w-[1160px] mx-auto px-5 sm:px-8 lg:px-12 py-16 flex flex-col gap-10">
 
-        {/* Brand glass cards — top */}
-        <div className="flex items-stretch gap-3 self-start">
+        {/* Top: brand card + link columns */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-6 items-stretch">
 
-          {/* Logo card */}
-          <div
-            className="relative overflow-hidden flex items-center justify-center flex-shrink-0"
-            style={{
-              background: 'rgba(43,31,18,0.28)',
-              backdropFilter: 'blur(36px) saturate(180%)',
-              WebkitBackdropFilter: 'blur(36px) saturate(180%)',
-              border: '1px solid rgba(248,242,228,0.20)',
-              borderRadius: '18px',
-              width: logoCardSize ? `${logoCardSize}px` : '80px',
-              height: logoCardSize ? `${logoCardSize}px` : '80px',
-              boxShadow: '0 16px 48px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.09)',
-            }}
-          >
+          {/* Brand card */}
+          <div className="relative overflow-hidden flex flex-col justify-between p-7" style={glassCard}>
             <div
               className="absolute top-0 left-0 right-0 h-px pointer-events-none"
               style={{
                 background: 'linear-gradient(90deg, transparent 0%, rgba(248,242,228,0.30) 40%, rgba(248,242,228,0.12) 70%, transparent 100%)',
               }}
             />
-            <Image
-              src="/landing/lambda-logo.png"
-              alt="Agora"
-              width={52}
-              height={52}
-              className="object-contain"
-              style={{ filter: 'brightness(0) invert(1)', width: '52px', height: '52px' }}
-            />
-          </div>
-
-          {/* Text card */}
-          <div
-            ref={textCardRef}
-            className="relative overflow-hidden flex flex-col justify-center"
-            style={{
-              background: 'rgba(43,31,18,0.28)',
-              backdropFilter: 'blur(36px) saturate(180%)',
-              WebkitBackdropFilter: 'blur(36px) saturate(180%)',
-              border: '1px solid rgba(248,242,228,0.20)',
-              borderRadius: '18px',
-              padding: '22px 26px',
-              boxShadow: '0 16px 48px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.09)',
-            }}
-          >
-            <div
-              className="absolute top-0 left-0 right-0 h-px pointer-events-none"
-              style={{
-                background: 'linear-gradient(90deg, transparent 0%, rgba(248,242,228,0.30) 40%, rgba(248,242,228,0.12) 70%, transparent 100%)',
-              }}
-            />
-            <span
-              className="italic text-[19px] mb-2"
-              style={{ fontFamily: 'var(--font-family-old-standard)', color: '#F8F2E4', letterSpacing: '0.01em' }}
-            >
-              Agora
-            </span>
+            <div className="flex items-center gap-3 mb-5">
+              <Image
+                src="/landing/lambda-logo.png"
+                alt="Agora"
+                width={38}
+                height={38}
+                className="object-contain"
+                style={{ filter: 'brightness(0) invert(1)' }}
+              />
+              <span
+                className="italic text-[21px]"
+                style={{ fontFamily: 'var(--font-family-old-standard)', color: '#F8F2E4', letterSpacing: '0.01em' }}
+              >
+                Agora
+              </span>
+            </div>
             <div
               className="italic"
               style={{
                 fontFamily: 'var(--font-family-display)',
                 fontWeight: 300,
-                fontSize: 'clamp(15px, 1.6vw, 22px)',
+                fontSize: 'clamp(17px, 1.8vw, 24px)',
                 lineHeight: 1.25,
-                color: 'rgba(248,242,228,0.82)',
-                maxWidth: '340px',
+                color: 'rgba(248,242,228,0.85)',
+                maxWidth: '380px',
               }}
             >
               {t('footer.tagline')}
             </div>
-          </div>
-
-        </div>
-
-        {/* Bottom bar glass pill */}
-        <div
-          className="relative overflow-hidden mt-12"
-          style={{
-            background: 'rgba(43,31,18,0.32)',
-            backdropFilter: 'blur(24px) saturate(160%)',
-            WebkitBackdropFilter: 'blur(24px) saturate(160%)',
-            border: '1px solid rgba(248,242,228,0.16)',
-            borderRadius: '12px',
-            padding: '14px 20px',
-            boxShadow: '0 8px 24px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.07)',
-          }}
-        >
-          <div className="flex items-center justify-between flex-wrap gap-4">
-            <span
-              className="text-[10.5px] tracking-[0.06em]"
-              style={{ fontFamily: 'var(--font-family-mono)', color: 'rgba(248,242,228,0.55)' }}
+            <div
+              className="mt-6 text-[10px] uppercase tracking-[0.14em]"
+              style={{ fontFamily: 'var(--font-family-mono)', color: 'rgba(248,242,228,0.45)' }}
             >
-              {t('footer.copyright')}
-            </span>
-
-            <div className="flex items-center gap-5">
-              <a
-                href="#contact"
-                className="text-[12px] transition-colors duration-150 cursor-pointer"
-                style={{ color: 'rgba(248,242,228,0.65)', textDecoration: 'none' }}
-                onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = '#F8F2E4')}
-                onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = 'rgba(248,242,228,0.65)')}
-              >
-                {t('footer.linkContact')}
-              </a>
-              <button
-                onClick={toggleLocale}
-                className="inline-flex items-center gap-[3px] px-[10px] py-[5px] rounded-[7px] cursor-pointer transition-colors duration-150"
-                style={{
-                  fontFamily: 'var(--font-family-mono)',
-                  fontSize: '10.5px',
-                  letterSpacing: '0.06em',
-                  background: 'rgba(248,242,228,0.08)',
-                  border: '1px solid rgba(248,242,228,0.14)',
-                }}
-                onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = 'rgba(248,242,228,0.14)')}
-                onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = 'rgba(248,242,228,0.08)')}
-              >
-                <span style={{ color: locale === 'es' ? '#F8F2E4' : 'rgba(248,242,228,0.45)', fontWeight: locale === 'es' ? 600 : 400 }}>ES</span>
-                <span style={{ color: 'rgba(248,242,228,0.25)', margin: '0 1px' }}>/</span>
-                <span style={{ color: locale === 'en' ? '#F8F2E4' : 'rgba(248,242,228,0.45)', fontWeight: locale === 'en' ? 600 : 400 }}>EN</span>
-              </button>
+              {t('footer.madeIn')}
             </div>
           </div>
+
+          {/* Link columns */}
+          <div className="relative overflow-hidden p-7 grid grid-cols-2 gap-8" style={glassCard}>
+            <div
+              className="absolute top-0 left-0 right-0 h-px pointer-events-none"
+              style={{
+                background: 'linear-gradient(90deg, transparent 0%, rgba(248,242,228,0.30) 40%, rgba(248,242,228,0.12) 70%, transparent 100%)',
+              }}
+            />
+            <div>
+              <div style={colHead} className="mb-4">{t('footer.colPlatform')}</div>
+              <ul className="m-0 p-0 list-none flex flex-col gap-[10px]">
+                {PLATFORM_LINKS.map(({ key, href }) => (
+                  <li key={key}>
+                    <a href={href} className="footer-link">{t(`footer.${key}` as any)}</a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <div style={colHead} className="mb-4">{t('footer.colCompany')}</div>
+              <ul className="m-0 p-0 list-none flex flex-col gap-[10px]">
+                <li>
+                  <a href="#contact" className="footer-link">{t('footer.linkContact')}</a>
+                </li>
+                <li>
+                  <a href={`mailto:${t('footer.email')}`} className="footer-link">{t('footer.email')}</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom bar */}
+        <div
+          className="relative overflow-hidden flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 px-6 py-4"
+          style={{ ...glassCard, borderRadius: '12px' }}
+        >
+          <span
+            style={{
+              fontFamily: 'var(--font-family-mono)',
+              fontSize: '10.5px',
+              letterSpacing: '0.04em',
+              color: 'rgba(248,242,228,0.60)',
+            }}
+          >
+            {t('footer.copyright')}
+          </span>
+          <button
+            onClick={toggleLocale}
+            className="locale-toggle inline-flex items-center gap-[3px] self-start sm:self-auto px-[10px] py-[6px] rounded-full cursor-pointer"
+            style={{ fontFamily: 'var(--font-family-mono)', fontSize: '10.5px' }}
+            aria-label="Cambiar idioma"
+          >
+            <span style={{ color: locale === 'es' ? '#F8F2E4' : 'rgba(248,242,228,0.50)', fontWeight: locale === 'es' ? 600 : 400 }}>ES</span>
+            <span style={{ color: 'rgba(248,242,228,0.25)', margin: '0 1px' }}>/</span>
+            <span style={{ color: locale === 'en' ? '#F8F2E4' : 'rgba(248,242,228,0.50)', fontWeight: locale === 'en' ? 600 : 400 }}>EN</span>
+          </button>
         </div>
       </div>
     </footer>

@@ -2,9 +2,8 @@
 
 import React from 'react'
 import { useTranslations } from 'next-intl'
-import { ParallaxImage } from './ParallaxImage'
 import { AlertTriangle, Check, Minus } from 'lucide-react'
-import { useFadeIn } from '@/hooks/useFadeIn'
+import { useReveal } from '@/hooks/useReveal'
 import { useInView } from '@/hooks/useInView'
 
 type T = ReturnType<typeof useTranslations<'landing.pillars'>>
@@ -92,8 +91,14 @@ function AlertVisual({ t }: { t: T }) {
       style={{ background: '#FCF7EA', border: '1px solid rgba(60,42,22,0.08)', boxShadow: '0 8px 32px rgba(43,31,18,0.08)' }}
     >
       <div
-        className={`rounded-[10px] p-4 mb-[10px]${isVisible ? ' alert-shake' : ''}`}
-        style={{ background: '#FFFCF1', border: '1px solid rgba(60,42,22,0.08)' }}
+        className="rounded-[10px] p-4 mb-[10px]"
+        style={{
+          background: '#FFFCF1',
+          border: '1px solid rgba(60,42,22,0.08)',
+          opacity: isVisible ? 1 : 0,
+          transform: isVisible ? 'translateY(0)' : 'translateY(10px)',
+          transition: 'opacity 480ms cubic-bezier(0.23,1,0.32,1) 120ms, transform 480ms cubic-bezier(0.23,1,0.32,1) 120ms',
+        }}
       >
         <div className="flex items-center gap-2 mb-2">
           <AlertTriangle size={15} strokeWidth={1.5} style={{ color: '#B97A1F', flexShrink: 0 }} />
@@ -110,7 +115,16 @@ function AlertVisual({ t }: { t: T }) {
           ))}
         </div>
       </div>
-      <div className="text-[12px] p-[12px] rounded-[8px] flex items-start gap-[8px]" style={{ background: 'rgba(79,122,60,0.06)', border: '1px solid rgba(79,122,60,0.25)' }}>
+      <div
+        className="text-[12px] p-[12px] rounded-[8px] flex items-start gap-[8px]"
+        style={{
+          background: 'rgba(79,122,60,0.06)',
+          border: '1px solid rgba(79,122,60,0.25)',
+          opacity: isVisible ? 1 : 0,
+          transform: isVisible ? 'translateY(0)' : 'translateY(10px)',
+          transition: 'opacity 480ms cubic-bezier(0.23,1,0.32,1) 320ms, transform 480ms cubic-bezier(0.23,1,0.32,1) 320ms',
+        }}
+      >
         <Check size={12} strokeWidth={2} style={{ color: '#4F7A3C', flexShrink: 0, marginTop: '1px' }} />
         <div>
           <span style={{ color: '#4F7A3C', fontWeight: 600 }}>{t('vis2OkLabel')}</span>
@@ -188,25 +202,19 @@ const PILLARS = [
 
 export function LandingPillars() {
   const t = useTranslations('landing.pillars')
-  const ref = useFadeIn()
+  const ref = useReveal<HTMLElement>(0.08)
 
   return (
     <section
-      ref={ref as React.RefObject<HTMLElement>}
+      ref={ref}
       id="solutions"
-      className="py-[120px]"
-      style={{
-        borderTop: '1px solid rgba(60,42,22,0.08)',
-        opacity: 0,
-        transform: 'translateY(44px)',
-        transition: 'opacity 0.72s cubic-bezier(0.23,1,0.32,1), transform 0.72s cubic-bezier(0.23,1,0.32,1)',
-      }}
+      className="reveal py-[120px]"
+      style={{ borderTop: '1px solid rgba(60,42,22,0.08)' }}
     >
       <div className="max-w-[1160px] mx-auto px-5 sm:px-8 lg:px-12">
-        {/* Section head */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center mb-20">
-          {/* Left: eyebrow + title + description */}
-          <div>
+        {/* Section head — editorial two-column text */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-8 lg:gap-20 items-end mb-24">
+          <div className="stagger-item">
             <span
               className="block mb-3 text-[10px] uppercase tracking-[0.18em]"
               style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860' }}
@@ -227,32 +235,10 @@ export function LandingPillars() {
               <br />
               {t('titleLine2')}
             </h2>
-            <p className="text-[16px] leading-[1.65] m-0 mt-8" style={{ color: '#5A4A38', maxWidth: '52ch' }}>
-              {t('lede')}
-            </p>
           </div>
-
-          {/* Right: image */}
-          <div className="relative w-full">
-            <ParallaxImage
-              variant="frame"
-              src="/landing/solution-bg.png"
-              objectPosition="center 30%"
-              strength={0.12}
-              style={{
-                borderRadius: '16px',
-                aspectRatio: '4 / 3',
-                boxShadow: '0 24px 64px rgba(43,31,18,0.18), 0 0 0 1px rgba(43,31,18,0.06)',
-              }}
-            />
-            <div
-              className="absolute inset-0 pointer-events-none"
-              style={{
-                borderRadius: '16px',
-                background: 'linear-gradient(to bottom, transparent 60%, rgba(43,31,18,0.14) 100%)',
-              }}
-            />
-          </div>
+          <p className="text-[16px] leading-[1.65] m-0 stagger-item" style={{ color: '#5A4A38', maxWidth: '48ch' }}>
+            {t('lede')}
+          </p>
         </div>
 
         {/* Pillar rows */}
@@ -260,8 +246,8 @@ export function LandingPillars() {
           {PILLARS.map(({ numKey, titleKey, bodyKey, Visual, reverse }, index) => (
             <div
               key={numKey}
-              className={`grid grid-cols-1 lg:grid-cols-2 gap-20 items-center ${reverse ? 'lg:[&>*:first-child]:order-2 lg:[&>*:last-child]:order-1' : ''}`}
-              style={index > 0 ? { paddingTop: '80px', borderTop: '1px solid rgba(60,42,22,0.06)' } : { paddingTop: '0' }}
+              className={`grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center ${reverse ? 'lg:[&>*:first-child]:order-2 lg:[&>*:last-child]:order-1' : ''}`}
+              style={index > 0 ? { paddingTop: '80px', marginTop: '80px', borderTop: '1px solid rgba(60,42,22,0.06)' } : undefined}
             >
               <div>
                 <div

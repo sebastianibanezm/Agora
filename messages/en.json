@@ -226,7 +226,7 @@
     "activityFilterAgent": "Agent",
     "activityFilterSystem": "System",
     "activityFilterUser": "User",
-    "activityEmpty": "No matching events.",
+    "activityEmpty": "No activity recorded.",
     "backToBookings": "Back to Bookings",
     "atRisk": "at risk",
     "colSiBlTurnaround": "SI → BL",
@@ -275,7 +275,6 @@
     "actorAgent": "Agent",
     "actorUser": "User",
     "badgeRescanned": "Re-scanned",
-    "activityEmpty": "No activity recorded.",
     "docHistoryEmpty": "No history for this document.",
     "isfWarning": "ISF must be sent to the consignee 48 h before departure. Non-compliance may result in fines at destination.",
     "uploadExporterBl": "Upload Exporter BL",
@@ -568,9 +567,6 @@
       "title": "Coordination and automation",
       "titleLine2": "across every step of the process.",
       "lede": "Comex, finance and commercial — three integrated areas, one platform.",
-      "tabComex": "Comex",
-      "tabFinanzas": "Finance",
-      "tabComercial": "Commercial",
       "comexHed": "Complete document control",
       "comexLede": "One operational view of all your exports: active shipments, pending documents, open exceptions — clear ownership, no manual chasing.",
       "feature1Label": "Document coordination",
@@ -594,10 +590,13 @@
       "comercial2Label": "Net effective price",
       "comercial2Body": "Not the nominal FOB — the money that actually arrives after fees, BL amendments, and exchange rate differences.",
       "comercial3Label": "Client health score",
-      "comercial3Body": "A single number per importer combining net price, OTIF, payment behavior, and volume trend."
-    },
-    "ecosystem": {
-      "statement": "Agora is an intelligent export platform that integrates with your systems and adapts to your processes to automate and organize the document workflow, connecting Commercial, Comex, Planning, and Finance in one place."
+      "comercial3Body": "A single number per importer combining net price, OTIF, payment behavior, and volume trend.",
+      "blockComex": "Comex",
+      "blockFinanzas": "Finance",
+      "blockComercial": "Commercial",
+      "shotDashboardAlt": "Agora operations dashboard: priority queue of blocked documents and upcoming milestones for a real shipment",
+      "shotWorkflowAlt": "Agora document workflow: shipment documents organized by dependencies, with approved, pending and blocked statuses",
+      "shotCaption": "Real product — demo data"
     },
     "stats": {
       "eyebrow": "The cost of getting it wrong",
@@ -612,16 +611,10 @@
       "stat3Src": "SI, BL, packing list, phytosanitary certs, customs declaration, and more — assembled across email, WhatsApp, and Excel every time."
     },
     "contact": {
-      "eyebrow": "04 — Contact",
+      "eyebrow": "05 — Contact",
       "title": "Less chasing.",
       "titleLine2": "More shipping.",
       "sub": "Tell us about your operation: volume, markets, and where you lose the most time. We'll respond within 24 hours with a concrete proposal.",
-      "step1Title": "We map your workflow",
-      "step1Body": "A 30-minute call to understand your current process, where errors happen, and what coordination costs you most.",
-      "step2Title": "Demo in 48 hours",
-      "step2Body": "We show Agora running on your type of operation. No prior integration, no commitment, straight to the point.",
-      "step3Title": "Dedicated onboarding",
-      "step3Body": "Supported from day one by a professional expert team.",
       "formTitle": "Tell us about your operations",
       "formSub": "No commitment — we'll respond within one business day.",
       "labelFirstName": "First name",
@@ -639,20 +632,55 @@
     "footer": {
       "tagline": "The intelligent operational platform for exports.",
       "colPlatform": "Platform",
-      "linkVisibility": "Visibility",
-      "linkAlerts": "Alerts",
-      "linkDocs": "Documentation",
-      "linkIntegrations": "Integrations",
       "colCompany": "Company",
-      "linkAbout": "About",
-      "linkClients": "Clients",
-      "linkBlog": "Blog",
       "linkContact": "Contact",
-      "colLegal": "Legal",
-      "linkPrivacy": "Privacy",
-      "linkTerms": "Terms of use",
-      "linkSecurity": "Security",
-      "copyright": "© 2026 Agente Agora LLC · Latin America - United States"
+      "copyright": "© 2026 Agente Agora LLC · Latin America - United States",
+      "linkSolutions": "Solutions",
+      "linkPlatform": "Platform",
+      "linkHow": "How it works",
+      "linkFaq": "FAQ",
+      "madeIn": "From Chile for Latin America",
+      "email": "hola@agenteagora.com"
+    },
+    "proof": {
+      "eyebrow": "Trusted by",
+      "statement": "Built alongside exporters who ship every single week.",
+      "clientName": "Onizzo Exportaciones SpA",
+      "clientDetail": "Prunes, garlic and walnuts from Chile to 16+ markets",
+      "marker1": "Dried fruit & tree nuts",
+      "marker2": "16+ destination markets",
+      "marker3": "Thousands of real-season documents",
+      "logoAlt": "Onizzo — Southern Sweetness"
+    },
+    "howItWorks": {
+      "eyebrow": "04 — How we start",
+      "title": "From the first call",
+      "titleLine2": "to your first shipment.",
+      "step1Title": "We map your workflow",
+      "step1Body": "A 30-minute call to understand your current process, where errors happen, and what coordination costs you most.",
+      "step2Title": "Demo in 48 hours",
+      "step2Body": "We show Agora running on your type of operation. No prior integration, no commitment, straight to the point.",
+      "step3Title": "Dedicated onboarding",
+      "step3Body": "We start from your real documents and support you from day one with an expert team."
+    },
+    "ctaBand": {
+      "line": "Get your next season in order",
+      "lineAccent": "before it starts.",
+      "cta": "Book a call"
+    },
+    "faq": {
+      "eyebrow": "Frequently asked questions",
+      "title": "What we get asked before starting",
+      "q1": "How does Agora integrate with my current systems?",
+      "a1": "Agora works on top of what you already use: email, spreadsheets, and your ERP. Nothing needs replacing — we start by capturing your real documents and data, and integration deepens as your operation requires.",
+      "q2": "How long does implementation take?",
+      "a2": "The demo requires no prior integration. Onboarding starts from your real season documents, and your first shipments run on Agora within weeks, not months, with dedicated support.",
+      "q3": "What about the confidentiality of my documents?",
+      "a3": "Your documents and data live isolated per organization, encrypted, with a complete audit trail. They are never shared with third parties or between clients.",
+      "q4": "What language does the platform work in?",
+      "a4": "The platform is in Spanish and handles English export documents natively: BLs, invoices, certificates, and correspondence with carriers and clients.",
+      "q5": "How does pricing work?",
+      "a5": "Based on your season's shipment volume. After the first call we send you a concrete proposal — no fine print."
     }
   }
 }

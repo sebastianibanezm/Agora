@@ -1,11 +1,13 @@
 import type { Metadata } from 'next'
 import { LandingHero } from '@/components/landing/LandingHero'
-import { LandingEcosystem } from '@/components/landing/LandingEcosystem'
+import { LandingProof } from '@/components/landing/LandingProof'
 import { LandingProblem } from '@/components/landing/LandingProblem'
 import { LandingPillars } from '@/components/landing/LandingPillars'
 import { LandingProduct } from '@/components/landing/LandingProduct'
-import { LandingStats } from '@/components/landing/LandingStats'
+import { LandingHowItWorks } from '@/components/landing/LandingHowItWorks'
+import { LandingCtaBand } from '@/components/landing/LandingCtaBand'
 import { LandingContact } from '@/components/landing/LandingContact'
+import { LandingFaq } from '@/components/landing/LandingFaq'
 import { LandingFooter } from '@/components/landing/LandingFooter'
 
 export const metadata: Metadata = {
@@ -34,14 +36,16 @@ export const metadata: Metadata = {
 export default function LandingPage() {
   return (
     <>
-      <main>
+      <main id="landing-main">
         <LandingHero />
-        <LandingEcosystem />
+        <LandingProof />
         <LandingProblem />
         <LandingPillars />
         <LandingProduct />
-        <LandingStats />
+        <LandingHowItWorks />
+        <LandingCtaBand />
         <LandingContact />
+        <LandingFaq />
       </main>
       <LandingFooter />
     </>

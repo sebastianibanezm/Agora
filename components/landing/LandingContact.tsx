@@ -2,8 +2,8 @@
 
 import React, { useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { ArrowRight } from 'lucide-react'
-import { useFadeIn } from '@/hooks/useFadeIn'
+import { ArrowRight, Clock, ShieldCheck } from 'lucide-react'
+import { useReveal } from '@/hooks/useReveal'
 
 const VOLUME_OPTIONS = ['100–500', '500–1000', '1000–3000', '3000+'] as const
 
@@ -13,7 +13,7 @@ export function LandingContact() {
   const t = useTranslations('landing')
   const [volume, setVolume] = useState<string | null>(null)
   const [status, setStatus] = useState<Status>('idle')
-  const ref = useFadeIn()
+  const ref = useReveal<HTMLElement>(0.1)
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -41,21 +41,16 @@ export function LandingContact() {
 
   return (
     <section
-      ref={ref as React.RefObject<HTMLElement>}
+      ref={ref}
       id="contact"
-      className="py-[140px]"
-      style={{
-        borderTop: '1px solid rgba(60,42,22,0.08)',
-        opacity: 0,
-        transform: 'translateY(44px)',
-        transition: 'opacity 0.72s cubic-bezier(0.23,1,0.32,1), transform 0.72s cubic-bezier(0.23,1,0.32,1)',
-      }}
+      className="reveal py-[140px]"
+      style={{ borderTop: '1px solid rgba(60,42,22,0.08)' }}
     >
       <div className="max-w-[1160px] mx-auto px-5 sm:px-8 lg:px-12">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-20 items-start">
 
-          {/* Left: copy + steps */}
-          <div>
+          {/* Left: copy + reassurance */}
+          <div className="stagger-item">
             <span
               className="block mb-[18px] text-[10px] uppercase tracking-[0.18em]"
               style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860' }}
@@ -78,37 +73,22 @@ export function LandingContact() {
               {t('contact.titleLine2')}
             </h2>
             <p
-              className="text-[16px] leading-[1.65] mb-6"
+              className="text-[16px] leading-[1.65] mb-10"
               style={{ color: '#5A4A38', maxWidth: '42ch' }}
             >
               {t('contact.sub')}
             </p>
 
-            {/* Process steps */}
-            <div className="flex flex-col gap-[18px]">
-              {(['1', '2', '3'] as const).map((n) => (
-                <div
-                  key={n}
-                  className="flex gap-4 items-start pt-[18px] stagger-item"
-                  style={{ borderTop: '1px solid rgba(60,42,22,0.08)' }}
-                >
-                  <div
-                    className="text-[10px] uppercase tracking-[0.18em] pt-[2px] min-w-[32px] flex-shrink-0"
-                    style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860' }}
-                  >
-                    0{n}
-                  </div>
-                  <div>
-                    <strong
-                      className="italic text-[16px] font-medium block mb-[2px]"
-                      style={{ fontFamily: 'var(--font-family-display)', color: '#2B1F12' }}
-                    >
-                      {t(`contact.step${n}Title` as any)}
-                    </strong>
-                    <p className="text-[13.5px] leading-[1.55] m-0" style={{ color: '#5A4A38' }}>
-                      {t(`contact.step${n}Body` as any)}
-                    </p>
-                  </div>
+            <div className="flex flex-col gap-4">
+              {[
+                { Icon: Clock, text: t('contact.formSub') },
+                { Icon: ShieldCheck, text: t('contact.formNote') },
+              ].map(({ Icon, text }, i) => (
+                <div key={i} className="flex items-start gap-3 pt-4" style={{ borderTop: '1px solid rgba(60,42,22,0.08)' }}>
+                  <Icon size={15} strokeWidth={1.5} style={{ color: '#8A7860', flexShrink: 0, marginTop: '2px' }} />
+                  <p className="m-0 text-[13.5px] leading-[1.55]" style={{ color: '#5A4A38' }}>
+                    {text}
+                  </p>
                 </div>
               ))}
             </div>
@@ -116,7 +96,7 @@ export function LandingContact() {
 
           {/* Right: form card */}
           <div
-            className="rounded-[16px] p-9"
+            className="rounded-[16px] p-9 stagger-item"
             style={{
               background: '#FFFCF1',
               border: '1px solid rgba(60,42,22,0.16)',
@@ -169,20 +149,7 @@ export function LandingContact() {
                       name={f === 'FirstName' ? 'firstName' : 'lastName'}
                       required
                       placeholder={t(`contact.placeholder${f}` as any)}
-                      className="h-[42px] px-[14px] rounded-[8px] text-[14px] outline-none w-full transition-shadow duration-150"
-                      style={{
-                        background: '#FCF7EA',
-                        border: '1px solid rgba(60,42,22,0.14)',
-                        color: '#2B1F12',
-                      }}
-                      onFocus={(e) => {
-                        e.currentTarget.style.borderColor = '#5A4A38'
-                        e.currentTarget.style.boxShadow = '0 0 0 3px rgba(43,31,18,0.07)'
-                      }}
-                      onBlur={(e) => {
-                        e.currentTarget.style.borderColor = 'rgba(60,42,22,0.14)'
-                        e.currentTarget.style.boxShadow = 'none'
-                      }}
+                      className="contact-input h-[42px] px-[14px] rounded-[8px] text-[14px] w-full"
                     />
                   </div>
                 ))}
@@ -203,20 +170,7 @@ export function LandingContact() {
                     name={f.toLowerCase()}
                     required
                     placeholder={t(`contact.placeholder${f}` as any)}
-                    className="h-[42px] px-[14px] rounded-[8px] text-[14px] outline-none w-full transition-shadow duration-150"
-                    style={{
-                      background: '#FCF7EA',
-                      border: '1px solid rgba(60,42,22,0.14)',
-                      color: '#2B1F12',
-                    }}
-                    onFocus={(e) => {
-                      e.currentTarget.style.borderColor = '#5A4A38'
-                      e.currentTarget.style.boxShadow = '0 0 0 3px rgba(43,31,18,0.07)'
-                    }}
-                    onBlur={(e) => {
-                      e.currentTarget.style.borderColor = 'rgba(60,42,22,0.14)'
-                      e.currentTarget.style.boxShadow = 'none'
-                    }}
+                    className="contact-input h-[42px] px-[14px] rounded-[8px] text-[14px] w-full"
                   />
                 </div>
               ))}
@@ -237,13 +191,8 @@ export function LandingContact() {
                       type="button"
                       data-active={volume === opt ? 'true' : undefined}
                       onClick={() => setVolume(opt)}
-                      className="h-[38px] flex items-center justify-center rounded-[7px] text-[11.5px] cursor-pointer btn-press"
-                      style={{
-                        fontFamily: 'var(--font-family-mono)',
-                        background: volume === opt ? '#2B1F12' : '#FCF7EA',
-                        color: volume === opt ? '#F8F2E4' : '#5A4A38',
-                        border: `1px solid ${volume === opt ? '#2B1F12' : 'rgba(60,42,22,0.14)'}`,
-                      }}
+                      className="volume-option h-[38px] flex items-center justify-center rounded-[7px] text-[11.5px] cursor-pointer btn-press"
+                      style={{ fontFamily: 'var(--font-family-mono)' }}
                     >
                       {opt}
                     </button>
@@ -261,15 +210,8 @@ export function LandingContact() {
               <button
                 type="submit"
                 disabled={status === 'loading'}
-                className="w-full h-[46px] rounded-[10px] text-[14px] font-medium flex items-center justify-center gap-2 cursor-pointer mt-[6px] btn-press"
-                style={{
-                  background: status === 'loading' ? '#5A4A38' : '#2B1F12',
-                  color: '#F8F2E4',
-                  border: 'none',
-                  opacity: status === 'loading' ? 0.7 : 1,
-                }}
-                onMouseEnter={(e) => { if (status !== 'loading') (e.currentTarget as HTMLElement).style.background = '#1F1609' }}
-                onMouseLeave={(e) => { if (status !== 'loading') (e.currentTarget as HTMLElement).style.background = '#2B1F12' }}
+                className="contact-submit w-full h-[46px] rounded-[10px] text-[14px] font-medium flex items-center justify-center gap-2 cursor-pointer mt-[6px] btn-press"
+                style={{ opacity: status === 'loading' ? 0.7 : 1 }}
               >
                 {status === 'loading' ? 'Enviando…' : <>{t('contact.submitBtn')} <ArrowRight size={14} strokeWidth={1.8} /></>}
               </button>

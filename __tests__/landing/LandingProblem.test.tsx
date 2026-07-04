@@ -14,7 +14,15 @@ describe('LandingProblem', () => {
   it('renders the section title', () => {
     render(<LandingProblem />)
     // Title is split by <br /> so we check for heading containing the text
-    const heading = screen.getByRole('heading', { level: 2 })
-    expect(heading.textContent).toContain('title')
+    const heading = screen.getAllByRole('heading', { level: 2 })[0]
+    expect(heading?.textContent).toContain('title')
+  })
+
+  it('renders the integrated stats band', () => {
+    render(<LandingProblem />)
+    expect(screen.getByText('stats.eyebrow')).toBeInTheDocument()
+    expect(screen.getByText('stats.stat1Label')).toBeInTheDocument()
+    expect(screen.getByText('stats.stat2Label')).toBeInTheDocument()
+    expect(screen.getByText('stats.stat3Label')).toBeInTheDocument()
   })
 })

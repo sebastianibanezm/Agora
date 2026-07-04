@@ -261,16 +261,12 @@ body::after {
 [data-visible="true"] .stagger-item:nth-child(5) { animation-delay: 700ms; }
 [data-visible="true"] .stagger-item:nth-child(6) { animation-delay: 840ms; }
 
-/* Pillar visual: alert push-notification shake */
-@keyframes alertShake {
-  0%, 100% { transform: translateX(0); }
-  20%      { transform: translateX(-3px); }
-  40%      { transform: translateX(3px); }
-  60%      { transform: translateX(-2px); }
-  80%      { transform: translateX(2px); }
-}
-.alert-shake {
-  animation: alertShake 420ms cubic-bezier(0.23, 1, 0.32, 1) 480ms both;
+/* Reveal containers (useReveal): stagger children stay hidden until the
+   container enters the viewport. Scoped to .reveal so nested grids/cards
+   inside an already-visible container are unaffected. */
+.reveal:not([data-visible="true"]) .stagger-item {
+  opacity: 0;
+  animation: none;
 }
 
 /* Amber status dot pulse */
@@ -308,18 +304,136 @@ body::after {
   }
 }
 
+/* ── Landing interactive states (hover + keyboard focus) ────────── */
+
+/* Solid cream pill CTA (nav, CTA band) */
+.cta-solid {
+  background: #F8F2E4;
+  color: #2B1F12;
+  border: none;
+  text-decoration: none;
+  transition: background 150ms ease;
+}
+.cta-solid:hover { background: #fff; }
+
+/* Quiet light-on-dark links (nav) */
+.nav-link {
+  color: rgba(248, 242, 228, 0.70);
+  text-decoration: none;
+  transition: color 150ms ease;
+}
+.nav-link:hover { color: #F8F2E4; }
+
+/* Footer links */
+.footer-link {
+  font-size: 13px;
+  color: rgba(248, 242, 228, 0.75);
+  text-decoration: none;
+  transition: color 150ms ease;
+}
+.footer-link:hover { color: #F8F2E4; }
+
+/* Locale toggle pill (footer) */
+.locale-toggle {
+  background: transparent;
+  border: 1px solid rgba(248, 242, 228, 0.18);
+  transition: background 150ms ease;
+}
+.locale-toggle:hover { background: rgba(248, 242, 228, 0.08); }
+
+/* Onizzo logo in the proof strip — toned down to sit in the paper palette */
+.proof-logo {
+  height: auto;
+  filter: grayscale(1) brightness(0.55) sepia(0.22);
+  opacity: 0.75;
+  transition: filter 200ms ease, opacity 200ms ease;
+}
+.proof-logo:hover {
+  filter: none;
+  opacity: 1;
+}
+
+/* Contact form inputs */
+.contact-input {
+  background: #FCF7EA;
+  border: 1px solid rgba(60, 42, 22, 0.14);
+  color: #2B1F12;
+  outline: none;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+.contact-input:focus {
+  border-color: #5A4A38;
+  box-shadow: 0 0 0 3px rgba(43, 31, 18, 0.07);
+}
+
+/* Contact volume selector */
+.volume-option {
+  background: #FCF7EA;
+  color: #5A4A38;
+  border: 1px solid rgba(60, 42, 22, 0.14);
+  transition: background 150ms ease, color 150ms ease, border-color 150ms ease;
+}
+.volume-option:hover { border-color: rgba(60, 42, 22, 0.32); }
+.volume-option[data-active="true"] {
+  background: #2B1F12;
+  color: #F8F2E4;
+  border-color: #2B1F12;
+}
+
+/* Contact submit */
+.contact-submit {
+  background: #2B1F12;
+  color: #F8F2E4;
+  border: none;
+  transition: background 150ms ease;
+}
+.contact-submit:hover:not(:disabled) { background: #1F1609; }
+.contact-submit:disabled { background: #5A4A38; }
+
+/* FAQ accordion (native details/summary) */
+.faq-item {
+  border-bottom: 1px solid rgba(60, 42, 22, 0.08);
+}
+.faq-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 22px 0;
+  cursor: pointer;
+  list-style: none;
+}
+.faq-summary::-webkit-details-marker { display: none; }
+.faq-icon { transition: transform 220ms cubic-bezier(0.23, 1, 0.32, 1); }
+.faq-item[open] .faq-icon { transform: rotate(45deg); }
+
+/* Keyboard focus — landing interactive elements */
+#landing-main a:focus-visible,
+#landing-main button:focus-visible,
+#landing-main summary:focus-visible,
+footer a:focus-visible,
+footer button:focus-visible,
+nav a:focus-visible,
+nav button:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
 /* Accessibility */
 @media (prefers-reduced-motion: reduce) {
   .hero-el,
   .stagger-item,
   .stat-item,
-  .alert-shake,
   .btn-press,
   .parallax-layer {
     animation: none !important;
     transition: none !important;
     opacity: 1 !important;
     transform: none !important;
+  }
+  .reveal:not([data-visible="true"]) .stagger-item {
+    opacity: 1;
   }
 }
 

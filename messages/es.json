@@ -226,7 +226,7 @@
     "activityFilterAgent": "Agente",
     "activityFilterSystem": "Sistema",
     "activityFilterUser": "Usuario",
-    "activityEmpty": "Sin eventos coincidentes.",
+    "activityEmpty": "Sin actividad registrada.",
     "backToBookings": "Volver a Embarques",
     "atRisk": "en riesgo",
     "colSiBlTurnaround": "SI → BL",
@@ -275,7 +275,6 @@
     "actorAgent": "Agente",
     "actorUser": "Usuario",
     "badgeRescanned": "Re-escaneado",
-    "activityEmpty": "Sin actividad registrada.",
     "docHistoryEmpty": "Sin historial para este documento.",
     "isfWarning": "ISF debe enviarse al recibidor 48 h antes del zarpe. El incumplimiento puede generar multas en destino.",
     "uploadExporterBl": "Subir Exporter BL",
@@ -568,9 +567,6 @@
       "title": "Coordinación y automatización",
       "titleLine2": "a lo largo de todo el proceso.",
       "lede": "Comex, finanzas y comercial — tres áreas integradas en una sola plataforma.",
-      "tabComex": "Comex",
-      "tabFinanzas": "Finanzas",
-      "tabComercial": "Comercial",
       "comexHed": "Control documental completo",
       "comexLede": "Una vista operacional de todas tus exportaciones: embarques activos, documentos pendientes, excepciones abiertas — con responsable claro, sin coordinación manual.",
       "feature1Label": "Coordinación documental",
@@ -594,10 +590,13 @@
       "comercial2Label": "Precio neto efectivo",
       "comercial2Body": "No el FOB nominal — el dinero que realmente llega después de fees, amendments y diferencias de cambio.",
       "comercial3Label": "Score de salud del cliente",
-      "comercial3Body": "Un solo número por importador que combina precio neto, OTIF, comportamiento de pago y tendencia de volumen."
-    },
-    "ecosystem": {
-      "statement": "Agora es una plataforma de inteligencia para exportaciones que se integra a tus sistemas y se adapta a tus procesos para automatizar y ordenar el flujo documental, conectando el área Comercial, Comex, Planificación y Finanzas en un solo lugar."
+      "comercial3Body": "Un solo número por importador que combina precio neto, OTIF, comportamiento de pago y tendencia de volumen.",
+      "blockComex": "Comex",
+      "blockFinanzas": "Finanzas",
+      "blockComercial": "Comercial",
+      "shotDashboardAlt": "Panel de operaciones de Agora: cola prioritaria de documentos bloqueados y próximos hitos de un embarque real",
+      "shotWorkflowAlt": "Workflow documental de Agora: documentos de un embarque organizados por dependencias, con estados aprobado, pendiente y bloqueado",
+      "shotCaption": "Producto real — datos de demostración"
     },
     "stats": {
       "eyebrow": "El costo de equivocarse",
@@ -612,16 +611,10 @@
       "stat3Src": "Instructivo, BL, packing list, certificados fitosanitarios, DUS y más — armados entre correo, WhatsApp y Excel cada vez."
     },
     "contact": {
-      "eyebrow": "04 — Contacto",
+      "eyebrow": "05 — Contacto",
       "title": "Menos coordinación.",
       "titleLine2": "Más embarques.",
       "sub": "Cuéntanos sobre tu operación: volumen, mercados y dónde pierdes más tiempo. Te respondemos en menos de 24 horas con una propuesta concreta.",
-      "step1Title": "Mapeamos tu flujo",
-      "step1Body": "Una llamada de 30 minutos para entender tu proceso actual, dónde ocurren los errores y qué coordinación te cuesta más.",
-      "step2Title": "Demo en 48 horas",
-      "step2Body": "Te mostramos Agora funcionando con tu tipo de operación. Sin integración previa, sin compromisos, directo al grano.",
-      "step3Title": "Onboarding dedicado",
-      "step3Body": "Acompañamiento desde el día 1 por un equipo profesional experto.",
       "formTitle": "Cuéntanos sobre tus operaciones",
       "formSub": "Sin compromisos — te respondemos en menos de un día hábil.",
       "labelFirstName": "Nombre",
@@ -639,20 +632,55 @@
     "footer": {
       "tagline": "La plataforma operacional inteligente para las exportaciones.",
       "colPlatform": "Plataforma",
-      "linkVisibility": "Visibilidad",
-      "linkAlerts": "Alertas",
-      "linkDocs": "Documentación",
-      "linkIntegrations": "Integraciones",
       "colCompany": "Empresa",
-      "linkAbout": "Nosotros",
-      "linkClients": "Clientes",
-      "linkBlog": "Blog",
       "linkContact": "Contacto",
-      "colLegal": "Legal",
-      "linkPrivacy": "Privacidad",
-      "linkTerms": "Términos de uso",
-      "linkSecurity": "Seguridad",
-      "copyright": "© 2026 Agente Agora LLC · Latinoamérica - Estados Unidos"
+      "copyright": "© 2026 Agente Agora LLC · Latinoamérica - Estados Unidos",
+      "linkSolutions": "Soluciones",
+      "linkPlatform": "Plataforma",
+      "linkHow": "Cómo funciona",
+      "linkFaq": "Preguntas frecuentes",
+      "madeIn": "Desde Chile para Latinoamérica",
+      "email": "hola@agenteagora.com"
+    },
+    "proof": {
+      "eyebrow": "Confían en Agora",
+      "statement": "Construido junto a exportadores que embarcan todas las semanas.",
+      "clientName": "Onizzo Exportaciones SpA",
+      "clientDetail": "Ciruelas, ajos y nueces desde Chile a más de 16 mercados",
+      "marker1": "Fruta deshidratada y frutos secos",
+      "marker2": "16+ mercados de destino",
+      "marker3": "Miles de documentos de temporadas reales",
+      "logoAlt": "Onizzo — Southern Sweetness"
+    },
+    "howItWorks": {
+      "eyebrow": "04 — Cómo empezamos",
+      "title": "De la primera llamada",
+      "titleLine2": "a tu primer embarque.",
+      "step1Title": "Mapeamos tu flujo",
+      "step1Body": "Una llamada de 30 minutos para entender tu proceso actual, dónde ocurren los errores y qué coordinación te cuesta más.",
+      "step2Title": "Demo en 48 horas",
+      "step2Body": "Te mostramos Agora funcionando con tu tipo de operación. Sin integración previa, sin compromisos, directo al grano.",
+      "step3Title": "Onboarding dedicado",
+      "step3Body": "Partimos con tus documentos reales y te acompañamos desde el día 1 con un equipo experto."
+    },
+    "ctaBand": {
+      "line": "Ordena tu próxima temporada",
+      "lineAccent": "antes de que empiece.",
+      "cta": "Agenda una llamada"
+    },
+    "faq": {
+      "eyebrow": "Preguntas frecuentes",
+      "title": "Lo que nos preguntan antes de partir",
+      "q1": "¿Cómo se integra Agora con mis sistemas actuales?",
+      "a1": "Agora trabaja sobre lo que ya usas: correo, planillas y tu ERP. No necesitas reemplazar nada — empezamos capturando tus documentos y datos reales, y la integración se profundiza según tu operación.",
+      "q2": "¿Cuánto toma la implementación?",
+      "a2": "La demo no requiere integración previa. El onboarding parte con tus documentos de temporada reales y los primeros embarques operando en Agora toman semanas, no meses, con acompañamiento dedicado.",
+      "q3": "¿Qué pasa con la confidencialidad de mis documentos?",
+      "a3": "Tus documentos y datos viven aislados por organización, cifrados y con registro de auditoría completo. Nunca se comparten con terceros ni entre clientes.",
+      "q4": "¿En qué idioma funciona la plataforma?",
+      "a4": "La plataforma está en español y maneja con naturalidad los documentos de exportación en inglés: BL, invoices, certificados y correspondencia con navieras y clientes.",
+      "q5": "¿Cómo funciona el precio?",
+      "a5": "Según el volumen de embarques de tu temporada. Después de la primera llamada te enviamos una propuesta concreta, sin letra chica."
     }
   }
 }

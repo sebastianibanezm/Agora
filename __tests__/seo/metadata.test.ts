@@ -41,6 +41,6 @@ describe('landing page metadata', () => {
   })
 
   it('has twitter card', () => {
-    expect(landingMetadata.twitter?.card).toBe('summary_large_image')
+    expect((landingMetadata.twitter as { card?: string } | undefined)?.card).toBe('summary_large_image')
   })
 })

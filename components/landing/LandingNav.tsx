@@ -57,16 +57,13 @@ export function LandingNav() {
       </div>
 
       {/* Nav links — hidden on mobile */}
-      {/* 'solutions' → #solutions (LandingPillars), 'howItWorks' → #solutions, 'company' → #contact */}
+      {/* 'solutions' → #solutions (LandingPillars), 'howItWorks' → #how-it-works, 'company' → #contact */}
       <div className="hidden md:flex gap-[1px]">
         {(['solutions', 'howItWorks', 'company'] as const).map((key) => (
           <a
             key={key}
-            href={key === 'company' ? '#contact' : key === 'howItWorks' ? '#problem' : '#solutions'}
-            className="px-[13px] py-2 rounded-full text-[12px] transition-colors duration-150 cursor-pointer"
-            style={{ color: 'rgba(248,242,228,0.70)' }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = '#F8F2E4')}
-            onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(248,242,228,0.70)')}
+            href={key === 'company' ? '#contact' : key === 'howItWorks' ? '#how-it-works' : '#solutions'}
+            className="nav-link px-[13px] py-2 rounded-full text-[12px] cursor-pointer"
           >
             {t(key)}
           </a>
@@ -89,14 +86,8 @@ export function LandingNav() {
       {/* Primary CTA — desktop only */}
       <a
         href="#contact"
-        className="hidden md:inline-flex ml-1 px-[18px] py-[9px] rounded-full text-[12px] font-medium items-center gap-[6px] cursor-pointer btn-press"
-        style={{
-          background: '#F8F2E4',
-          color: '#2B1F12',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.25)',
-        }}
-        onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = '#fff')}
-        onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = '#F8F2E4')}
+        className="cta-solid hidden md:inline-flex ml-1 px-[18px] py-[9px] rounded-full text-[12px] font-medium items-center gap-[6px] cursor-pointer btn-press"
+        style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.25)' }}
       >
         {t('cta')} <ArrowRight size={13} strokeWidth={1.8} />
       </a>

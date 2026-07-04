@@ -16,15 +16,15 @@ describe('LandingContact', () => {
 
   it('volume selector marks clicked option as active', () => {
     render(<LandingContact />)
-    const option = screen.getByText('20–100')
+    const option = screen.getByText('100–500')
     fireEvent.click(option)
     expect(option).toHaveAttribute('data-active', 'true')
   })
 
-  it('renders all 3 process steps', () => {
+  it('renders reassurance rows instead of process steps', () => {
     render(<LandingContact />)
-    expect(screen.getByText('contact.step1Title')).toBeInTheDocument()
-    expect(screen.getByText('contact.step2Title')).toBeInTheDocument()
-    expect(screen.getByText('contact.step3Title')).toBeInTheDocument()
+    expect(screen.getAllByText('contact.formSub').length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByText('contact.formNote').length).toBeGreaterThanOrEqual(1)
+    expect(screen.queryByText('contact.step1Title')).not.toBeInTheDocument()
   })
 })

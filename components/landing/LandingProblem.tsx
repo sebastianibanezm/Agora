@@ -2,16 +2,10 @@
 
 import React from 'react'
 import { useTranslations } from 'next-intl'
-import { ParallaxImage } from './ParallaxImage'
 import { FileWarning, AlertTriangle, Users } from 'lucide-react'
-import { useFadeIn } from '@/hooks/useFadeIn'
-
-const CARDS_TOP = [
-  { key: '1', Icon: FileWarning, severity: '#B97A1F' },
-  { key: '2', Icon: AlertTriangle, severity: '#8B2A1F' },
-] as const
-
-const CARD_BOTTOM = { key: '3', Icon: Users, severity: '#5A6B85' } as const
+import { useReveal } from '@/hooks/useReveal'
+import { useInView } from '@/hooks/useInView'
+import { useCountUp } from '@/hooks/useCountUp'
 
 function ProblemCard({
   cardKey,
@@ -74,7 +68,7 @@ function ProblemCard({
         className="italic"
         style={{
           fontFamily: 'var(--font-family-mono)',
-          fontSize: '10px',
+          fontSize: '11px',
           color: '#B5A586',
         }}
       >
@@ -84,27 +78,99 @@ function ProblemCard({
   )
 }
 
+const STAT_DEFS = [
+  { key: 'stat1', prefix: '', suffix: '%', target: 47 },
+  { key: 'stat2', prefix: '$', suffix: '+', target: 420 },
+  { key: 'stat3', prefix: '16–', suffix: '', target: 22 },
+] as const
+
+function StatNumber({ prefix, suffix, target, enabled }: {
+  prefix: string; suffix: string; target: number; enabled: boolean
+}) {
+  const count = useCountUp(target, 1400, enabled)
+  return <>{prefix}{count}{suffix}</>
+}
+
+function StatsBand() {
+  const t = useTranslations('landing')
+  const [bandRef, isVisible] = useInView<HTMLDivElement>(0.2)
+
+  return (
+    <div ref={bandRef} data-visible={isVisible ? 'true' : undefined} className="mt-20">
+      <div className="flex items-center gap-6 mb-12">
+        <span
+          className="flex-shrink-0 text-[10px] uppercase tracking-[0.18em]"
+          style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860' }}
+        >
+          {t('stats.eyebrow')}
+        </span>
+        <div className="flex-1 h-px" style={{ background: 'rgba(60,42,22,0.08)' }} />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3">
+        {STAT_DEFS.map(({ key, prefix, suffix, target }, i) => (
+          <div
+            key={key}
+            className={[
+              'flex flex-col stat-item',
+              i < 2 ? 'border-b md:border-b-0 md:border-r pb-10 md:pb-0' : '',
+              i > 0 ? 'pt-10 md:pt-0 md:pl-10' : '',
+              i < 2 ? 'md:pr-10' : '',
+            ].join(' ')}
+            style={{ borderColor: 'rgba(60,42,22,0.08)' }}
+          >
+            <div
+              className="italic font-light"
+              style={{
+                fontFamily: 'var(--font-family-display)',
+                fontSize: 'clamp(56px, 6vw, 76px)',
+                letterSpacing: '-0.025em',
+                lineHeight: 0.9,
+                color: '#2B1F12',
+              }}
+            >
+              <StatNumber prefix={prefix} suffix={suffix} target={target} enabled={isVisible} />
+            </div>
+            <div
+              className="font-medium mt-4"
+              style={{ fontSize: '16px', color: '#2B1F12', lineHeight: 1.4 }}
+            >
+              {t(`stats.${key}Label` as any)}
+            </div>
+            <p
+              className="italic m-0 mt-2"
+              style={{
+                fontFamily: 'var(--font-family-mono)',
+                fontSize: '11px',
+                color: '#8A7860',
+                maxWidth: '32ch',
+                lineHeight: 1.55,
+              }}
+            >
+              {t(`stats.${key}Src` as any)}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 export function LandingProblem() {
   const t = useTranslations('landing.problem')
-  const ref = useFadeIn()
+  const ref = useReveal<HTMLElement>(0.08)
 
   return (
     <section
-      ref={ref as React.RefObject<HTMLElement>}
+      ref={ref}
       id="problem"
-      className="py-[120px]"
-      style={{
-        borderTop: '1px solid rgba(60,42,22,0.08)',
-        opacity: 0,
-        transform: 'translateY(44px)',
-        transition: 'opacity 0.72s cubic-bezier(0.23,1,0.32,1), transform 0.72s cubic-bezier(0.23,1,0.32,1)',
-      }}
+      className="reveal py-[120px]"
+      style={{ borderTop: '1px solid rgba(60,42,22,0.08)' }}
     >
       <div className="max-w-[1160px] mx-auto px-5 sm:px-8 lg:px-12">
-        {/* Section head */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center mb-20">
-          {/* Left: eyebrow + title + description */}
-          <div>
+        {/* Section head — editorial two-column text */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-8 lg:gap-20 items-end mb-20">
+          <div className="stagger-item">
             <span
               className="block mb-3 text-[10px] uppercase tracking-[0.18em]"
               style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860' }}
@@ -125,35 +191,13 @@ export function LandingProblem() {
               <br />
               {t('titleLine2')}
             </h2>
-            <p
-              className="text-[16px] leading-[1.65] m-0 mt-8"
-              style={{ color: '#5A4A38', maxWidth: '52ch' }}
-            >
-              {t('lede')}
-            </p>
           </div>
-
-          {/* Right: image */}
-          <div className="relative w-full">
-            <ParallaxImage
-              variant="frame"
-              src="/landing/problem-bg.png"
-              objectPosition="center 20%"
-              strength={0.12}
-              style={{
-                borderRadius: '16px',
-                aspectRatio: '4 / 3',
-                boxShadow: '0 24px 64px rgba(43,31,18,0.18), 0 0 0 1px rgba(43,31,18,0.06)',
-              }}
-            />
-            <div
-              className="absolute inset-0 pointer-events-none"
-              style={{
-                borderRadius: '16px',
-                background: 'linear-gradient(to bottom, transparent 60%, rgba(43,31,18,0.18) 100%)',
-              }}
-            />
-          </div>
+          <p
+            className="text-[16px] leading-[1.65] m-0 stagger-item"
+            style={{ color: '#5A4A38', maxWidth: '48ch' }}
+          >
+            {t('lede')}
+          </p>
         </div>
 
         {/* Cards 1 & 2 — side by side */}
@@ -161,22 +205,21 @@ export function LandingProblem() {
           className="grid grid-cols-1 md:grid-cols-[1fr_1px_1fr]"
           style={{ borderTop: '1px solid rgba(60,42,22,0.08)', paddingTop: '44px', paddingBottom: '44px' }}
         >
-          <div className="pb-10 md:pb-0 md:pr-16">
+          <div className="pb-10 md:pb-0 md:pr-16 stagger-item">
             <ProblemCard cardKey="1" Icon={FileWarning} severity="#B97A1F" t={t} />
           </div>
-          {/* Divider — horizontal on mobile, vertical on desktop */}
           <div
             className="h-px w-full md:h-auto md:w-px my-0 md:mx-0"
             style={{ background: 'rgba(60,42,22,0.08)' }}
           />
-          <div className="pt-10 md:pt-0 md:pl-16">
+          <div className="pt-10 md:pt-0 md:pl-16 stagger-item">
             <ProblemCard cardKey="2" Icon={AlertTriangle} severity="#8B2A1F" t={t} />
           </div>
         </div>
 
         {/* Card 3 — full width, editorial treatment */}
         <div
-          className="rounded-[14px] p-8 lg:p-12"
+          className="rounded-[14px] p-8 lg:p-12 stagger-item"
           style={{
             background: '#FCF7EA',
             border: '1px solid rgba(60,42,22,0.10)',
@@ -184,7 +227,6 @@ export function LandingProblem() {
           }}
         >
           <div className="grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-8 lg:gap-16 items-start">
-            {/* Left: number + icon */}
             <div className="flex items-center gap-3 lg:flex-col lg:items-start lg:gap-3">
               <span
                 style={{
@@ -208,7 +250,6 @@ export function LandingProblem() {
                 <Users size={14} strokeWidth={1.5} />
               </div>
             </div>
-            {/* Right: copy */}
             <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-6 lg:gap-16 items-start">
               <h3
                 className="italic font-normal m-0"
@@ -236,7 +277,7 @@ export function LandingProblem() {
                   className="italic"
                   style={{
                     fontFamily: 'var(--font-family-mono)',
-                    fontSize: '10px',
+                    fontSize: '11px',
                     color: '#B5A586',
                   }}
                 >
@@ -246,6 +287,9 @@ export function LandingProblem() {
             </div>
           </div>
         </div>
+
+        {/* The cost of getting it wrong — evidence for the pain above */}
+        <StatsBand />
       </div>
     </section>
   )

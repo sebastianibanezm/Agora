@@ -30,7 +30,19 @@ describe('LandingFooter', () => {
     render(<LandingFooter />)
     expect(screen.getByText('footer.colPlatform')).toBeInTheDocument()
     expect(screen.getByText('footer.colCompany')).toBeInTheDocument()
-    expect(screen.getByText('footer.colLegal')).toBeInTheDocument()
+  })
+
+  it('renders section anchor links', () => {
+    render(<LandingFooter />)
+    expect(screen.getByText('footer.linkSolutions').closest('a')).toHaveAttribute('href', '#solutions')
+    expect(screen.getByText('footer.linkPlatform').closest('a')).toHaveAttribute('href', '#product')
+    expect(screen.getByText('footer.linkHow').closest('a')).toHaveAttribute('href', '#how-it-works')
+    expect(screen.getByText('footer.linkFaq').closest('a')).toHaveAttribute('href', '#faq')
+  })
+
+  it('renders contact email as mailto link', () => {
+    render(<LandingFooter />)
+    expect(screen.getByText('footer.email').closest('a')).toHaveAttribute('href', 'mailto:footer.email')
   })
 
   it('renders copyright', () => {

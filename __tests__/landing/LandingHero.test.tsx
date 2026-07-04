@@ -17,14 +17,10 @@ describe('LandingHero', () => {
     expect(screen.getByText('hero.headlineAccent')).toBeInTheDocument()
   })
 
-  it('renders both CTA buttons', () => {
+  it('renders the primary CTA linking to contact', () => {
     render(<LandingHero />)
-    expect(screen.getByText('hero.ctaPrimary')).toBeInTheDocument()
-    expect(screen.getByText('hero.ctaSecondary')).toBeInTheDocument()
-  })
-
-  it('renders the scroll cue', () => {
-    render(<LandingHero />)
-    expect(screen.getByText('hero.scroll')).toBeInTheDocument()
+    const cta = screen.getByText('hero.ctaPrimary')
+    expect(cta).toBeInTheDocument()
+    expect(cta.closest('a')).toHaveAttribute('href', '#contact')
   })
 })
