@@ -42,8 +42,8 @@ export default function LandingPage() {
         <LandingProblem />
         <LandingPillars />
         <LandingProduct />
-        <LandingHowItWorks />
         <LandingCtaBand />
+        <LandingHowItWorks />
         <LandingContact />
         <LandingFaq />
       </main>

@@ -20,8 +20,8 @@ const SECTION_IDS = [
   'landing-problem',
   'landing-pillars',
   'landing-product',
-  'landing-how-it-works',
   'landing-cta-band',
+  'landing-how-it-works',
   'landing-contact',
   'landing-faq',
 ] as const
