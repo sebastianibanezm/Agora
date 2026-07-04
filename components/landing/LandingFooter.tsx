@@ -2,6 +2,7 @@
 
 import React from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useTranslations, useLocale } from 'next-intl'
 import { ParallaxImage, useParallaxTimeline } from './ParallaxImage'
 import { useRouter, usePathname } from 'next/navigation'
@@ -147,7 +148,11 @@ export function LandingFooter() {
               <ul className="m-0 p-0 list-none flex flex-col gap-[10px]">
                 {PLATFORM_LINKS.map(({ key, href }) => (
                   <li key={key}>
-                    <a href={href} className="footer-link">{t(`footer.${key}` as any)}</a>
+                    {href.startsWith('/') ? (
+                      <Link href={href} className="footer-link">{t(`footer.${key}` as any)}</Link>
+                    ) : (
+                      <a href={href} className="footer-link">{t(`footer.${key}` as any)}</a>
+                    )}
                   </li>
                 ))}
               </ul>

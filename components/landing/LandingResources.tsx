@@ -2,6 +2,7 @@
 
 import React from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { ArrowRight } from 'lucide-react'
 import { useReveal } from '@/hooks/useReveal'
@@ -24,17 +25,17 @@ export function LandingResources() {
             {t('eyebrow')}
           </span>
           <div className="flex-1 h-px" style={{ background: 'rgba(60,42,22,0.08)' }} />
-          <a
+          <Link
             href="/recursos"
             className="flex-shrink-0 inline-flex items-center gap-[6px] text-[12px] font-medium"
             style={{ color: '#5A4A38', textDecoration: 'none' }}
           >
             {t('hubCta')} <ArrowRight size={12} strokeWidth={1.8} />
-          </a>
+          </Link>
         </div>
 
         {/* Featured article card */}
-        <a
+        <Link
           href={ARTICLE_PATH}
           className="group grid grid-cols-1 lg:grid-cols-[1fr_1.2fr] gap-8 lg:gap-14 items-center rounded-[16px] p-6 lg:p-9 stagger-item"
           style={{
@@ -99,7 +100,7 @@ export function LandingResources() {
               {t('cta')} <ArrowRight size={14} strokeWidth={1.8} />
             </span>
           </div>
-        </a>
+        </Link>
       </div>
     </section>
   )
