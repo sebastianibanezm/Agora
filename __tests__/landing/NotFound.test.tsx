@@ -11,8 +11,9 @@ vi.mock('next/navigation', () => ({
 }))
 
 describe('NotFoundDocument', () => {
-  it('renders the bill-of-lading fields with the requested path', () => {
+  it('renders the page heading and bill-of-lading fields with the requested path', () => {
     render(<NotFoundDocument />)
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('pageTitle')
     expect(screen.getByText('title')).toBeInTheDocument()
     expect(screen.getByText('/ruta-inexistente')).toBeInTheDocument()
     expect(screen.getByText('carrierNote')).toBeInTheDocument()

@@ -72,16 +72,42 @@ export function NotFoundDocument() {
       style={{ background: '#F1E8D5' }}
     >
       <div className="w-full" style={{ maxWidth: '780px' }}>
+        {/* Page heading — tells the visitor what they're looking at */}
+        <div className="text-center mb-10">
+          <span
+            className="block mb-3 text-[10px] uppercase tracking-[0.20em]"
+            style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860' }}
+          >
+            {t('pageEyebrow')}
+          </span>
+          <h1
+            className="italic font-normal m-0"
+            style={{
+              fontFamily: 'var(--font-family-display)',
+              fontSize: 'clamp(30px, 3.6vw, 42px)',
+              lineHeight: 1.1,
+              letterSpacing: '-0.015em',
+              color: INK,
+            }}
+          >
+            {t('pageTitle')}
+          </h1>
+          <p className="m-0 mt-3 text-[14px]" style={{ color: '#8A7860' }}>
+            {t('pageSub')}
+          </p>
+        </div>
+
         {/* The document — slightly rotated, like it landed on a desk */}
         <div
           className="notfound-doc relative"
           style={{
             background: '#FFFCF1',
-            border: `1.5px solid ${INK}`,
+            padding: '52px 30px 60px',
             boxShadow: '0 32px 80px rgba(43,31,18,0.28), 0 4px 16px rgba(43,31,18,0.10)',
             transform: 'rotate(-1.4deg)',
           }}
         >
+        <div style={{ border: `1.5px solid ${INK}` }}>
           {/* ── Header: logo + document title + refs ─────────────── */}
           <div className="grid grid-cols-[1.1fr_1.6fr_0.75fr]" style={{ borderBottom: `1.5px solid ${INK}` }}>
             <div className="doc-r flex items-center gap-[8px] px-4 py-4">
@@ -225,6 +251,8 @@ export function NotFoundDocument() {
               </div>
               <div style={{ ...cellLabel, marginBottom: 0, marginTop: '4px', fontSize: '7.5px' }}>{t('signedRole')}</div>
             </div>
+          </div>
+
           </div>
 
           {/* ── The stamp ────────────────────────────────────────── */}

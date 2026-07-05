@@ -264,7 +264,10 @@
         "fixLabel": "Corrección disponible",
         "fixBody": "versión corregida de tu ruta, lista para validar.",
         "ctaHome": "Ir al inicio",
-        "ctaResources": "Ver recursos"
+        "ctaResources": "Ver recursos",
+        "pageEyebrow": "Error 404",
+        "pageTitle": "Página no encontrada.",
+        "pageSub": "La aduana revisó tu solicitud y emitió el siguiente documento."
       }
     }
   }
