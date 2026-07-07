@@ -5,6 +5,7 @@ import { ArrowRight } from 'lucide-react'
 import { SITE_URL } from '@/lib/seo'
 import { ARTICLES, articleUrl } from '@/lib/articles'
 import { RecursosHeader } from '@/components/recursos/RecursosHeader'
+import { RelatedArticles } from '@/components/recursos/RelatedArticles'
 import { LandingFooter } from '@/components/landing/LandingFooter'
 
 const article = ARTICLES.find((a) => a.slug === 'ley-21719-proteccion-de-datos-agro')!
@@ -273,6 +274,8 @@ export default function Ley21719Page() {
             </Link>
           </div>
         </div>
+
+        <RelatedArticles currentSlug="ley-21719-proteccion-de-datos-agro" />
       </main>
 
       <LandingFooter />

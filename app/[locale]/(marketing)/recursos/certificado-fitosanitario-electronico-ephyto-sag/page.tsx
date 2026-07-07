@@ -5,6 +5,7 @@ import { ArrowRight } from 'lucide-react'
 import { SITE_URL } from '@/lib/seo'
 import { ARTICLES, articleUrl } from '@/lib/articles'
 import { RecursosHeader } from '@/components/recursos/RecursosHeader'
+import { RelatedArticles } from '@/components/recursos/RelatedArticles'
 import { LandingFooter } from '@/components/landing/LandingFooter'
 
 const article = ARTICLES.find((a) => a.slug === 'certificado-fitosanitario-electronico-ephyto-sag')!
@@ -282,6 +283,8 @@ export default function EphytoPage() {
             </Link>
           </div>
         </div>
+
+        <RelatedArticles currentSlug="certificado-fitosanitario-electronico-ephyto-sag" />
       </main>
 
       <LandingFooter />

@@ -5,6 +5,7 @@ import { ArrowRight } from 'lucide-react'
 import { SITE_URL } from '@/lib/seo'
 import { ARTICLES, articleUrl } from '@/lib/articles'
 import { RecursosHeader } from '@/components/recursos/RecursosHeader'
+import { RelatedArticles } from '@/components/recursos/RelatedArticles'
 import { LandingFooter } from '@/components/landing/LandingFooter'
 
 const article = ARTICLES.find((a) => a.slug === 'formas-de-pago-exportacion-carta-credito-cobranza')!
@@ -279,6 +280,8 @@ export default function FormasDePagoPage() {
             </Link>
           </div>
         </div>
+
+        <RelatedArticles currentSlug="formas-de-pago-exportacion-carta-credito-cobranza" />
       </main>
 
       <LandingFooter />

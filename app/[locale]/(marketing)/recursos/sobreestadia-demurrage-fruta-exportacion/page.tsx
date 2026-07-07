@@ -5,6 +5,7 @@ import { ArrowRight } from 'lucide-react'
 import { SITE_URL } from '@/lib/seo'
 import { ARTICLES, articleUrl } from '@/lib/articles'
 import { RecursosHeader } from '@/components/recursos/RecursosHeader'
+import { RelatedArticles } from '@/components/recursos/RelatedArticles'
 import { LandingFooter } from '@/components/landing/LandingFooter'
 
 const article = ARTICLES.find((a) => a.slug === 'sobreestadia-demurrage-fruta-exportacion')!
@@ -277,6 +278,8 @@ export default function SobreestadiaPage() {
             </Link>
           </div>
         </div>
+
+        <RelatedArticles currentSlug="sobreestadia-demurrage-fruta-exportacion" />
       </main>
 
       <LandingFooter />
