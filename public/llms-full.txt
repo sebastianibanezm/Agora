@@ -100,6 +100,15 @@ Según el volumen de embarques de tu temporada. Después de la primera llamada e
 - **OTIF (on-time in-full):** porcentaje de embarques entregados a tiempo y completos.
 - **Cobranza documentaria:** modalidad de pago donde los documentos de embarque se entregan al importador contra pago o aceptación vía bancos.
 
+## Recursos
+
+Content hub con análisis y guías en español para exportadores de fruta y frutos secos, en https://www.agenteagora.com/recursos:
+
+- **Certificado fitosanitario 100% digital: Chile estrena el ePhyto con China** (https://www.agenteagora.com/recursos/certificado-fitosanitario-electronico-ephyto-sag) — desde abril de 2026 Chile es el primer país del mundo con certificación fitosanitaria totalmente electrónica hacia China; qué es el ePhyto del SAG y qué exige del flujo documental del exportador.
+- **Sobreestadía y demurrage: el costo oculto que nace de un documento atrasado** (https://www.agenteagora.com/recursos/sobreestadia-demurrage-fruta-exportacion) — por qué la sobreestadía (demurrage) y la detención suelen originarse en errores o demoras documentales, cuánto cuestan (USD 400+/día por contenedor) y qué se puede controlar.
+- **Carta de crédito, cobranza documentaria o cuenta abierta** (https://www.agenteagora.com/recursos/formas-de-pago-exportacion-carta-credito-cobranza) — cómo las tres formas de pago reparten el riesgo de no pago y por qué los documentos de embarque definen si el exportador cobra.
+- **Ley 21.719: el nuevo desafío regulatorio que obliga al agro a ordenar sus datos antes de diciembre de 2026** (https://www.agenteagora.com/recursos/ley-21719-proteccion-de-datos-agro) — la nueva ley de protección de datos personales, con multas de hasta 20.000 UTM, y qué implica para exportadoras y packings.
+
 ## Empresa
 
 Agente Agora LLC — Chile / Latinoamérica / Estados Unidos

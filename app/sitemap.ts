@@ -1,4 +1,5 @@
 import type { MetadataRoute } from 'next'
+import { ARTICLES } from '@/lib/articles'
 
 const SITE_URL = 'https://www.agenteagora.com'
 
@@ -8,6 +9,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     en: `${SITE_URL}/en`,
   }
 
+  const articleEntries: MetadataRoute.Sitemap = ARTICLES.map((article) => ({
+    url: `${SITE_URL}/recursos/${article.slug}`,
+    lastModified: new Date(article.datePublished),
+    changeFrequency: 'monthly' as const,
+    priority: 0.7,
+  }))
+
   return [
     {
       url: `${SITE_URL}/recursos`,
@@ -15,12 +23,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'weekly' as const,
       priority: 0.7,
     },
-    {
-      url: `${SITE_URL}/recursos/ley-21719-proteccion-de-datos-agro`,
-      lastModified: new Date('2026-07-04'),
-      changeFrequency: 'monthly' as const,
-      priority: 0.7,
-    },
+    ...articleEntries,
     {
       url: SITE_URL,
       lastModified: new Date(),

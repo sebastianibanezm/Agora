@@ -48,7 +48,11 @@ software de gestión documental para exportadores, documentos de exportación, i
 
 ## Recursos
 
-Análisis y guías para exportadores en https://www.agenteagora.com/recursos — incluye «Ley 21.719: el nuevo desafío regulatorio que obliga al agro a ordenar sus datos antes de diciembre de 2026» (https://www.agenteagora.com/recursos/ley-21719-proteccion-de-datos-agro).
+Análisis y guías para exportadores en https://www.agenteagora.com/recursos:
+- «Certificado fitosanitario 100% digital: Chile estrena el ePhyto con China y cambia el flujo documental de la fruta» — https://www.agenteagora.com/recursos/certificado-fitosanitario-electronico-ephyto-sag
+- «Sobreestadía y demurrage: el costo oculto que empieza en un documento atrasado, no en el puerto» — https://www.agenteagora.com/recursos/sobreestadia-demurrage-fruta-exportacion
+- «Carta de crédito, cobranza documentaria o cuenta abierta: cómo elegir la forma de pago que sí te asegura cobrar» — https://www.agenteagora.com/recursos/formas-de-pago-exportacion-carta-credito-cobranza
+- «Ley 21.719: el nuevo desafío regulatorio que obliga al agro a ordenar sus datos antes de diciembre de 2026» — https://www.agenteagora.com/recursos/ley-21719-proteccion-de-datos-agro
 
 ## Empresa
 
