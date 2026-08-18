@@ -55,7 +55,9 @@ describe('LandingCtaBand', () => {
 
   it('tracks the closing CTA source', () => {
     render(<LandingCtaBand />)
-    fireEvent.click(screen.getByText('cta'))
+    const cta = screen.getByText('cta').closest('a')!
+    cta.addEventListener('click', event => event.preventDefault())
+    fireEvent.click(cta)
     expect(mockCaptureContactCta).toHaveBeenCalledWith('cta_band')
   })
 })
@@ -89,10 +91,14 @@ describe('LandingResources', () => {
   it('tracks the resources hub and featured article destinations', () => {
     render(<LandingResources />)
 
-    fireEvent.click(screen.getByText('hubCta'))
+    const hubLink = screen.getByText('hubCta').closest('a')!
+    hubLink.addEventListener('click', event => event.preventDefault())
+    fireEvent.click(hubLink)
     expect(mockCaptureResourceClick).toHaveBeenCalledWith('hub', '/recursos')
 
-    fireEvent.click(screen.getByText('articleTitle'))
+    const articleLink = screen.getByText('articleTitle').closest('a')!
+    articleLink.addEventListener('click', event => event.preventDefault())
+    fireEvent.click(articleLink)
     expect(mockCaptureResourceClick).toHaveBeenCalledWith(
       'featured_article',
       '/recursos/ley-21719-proteccion-de-datos-agro',

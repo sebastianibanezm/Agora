@@ -33,7 +33,9 @@ describe('LandingHero', () => {
 
   it('tracks the hero CTA source', () => {
     render(<LandingHero />)
-    fireEvent.click(screen.getByText('hero.ctaPrimary'))
+    const cta = screen.getByText('hero.ctaPrimary').closest('a')!
+    cta.addEventListener('click', event => event.preventDefault())
+    fireEvent.click(cta)
     expect(mockCaptureContactCta).toHaveBeenCalledWith('hero')
   })
 })
