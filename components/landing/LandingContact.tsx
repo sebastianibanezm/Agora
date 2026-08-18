@@ -12,6 +12,32 @@ import {
 } from '@/lib/analytics'
 
 const VOLUME_OPTIONS = ['100–500', '500–1000', '1000–3000', '3000+'] as const
+const NAME_FIELDS = [
+  {
+    name: 'firstName',
+    labelKey: 'contact.labelFirstName',
+    placeholderKey: 'contact.placeholderFirstName',
+  },
+  {
+    name: 'lastName',
+    labelKey: 'contact.labelLastName',
+    placeholderKey: 'contact.placeholderLastName',
+  },
+] as const
+const CONTACT_FIELDS = [
+  {
+    name: 'company',
+    type: 'text',
+    labelKey: 'contact.labelCompany',
+    placeholderKey: 'contact.placeholderCompany',
+  },
+  {
+    name: 'email',
+    type: 'email',
+    labelKey: 'contact.labelEmail',
+    placeholderKey: 'contact.placeholderEmail',
+  },
+] as const
 
 type Status = 'idle' | 'loading' | 'success' | 'error'
 
@@ -160,20 +186,20 @@ export function LandingContact() {
             <form onSubmit={handleSubmit} onFocusCapture={trackFormStarted}>
               {/* Name row */}
               <div className="grid grid-cols-2 gap-3 mb-4">
-                {(['FirstName', 'LastName'] as const).map((f) => (
-                  <div key={f} className="flex flex-col gap-[6px]">
+                {NAME_FIELDS.map((field) => (
+                  <div key={field.name} className="flex flex-col gap-[6px]">
                     <label
                       className="text-[10px] uppercase tracking-[0.12em] font-medium"
                       style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860' }}
                     >
-                      {t(`contact.label${f}` as any)}{' '}
+                      {t(field.labelKey)}{' '}
                       <span style={{ color: '#8B2A1F' }}>*</span>
                     </label>
                     <input
                       type="text"
-                      name={f === 'FirstName' ? 'firstName' : 'lastName'}
+                      name={field.name}
                       required
-                      placeholder={t(`contact.placeholder${f}` as any)}
+                      placeholder={t(field.placeholderKey)}
                       className="contact-input h-[42px] px-[14px] rounded-[8px] text-[14px] w-full"
                     />
                   </div>
@@ -181,20 +207,20 @@ export function LandingContact() {
               </div>
 
               {/* Single-field rows */}
-              {(['Company', 'Email'] as const).map((f) => (
-                <div key={f} className="flex flex-col gap-[6px] mb-4">
+              {CONTACT_FIELDS.map((field) => (
+                <div key={field.name} className="flex flex-col gap-[6px] mb-4">
                   <label
                     className="text-[10px] uppercase tracking-[0.12em] font-medium"
                     style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860' }}
                   >
-                    {t(`contact.label${f}` as any)}{' '}
+                    {t(field.labelKey)}{' '}
                     <span style={{ color: '#8B2A1F' }}>*</span>
                   </label>
                   <input
-                    type={f === 'Email' ? 'email' : 'text'}
-                    name={f.toLowerCase()}
+                    type={field.type}
+                    name={field.name}
                     required
-                    placeholder={t(`contact.placeholder${f}` as any)}
+                    placeholder={t(field.placeholderKey)}
                     className="contact-input h-[42px] px-[14px] rounded-[8px] text-[14px] w-full"
                   />
                 </div>

@@ -4,7 +4,12 @@ import { LandingHero } from '@/components/landing/LandingHero'
 const mockCaptureContactCta = vi.hoisted(() => vi.fn())
 
 vi.mock('next-intl', () => ({ useTranslations: () => (key: string) => key }))
-vi.mock('next/image', () => ({ default: (props: { alt: string }) => <img alt={props.alt} /> }))
+vi.mock('next/image', () => ({
+  default: (props: { alt: string }) => {
+    // eslint-disable-next-line @next/next/no-img-element -- Test double for next/image.
+    return <img alt={props.alt} />
+  },
+}))
 vi.mock('@/components/landing/LandingNav', () => ({ LandingNav: () => <nav data-testid="nav" /> }))
 vi.mock('@/lib/analytics', () => ({ captureContactCta: mockCaptureContactCta }))
 
