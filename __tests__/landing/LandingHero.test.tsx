@@ -1,11 +1,18 @@
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import { LandingHero } from '@/components/landing/LandingHero'
+
+const mockCaptureContactCta = vi.hoisted(() => vi.fn())
 
 vi.mock('next-intl', () => ({ useTranslations: () => (key: string) => key }))
 vi.mock('next/image', () => ({ default: (props: { alt: string }) => <img alt={props.alt} /> }))
 vi.mock('@/components/landing/LandingNav', () => ({ LandingNav: () => <nav data-testid="nav" /> }))
+vi.mock('@/lib/analytics', () => ({ captureContactCta: mockCaptureContactCta }))
 
 describe('LandingHero', () => {
+  beforeEach(() => {
+    mockCaptureContactCta.mockClear()
+  })
+
   it('renders the nav', () => {
     render(<LandingHero />)
     expect(screen.getByTestId('nav')).toBeInTheDocument()
@@ -22,5 +29,11 @@ describe('LandingHero', () => {
     const cta = screen.getByText('hero.ctaPrimary')
     expect(cta).toBeInTheDocument()
     expect(cta.closest('a')).toHaveAttribute('href', '#contact')
+  })
+
+  it('tracks the hero CTA source', () => {
+    render(<LandingHero />)
+    fireEvent.click(screen.getByText('hero.ctaPrimary'))
+    expect(mockCaptureContactCta).toHaveBeenCalledWith('hero')
   })
 })

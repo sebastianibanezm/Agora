@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl'
 import { ArrowRight } from 'lucide-react'
 import { LandingNav } from './LandingNav'
 import { ParallaxImage, useParallaxTimeline } from './ParallaxImage'
+import { captureContactCta } from '@/lib/analytics'
 
 export function LandingHero() {
   const t = useTranslations('landing')
@@ -161,6 +162,7 @@ export function LandingHero() {
           <div className="mt-5 flex items-center gap-[10px] flex-wrap hero-el hero-el-4">
             <a
               href="#contact"
+              onClick={() => captureContactCta('hero')}
               className="inline-flex items-center gap-[7px] font-medium text-[13px] cursor-pointer btn-press"
               style={{
                 height: '40px',

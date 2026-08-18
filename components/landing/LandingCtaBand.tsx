@@ -4,6 +4,7 @@ import React from 'react'
 import { useTranslations } from 'next-intl'
 import { ArrowRight } from 'lucide-react'
 import { useReveal } from '@/hooks/useReveal'
+import { captureContactCta } from '@/lib/analytics'
 
 export function LandingCtaBand() {
   const t = useTranslations('landing.ctaBand')
@@ -48,6 +49,7 @@ export function LandingCtaBand() {
           </h2>
           <a
             href="#contact"
+            onClick={() => captureContactCta('cta_band')}
             className="cta-solid inline-flex items-center gap-[8px] font-medium text-[14px] flex-shrink-0 btn-press stagger-item"
             style={{ height: '46px', padding: '0 24px', borderRadius: '999px' }}
           >

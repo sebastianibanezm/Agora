@@ -1,12 +1,26 @@
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import { LandingProof } from '@/components/landing/LandingProof'
 import { LandingHowItWorks } from '@/components/landing/LandingHowItWorks'
 import { LandingCtaBand } from '@/components/landing/LandingCtaBand'
 import { LandingFaq } from '@/components/landing/LandingFaq'
 import { LandingResources } from '@/components/landing/LandingResources'
 
+const { mockCaptureContactCta, mockCaptureResourceClick } = vi.hoisted(() => ({
+  mockCaptureContactCta: vi.fn(),
+  mockCaptureResourceClick: vi.fn(),
+}))
+
 vi.mock('next-intl', () => ({ useTranslations: () => (key: string) => key }))
 vi.mock('next/image', () => ({ default: (props: { alt: string }) => <img alt={props.alt} /> }))
+vi.mock('@/lib/analytics', () => ({
+  captureContactCta: mockCaptureContactCta,
+  captureResourceClick: mockCaptureResourceClick,
+}))
+
+beforeEach(() => {
+  mockCaptureContactCta.mockClear()
+  mockCaptureResourceClick.mockClear()
+})
 
 describe('LandingProof', () => {
   it('renders the Onizzo logo with alt text', () => {
@@ -38,6 +52,12 @@ describe('LandingCtaBand', () => {
     render(<LandingCtaBand />)
     expect(screen.getByText('cta').closest('a')).toHaveAttribute('href', '#contact')
   })
+
+  it('tracks the closing CTA source', () => {
+    render(<LandingCtaBand />)
+    fireEvent.click(screen.getByText('cta'))
+    expect(mockCaptureContactCta).toHaveBeenCalledWith('cta_band')
+  })
 })
 
 describe('LandingFaq', () => {
@@ -64,5 +84,18 @@ describe('LandingResources', () => {
     const card = screen.getByText('articleTitle').closest('a')
     expect(card).toHaveAttribute('href', '/recursos/ley-21719-proteccion-de-datos-agro')
     expect(screen.getByText('hubCta').closest('a')).toHaveAttribute('href', '/recursos')
+  })
+
+  it('tracks the resources hub and featured article destinations', () => {
+    render(<LandingResources />)
+
+    fireEvent.click(screen.getByText('hubCta'))
+    expect(mockCaptureResourceClick).toHaveBeenCalledWith('hub', '/recursos')
+
+    fireEvent.click(screen.getByText('articleTitle'))
+    expect(mockCaptureResourceClick).toHaveBeenCalledWith(
+      'featured_article',
+      '/recursos/ley-21719-proteccion-de-datos-agro',
+    )
   })
 })
