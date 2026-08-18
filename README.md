@@ -34,3 +34,26 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## PostHog analytics
+
+The marketing site initializes PostHog from `instrumentation-client.ts`. Add these public environment variables to every Vercel environment that should collect analytics:
+
+```bash
+NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN=phc_your_project_token
+NEXT_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
+```
+
+`NEXT_PUBLIC_` variables are embedded in the browser bundle at build time. The project token is intentionally public; never put a PostHog personal API key in either variable. If either variable is missing, analytics remains disabled and the site continues normally.
+
+PostHog collects automatic page views, page leaves, clicks, and session recordings. Session replay is enabled with all form inputs masked. The site also captures these explicit events:
+
+| Event | Properties |
+| --- | --- |
+| `contact_cta_clicked` | `source`: `hero` or `cta_band` |
+| `resource_clicked` | `source`, `path` |
+| `contact_form_started` | None |
+| `contact_form_submitted` | `annual_container_volume` |
+| `contact_form_failed` | `reason`, optional `status_code` |
+
+Names, email addresses, and company names are never included in captured event properties. After `/api/contact` returns success, the browser is identified with the normalized submitted email and the lead properties are attached to that PostHog person. This merges the earlier anonymous journey into the converted lead's profile.
