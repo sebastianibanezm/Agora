@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { ArrowRight } from 'lucide-react'
 import { useReveal } from '@/hooks/useReveal'
+import { captureResourceClick } from '@/lib/analytics'
 
 const ARTICLE_PATH = '/recursos/ley-21719-proteccion-de-datos-agro'
 
@@ -27,6 +28,7 @@ export function LandingResources() {
           <div className="flex-1 h-px" style={{ background: 'rgba(60,42,22,0.08)' }} />
           <Link
             href="/recursos"
+            onClick={() => captureResourceClick('hub', '/recursos')}
             className="flex-shrink-0 inline-flex items-center gap-[6px] text-[12px] font-medium"
             style={{ color: '#5A4A38', textDecoration: 'none' }}
           >
@@ -37,6 +39,7 @@ export function LandingResources() {
         {/* Featured article card */}
         <Link
           href={ARTICLE_PATH}
+          onClick={() => captureResourceClick('featured_article', ARTICLE_PATH)}
           className="group grid grid-cols-1 lg:grid-cols-[1fr_1.2fr] gap-8 lg:gap-14 items-center rounded-[16px] p-6 lg:p-9 stagger-item"
           style={{
             background: '#FCF7EA',

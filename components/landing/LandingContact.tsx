@@ -1,11 +1,43 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { ArrowRight, Clock, ShieldCheck } from 'lucide-react'
 import { useReveal } from '@/hooks/useReveal'
+import {
+  captureContactFormFailed,
+  captureContactFormStarted,
+  captureContactFormSubmitted,
+  identifyContactLead,
+} from '@/lib/analytics'
 
 const VOLUME_OPTIONS = ['100–500', '500–1000', '1000–3000', '3000+'] as const
+const NAME_FIELDS = [
+  {
+    name: 'firstName',
+    labelKey: 'contact.labelFirstName',
+    placeholderKey: 'contact.placeholderFirstName',
+  },
+  {
+    name: 'lastName',
+    labelKey: 'contact.labelLastName',
+    placeholderKey: 'contact.placeholderLastName',
+  },
+] as const
+const CONTACT_FIELDS = [
+  {
+    name: 'company',
+    type: 'text',
+    labelKey: 'contact.labelCompany',
+    placeholderKey: 'contact.placeholderCompany',
+  },
+  {
+    name: 'email',
+    type: 'email',
+    labelKey: 'contact.labelEmail',
+    placeholderKey: 'contact.placeholderEmail',
+  },
+] as const
 
 type Status = 'idle' | 'loading' | 'success' | 'error'
 
@@ -13,7 +45,15 @@ export function LandingContact() {
   const t = useTranslations('landing')
   const [volume, setVolume] = useState<string | null>(null)
   const [status, setStatus] = useState<Status>('idle')
+  const hasStartedRef = useRef(false)
   const ref = useReveal<HTMLElement>(0.1)
+
+  function trackFormStarted() {
+    if (hasStartedRef.current) return
+
+    hasStartedRef.current = true
+    captureContactFormStarted()
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -21,20 +61,31 @@ export function LandingContact() {
     setStatus('loading')
 
     const fd = new FormData(e.currentTarget)
+    const lead = {
+      firstName: String(fd.get('firstName') ?? ''),
+      lastName: String(fd.get('lastName') ?? ''),
+      company: String(fd.get('company') ?? ''),
+      email: String(fd.get('email') ?? ''),
+      volume,
+    }
+
     try {
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          firstName: fd.get('firstName'),
-          lastName: fd.get('lastName'),
-          company: fd.get('company'),
-          email: fd.get('email'),
-          volume,
-        }),
+        body: JSON.stringify(lead),
       })
-      setStatus(res.ok ? 'success' : 'error')
+
+      if (res.ok) {
+        captureContactFormSubmitted(volume)
+        identifyContactLead(lead)
+        setStatus('success')
+      } else {
+        captureContactFormFailed('http', res.status)
+        setStatus('error')
+      }
     } catch {
+      captureContactFormFailed('network')
       setStatus('error')
     }
   }
@@ -132,23 +183,23 @@ export function LandingContact() {
                 </p>
               </div>
             ) : (
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} onFocusCapture={trackFormStarted}>
               {/* Name row */}
               <div className="grid grid-cols-2 gap-3 mb-4">
-                {(['FirstName', 'LastName'] as const).map((f) => (
-                  <div key={f} className="flex flex-col gap-[6px]">
+                {NAME_FIELDS.map((field) => (
+                  <div key={field.name} className="flex flex-col gap-[6px]">
                     <label
                       className="text-[10px] uppercase tracking-[0.12em] font-medium"
                       style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860' }}
                     >
-                      {t(`contact.label${f}` as any)}{' '}
+                      {t(field.labelKey)}{' '}
                       <span style={{ color: '#8B2A1F' }}>*</span>
                     </label>
                     <input
                       type="text"
-                      name={f === 'FirstName' ? 'firstName' : 'lastName'}
+                      name={field.name}
                       required
-                      placeholder={t(`contact.placeholder${f}` as any)}
+                      placeholder={t(field.placeholderKey)}
                       className="contact-input h-[42px] px-[14px] rounded-[8px] text-[14px] w-full"
                     />
                   </div>
@@ -156,20 +207,20 @@ export function LandingContact() {
               </div>
 
               {/* Single-field rows */}
-              {(['Company', 'Email'] as const).map((f) => (
-                <div key={f} className="flex flex-col gap-[6px] mb-4">
+              {CONTACT_FIELDS.map((field) => (
+                <div key={field.name} className="flex flex-col gap-[6px] mb-4">
                   <label
                     className="text-[10px] uppercase tracking-[0.12em] font-medium"
                     style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860' }}
                   >
-                    {t(`contact.label${f}` as any)}{' '}
+                    {t(field.labelKey)}{' '}
                     <span style={{ color: '#8B2A1F' }}>*</span>
                   </label>
                   <input
-                    type={f === 'Email' ? 'email' : 'text'}
-                    name={f.toLowerCase()}
+                    type={field.type}
+                    name={field.name}
                     required
-                    placeholder={t(`contact.placeholder${f}` as any)}
+                    placeholder={t(field.placeholderKey)}
                     className="contact-input h-[42px] px-[14px] rounded-[8px] text-[14px] w-full"
                   />
                 </div>
@@ -190,7 +241,10 @@ export function LandingContact() {
                       key={opt}
                       type="button"
                       data-active={volume === opt ? 'true' : undefined}
-                      onClick={() => setVolume(opt)}
+                      onClick={() => {
+                        trackFormStarted()
+                        setVolume(opt)
+                      }}
                       className="volume-option h-[38px] flex items-center justify-center rounded-[7px] text-[11.5px] cursor-pointer btn-press"
                       style={{ fontFamily: 'var(--font-family-mono)' }}
                     >
