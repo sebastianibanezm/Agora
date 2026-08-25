@@ -1,6 +1,8 @@
 import { render, screen } from '@testing-library/react'
 import { getLegalDocument } from '@/lib/legal-content'
 import { LegalDocumentPage } from '@/components/legal/LegalDocumentPage'
+import esMessages from '@/messages/es.json'
+import enMessages from '@/messages/en.json'
 
 vi.mock('@/components/landing/LandingFooter', () => ({
   LandingFooter: () => <footer aria-label="Agora footer" />,
@@ -18,6 +20,7 @@ describe('LegalDocumentPage', () => {
     expect(screen.getByText(/nombre, dirección de correo electrónico, imagen de perfil e identificador de cuenta/i)).toBeInTheDocument()
     expect(screen.getByText(/no solicita acceso a Gmail, Google Drive, Google Calendar ni a otro contenido de Google Workspace/i)).toBeInTheDocument()
     expect(screen.getByText(/no vende datos de usuarios de Google ni los usa para publicidad/i)).toBeInTheDocument()
+    expect(screen.queryByAltText('Agora')).not.toBeInTheDocument()
   })
 
   it('renders the English privacy policy with the same Google data boundary', () => {
@@ -37,5 +40,12 @@ describe('LegalDocumentPage', () => {
     expect(screen.getByRole('heading', { name: 'Customer content' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Suspension and termination' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Contact' })).toBeInTheDocument()
+  })
+
+  it('aligns contact and FAQ privacy messages with the service-provider policy', () => {
+    expect(esMessages.landing.contact.formNote).toMatch(/no se venden.*solo se comparten con proveedores necesarios/i)
+    expect(esMessages.landing.faq.a3).toMatch(/no se venden.*proveedores necesarios/i)
+    expect(enMessages.landing.contact.formNote).toMatch(/never sold.*shared only with providers needed/i)
+    expect(enMessages.landing.faq.a3).toMatch(/never sold.*providers needed/i)
   })
 })

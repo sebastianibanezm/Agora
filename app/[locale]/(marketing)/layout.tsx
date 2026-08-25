@@ -1,5 +1,3 @@
-import { getTranslations } from 'next-intl/server'
-
 const organizationSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
@@ -47,28 +45,12 @@ const softwareSchema = {
   },
 }
 
-export default async function MarketingLayout({
+export default function MarketingLayout({
   children,
-  params,
 }: {
   children: React.ReactNode
-  params: Promise<{ locale: string }>
+  params?: Promise<{ locale: string }>
 }) {
-  const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'landing.faq' })
-
-  // FAQPage schema built from the visible FAQ — keeps markup and content in sync
-  const faqSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    inLanguage: locale,
-    mainEntity: (['1', '2', '3', '4', '5'] as const).map((n) => ({
-      '@type': 'Question',
-      name: t(`q${n}`),
-      acceptedAnswer: { '@type': 'Answer', text: t(`a${n}`) },
-    })),
-  }
-
   return (
     <>
       <script
@@ -78,10 +60,6 @@ export default async function MarketingLayout({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       {children}
     </>

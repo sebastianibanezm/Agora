@@ -2,6 +2,10 @@ import { render, screen } from '@testing-library/react'
 import { vi } from 'vitest'
 import LandingPage from '@/app/[locale]/(marketing)/page'
 
+vi.mock('next-intl/server', () => ({
+  getTranslations: async () => (key: string) => `faq.${key}`,
+}))
+
 // Mock all landing components
 vi.mock('@/components/landing/LandingHero', () => ({ LandingHero: () => <div data-testid="landing-hero" /> }))
 vi.mock('@/components/landing/LandingProof', () => ({ LandingProof: () => <div data-testid="landing-proof" /> }))
@@ -30,7 +34,7 @@ const SECTION_IDS = [
 
 describe('LandingPage', () => {
   it('renders all 9 landing sections in order', async () => {
-    const { container } = render(await LandingPage())
+    const { container } = render(await LandingPage({ params: Promise.resolve({ locale: 'es' }) }))
     const rendered = Array.from(container.querySelectorAll('[data-testid^="landing-"]')).map(
       (el) => el.getAttribute('data-testid')
     )
@@ -38,7 +42,7 @@ describe('LandingPage', () => {
   })
 
   it('wraps all sections in a main element', async () => {
-    const { container } = render(await LandingPage())
+    const { container } = render(await LandingPage({ params: Promise.resolve({ locale: 'es' }) }))
     const main = container.querySelector('main')
     expect(main).toBeInTheDocument()
     for (const id of SECTION_IDS) {
@@ -47,7 +51,7 @@ describe('LandingPage', () => {
   })
 
   it('renders footer outside main', async () => {
-    const { container } = render(await LandingPage())
+    const { container } = render(await LandingPage({ params: Promise.resolve({ locale: 'es' }) }))
     const main = container.querySelector('main')
     expect(main).not.toContainElement(screen.getByTestId('landing-footer'))
   })

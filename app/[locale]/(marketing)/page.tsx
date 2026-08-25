@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { getMessages } from 'next-intl/server'
+import { getMessages, getTranslations } from 'next-intl/server'
 import { SITE_URL, LOCALE_URLS } from '@/lib/seo'
 import { LandingHero } from '@/components/landing/LandingHero'
 import { LandingProof } from '@/components/landing/LandingProof'
@@ -44,9 +44,26 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   }
 }
 
-export default function LandingPage() {
+export default async function LandingPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'landing.faq' })
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    inLanguage: locale,
+    mainEntity: (['1', '2', '3', '4', '5'] as const).map((n) => ({
+      '@type': 'Question',
+      name: t(`q${n}`),
+      acceptedAnswer: { '@type': 'Answer', text: t(`a${n}`) },
+    })),
+  }
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       <main id="landing-main">
         <LandingHero />
         <LandingProof />

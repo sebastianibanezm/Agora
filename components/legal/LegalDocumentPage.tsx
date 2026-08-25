@@ -23,7 +23,7 @@ export function LegalDocumentPage({ document }: { document: LegalDocument }) {
       <header className="border-b border-[rgba(60,42,22,0.12)] bg-[#F8F2E4]">
         <div className="mx-auto flex max-w-[1100px] items-center justify-between gap-5 px-5 py-5 sm:px-8 lg:px-12">
           <Link href={homePath} className="inline-flex items-center gap-2 text-[#2B1F12] no-underline">
-            <Image src="/landing/lambda-logo.png" alt="Agora" width={26} height={26} className="object-contain" />
+            <Image src="/landing/lambda-logo.png" alt="" width={26} height={26} className="object-contain" />
             <span className="italic text-[20px]" style={{ fontFamily: 'var(--font-family-old-standard)' }}>Agora</span>
             <span className="text-[10px] uppercase tracking-[0.13em] text-[#8A7860]" style={{ fontFamily: 'var(--font-family-mono)' }}>{homeLabel}</span>
           </Link>

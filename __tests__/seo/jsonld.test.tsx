@@ -2,6 +2,7 @@ import { render } from '@testing-library/react'
 import { describe, it, expect, vi } from 'vitest'
 import esMessages from '@/messages/es.json'
 import MarketingLayout from '@/app/[locale]/(marketing)/layout'
+import LandingPage from '@/app/[locale]/(marketing)/page'
 
 vi.mock('next-intl/server', () => ({
   getTranslations: vi.fn(async ({ namespace }: { namespace: string }) => {
@@ -13,12 +14,41 @@ vi.mock('next-intl/server', () => ({
   }),
 }))
 
+vi.mock('@/components/landing/LandingHero', () => ({ LandingHero: () => <div /> }))
+vi.mock('@/components/landing/LandingProof', () => ({ LandingProof: () => <div /> }))
+vi.mock('@/components/landing/LandingProblem', () => ({ LandingProblem: () => <div /> }))
+vi.mock('@/components/landing/LandingPillars', () => ({ LandingPillars: () => <div /> }))
+vi.mock('@/components/landing/LandingProduct', () => ({ LandingProduct: () => <div /> }))
+vi.mock('@/components/landing/LandingHowItWorks', () => ({ LandingHowItWorks: () => <div /> }))
+vi.mock('@/components/landing/LandingCtaBand', () => ({ LandingCtaBand: () => <div /> }))
+vi.mock('@/components/landing/LandingContact', () => ({ LandingContact: () => <div /> }))
+vi.mock('@/components/landing/LandingFaq', () => ({ LandingFaq: () => <div /> }))
+vi.mock('@/components/landing/LandingResources', () => ({ LandingResources: () => <div /> }))
+vi.mock('@/components/landing/LandingFooter', () => ({ LandingFooter: () => <footer /> }))
+
 async function renderLayout() {
   const element = await MarketingLayout({
     children: <div />,
     params: Promise.resolve({ locale: 'es' }),
   })
   return render(element)
+}
+
+async function renderHomepage() {
+  const page = await LandingPage({ params: Promise.resolve({ locale: 'es' }) })
+  const layout = await MarketingLayout({
+    children: page,
+    params: Promise.resolve({ locale: 'es' }),
+  })
+  return render(layout)
+}
+
+async function renderLegalPage() {
+  const layout = await MarketingLayout({
+    children: <main><h1>Privacy Policy</h1></main>,
+    params: Promise.resolve({ locale: 'es' }),
+  })
+  return render(layout)
 }
 
 function getSchemas(container: HTMLElement) {
@@ -43,12 +73,17 @@ describe('marketing layout JSON-LD', () => {
     expect(app.applicationCategory).toBe('BusinessApplication')
   })
 
-  it('renders a FAQPage schema with 5 questions matching the visible FAQ', async () => {
-    const { container } = await renderLayout()
+  it('renders a FAQPage schema with 5 questions on the homepage', async () => {
+    const { container } = await renderHomepage()
     const faq = getSchemas(container).find((s: { '@type': string }) => s['@type'] === 'FAQPage')
     expect(faq).toBeTruthy()
     expect(faq.mainEntity).toHaveLength(5)
     expect(faq.mainEntity[0].name).toBe(esMessages.landing.faq.q1)
     expect(faq.mainEntity[0].acceptedAnswer.text).toBe(esMessages.landing.faq.a1)
+  })
+
+  it('does not add FAQPage schema when rendering a legal page through the marketing layout', async () => {
+    const { container } = await renderLegalPage()
+    expect(getSchemas(container).some((s: { '@type': string }) => s['@type'] === 'FAQPage')).toBe(false)
   })
 })

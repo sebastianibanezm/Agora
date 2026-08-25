@@ -12,6 +12,8 @@ vi.mock('next-intl/server', () => ({
 
 import { generateMetadata as layoutMetadata } from '@/app/[locale]/layout'
 import { generateMetadata as pageMetadata } from '@/app/[locale]/(marketing)/page'
+import { generateMetadata as privacyMetadata } from '@/app/[locale]/(marketing)/privacy/page'
+import { generateMetadata as termsMetadata } from '@/app/[locale]/(marketing)/terms/page'
 
 const params = (locale: string) => ({ params: Promise.resolve({ locale }) })
 
@@ -76,5 +78,25 @@ describe('landing page metadata', () => {
   it('has twitter card', async () => {
     const metadata = await pageMetadata(params('es'))
     expect((metadata.twitter as { card?: string } | undefined)?.card).toBe('summary_large_image')
+  })
+})
+
+describe('legal page metadata', () => {
+  it('sets localized Twitter metadata for the privacy policy', async () => {
+    const metadata = await privacyMetadata(params('en'))
+    const twitter = metadata.twitter as { card?: string; title?: string; description?: string }
+
+    expect(twitter.card).toBe('summary_large_image')
+    expect(twitter.title).toBe('Privacy Policy')
+    expect(twitter.description).toMatch(/collects, uses, and protects/i)
+  })
+
+  it('sets localized Twitter metadata for the terms page', async () => {
+    const metadata = await termsMetadata(params('es'))
+    const twitter = metadata.twitter as { card?: string; title?: string; description?: string }
+
+    expect(twitter.card).toBe('summary_large_image')
+    expect(twitter.title).toBe('Términos de Servicio')
+    expect(twitter.description).toMatch(/reglas básicas/i)
   })
 })
