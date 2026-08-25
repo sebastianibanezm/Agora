@@ -6,6 +6,8 @@ import { useRouter, usePathname } from 'next/navigation'
 import { ArrowRight, Menu, X } from 'lucide-react'
 import { useState } from 'react'
 
+const APP_LOGIN_URL = 'https://app.agenteagora.com/login'
+
 export function LandingNav() {
   const t = useTranslations('landing.nav')
   const locale = useLocale()
@@ -27,14 +29,7 @@ export function LandingNav() {
   return (
     <>
     <nav
-      className="fixed top-6 left-1/2 -translate-x-1/2 z-50 inline-flex items-center gap-1 p-[5px] rounded-full"
-      style={{
-        background: 'rgba(43,31,18,0.38)',
-        backdropFilter: 'blur(24px) saturate(180%) brightness(1.05)',
-        WebkitBackdropFilter: 'blur(24px) saturate(180%) brightness(1.05)',
-        border: '1px solid rgba(248,242,228,0.22)',
-        boxShadow: '0 8px 32px rgba(0,0,0,0.40), inset 0 1px 0 rgba(255,255,255,0.08)',
-      }}
+      className="landing-nav-glass fixed top-6 left-1/2 -translate-x-1/2 z-50 inline-flex items-center gap-1 p-[5px] rounded-full"
     >
       {/* Brand */}
       <div className="inline-flex items-center gap-[9px] pr-[14px] pl-1">
@@ -108,8 +103,16 @@ export function LandingNav() {
       </button>
     </nav>
 
+    <a
+      href={APP_LOGIN_URL}
+      className="landing-nav-glass landing-sign-in-glass fixed top-6 right-6 z-50 hidden h-[48px] items-center px-[18px] rounded-full text-[12px] font-medium md:inline-flex"
+    >
+      {t('signIn')}
+    </a>
+
     {/* Mobile dropdown — always rendered, animated via opacity/transform */}
     <div
+      data-mobile-menu
       className="fixed left-1/2 -translate-x-1/2 z-40 flex flex-col py-2 md:hidden"
       style={{
         top: '76px',
@@ -143,6 +146,13 @@ export function LandingNav() {
         </a>
       ))}
       <div style={{ height: '1px', background: 'rgba(248,242,228,0.10)', margin: '4px 0' }} />
+      <a
+        href={APP_LOGIN_URL}
+        onClick={() => setOpen(false)}
+        className="landing-mobile-sign-in mx-3 mt-2 px-4 py-[10px] rounded-[10px] text-[14px] font-medium text-center cursor-pointer btn-press"
+      >
+        {t('signIn')}
+      </a>
       <a
         href="#contact"
         onClick={() => setOpen(false)}

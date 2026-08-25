@@ -215,6 +215,41 @@ body::after {
   -webkit-backdrop-filter: blur(12px);
 }
 
+.landing-nav-glass {
+  background: rgba(43, 31, 18, 0.38);
+  backdrop-filter: blur(24px) saturate(180%) brightness(1.05);
+  -webkit-backdrop-filter: blur(24px) saturate(180%) brightness(1.05);
+  border: 1px solid rgba(248, 242, 228, 0.22);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.landing-sign-in-glass {
+  color: rgba(248, 242, 228, 0.82);
+  text-decoration: none;
+  transition: background 150ms ease, color 150ms ease, border-color 150ms ease;
+}
+
+.landing-sign-in-glass:hover {
+  background: rgba(43, 31, 18, 0.52);
+  border-color: rgba(248, 242, 228, 0.3);
+  color: #f8f2e4;
+}
+
+.landing-mobile-sign-in {
+  background: rgba(248, 242, 228, 0.07);
+  border: 1px solid rgba(248, 242, 228, 0.16);
+  color: rgba(248, 242, 228, 0.86);
+  text-decoration: none;
+  transition: background 150ms ease, color 150ms ease;
+}
+
+.landing-mobile-sign-in:hover {
+  background: rgba(248, 242, 228, 0.12);
+  color: #f8f2e4;
+}
+
 @keyframes pulse-crit {
   0%, 100% { border-color: var(--color-severity-crit); }
   50%       { border-color: transparent; }

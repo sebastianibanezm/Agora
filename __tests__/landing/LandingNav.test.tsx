@@ -55,4 +55,39 @@ describe('LandingNav', () => {
     expect(mockReplace).toHaveBeenCalledWith('/en')
     expect(mockRefresh).toHaveBeenCalled()
   })
+
+  it('renders desktop and mobile sign-in links to the universal app login', () => {
+    render(<LandingNav />)
+
+    const signInLinks = screen.getAllByRole('link', { name: 'signIn' })
+    expect(signInLinks).toHaveLength(2)
+    for (const link of signInLinks) {
+      expect(link).toHaveAttribute('href', 'https://app.agenteagora.com/login')
+    }
+
+    const desktopLink = signInLinks.find((link) => link.classList.contains('fixed'))
+    expect(desktopLink).toHaveClass('top-6', 'right-6', 'hidden', 'md:inline-flex')
+
+    const mobileMenu = document.querySelector('[data-mobile-menu]')
+    expect(mobileMenu).not.toBeNull()
+    expect(mobileMenu).toContainElement(
+      signInLinks.find((link) => mobileMenu?.contains(link)) ?? null
+    )
+  })
+
+  it('closes the mobile menu when sign-in is selected', () => {
+    render(<LandingNav />)
+
+    fireEvent.click(screen.getByRole('button', { name: 'Menu' }))
+    const mobileMenu = document.querySelector('[data-mobile-menu]') as HTMLElement
+    expect(mobileMenu).toHaveStyle({ opacity: '1' })
+
+    const mobileSignIn = screen
+      .getAllByRole('link', { name: 'signIn' })
+      .find((link) => mobileMenu.contains(link))
+    expect(mobileSignIn).toBeDefined()
+    fireEvent.click(mobileSignIn!)
+
+    expect(mobileMenu).toHaveStyle({ opacity: '0' })
+  })
 })

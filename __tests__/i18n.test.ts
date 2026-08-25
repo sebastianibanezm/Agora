@@ -37,5 +37,7 @@ describe('i18n', () => {
   it('landing.nav keys exist in both locales', () => {
     expect(en.landing.nav.solutions).toBeDefined();
     expect(es.landing.nav.solutions).toBeDefined();
+    expect(en.landing.nav.signIn).toBe('Sign In');
+    expect(es.landing.nav.signIn).toBe('Iniciar sesión');
   });
 });
