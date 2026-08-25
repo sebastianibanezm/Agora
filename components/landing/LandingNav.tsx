@@ -107,7 +107,7 @@ export function LandingNav() {
 
     <a
       href={APP_LOGIN_URL}
-      className="landing-nav-glass landing-sign-in-glass fixed top-6 right-6 z-50 hidden h-[48px] items-center px-[18px] rounded-full text-[12px] font-medium whitespace-nowrap lg:inline-flex"
+      className="landing-nav-glass landing-sign-in-glass fixed top-6 right-6 z-50 hidden h-[48px] items-center px-[18px] rounded-full text-[12px] font-medium whitespace-nowrap md:inline-flex"
     >
       {t('signIn')}
     </a>
@@ -154,7 +154,7 @@ export function LandingNav() {
       <a
         href={APP_LOGIN_URL}
         onClick={() => setOpen(false)}
-        className="landing-mobile-sign-in mx-3 mt-2 px-4 py-[10px] rounded-[10px] text-[14px] font-medium text-center whitespace-nowrap cursor-pointer btn-press"
+        className="landing-mobile-sign-in mx-3 mt-2 px-4 py-[10px] rounded-[10px] text-[14px] font-medium text-center whitespace-nowrap cursor-pointer btn-press md:hidden"
       >
         {t('signIn')}
       </a>

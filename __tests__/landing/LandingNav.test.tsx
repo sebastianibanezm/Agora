@@ -67,14 +67,23 @@ describe('LandingNav', () => {
     }
 
     const desktopLink = signInLinks.find((link) => link.classList.contains('fixed'))
-    expect(desktopLink).toHaveClass('top-6', 'right-6', 'hidden', 'lg:inline-flex')
+    expect(desktopLink).toHaveClass('top-6', 'right-6', 'hidden', 'md:inline-flex')
 
     const mobileMenu = document.querySelector('[data-mobile-menu]')
     expect(mobileMenu).not.toBeNull()
     expect(mobileMenu).toHaveClass('lg:hidden')
-    expect(mobileMenu).toContainElement(
-      signInLinks.find((link) => mobileMenu?.contains(link)) ?? null
-    )
+    const mobileSignIn = signInLinks.find((link) => mobileMenu?.contains(link))
+    expect(mobileSignIn).toBeDefined()
+    expect(mobileSignIn).toHaveClass('md:hidden')
+
+    const menuButton = screen.getByRole('button', { name: 'Menu' })
+    expect(menuButton).toHaveClass('lg:hidden')
+    const desktopNav = screen
+      .getAllByRole('link', { name: 'solutions', hidden: true })
+      .find((link) => link.classList.contains('nav-link'))
+      ?.parentElement
+    expect(desktopNav).toHaveClass('hidden', 'lg:flex')
+    expect(screen.getAllByText('cta').find((cta) => cta.closest('.cta-solid'))?.closest('a')).toHaveClass('hidden', 'lg:inline-flex')
   })
 
   it('removes the closed mobile menu from the accessibility tree', () => {
