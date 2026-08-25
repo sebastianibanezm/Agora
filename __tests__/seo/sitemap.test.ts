@@ -32,4 +32,26 @@ describe('sitemap', () => {
     const homepage = result.find(e => e.url === 'https://www.agenteagora.com')
     expect(homepage?.lastModified).toBeInstanceOf(Date)
   })
+
+  it('includes localized privacy and terms pages with reciprocal language alternates', () => {
+    const result = sitemap()
+
+    const privacyEs = result.find(entry => entry.url === 'https://www.agenteagora.com/privacy')
+    const privacyEn = result.find(entry => entry.url === 'https://www.agenteagora.com/en/privacy')
+    const termsEs = result.find(entry => entry.url === 'https://www.agenteagora.com/terms')
+    const termsEn = result.find(entry => entry.url === 'https://www.agenteagora.com/en/terms')
+
+    expect(privacyEs?.alternates?.languages).toEqual({
+      es: 'https://www.agenteagora.com/privacy',
+      en: 'https://www.agenteagora.com/en/privacy',
+    })
+    expect(privacyEn?.alternates?.languages).toEqual(privacyEs?.alternates?.languages)
+    expect(termsEs?.alternates?.languages).toEqual({
+      es: 'https://www.agenteagora.com/terms',
+      en: 'https://www.agenteagora.com/en/terms',
+    })
+    expect(termsEn?.alternates?.languages).toEqual(termsEs?.alternates?.languages)
+    expect(privacyEs?.changeFrequency).toBe('yearly')
+    expect(termsEs?.changeFrequency).toBe('yearly')
+  })
 })

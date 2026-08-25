@@ -140,13 +140,15 @@
       "placeholderCompany": "Valle Fresco S.A.",
       "placeholderEmail": "msoto@vallefresco.cl",
       "submitBtn": "Send message",
-      "formNote": "Your information is confidential and never shared with third parties."
+      "formNote": "Your information is confidential. Your data is never sold and is shared only with providers needed to operate the service."
     },
     "footer": {
       "tagline": "The intelligent operational platform for exports.",
       "colPlatform": "Platform",
       "colCompany": "Company",
       "linkContact": "Contact",
+      "linkPrivacy": "Privacy",
+      "linkTerms": "Terms",
       "copyright": "© 2026 Agente Agora LLC · Latin America · United States",
       "linkSolutions": "Solutions",
       "linkPlatform": "Platform",
@@ -190,7 +192,7 @@
       "q2": "How long does implementation take?",
       "a2": "The demo requires no prior integration. Onboarding starts from your real season documents, and your first shipments run on Agora within weeks, not months, with dedicated support.",
       "q3": "What about the confidentiality of my documents?",
-      "a3": "Your documents and data live isolated per organization, encrypted, with a complete audit trail. They are never shared with third parties or between clients.",
+      "a3": "Your documents and data live isolated per organization, encrypted, with a complete audit trail. Your data is never sold and is shared only with providers needed to operate the service, never with other clients.",
       "q4": "What language does the platform work in?",
       "a4": "The platform is in Spanish and handles English export documents natively: BLs, invoices, certificates, and correspondence with carriers and clients.",
       "q5": "How does pricing work?",

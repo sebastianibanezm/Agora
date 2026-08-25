@@ -140,13 +140,15 @@
       "placeholderCompany": "Valle Fresco S.A.",
       "placeholderEmail": "msoto@vallefresco.cl",
       "submitBtn": "Enviar mensaje",
-      "formNote": "Tu información es confidencial y nunca se comparte con terceros."
+      "formNote": "Tu información es confidencial. Tus datos no se venden y solo se comparten con proveedores necesarios para operar el servicio."
     },
     "footer": {
       "tagline": "La plataforma operacional inteligente para las exportaciones.",
       "colPlatform": "Plataforma",
       "colCompany": "Empresa",
       "linkContact": "Contacto",
+      "linkPrivacy": "Privacidad",
+      "linkTerms": "Términos",
       "copyright": "© 2026 Agente Agora LLC · Latinoamérica · Estados Unidos",
       "linkSolutions": "Soluciones",
       "linkPlatform": "Plataforma",
@@ -190,7 +192,7 @@
       "q2": "¿Cuánto toma la implementación?",
       "a2": "La demo no requiere integración previa. El onboarding parte con tus documentos de temporada reales y los primeros embarques operando en Agora toman semanas, no meses, con acompañamiento dedicado.",
       "q3": "¿Qué pasa con la confidencialidad de mis documentos?",
-      "a3": "Tus documentos y datos viven aislados por organización, cifrados y con registro de auditoría completo. Nunca se comparten con terceros ni entre clientes.",
+      "a3": "Tus documentos y datos viven aislados por organización, cifrados y con registro de auditoría completo. Tus datos no se venden y solo se comparten con proveedores necesarios para operar el servicio, nunca con otros clientes.",
       "q4": "¿En qué idioma funciona la plataforma?",
       "a4": "La plataforma está en español y maneja con naturalidad los documentos de exportación en inglés: BL, invoices, certificados y correspondencia con navieras y clientes.",
       "q5": "¿Cómo funciona el precio?",

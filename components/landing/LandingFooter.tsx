@@ -7,13 +7,21 @@ import { useTranslations, useLocale } from 'next-intl'
 import { ParallaxImage, useParallaxTimeline } from './ParallaxImage'
 import { useRouter, usePathname } from 'next/navigation'
 
-const PLATFORM_LINKS = [
-  { key: 'linkSolutions', href: '#solutions' },
-  { key: 'linkResources', href: '/recursos' },
-  { key: 'linkPlatform', href: '#product' },
-  { key: 'linkHow', href: '#how-it-works' },
-  { key: 'linkFaq', href: '#faq' },
-] as const
+function platformLinks(locale: string) {
+  const homePath = locale === 'en' ? '/en' : ''
+
+  return [
+    { key: 'linkSolutions', href: `${homePath}/#solutions` },
+    { key: 'linkResources', href: '/recursos' },
+    { key: 'linkPlatform', href: `${homePath}/#product` },
+    { key: 'linkHow', href: `${homePath}/#how-it-works` },
+    { key: 'linkFaq', href: `${homePath}/#faq` },
+  ] as const
+}
+
+function legalPath(locale: string, kind: 'privacy' | 'terms') {
+  return `${locale === 'en' ? '/en' : ''}/${kind}`
+}
 
 export function LandingFooter() {
   const t = useTranslations('landing')
@@ -146,9 +154,9 @@ export function LandingFooter() {
             <div>
               <div style={colHead} className="mb-4">{t('footer.colPlatform')}</div>
               <ul className="m-0 p-0 list-none flex flex-col gap-[10px]">
-                {PLATFORM_LINKS.map(({ key, href }) => (
+                {platformLinks(locale).map(({ key, href }) => (
                   <li key={key}>
-                    {href.startsWith('/') ? (
+                    {href.startsWith('/') && !href.includes('#') ? (
                       <Link href={href} className="footer-link">{t(`footer.${key}` as any)}</Link>
                     ) : (
                       <a href={href} className="footer-link">{t(`footer.${key}` as any)}</a>
@@ -161,10 +169,16 @@ export function LandingFooter() {
               <div style={colHead} className="mb-4">{t('footer.colCompany')}</div>
               <ul className="m-0 p-0 list-none flex flex-col gap-[10px]">
                 <li>
-                  <a href="#contact" className="footer-link">{t('footer.linkContact')}</a>
+                  <a href={`${locale === 'en' ? '/en' : ''}/#contact`} className="footer-link">{t('footer.linkContact')}</a>
                 </li>
                 <li>
                   <a href={`mailto:${t('footer.email')}`} className="footer-link">{t('footer.email')}</a>
+                </li>
+                <li>
+                  <Link href={legalPath(locale, 'privacy')} className="footer-link">{t('footer.linkPrivacy')}</Link>
+                </li>
+                <li>
+                  <Link href={legalPath(locale, 'terms')} className="footer-link">{t('footer.linkTerms')}</Link>
                 </li>
               </ul>
             </div>
