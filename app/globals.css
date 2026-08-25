@@ -261,6 +261,12 @@ body::after {
 .btn-press {
   transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
 }
+.landing-mobile-sign-in.btn-press {
+  transition:
+    transform 160ms cubic-bezier(0.23, 1, 0.32, 1),
+    background 150ms ease,
+    color 150ms ease;
+}
 .btn-press:active {
   transform: scale(0.97);
   transition-duration: 0ms;

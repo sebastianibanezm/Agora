@@ -59,28 +59,48 @@ describe('LandingNav', () => {
   it('renders desktop and mobile sign-in links to the universal app login', () => {
     render(<LandingNav />)
 
-    const signInLinks = screen.getAllByRole('link', { name: 'signIn' })
+    const signInLinks = screen.getAllByRole('link', { name: 'signIn', hidden: true })
     expect(signInLinks).toHaveLength(2)
     for (const link of signInLinks) {
       expect(link).toHaveAttribute('href', 'https://app.agenteagora.com/login')
+      expect(link).toHaveClass('whitespace-nowrap')
     }
 
     const desktopLink = signInLinks.find((link) => link.classList.contains('fixed'))
-    expect(desktopLink).toHaveClass('top-6', 'right-6', 'hidden', 'md:inline-flex')
+    expect(desktopLink).toHaveClass('top-6', 'right-6', 'hidden', 'lg:inline-flex')
 
     const mobileMenu = document.querySelector('[data-mobile-menu]')
     expect(mobileMenu).not.toBeNull()
+    expect(mobileMenu).toHaveClass('lg:hidden')
     expect(mobileMenu).toContainElement(
       signInLinks.find((link) => mobileMenu?.contains(link)) ?? null
     )
   })
 
-  it('closes the mobile menu when sign-in is selected', () => {
+  it('removes the closed mobile menu from the accessibility tree', () => {
     render(<LandingNav />)
 
-    fireEvent.click(screen.getByRole('button', { name: 'Menu' }))
+    const menuButton = screen.getByRole('button', { name: 'Menu' })
+    const mobileMenu = document.querySelector('[data-mobile-menu]') as HTMLElement
+    expect(menuButton).toHaveAttribute('aria-controls', 'landing-mobile-menu')
+    expect(menuButton).toHaveAttribute('aria-expanded', 'false')
+    expect(mobileMenu).toHaveAttribute('id', 'landing-mobile-menu')
+    expect(mobileMenu).toHaveAttribute('aria-hidden', 'true')
+    expect(mobileMenu).toHaveAttribute('inert')
+    expect(screen.getAllByRole('link', { name: 'signIn' })).toHaveLength(1)
+  })
+
+  it('exposes the opened mobile menu and closes it when sign-in is selected', () => {
+    render(<LandingNav />)
+
+    const menuButton = screen.getByRole('button', { name: 'Menu' })
+    fireEvent.click(menuButton)
     const mobileMenu = document.querySelector('[data-mobile-menu]') as HTMLElement
     expect(mobileMenu).toHaveStyle({ opacity: '1' })
+    expect(menuButton).toHaveAttribute('aria-expanded', 'true')
+    expect(mobileMenu).toHaveAttribute('aria-hidden', 'false')
+    expect(mobileMenu).not.toHaveAttribute('inert')
+    expect(screen.getAllByRole('link', { name: 'signIn' })).toHaveLength(2)
 
     const mobileSignIn = screen
       .getAllByRole('link', { name: 'signIn' })
@@ -89,5 +109,9 @@ describe('LandingNav', () => {
     fireEvent.click(mobileSignIn!)
 
     expect(mobileMenu).toHaveStyle({ opacity: '0' })
+    expect(menuButton).toHaveAttribute('aria-expanded', 'false')
+    expect(mobileMenu).toHaveAttribute('aria-hidden', 'true')
+    expect(mobileMenu).toHaveAttribute('inert')
+    expect(screen.getAllByRole('link', { name: 'signIn' })).toHaveLength(1)
   })
 })

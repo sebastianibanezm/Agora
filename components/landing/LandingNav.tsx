@@ -55,7 +55,7 @@ export function LandingNav() {
 
       {/* Nav links — hidden on mobile */}
       {/* 'solutions' → #solutions (LandingPillars), 'howItWorks' → #how-it-works, 'company' → #contact */}
-      <div className="hidden md:flex gap-[1px]">
+      <div className="hidden lg:flex gap-[1px]">
         {(['solutions', 'howItWorks', 'company'] as const).map((key) => (
           <a
             key={key}
@@ -70,12 +70,14 @@ export function LandingNav() {
       {/* Separator */}
       <div className="w-px h-5 mx-1" style={{ background: 'rgba(248,242,228,0.14)' }} />
 
-      {/* Hamburger — mobile only */}
+      {/* Hamburger — compact navigation through tablet widths */}
       <button
-        className="md:hidden p-2 rounded-full transition-colors duration-150"
+        className="lg:hidden p-2 rounded-full transition-colors duration-150"
         style={{ color: 'rgba(248,242,228,0.70)' }}
         onClick={() => setOpen(o => !o)}
         aria-label="Menu"
+        aria-controls="landing-mobile-menu"
+        aria-expanded={open}
       >
         {open ? <X size={16} strokeWidth={1.8} /> : <Menu size={16} strokeWidth={1.8} />}
       </button>
@@ -83,7 +85,7 @@ export function LandingNav() {
       {/* Primary CTA — desktop only */}
       <a
         href="#contact"
-        className="cta-solid hidden md:inline-flex ml-1 px-[18px] py-[9px] rounded-full text-[12px] font-medium items-center gap-[6px] cursor-pointer btn-press"
+        className="cta-solid hidden lg:inline-flex ml-1 px-[18px] py-[9px] rounded-full text-[12px] font-medium items-center gap-[6px] cursor-pointer btn-press"
         style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.25)' }}
       >
         {t('cta')} <ArrowRight size={13} strokeWidth={1.8} />
@@ -105,7 +107,7 @@ export function LandingNav() {
 
     <a
       href={APP_LOGIN_URL}
-      className="landing-nav-glass landing-sign-in-glass fixed top-6 right-6 z-50 hidden h-[48px] items-center px-[18px] rounded-full text-[12px] font-medium md:inline-flex"
+      className="landing-nav-glass landing-sign-in-glass fixed top-6 right-6 z-50 hidden h-[48px] items-center px-[18px] rounded-full text-[12px] font-medium whitespace-nowrap lg:inline-flex"
     >
       {t('signIn')}
     </a>
@@ -113,7 +115,10 @@ export function LandingNav() {
     {/* Mobile dropdown — always rendered, animated via opacity/transform */}
     <div
       data-mobile-menu
-      className="fixed left-1/2 -translate-x-1/2 z-40 flex flex-col py-2 md:hidden"
+      id="landing-mobile-menu"
+      aria-hidden={!open}
+      inert={!open}
+      className="fixed left-1/2 -translate-x-1/2 z-40 flex flex-col py-2 lg:hidden"
       style={{
         top: '76px',
         width: 'min(320px, calc(100vw - 32px))',
@@ -149,7 +154,7 @@ export function LandingNav() {
       <a
         href={APP_LOGIN_URL}
         onClick={() => setOpen(false)}
-        className="landing-mobile-sign-in mx-3 mt-2 px-4 py-[10px] rounded-[10px] text-[14px] font-medium text-center cursor-pointer btn-press"
+        className="landing-mobile-sign-in mx-3 mt-2 px-4 py-[10px] rounded-[10px] text-[14px] font-medium text-center whitespace-nowrap cursor-pointer btn-press"
       >
         {t('signIn')}
       </a>
