@@ -33,4 +33,3 @@ The pages use Agora's existing ivory, ink, display-serif, body-sans, and mono-la
 - No em dash or en dash characters appear in new visible copy.
 - Pages are semantic, keyboard-accessible, responsive, and build under Next.js 16.
 - Run the focused tests, full Vitest suite, ESLint, TypeScript, and production build.
-
