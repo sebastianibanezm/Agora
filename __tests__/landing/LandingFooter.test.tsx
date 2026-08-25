@@ -4,10 +4,11 @@ import { LandingFooter } from '@/components/landing/LandingFooter'
 // Module-level mock functions so tests can assert on them
 const mockReplace = vi.fn()
 const mockRefresh = vi.fn()
+const mockLocale = vi.hoisted(() => ({ value: 'es' }))
 
 vi.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key,
-  useLocale: () => 'es',
+  useLocale: () => mockLocale.value,
 }))
 vi.mock('next/image', () => ({ default: (props: { alt: string }) => <img alt={props.alt} /> }))
 vi.mock('next/navigation', () => ({
@@ -19,6 +20,7 @@ describe('LandingFooter', () => {
   beforeEach(() => {
     mockReplace.mockClear()
     mockRefresh.mockClear()
+    mockLocale.value = 'es'
   })
 
   it('renders the Agora wordmark', () => {
@@ -34,10 +36,24 @@ describe('LandingFooter', () => {
 
   it('renders section anchor links', () => {
     render(<LandingFooter />)
-    expect(screen.getByText('footer.linkSolutions').closest('a')).toHaveAttribute('href', '#solutions')
-    expect(screen.getByText('footer.linkPlatform').closest('a')).toHaveAttribute('href', '#product')
-    expect(screen.getByText('footer.linkHow').closest('a')).toHaveAttribute('href', '#how-it-works')
-    expect(screen.getByText('footer.linkFaq').closest('a')).toHaveAttribute('href', '#faq')
+    expect(screen.getByText('footer.linkSolutions').closest('a')).toHaveAttribute('href', '/#solutions')
+    expect(screen.getByText('footer.linkPlatform').closest('a')).toHaveAttribute('href', '/#product')
+    expect(screen.getByText('footer.linkHow').closest('a')).toHaveAttribute('href', '/#how-it-works')
+    expect(screen.getByText('footer.linkFaq').closest('a')).toHaveAttribute('href', '/#faq')
+  })
+
+  it('routes Spanish legal links to unprefixed pages', () => {
+    render(<LandingFooter />)
+    expect(screen.getByText('footer.linkPrivacy').closest('a')).toHaveAttribute('href', '/privacy')
+    expect(screen.getByText('footer.linkTerms').closest('a')).toHaveAttribute('href', '/terms')
+  })
+
+  it('routes English legal links and homepage sections to English paths', () => {
+    mockLocale.value = 'en'
+    render(<LandingFooter />)
+    expect(screen.getByText('footer.linkPrivacy').closest('a')).toHaveAttribute('href', '/en/privacy')
+    expect(screen.getByText('footer.linkTerms').closest('a')).toHaveAttribute('href', '/en/terms')
+    expect(screen.getByText('footer.linkSolutions').closest('a')).toHaveAttribute('href', '/en/#solutions')
   })
 
   it('renders contact email as mailto link', () => {

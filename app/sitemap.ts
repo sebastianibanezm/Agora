@@ -16,6 +16,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }))
 
+  const legalEntries: MetadataRoute.Sitemap = (['privacy', 'terms'] as const).flatMap((kind) => {
+    const localizedUrls = {
+      es: `${SITE_URL}/${kind}`,
+      en: `${SITE_URL}/en/${kind}`,
+    }
+
+    return (['es', 'en'] as const).map((locale) => ({
+      url: localizedUrls[locale],
+      lastModified: new Date('2026-08-24'),
+      changeFrequency: 'yearly' as const,
+      priority: 0.4,
+      alternates: { languages: localizedUrls },
+    }))
+  })
+
   return [
     {
       url: `${SITE_URL}/recursos`,
@@ -31,6 +46,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1.0,
       alternates: { languages },
     },
+    ...legalEntries,
     {
       url: `${SITE_URL}/en`,
       lastModified: new Date(),
