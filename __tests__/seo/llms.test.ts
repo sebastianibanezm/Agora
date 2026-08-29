@@ -22,6 +22,10 @@ describe('llms.txt', () => {
   it('clarifies Agora is not a freight forwarder', () => {
     expect(llms).toMatch(/freight forwarder|agente de carga/)
   })
+
+  it('publishes the working inbound contact address', () => {
+    expect(llms).toContain('hola@replies.agenteagora.com')
+  })
 })
 
 const llmsFull = readFileSync(resolve(process.cwd(), 'public/llms-full.txt'), 'utf-8')
@@ -60,5 +64,9 @@ describe('llms-full.txt', () => {
   it('references the company correctly', () => {
     expect(llmsFull).toMatch(/Agente Agora LLC/)
     expect(llmsFull).toMatch(/agenteagora\.com/)
+  })
+
+  it('publishes the working inbound contact address', () => {
+    expect(llmsFull).toContain('hola@replies.agenteagora.com')
   })
 })

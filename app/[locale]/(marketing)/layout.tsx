@@ -5,14 +5,14 @@ const organizationSchema = {
   alternateName: 'Agora',
   url: 'https://www.agenteagora.com',
   logo: 'https://www.agenteagora.com/agora-logo.png',
-  email: 'hola@agenteagora.com',
+  email: 'hola@replies.agenteagora.com',
   description:
     'Plataforma de gestión documental y operaciones para exportadores de fruta y frutos secos en Latinoamérica.',
   areaServed: ['CL', 'PE', 'EC', 'US'],
   contactPoint: {
     '@type': 'ContactPoint',
     url: 'https://www.agenteagora.com/#contact',
-    email: 'hola@agenteagora.com',
+    email: 'hola@replies.agenteagora.com',
     contactType: 'sales',
     availableLanguage: ['es', 'en'],
   },

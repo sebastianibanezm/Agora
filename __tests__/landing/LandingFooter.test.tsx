@@ -1,5 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import { LandingFooter } from '@/components/landing/LandingFooter'
+import esMessages from '@/messages/es.json'
+import enMessages from '@/messages/en.json'
 
 // Module-level mock functions so tests can assert on them
 const mockReplace = vi.fn()
@@ -59,6 +61,11 @@ describe('LandingFooter', () => {
   it('renders contact email as mailto link', () => {
     render(<LandingFooter />)
     expect(screen.getByText('footer.email').closest('a')).toHaveAttribute('href', 'mailto:footer.email')
+  })
+
+  it('publishes the working replies subdomain in both locales', () => {
+    expect(esMessages.landing.footer.email).toBe('hola@replies.agenteagora.com')
+    expect(enMessages.landing.footer.email).toBe('hola@replies.agenteagora.com')
   })
 
   it('renders copyright', () => {

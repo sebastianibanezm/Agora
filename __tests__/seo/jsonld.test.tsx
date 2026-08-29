@@ -63,6 +63,8 @@ describe('marketing layout JSON-LD', () => {
     expect(org).toBeTruthy()
     expect(org.name).toBe('Agente Agora LLC')
     expect(org.url).toBe('https://www.agenteagora.com')
+    expect(org.email).toBe('hola@replies.agenteagora.com')
+    expect(org.contactPoint.email).toBe('hola@replies.agenteagora.com')
   })
 
   it('renders a SoftwareApplication schema script tag', async () => {

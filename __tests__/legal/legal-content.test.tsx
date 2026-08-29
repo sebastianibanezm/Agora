@@ -14,8 +14,8 @@ describe('LegalDocumentPage', () => {
 
     expect(screen.getByRole('heading', { level: 1, name: 'Política de Privacidad' })).toBeInTheDocument()
     expect(screen.getByText('Agente Agora LLC')).toBeInTheDocument()
-    expect(screen.getAllByRole('link', { name: 'hola@agenteagora.com' })).toEqual(
-      expect.arrayContaining([expect.objectContaining({ href: 'mailto:hola@agenteagora.com' })]),
+    expect(screen.getAllByRole('link', { name: 'hola@replies.agenteagora.com' })).toEqual(
+      expect.arrayContaining([expect.objectContaining({ href: 'mailto:hola@replies.agenteagora.com' })]),
     )
     expect(screen.getByText(/nombre, dirección de correo electrónico, imagen de perfil e identificador de cuenta/i)).toBeInTheDocument()
     expect(screen.getByText(/no solicita acceso a Gmail, Google Drive, Google Calendar ni a otro contenido de Google Workspace/i)).toBeInTheDocument()

@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { Resend } from 'resend'
-
-const resend = new Resend(process.env.RESEND_API_KEY)
+import { getResend } from '@/lib/resend-client'
 
 const AIRTABLE_BASE_ID = 'appiidWXwEAZtzTPh'
 const AIRTABLE_TABLE_ID = 'tblEXq4VKb3SYRRqV'
@@ -198,11 +196,13 @@ export async function POST(req: NextRequest) {
 
     // ── Send email ────────────────────────────────────────────────
     const html = buildEmailHtml({ firstName, lastName, company, email, volume })
+    const resend = getResend()
 
     await resend.emails.send({
       from: 'Agora <hola@agenteagora.com>',
       to: email,
       cc: 'sebastian@agenteagora.com',
+      replyTo: 'hola@replies.agenteagora.com',
       subject: `Gracias por tu interés, ${firstName} — te contactamos pronto`,
       html,
     })

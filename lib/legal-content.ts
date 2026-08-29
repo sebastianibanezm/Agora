@@ -19,7 +19,7 @@ export type LegalDocument = {
   sections: LegalSection[]
 }
 
-const email = 'hola@agenteagora.com'
+const email = 'hola@replies.agenteagora.com'
 
 const documents: Record<LegalLocale, Record<LegalKind, LegalDocument>> = {
   es: {

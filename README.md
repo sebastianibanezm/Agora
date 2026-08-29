@@ -57,3 +57,22 @@ PostHog collects automatic page views, page leaves, clicks, and session recordin
 | `contact_form_failed` | `reason`, optional `status_code` |
 
 Names, email addresses, and company names are never included in captured event properties. After `/api/contact` returns success, the browser is identified with the normalized submitted email and the lead properties are attached to that PostHog person. This merges the earlier anonymous journey into the converted lead's profile.
+
+## Resend inbound replies
+
+Public contact mail uses `hola@replies.agenteagora.com`. Contact-form confirmations continue to send from `Agora <hola@agenteagora.com>` but set the public address as `Reply-To`.
+
+Resend Receiving delivers `email.received` events to:
+
+```text
+https://www.agenteagora.com/api/webhooks/resend/inbound
+```
+
+The route verifies the raw Svix payload, accepts only messages addressed to `hola@replies.agenteagora.com`, and forwards their body and send-compatible attachments to `sebastian@agenteagora.com`. The forwarded message uses the original sender as `Reply-To` and the inbound Resend email ID plus delivery mode as an idempotency key. Attachments with Resend-prohibited extensions or attachments that exceed the safe encoded-size budget are omitted with a notice so the message body still arrives; a permanent attachment rejection also falls back once to body-only delivery.
+
+Production requires the following secret environment variables in Vercel:
+
+- `RESEND_API_KEY`: must permit sending and access to Resend Receiving APIs.
+- `RESEND_WEBHOOK_SECRET`: signing secret for the production inbound webhook.
+
+Configure `replies.agenteagora.com` as a receiving domain in Resend, add the exact MX record Resend supplies for that subdomain, and subscribe the production webhook to `email.received`. Do not change the root `agenteagora.com` MX records; they remain assigned to Google Workspace. Never commit or print either secret value.
