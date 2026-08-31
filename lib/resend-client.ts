@@ -1,6 +1,7 @@
 import { Resend } from 'resend'
 
 let resend: Resend | undefined
+let inboundResend: Resend | undefined
 
 export function getResend() {
   const apiKey = process.env.RESEND_API_KEY
@@ -8,4 +9,12 @@ export function getResend() {
 
   resend ??= new Resend(apiKey)
   return resend
+}
+
+export function getInboundResend() {
+  const apiKey = process.env.RESEND_RECEIVING_API_KEY
+  if (!apiKey) throw new Error('RESEND_RECEIVING_API_KEY is not configured')
+
+  inboundResend ??= new Resend(apiKey)
+  return inboundResend
 }

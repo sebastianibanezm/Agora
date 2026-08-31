@@ -72,7 +72,8 @@ The route verifies the raw Svix payload, accepts only messages addressed to `hol
 
 Production requires the following secret environment variables in Vercel:
 
-- `RESEND_API_KEY`: must permit sending and access to Resend Receiving APIs.
+- `RESEND_API_KEY`: existing key used to send contact confirmations and forwarded mail.
+- `RESEND_RECEIVING_API_KEY`: full-access key from the Resend team that owns `replies.agenteagora.com`; used only to retrieve received messages and attachments.
 - `RESEND_WEBHOOK_SECRET`: signing secret for the production inbound webhook.
 
-Configure `replies.agenteagora.com` as a receiving domain in Resend, add the exact MX record Resend supplies for that subdomain, and subscribe the production webhook to `email.received`. Do not change the root `agenteagora.com` MX records; they remain assigned to Google Workspace. Never commit or print either secret value.
+Configure `replies.agenteagora.com` as a receiving domain in Resend, add the exact MX record Resend supplies for that subdomain, and subscribe the production webhook to `email.received`. Do not change the root `agenteagora.com` MX records; they remain assigned to Google Workspace. Never commit or print any secret value.

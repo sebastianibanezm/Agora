@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getResend } from '@/lib/resend-client'
+import { getInboundResend, getResend } from '@/lib/resend-client'
 
 const INBOUND_ADDRESS = 'hola@replies.agenteagora.com'
 const FORWARD_FROM = 'Agora Replies <hola@agenteagora.com>'
@@ -128,11 +128,16 @@ function isPermanentClientError(error: unknown) {
 
 export async function POST(request: NextRequest) {
   const webhookSecret = process.env.RESEND_WEBHOOK_SECRET
-  if (!webhookSecret || !process.env.RESEND_API_KEY) {
+  if (
+    !webhookSecret
+    || !process.env.RESEND_API_KEY
+    || !process.env.RESEND_RECEIVING_API_KEY
+  ) {
     return NextResponse.json({ error: 'Webhook is not configured' }, { status: 503 })
   }
 
   const resend = getResend()
+  const inboundResend = getInboundResend()
 
   const id = request.headers.get('svix-id')
   const timestamp = request.headers.get('svix-timestamp')
@@ -166,13 +171,13 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ignored: true })
   }
 
-  const { data: receivedData, error: receivedError } = await resend.emails.receiving.get(
+  const { data: receivedData, error: receivedError } = await inboundResend.emails.receiving.get(
     event.data.email_id,
   )
   if (receivedError || !receivedData) return upstreamFailure('retrieve message')
 
   const { data: attachmentPage, error: attachmentError } =
-    await resend.emails.receiving.attachments.list({ emailId: event.data.email_id })
+    await inboundResend.emails.receiving.attachments.list({ emailId: event.data.email_id })
   if (attachmentError || !attachmentPage) return upstreamFailure('list attachments')
 
   const receivedEmail = receivedData as ReceivedEmail

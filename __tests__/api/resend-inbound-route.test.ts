@@ -6,6 +6,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 const resendMocks = vi.hoisted(() => ({
   verify: vi.fn(),
   get: vi.fn(),
+  getInbound: vi.fn(),
   listAttachments: vi.fn(),
   send: vi.fn(),
 }))
@@ -19,6 +20,14 @@ vi.mock('@/lib/resend-client', () => ({
         attachments: { list: resendMocks.listAttachments },
       },
       send: resendMocks.send,
+    },
+  }),
+  getInboundResend: () => ({
+    emails: {
+      receiving: {
+        get: resendMocks.getInbound,
+        attachments: { list: resendMocks.listAttachments },
+      },
     },
   }),
 }))
@@ -50,14 +59,20 @@ function webhookRequest(headers: Record<string, string> = {
 describe('POST /api/webhooks/resend/inbound', () => {
   beforeEach(() => {
     process.env.RESEND_API_KEY = 'test_api_key'
+    process.env.RESEND_RECEIVING_API_KEY = 'test_receiving_api_key'
     process.env.RESEND_WEBHOOK_SECRET = 'test_webhook_secret'
     resendMocks.verify.mockReset()
     resendMocks.get.mockReset()
+    resendMocks.getInbound.mockReset()
     resendMocks.listAttachments.mockReset()
     resendMocks.send.mockReset()
 
     resendMocks.verify.mockReturnValue(validEvent)
     resendMocks.get.mockResolvedValue({
+      data: { html: '<p>Reply body</p>', text: 'Reply body', subject: 'Re: Agora' },
+      error: null,
+    })
+    resendMocks.getInbound.mockResolvedValue({
       data: { html: '<p>Reply body</p>', text: 'Reply body', subject: 'Re: Agora' },
       error: null,
     })
@@ -84,6 +99,7 @@ describe('POST /api/webhooks/resend/inbound', () => {
 
   afterEach(() => {
     delete process.env.RESEND_API_KEY
+    delete process.env.RESEND_RECEIVING_API_KEY
     delete process.env.RESEND_WEBHOOK_SECRET
     vi.unstubAllGlobals()
   })
@@ -95,7 +111,7 @@ describe('POST /api/webhooks/resend/inbound', () => {
 
     expect(response.status).toBe(503)
     expect(resendMocks.verify).not.toHaveBeenCalled()
-    expect(resendMocks.get).not.toHaveBeenCalled()
+    expect(resendMocks.getInbound).not.toHaveBeenCalled()
   })
 
   it('fails closed when the Resend API key is not configured', async () => {
@@ -105,7 +121,29 @@ describe('POST /api/webhooks/resend/inbound', () => {
 
     expect(response.status).toBe(503)
     expect(resendMocks.verify).not.toHaveBeenCalled()
-    expect(resendMocks.get).not.toHaveBeenCalled()
+    expect(resendMocks.getInbound).not.toHaveBeenCalled()
+  })
+
+  it('fails closed when the receiving API key is not configured', async () => {
+    delete process.env.RESEND_RECEIVING_API_KEY
+
+    const response = await POST(webhookRequest())
+
+    expect(response.status).toBe(503)
+    expect(resendMocks.verify).not.toHaveBeenCalled()
+    expect(resendMocks.getInbound).not.toHaveBeenCalled()
+  })
+
+  it('retrieves received email with the separately configured client', async () => {
+    resendMocks.get.mockResolvedValue({
+      data: null,
+      error: { name: 'not_found', message: 'Email not found', statusCode: 404 },
+    })
+
+    const response = await POST(webhookRequest())
+
+    expect(response.status).toBe(200)
+    await expect(response.json()).resolves.toEqual({ forwarded: true })
   })
 
   it('rejects requests with missing signature headers before verification', async () => {
@@ -113,7 +151,7 @@ describe('POST /api/webhooks/resend/inbound', () => {
 
     expect(response.status).toBe(400)
     expect(resendMocks.verify).not.toHaveBeenCalled()
-    expect(resendMocks.get).not.toHaveBeenCalled()
+    expect(resendMocks.getInbound).not.toHaveBeenCalled()
   })
 
   it('rejects an invalid webhook signature before processing', async () => {
@@ -124,7 +162,7 @@ describe('POST /api/webhooks/resend/inbound', () => {
     const response = await POST(webhookRequest())
 
     expect(response.status).toBe(400)
-    expect(resendMocks.get).not.toHaveBeenCalled()
+    expect(resendMocks.getInbound).not.toHaveBeenCalled()
     expect(resendMocks.send).not.toHaveBeenCalled()
   })
 
@@ -150,7 +188,7 @@ describe('POST /api/webhooks/resend/inbound', () => {
     }))
 
     expect(response.status).toBe(200)
-    expect(resendMocks.get).toHaveBeenCalledWith('email_123')
+    expect(resendMocks.getInbound).toHaveBeenCalledWith('email_123')
     expect(resendMocks.send).toHaveBeenCalledTimes(1)
   })
 
@@ -161,7 +199,7 @@ describe('POST /api/webhooks/resend/inbound', () => {
 
     expect(response.status).toBe(200)
     await expect(response.json()).resolves.toEqual({ ignored: true })
-    expect(resendMocks.get).not.toHaveBeenCalled()
+    expect(resendMocks.getInbound).not.toHaveBeenCalled()
   })
 
   it('ignores inbound email for any other recipient on the subdomain', async () => {
@@ -174,7 +212,7 @@ describe('POST /api/webhooks/resend/inbound', () => {
 
     expect(response.status).toBe(200)
     await expect(response.json()).resolves.toEqual({ ignored: true })
-    expect(resendMocks.get).not.toHaveBeenCalled()
+    expect(resendMocks.getInbound).not.toHaveBeenCalled()
   })
 
   it('retrieves and forwards a valid message and attachment exactly once', async () => {
@@ -191,7 +229,7 @@ describe('POST /api/webhooks/resend/inbound', () => {
       },
       webhookSecret: 'test_webhook_secret',
     })
-    expect(resendMocks.get).toHaveBeenCalledWith('email_123')
+    expect(resendMocks.getInbound).toHaveBeenCalledWith('email_123')
     expect(resendMocks.listAttachments).toHaveBeenCalledWith({ emailId: 'email_123' })
     expect(fetch).toHaveBeenCalledWith('https://example.com/quote.pdf')
     expect(resendMocks.send).toHaveBeenCalledWith(
@@ -312,7 +350,7 @@ describe('POST /api/webhooks/resend/inbound', () => {
   })
 
   it.each([
-    ['received email retrieval', () => resendMocks.get.mockResolvedValue({ data: null, error: { message: 'get failed' } })],
+    ['received email retrieval', () => resendMocks.getInbound.mockResolvedValue({ data: null, error: { message: 'get failed' } })],
     ['attachment listing', () => resendMocks.listAttachments.mockResolvedValue({ data: null, error: { message: 'list failed' } })],
     ['attachment download', () => vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(null, { status: 500 })))],
     ['forwarding send', () => resendMocks.send.mockResolvedValue({ data: null, error: { message: 'send failed' } })],
