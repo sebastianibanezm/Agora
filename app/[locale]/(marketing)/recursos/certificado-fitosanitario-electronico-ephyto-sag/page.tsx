@@ -50,7 +50,7 @@ const articleSchema = {
   author: { '@type': 'Organization', name: 'Agora', url: SITE_URL },
   publisher: {
     '@type': 'Organization',
-    name: 'Agente Agora LLC',
+    name: 'Agente Agora Inc.',
     logo: { '@type': 'ImageObject', url: `${SITE_URL}/agora-logo.png` },
   },
   mainEntityOfPage: articleUrl(article),

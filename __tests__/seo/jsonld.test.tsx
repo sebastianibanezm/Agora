@@ -61,7 +61,7 @@ describe('marketing layout JSON-LD', () => {
     const { container } = await renderLayout()
     const org = getSchemas(container).find((s: { '@type': string }) => s['@type'] === 'Organization')
     expect(org).toBeTruthy()
-    expect(org.name).toBe('Agente Agora LLC')
+    expect(org.name).toBe('Agente Agora Inc.')
     expect(org.url).toBe('https://www.agenteagora.com')
     expect(org.email).toBe('hola@replies.agenteagora.com')
     expect(org.contactPoint.email).toBe('hola@replies.agenteagora.com')

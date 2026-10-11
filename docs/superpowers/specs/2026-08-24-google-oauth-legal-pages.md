@@ -14,7 +14,7 @@ Publish the legal pages required to present Agora's Google OAuth consent screen 
 
 ## Privacy policy content
 
-The policy identifies Agente Agora LLC as the service provider and `hola@agenteagora.com` as the privacy contact. It explains the categories of information collected, purposes of use, limited sharing with service providers, retention, security, international processing, user rights, children's privacy, and policy updates.
+The policy identifies Agente Agora Inc. as the service provider and `hola@agenteagora.com` as the privacy contact. It explains the categories of information collected, purposes of use, limited sharing with service providers, retention, security, international processing, user rights, children's privacy, and policy updates.
 
 The Google-specific disclosure is explicit: Google login provides basic identity information such as name, email address, profile image, and a Google account identifier. Agora uses it only to authenticate and administer the account. Agora does not request access to Gmail, Google Drive, Google Calendar, or other Google Workspace content, and does not sell Google user data or use it for advertising.
 

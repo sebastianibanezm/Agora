@@ -1,7 +1,7 @@
 const organizationSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
-  name: 'Agente Agora LLC',
+  name: 'Agente Agora Inc.',
   alternateName: 'Agora',
   url: 'https://www.agenteagora.com',
   logo: 'https://www.agenteagora.com/agora-logo.png',

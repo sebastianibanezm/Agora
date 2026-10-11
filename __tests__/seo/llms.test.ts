@@ -62,7 +62,7 @@ describe('llms-full.txt', () => {
   })
 
   it('references the company correctly', () => {
-    expect(llmsFull).toMatch(/Agente Agora LLC/)
+    expect(llmsFull).toMatch(/Agente Agora Inc./)
     expect(llmsFull).toMatch(/agenteagora\.com/)
   })
 

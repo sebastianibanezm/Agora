@@ -13,7 +13,7 @@
 ## Global Constraints
 
 - Spanish routes are `/privacy` and `/terms`; English routes are `/en/privacy` and `/en/terms`.
-- The privacy policy names Agente Agora LLC and `hola@agenteagora.com` and accurately limits Google access to basic authentication identity data.
+- The privacy policy names Agente Agora Inc. and `hola@agenteagora.com` and accurately limits Google access to basic authentication identity data.
 - State explicitly that Agora does not request Gmail, Google Drive, Google Calendar, or other Google Workspace content and does not sell Google user data or use it for advertising.
 - Do not invent a governing jurisdiction, pricing, liability cap, or commercial term.
 - Preserve Agora's existing ivory-and-ink editorial design; add no dependency and no motion.
@@ -45,7 +45,7 @@
 
 **Task constraints:**
 - Spanish routes are `/privacy` and `/terms`; English routes are `/en/privacy` and `/en/terms`.
-- The privacy policy names Agente Agora LLC and `hola@agenteagora.com` and accurately limits Google access to basic authentication identity data.
+- The privacy policy names Agente Agora Inc. and `hola@agenteagora.com` and accurately limits Google access to basic authentication identity data.
 - State explicitly that Agora does not request Gmail, Google Drive, Google Calendar, or other Google Workspace content and does not sell Google user data or use it for advertising.
 - Do not invent a governing jurisdiction, pricing, liability cap, or commercial term.
 - Preserve Agora's existing ivory-and-ink editorial design; add no dependency and no motion.
@@ -55,7 +55,7 @@
 
 - [ ] **Step 1: Write failing content, footer, and sitemap tests**
 
-Create `__tests__/legal/legal-content.test.tsx` to render `LegalDocumentPage` with the documents returned by `getLegalDocument`. Assert localized H1 headings, Agente Agora LLC, the privacy contact mail link, Google identity use, and explicit absence of Gmail, Drive, and Calendar access. Assert the terms include account security, customer-content ownership, termination, and contact sections. Extend `LandingFooter.test.tsx` so the Spanish mock asserts `/privacy` and `/terms`; add an English-locale case asserting `/en/privacy` and `/en/terms`. Extend `sitemap.test.ts` to assert all four URLs and reciprocal `es`/`en` alternates.
+Create `__tests__/legal/legal-content.test.tsx` to render `LegalDocumentPage` with the documents returned by `getLegalDocument`. Assert localized H1 headings, Agente Agora Inc., the privacy contact mail link, Google identity use, and explicit absence of Gmail, Drive, and Calendar access. Assert the terms include account security, customer-content ownership, termination, and contact sections. Extend `LandingFooter.test.tsx` so the Spanish mock asserts `/privacy` and `/terms`; add an English-locale case asserting `/en/privacy` and `/en/terms`. Extend `sitemap.test.ts` to assert all four URLs and reciprocal `es`/`en` alternates.
 
 - [ ] **Step 2: Run the focused tests and verify RED**
 
