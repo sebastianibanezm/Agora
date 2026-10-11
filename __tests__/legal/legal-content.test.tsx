@@ -13,7 +13,7 @@ describe('LegalDocumentPage', () => {
     render(<LegalDocumentPage document={getLegalDocument('privacy', 'es')} />)
 
     expect(screen.getByRole('heading', { level: 1, name: 'Política de Privacidad' })).toBeInTheDocument()
-    expect(screen.getByText('Agente Agora LLC')).toBeInTheDocument()
+    expect(screen.getByText('Agente Agora Inc.')).toBeInTheDocument()
     expect(screen.getAllByRole('link', { name: 'hola@replies.agenteagora.com' })).toEqual(
       expect.arrayContaining([expect.objectContaining({ href: 'mailto:hola@replies.agenteagora.com' })]),
     )

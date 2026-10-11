@@ -30,9 +30,9 @@ const documents: Record<LegalLocale, Record<LegalKind, LegalDocument>> = {
       title: 'Política de Privacidad',
       summary: 'Cómo Agora recopila, usa y protege la información relacionada con el servicio.',
       effectiveDate: '24 de agosto de 2026',
-      provider: 'Agente Agora LLC',
+      provider: 'Agente Agora Inc.',
       sections: [
-        { id: 'controller', title: 'Responsable y contacto', paragraphs: ['Agente Agora LLC es responsable del tratamiento de la información descrita en esta política. Para consultas sobre privacidad, escríbenos a la dirección indicada abajo.'], contactEmail: email },
+        { id: 'controller', title: 'Responsable y contacto', paragraphs: ['Agente Agora Inc. es responsable del tratamiento de la información descrita en esta política. Para consultas sobre privacidad, escríbenos a la dirección indicada abajo.'], contactEmail: email },
         { id: 'data-collected', title: 'Información que recopilamos', paragraphs: ['Recopilamos la información que proporcionas al contactar con Agora, crear una cuenta o usar el servicio, como tu nombre, correo electrónico, empresa, datos de inicio de sesión y la información necesaria para operar las funciones que eliges usar. También podemos recibir datos técnicos básicos, como registros de uso, dirección IP, tipo de navegador y diagnósticos de seguridad.'] },
         { id: 'google-login', title: 'Inicio de sesión con Google', paragraphs: ['Cuando eliges iniciar sesión con Google, recibimos solo datos básicos de identidad: nombre, dirección de correo electrónico, imagen de perfil e identificador de cuenta de Google. Usamos esa información únicamente para autenticarte y administrar tu cuenta.', 'Agora no solicita acceso a Gmail, Google Drive, Google Calendar ni a otro contenido de Google Workspace. Agora no vende datos de usuarios de Google ni los usa para publicidad.'] },
         { id: 'uses', title: 'Cómo usamos la información', paragraphs: ['Usamos la información para proporcionar, mantener y mejorar Agora, responder solicitudes, administrar cuentas, proteger el servicio, cumplir obligaciones aplicables y comunicarnos sobre asuntos operativos. No usamos información personal para fines incompatibles con esta política.'] },
@@ -52,7 +52,7 @@ const documents: Record<LegalLocale, Record<LegalKind, LegalDocument>> = {
       title: 'Términos de Servicio',
       summary: 'Las reglas básicas para acceder y utilizar Agora.',
       effectiveDate: '24 de agosto de 2026',
-      provider: 'Agente Agora LLC',
+      provider: 'Agente Agora Inc.',
       sections: [
         { id: 'acceptance', title: 'Aceptación y autoridad', paragraphs: ['Al acceder o usar Agora aceptas estos términos. Si utilizas el servicio en nombre de una organización, declaras que tienes autoridad para aceptar estos términos en su nombre.'] },
         { id: 'accounts-security', title: 'Cuentas y seguridad', paragraphs: ['Debes proporcionar información exacta al crear una cuenta y mantener protegidas tus credenciales. Eres responsable de las actividades realizadas desde tu cuenta y debes avisarnos de inmediato si detectas un uso no autorizado.'] },
@@ -77,9 +77,9 @@ const documents: Record<LegalLocale, Record<LegalKind, LegalDocument>> = {
       title: 'Privacy Policy',
       summary: 'How Agora collects, uses, and protects information connected to the service.',
       effectiveDate: 'August 24, 2026',
-      provider: 'Agente Agora LLC',
+      provider: 'Agente Agora Inc.',
       sections: [
-        { id: 'controller', title: 'Controller and contact', paragraphs: ['Agente Agora LLC is responsible for the processing described in this policy. For privacy questions, contact us at the address below.'], contactEmail: email },
+        { id: 'controller', title: 'Controller and contact', paragraphs: ['Agente Agora Inc. is responsible for the processing described in this policy. For privacy questions, contact us at the address below.'], contactEmail: email },
         { id: 'data-collected', title: 'Information we collect', paragraphs: ['We collect information you provide when you contact Agora, create an account, or use the service, including your name, email address, company, sign-in details, and information needed to operate the features you choose to use. We may also receive basic technical information such as usage logs, IP address, browser type, and security diagnostics.'] },
         { id: 'google-login', title: 'Sign in with Google', paragraphs: ['When you choose to sign in with Google, we receive only basic identity information: name, email address, profile image, and Google account identifier. We use that information only to authenticate you and administer your account.', 'Agora does not request access to Gmail, Google Drive, Google Calendar, or other Google Workspace content. Agora does not sell Google user data or use it for advertising.'] },
         { id: 'uses', title: 'How we use information', paragraphs: ['We use information to provide, maintain, and improve Agora, respond to requests, administer accounts, protect the service, meet applicable obligations, and communicate about operational matters. We do not use personal information for purposes incompatible with this policy.'] },
@@ -99,7 +99,7 @@ const documents: Record<LegalLocale, Record<LegalKind, LegalDocument>> = {
       title: 'Terms of Service',
       summary: 'The basic rules for accessing and using Agora.',
       effectiveDate: 'August 24, 2026',
-      provider: 'Agente Agora LLC',
+      provider: 'Agente Agora Inc.',
       sections: [
         { id: 'acceptance', title: 'Acceptance and authority', paragraphs: ['By accessing or using Agora, you accept these terms. If you use the service for an organization, you represent that you have authority to accept these terms for that organization.'] },
         { id: 'accounts-security', title: 'Accounts and security', paragraphs: ['You must provide accurate information when creating an account and keep your credentials protected. You are responsible for activity from your account and must promptly notify us if you discover unauthorized use.'] },

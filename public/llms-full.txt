@@ -1,6 +1,6 @@
 # Agora — Software de gestión documental para exportadores (versión extendida)
 
-> Agora (Agente Agora LLC) es un software de gestión documental y coordinación de embarques para exportadores de fruta y frutos secos en Chile y Latinoamérica. Este documento amplía https://www.agenteagora.com/llms.txt con el detalle del producto, el perfil de cliente y un glosario del dominio.
+> Agora (Agente Agora Inc.) es un software de gestión documental y coordinación de embarques para exportadores de fruta y frutos secos en Chile y Latinoamérica. Este documento amplía https://www.agenteagora.com/llms.txt con el detalle del producto, el perfil de cliente y un glosario del dominio.
 
 ## Qué es Agora
 
@@ -111,6 +111,6 @@ Content hub con análisis y guías en español para exportadores de fruta y frut
 
 ## Empresa
 
-Agente Agora LLC — Chile / Latinoamérica / Estados Unidos
+Agente Agora Inc. — Chile / Latinoamérica / Estados Unidos
 Web: https://www.agenteagora.com (español) · https://www.agenteagora.com/en (English)
 Contacto: hola@replies.agenteagora.com · https://www.agenteagora.com/#contact

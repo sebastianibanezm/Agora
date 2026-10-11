@@ -415,7 +415,7 @@ describe('marketing layout JSON-LD', () => {
     const schemas = Array.from(scripts).map(s => JSON.parse(s.textContent ?? '{}'))
     const org = schemas.find((s: { '@type': string }) => s['@type'] === 'Organization')
     expect(org).toBeTruthy()
-    expect(org.name).toBe('Agente Agora LLC')
+    expect(org.name).toBe('Agente Agora Inc.')
     expect(org.url).toBe('https://www.agenteagora.com')
   })
 
@@ -449,7 +449,7 @@ Expected: FAIL — 0 script tags found (layout is a passthrough)
 const organizationSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
-  name: 'Agente Agora LLC',
+  name: 'Agente Agora Inc.',
   url: 'https://www.agenteagora.com',
   logo: 'https://www.agenteagora.com/agora-logo.png',
   description:
@@ -641,7 +641,7 @@ describe('llms-full.txt', () => {
   })
 
   it('references the company correctly', () => {
-    expect(llmsFull).toMatch(/Agente Agora LLC/)
+    expect(llmsFull).toMatch(/Agente Agora Inc./)
     expect(llmsFull).toMatch(/agenteagora\.com/)
   })
 })
@@ -745,7 +745,7 @@ Una sola capa que responde las preguntas que el equipo hace todos los días: qu�
 
 ## Empresa
 
-Agente Agora LLC — Latinoamerica, Estados Unidos
+Agente Agora Inc. — Latinoamerica, Estados Unidos
 Web: https://www.agenteagora.com
 Contacto: https://www.agenteagora.com/#contacto
 ```

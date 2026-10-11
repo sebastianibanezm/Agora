@@ -86,7 +86,7 @@ Two schemas:
 {
   "@context": "https://schema.org",
   "@type": "Organization",
-  "name": "Agente Agora LLC",
+  "name": "Agente Agora Inc.",
   "url": "https://www.agenteagora.com",
   "logo": "https://www.agenteagora.com/agora-logo.png",
   "description": "Plataforma de export intelligence para exportadores de fruta y frutos secos en Latinoamérica.",
@@ -129,7 +129,7 @@ Both schemas are server-rendered and invisible to users.
 The existing file is solid. Small additions:
 - Add a `## Keywords` section with anchor terms (BL, DUS, fitosanitario, demurrage, cut-off, packing list, naviera, booking, consignatario)
 - Add a `## What Agora is not` section to prevent LLM misclassification (not a freight forwarder, not a customs broker, not a TMS)
-- Company name and location (`Agente Agora LLC — Latinoamerica, Estados Unidos`) stays as-is
+- Company name and location (`Agente Agora Inc. — Latinoamerica, Estados Unidos`) stays as-is
 
 ### `public/llms-full.txt` (new file)
 Expanded context for AI assistants that support the llms.txt standard (Perplexity, Claude, etc.). Includes:
@@ -139,7 +139,7 @@ Expanded context for AI assistants that support the llms.txt standard (Perplexit
 - Domain glossary: BL, DUS, fitosanitario, demurrage, packing list, naviera, booking confirmation, consignatario, SAG certificate, carta de crédito
 - Ideal customer profile
 - What Agora is not (freight forwarder, customs broker, TMS, ERP)
-- Company: Agente Agora LLC, Latinoamerica / Estados Unidos, https://www.agenteagora.com
+- Company: Agente Agora Inc., Latinoamerica / Estados Unidos, https://www.agenteagora.com
 
 ---
 
