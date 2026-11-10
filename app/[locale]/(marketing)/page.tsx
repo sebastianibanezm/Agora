@@ -4,10 +4,10 @@ import { SITE_URL, LOCALE_URLS } from '@/lib/seo'
 import { LandingHero } from '@/components/landing/LandingHero'
 import { LandingProof } from '@/components/landing/LandingProof'
 import { LandingProblem } from '@/components/landing/LandingProblem'
-import { LandingPillars } from '@/components/landing/LandingPillars'
-import { LandingProduct } from '@/components/landing/LandingProduct'
+import { LandingProcess } from '@/components/landing/LandingProcess'
+import { LandingCompare } from '@/components/landing/LandingCompare'
+import { LandingRoadmap } from '@/components/landing/LandingRoadmap'
 import { LandingHowItWorks } from '@/components/landing/LandingHowItWorks'
-import { LandingCtaBand } from '@/components/landing/LandingCtaBand'
 import { LandingContact } from '@/components/landing/LandingContact'
 import { LandingFaq } from '@/components/landing/LandingFaq'
 import { LandingResources } from '@/components/landing/LandingResources'
@@ -68,9 +68,9 @@ export default async function LandingPage({ params }: { params: Promise<{ locale
         <LandingHero />
         <LandingProof />
         <LandingProblem />
-        <LandingPillars />
-        <LandingCtaBand />
-        <LandingProduct />
+        <LandingProcess />
+        <LandingCompare />
+        <LandingRoadmap />
         <LandingHowItWorks />
         <LandingContact />
         <LandingFaq />

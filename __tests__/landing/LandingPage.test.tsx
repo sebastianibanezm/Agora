@@ -10,10 +10,10 @@ vi.mock('next-intl/server', () => ({
 vi.mock('@/components/landing/LandingHero', () => ({ LandingHero: () => <div data-testid="landing-hero" /> }))
 vi.mock('@/components/landing/LandingProof', () => ({ LandingProof: () => <div data-testid="landing-proof" /> }))
 vi.mock('@/components/landing/LandingProblem', () => ({ LandingProblem: () => <div data-testid="landing-problem" /> }))
-vi.mock('@/components/landing/LandingPillars', () => ({ LandingPillars: () => <div data-testid="landing-pillars" /> }))
-vi.mock('@/components/landing/LandingProduct', () => ({ LandingProduct: () => <div data-testid="landing-product" /> }))
+vi.mock('@/components/landing/LandingProcess', () => ({ LandingProcess: () => <div data-testid="landing-process" /> }))
+vi.mock('@/components/landing/LandingCompare', () => ({ LandingCompare: () => <div data-testid="landing-compare" /> }))
+vi.mock('@/components/landing/LandingRoadmap', () => ({ LandingRoadmap: () => <div data-testid="landing-roadmap" /> }))
 vi.mock('@/components/landing/LandingHowItWorks', () => ({ LandingHowItWorks: () => <div data-testid="landing-how-it-works" /> }))
-vi.mock('@/components/landing/LandingCtaBand', () => ({ LandingCtaBand: () => <div data-testid="landing-cta-band" /> }))
 vi.mock('@/components/landing/LandingContact', () => ({ LandingContact: () => <div data-testid="landing-contact" /> }))
 vi.mock('@/components/landing/LandingFaq', () => ({ LandingFaq: () => <div data-testid="landing-faq" /> }))
 vi.mock('@/components/landing/LandingResources', () => ({ LandingResources: () => <div data-testid="landing-resources" /> }))
@@ -23,9 +23,9 @@ const SECTION_IDS = [
   'landing-hero',
   'landing-proof',
   'landing-problem',
-  'landing-pillars',
-  'landing-cta-band',
-  'landing-product',
+  'landing-process',
+  'landing-compare',
+  'landing-roadmap',
   'landing-how-it-works',
   'landing-contact',
   'landing-faq',
@@ -33,7 +33,7 @@ const SECTION_IDS = [
 ] as const
 
 describe('LandingPage', () => {
-  it('renders all 9 landing sections in order', async () => {
+  it('renders all landing sections in order', async () => {
     const { container } = render(await LandingPage({ params: Promise.resolve({ locale: 'es' }) }))
     const rendered = Array.from(container.querySelectorAll('[data-testid^="landing-"]')).map(
       (el) => el.getAttribute('data-testid')

@@ -2,6 +2,19 @@
 
 import React from 'react'
 import Image from 'next/image'
+import type { ReactNode } from 'react'
+
+type FrameProps = {
+  src: string
+  alt: string
+  caption?: string
+  priority?: boolean
+  /** Text in the address bar. */
+  label?: ReactNode
+  width?: number
+  height?: number
+  sizes?: string
+}
 
 /**
  * Frames a real product screenshot in a minimal browser chrome so it reads
@@ -12,12 +25,11 @@ export function BrowserFrame({
   alt,
   caption,
   priority = false,
-}: {
-  src: string
-  alt: string
-  caption?: string
-  priority?: boolean
-}) {
+  label = 'app.agenteagora.com',
+  width = 1600,
+  height = 1000,
+  sizes = '(max-width: 768px) 100vw, 720px',
+}: FrameProps) {
   return (
     <figure className="m-0">
       <div
@@ -36,20 +48,20 @@ export function BrowserFrame({
             <span key={i} className="w-[9px] h-[9px] rounded-full flex-shrink-0" style={{ background: c }} />
           ))}
           <span
-            className="mx-auto px-4 py-[3px] rounded-[6px] text-[10px] tracking-[0.04em]"
+            className="mx-auto px-4 py-[3px] rounded-[6px] text-[10px] tracking-[0.04em] truncate max-w-[80%]"
             style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860', background: '#FCF7EA' }}
           >
-            app.agenteagora.com
+            {label}
           </span>
         </div>
         <Image
           src={src}
           alt={alt}
-          width={1600}
-          height={1000}
+          width={width}
+          height={height}
           priority={priority}
           className="block w-full h-auto"
-          sizes="(max-width: 768px) 100vw, 720px"
+          sizes={sizes}
         />
       </div>
       {caption && (

@@ -79,11 +79,20 @@ describe('LandingNav', () => {
     const menuButton = screen.getByRole('button', { name: 'Menu' })
     expect(menuButton).toHaveClass('lg:hidden')
     const desktopNav = screen
-      .getAllByRole('link', { name: 'solutions', hidden: true })
+      .getAllByRole('link', { name: 'howItWorks', hidden: true })
       .find((link) => link.classList.contains('nav-link'))
       ?.parentElement
     expect(desktopNav).toHaveClass('hidden', 'lg:flex')
     expect(screen.getAllByText('cta').find((cta) => cta.closest('.cta-solid'))?.closest('a')).toHaveClass('hidden', 'lg:inline-flex')
+  })
+
+  it('links the section navigation to the landing anchors', () => {
+    render(<LandingNav />)
+    const desktop = (name: string) =>
+      screen.getAllByRole('link', { name, hidden: true }).find((link) => link.classList.contains('nav-link'))
+    expect(desktop('howItWorks')).toHaveAttribute('href', '#how-it-works')
+    expect(desktop('gettingStarted')).toHaveAttribute('href', '#getting-started')
+    expect(desktop('faq')).toHaveAttribute('href', '#faq')
   })
 
   it('removes the closed mobile menu from the accessibility tree', () => {
