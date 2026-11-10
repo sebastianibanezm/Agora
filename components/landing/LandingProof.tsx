@@ -15,7 +15,7 @@ export function LandingProof() {
         <div className="flex items-center gap-6 mb-10">
           <span
             className="flex-shrink-0 text-[10px] uppercase tracking-[0.18em]"
-            style={{ fontFamily: 'var(--font-family-mono)', color: '#6E5D45' }}
+            style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860' }}
           >
             {t('eyebrow')}
           </span>
@@ -36,7 +36,7 @@ export function LandingProof() {
               <div className="font-medium" style={{ fontSize: '14px', color: '#2B1F12' }}>
                 {t('clientName')}
               </div>
-              <div className="mt-[2px]" style={{ fontSize: '12.5px', color: '#6E5D45' }}>
+              <div className="mt-[2px]" style={{ fontSize: '12.5px', color: '#8A7860' }}>
                 {t('clientDetail')}
               </div>
             </div>
@@ -63,7 +63,7 @@ export function LandingProof() {
                 <span
                   key={key}
                   className="inline-flex items-center gap-2 text-[10.5px] uppercase tracking-[0.10em]"
-                  style={{ fontFamily: 'var(--font-family-mono)', color: '#6E5D45' }}
+                  style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860' }}
                 >
                   <span
                     className="w-[5px] h-[5px] rounded-full flex-shrink-0"
