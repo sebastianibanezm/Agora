@@ -65,7 +65,7 @@ describe('landing page metadata', () => {
   it('en title is localized', async () => {
     const metadata = await pageMetadata(params('en'))
     const title = metadata.title as { absolute: string }
-    expect(title.absolute).toMatch(/export document/i)
+    expect(title.absolute).toBe('The AI platform for smarter export operations')
   })
 
   it('has openGraph title, description and image', async () => {
