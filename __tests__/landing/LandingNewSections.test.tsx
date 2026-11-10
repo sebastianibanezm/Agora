@@ -1,7 +1,9 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import { LandingProof } from '@/components/landing/LandingProof'
 import { LandingHowItWorks } from '@/components/landing/LandingHowItWorks'
-import { LandingCtaBand } from '@/components/landing/LandingCtaBand'
+import { LandingProcess } from '@/components/landing/LandingProcess'
+import { LandingCompare } from '@/components/landing/LandingCompare'
+import { LandingRoadmap } from '@/components/landing/LandingRoadmap'
 import { LandingFaq } from '@/components/landing/LandingFaq'
 import { LandingResources } from '@/components/landing/LandingResources'
 
@@ -43,27 +45,52 @@ describe('LandingProof', () => {
 })
 
 describe('LandingHowItWorks', () => {
-  it('renders the 3 process steps with the section anchor', () => {
+  it('renders the 3 getting-started steps with the section anchor', () => {
     const { container } = render(<LandingHowItWorks />)
-    expect(container.querySelector('#how-it-works')).toBeInTheDocument()
-    expect(screen.getByText('step1Title')).toBeInTheDocument()
-    expect(screen.getByText('step2Title')).toBeInTheDocument()
-    expect(screen.getByText('step3Title')).toBeInTheDocument()
+    expect(container.querySelector('#getting-started')).toBeInTheDocument()
+    for (const n of ['1', '2', '3']) expect(screen.getByText(`step${n}Title`)).toBeInTheDocument()
+  })
+
+  it('does not show a price', () => {
+    const { container } = render(<LandingHowItWorks />)
+    expect(container.textContent).not.toMatch(/USD|price|precio/i)
+  })
+
+  it('tracks the getting-started CTA, which links to contact', () => {
+    render(<LandingHowItWorks />)
+    const cta = screen.getByText('cta').closest('a')!
+    expect(cta).toHaveAttribute('href', '#contact')
+    cta.addEventListener('click', event => event.preventDefault())
+    fireEvent.click(cta)
+    expect(mockCaptureContactCta).toHaveBeenCalledWith('getting_started')
   })
 })
 
-describe('LandingCtaBand', () => {
-  it('renders the CTA linking to contact', () => {
-    render(<LandingCtaBand />)
-    expect(screen.getByText('cta').closest('a')).toHaveAttribute('href', '#contact')
+describe('LandingProcess', () => {
+  it('renders the five process steps with a product screen each', () => {
+    const { container } = render(<LandingProcess />)
+    expect(container.querySelector('#how-it-works')).toBeInTheDocument()
+    for (const n of ['1', '2', '3', '4', '5']) {
+      expect(screen.getByText(`step${n}Title`)).toBeInTheDocument()
+      expect(screen.getByAltText(`step${n}Alt`)).toBeInTheDocument()
+    }
   })
+})
 
-  it('tracks the closing CTA source', () => {
-    render(<LandingCtaBand />)
-    const cta = screen.getByText('cta').closest('a')!
-    cta.addEventListener('click', event => event.preventDefault())
-    fireEvent.click(cta)
-    expect(mockCaptureContactCta).toHaveBeenCalledWith('cta_band')
+describe('LandingCompare', () => {
+  it('renders the before and after table', () => {
+    render(<LandingCompare />)
+    expect(screen.getByRole('table')).toBeInTheDocument()
+    expect(screen.getAllByRole('row')).toHaveLength(6)
+  })
+})
+
+describe('LandingRoadmap', () => {
+  it('marks both roadmap items as not yet available', () => {
+    render(<LandingRoadmap />)
+    expect(screen.getAllByText('tag')).toHaveLength(2)
+    expect(screen.getByText('item1Title')).toBeInTheDocument()
+    expect(screen.getByText('item2Title')).toBeInTheDocument()
   })
 })
 

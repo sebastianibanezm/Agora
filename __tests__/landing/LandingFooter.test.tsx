@@ -38,9 +38,8 @@ describe('LandingFooter', () => {
 
   it('renders section anchor links', () => {
     render(<LandingFooter />)
-    expect(screen.getByText('footer.linkSolutions').closest('a')).toHaveAttribute('href', '/#solutions')
-    expect(screen.getByText('footer.linkPlatform').closest('a')).toHaveAttribute('href', '/#product')
     expect(screen.getByText('footer.linkHow').closest('a')).toHaveAttribute('href', '/#how-it-works')
+    expect(screen.getByText('footer.linkStart').closest('a')).toHaveAttribute('href', '/#getting-started')
     expect(screen.getByText('footer.linkFaq').closest('a')).toHaveAttribute('href', '/#faq')
   })
 
@@ -55,7 +54,7 @@ describe('LandingFooter', () => {
     render(<LandingFooter />)
     expect(screen.getByText('footer.linkPrivacy').closest('a')).toHaveAttribute('href', '/en/privacy')
     expect(screen.getByText('footer.linkTerms').closest('a')).toHaveAttribute('href', '/en/terms')
-    expect(screen.getByText('footer.linkSolutions').closest('a')).toHaveAttribute('href', '/en/#solutions')
+    expect(screen.getByText('footer.linkHow').closest('a')).toHaveAttribute('href', '/en/#how-it-works')
   })
 
   it('renders contact email as mailto link', () => {

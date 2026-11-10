@@ -89,6 +89,6 @@ describe('analytics', () => {
 
   it('contains PostHog runtime failures', () => {
     posthog.capture.mockImplementationOnce(() => { throw new Error('blocked') })
-    expect(() => captureContactCta('cta_band')).not.toThrow()
+    expect(() => captureContactCta('getting_started')).not.toThrow()
   })
 })

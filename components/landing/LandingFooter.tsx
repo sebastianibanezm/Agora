@@ -11,11 +11,10 @@ function platformLinks(locale: string) {
   const homePath = locale === 'en' ? '/en' : ''
 
   return [
-    { key: 'linkSolutions', href: `${homePath}/#solutions` },
-    { key: 'linkResources', href: '/recursos' },
-    { key: 'linkPlatform', href: `${homePath}/#product` },
     { key: 'linkHow', href: `${homePath}/#how-it-works` },
+    { key: 'linkStart', href: `${homePath}/#getting-started` },
     { key: 'linkFaq', href: `${homePath}/#faq` },
+    { key: 'linkResources', href: '/recursos' },
   ] as const
 }
 

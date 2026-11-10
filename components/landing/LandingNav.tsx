@@ -8,6 +8,12 @@ import { useState } from 'react'
 
 const APP_LOGIN_URL = 'https://app.agenteagora.com/login'
 
+const NAV_LINKS = [
+  { key: 'howItWorks', href: '#how-it-works' },
+  { key: 'gettingStarted', href: '#getting-started' },
+  { key: 'faq', href: '#faq' },
+] as const
+
 export function LandingNav() {
   const t = useTranslations('landing.nav')
   const locale = useLocale()
@@ -54,12 +60,11 @@ export function LandingNav() {
       </div>
 
       {/* Nav links — hidden on mobile */}
-      {/* 'solutions' → #solutions (LandingPillars), 'howItWorks' → #how-it-works, 'company' → #contact */}
       <div className="hidden lg:flex gap-[1px]">
-        {(['solutions', 'howItWorks', 'company'] as const).map((key) => (
+        {NAV_LINKS.map(({ key, href }) => (
           <a
             key={key}
-            href={key === 'company' ? '#contact' : key === 'howItWorks' ? '#how-it-works' : '#solutions'}
+            href={href}
             className="nav-link px-[13px] py-2 rounded-full text-[12px] cursor-pointer"
           >
             {t(key)}
@@ -137,10 +142,10 @@ export function LandingNav() {
           : 'opacity 100ms ease-in, transform 100ms ease-in',
       }}
     >
-      {(['solutions', 'howItWorks', 'company'] as const).map((key) => (
+      {NAV_LINKS.map(({ key, href }) => (
         <a
           key={key}
-          href={key === 'company' ? '#contact' : key === 'howItWorks' ? '#problem' : '#solutions'}
+          href={href}
           onClick={() => setOpen(false)}
           className="px-5 py-3 text-[14px] transition-colors duration-150 cursor-pointer"
           style={{ color: 'rgba(248,242,228,0.80)', textDecoration: 'none' }}

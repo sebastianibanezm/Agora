@@ -44,8 +44,8 @@ describe('LegalDocumentPage', () => {
 
   it('aligns contact and FAQ privacy messages with the service-provider policy', () => {
     expect(esMessages.landing.contact.formNote).toMatch(/no se venden.*solo se comparten con proveedores necesarios/i)
-    expect(esMessages.landing.faq.a3).toMatch(/no se venden.*proveedores necesarios/i)
+    expect(esMessages.landing.faq.a4).toMatch(/no se venden.*proveedores necesarios/i)
     expect(enMessages.landing.contact.formNote).toMatch(/never sold.*shared only with providers needed/i)
-    expect(enMessages.landing.faq.a3).toMatch(/never sold.*providers needed/i)
+    expect(enMessages.landing.faq.a4).toMatch(/never sold.*providers needed/i)
   })
 })

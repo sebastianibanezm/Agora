@@ -35,8 +35,10 @@ describe('i18n', () => {
   });
 
   it('landing.nav keys exist in both locales', () => {
-    expect(en.landing.nav.solutions).toBeDefined();
-    expect(es.landing.nav.solutions).toBeDefined();
+    for (const key of ['howItWorks', 'gettingStarted', 'faq']) {
+      expect(en.landing.nav[key]).toBeDefined();
+      expect(es.landing.nav[key]).toBeDefined();
+    }
     expect(en.landing.nav.signIn).toBe('Sign In');
     expect(es.landing.nav.signIn).toBe('Iniciar sesión');
   });

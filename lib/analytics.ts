@@ -1,6 +1,6 @@
 import posthog from 'posthog-js'
 
-export type ContactCtaSource = 'hero' | 'cta_band'
+export type ContactCtaSource = 'hero' | 'getting_started'
 export type ResourceClickSource = 'hub' | 'featured_article'
 export type ContactFormFailureReason = 'http' | 'network'
 
