@@ -17,7 +17,7 @@ export function LandingHowItWorks() {
   const ref = useReveal<HTMLElement>(0.15)
 
   return (
-    <section ref={ref} id="getting-started" className="reveal py-[120px]" style={{ borderTop: LINE }}>
+    <section ref={ref} id="getting-started" className="reveal landing-section" style={{ borderTop: LINE }}>
       <div className="max-w-[1160px] mx-auto px-5 sm:px-8 lg:px-12">
         <SectionHeading eyebrow={t('eyebrow')} title={t('title')} accent={t('titleLine2')} />
 
@@ -31,7 +31,7 @@ export function LandingHowItWorks() {
               >
                 <span
                   className="pt-[6px]"
-                  style={{ fontFamily: 'var(--font-family-mono)', fontSize: '11px', letterSpacing: '0.16em', color: '#B5A586' }}
+                  style={{ fontFamily: 'var(--font-family-mono)', fontSize: '11px', letterSpacing: '0.16em', color: '#6E5D45' }}
                 >
                   0{n}
                 </span>
@@ -56,7 +56,7 @@ export function LandingHowItWorks() {
           >
             <span
               className="text-[10px] uppercase tracking-[0.18em]"
-              style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860' }}
+              style={{ fontFamily: 'var(--font-family-mono)', color: '#6E5D45' }}
             >
               {t('includedLabel')}
             </span>

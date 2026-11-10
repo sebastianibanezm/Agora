@@ -357,17 +357,80 @@ body::after {
 }
 .cta-solid:hover { background: #fff; }
 
-/* Quiet light-on-dark links (nav) */
-.nav-link {
-  color: rgba(248, 242, 228, 0.70);
+/* Ink pill CTA on cream sections */
+.cta-ink {
+  background: #2B1F12;
+  color: #FFFBF2;
+  border: none;
   text-decoration: none;
-  transition: color 150ms ease;
+  transition: background 150ms ease;
 }
-.nav-link:hover { color: #F8F2E4; }
+.cta-ink:hover { background: #000; }
+
+/* Top bar: see-through over the hero, solid cream once the hero scrolls away */
+.landing-bar {
+  padding-top: env(safe-area-inset-top, 0px);
+  color: #F3EAD8;
+  border-bottom: 1px solid transparent;
+  transition: background 250ms ease, border-color 250ms ease, color 250ms ease;
+}
+.landing-bar[data-solid="true"] {
+  background: rgba(247, 241, 228, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom-color: rgba(60, 42, 22, 0.12);
+  color: #2B1F12;
+}
+.landing-bar .bar-logo { filter: brightness(0) invert(1); transition: filter 250ms ease; }
+.landing-bar[data-solid="true"] .bar-logo { filter: brightness(0); }
+.landing-bar[data-solid="true"] .cta-solid { background: #2B1F12; color: #FFFBF2; }
+.landing-bar[data-solid="true"] .cta-solid:hover { background: #000; }
+.bar-sign-in,
+.bar-locale { color: inherit; text-decoration: none; opacity: 0.86; transition: opacity 150ms ease; }
+.bar-sign-in:hover,
+.bar-locale:hover { opacity: 1; }
+.bar-menu { color: inherit; border: 1px solid currentColor; opacity: 0.75; background: transparent; }
+
+/* Quiet links in the top bar; they follow the bar's text color */
+.nav-link {
+  color: inherit;
+  opacity: 0.82;
+  text-decoration: none;
+  transition: opacity 150ms ease;
+}
+.nav-link:hover { opacity: 1; }
+
+/* Secondary link in the hero */
+.hero-link { color: #F3EAD8; text-decoration: none; }
+.hero-link:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+/* Hero photo: wider than the viewport on desktop so the container sits right of the headline */
+.hero-photo { width: 100%; }
+@media (min-width: 1024px) {
+  .hero-photo { width: 140%; }
+}
+
+/* Process steps: a rule on the left that turns gold for the step in view (desktop) */
+@media (min-width: 1024px) {
+  .process-step { border-left: 2px solid rgba(60, 42, 22, 0.12); transition: border-color 300ms ease; }
+  .process-step[data-active="true"] { border-left-color: #A86B14; }
+}
+
+/* Section rhythm: 64px on phones up to 120px on desktop */
+.landing-section { padding-block: clamp(64px, 9vw, 120px); }
+
+/* Before/after: a table on desktop, stacked rows on phones */
+@media (max-width: 767px) {
+  .compare-table thead { display: none; }
+  .compare-table tr { display: grid; gap: 6px; padding-block: 18px; }
+  .compare-table th,
+  .compare-table td { display: block; padding: 0 !important; width: auto !important; }
+  .compare-table .compare-before::before { content: attr(data-label) ": "; }
+}
 
 /* Footer links */
 .footer-link {
-  font-size: 13px;
+  font-size: 15px;
   color: rgba(248, 242, 228, 0.75);
   text-decoration: none;
   transition: color 150ms ease;

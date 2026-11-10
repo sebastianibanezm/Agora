@@ -42,10 +42,31 @@ describe('LandingNav', () => {
     }
   })
 
-  it('renders language toggle with ES and EN', () => {
+  it('renders language toggle with ES and EN (bar from sm, mobile menu below)', () => {
     render(<LandingNav />)
-    expect(screen.getByText('ES')).toBeInTheDocument()
-    expect(screen.getByText('EN')).toBeInTheDocument()
+    expect(screen.getAllByText('ES')).toHaveLength(2)
+    expect(screen.getAllByText('EN')).toHaveLength(2)
+    const toggles = screen.getAllByRole('button', { name: /ES\s*\/\s*EN/i, hidden: true })
+    const mobileMenu = document.querySelector('[data-mobile-menu]')
+    expect(toggles.find((button) => !mobileMenu?.contains(button))?.parentElement).toHaveClass('hidden', 'sm:inline-flex')
+    expect(toggles.find((button) => mobileMenu?.contains(button))?.parentElement).toHaveClass('sm:hidden')
+  })
+
+  it('turns the bar solid once the hero scrolls away', () => {
+    const hero = document.createElement('section')
+    hero.setAttribute('data-hero', '')
+    document.body.appendChild(hero)
+    const rect = { bottom: 900 }
+    hero.getBoundingClientRect = () => rect as DOMRect
+
+    render(<LandingNav />)
+    const bar = document.querySelector('.landing-bar')
+    expect(bar).toHaveAttribute('data-solid', 'false')
+
+    rect.bottom = 40
+    fireEvent.scroll(window)
+    expect(bar).toHaveAttribute('data-solid', 'true')
+    hero.remove()
   })
 
   it('calls router.replace and router.refresh when locale toggle is clicked', () => {
@@ -66,15 +87,13 @@ describe('LandingNav', () => {
       expect(link).toHaveClass('whitespace-nowrap')
     }
 
-    const desktopLink = signInLinks.find((link) => link.classList.contains('fixed'))
-    expect(desktopLink).toHaveClass('top-6', 'right-6', 'hidden', 'md:inline-flex')
-
+    // Sign-in sits inside the bar on desktop and in the menu below lg.
     const mobileMenu = document.querySelector('[data-mobile-menu]')
     expect(mobileMenu).not.toBeNull()
     expect(mobileMenu).toHaveClass('lg:hidden')
-    const mobileSignIn = signInLinks.find((link) => mobileMenu?.contains(link))
-    expect(mobileSignIn).toBeDefined()
-    expect(mobileSignIn).toHaveClass('md:hidden')
+    const barSignIn = signInLinks.find((link) => link.closest('.landing-bar'))
+    expect(barSignIn).toHaveClass('hidden', 'lg:inline-flex')
+    expect(signInLinks.find((link) => mobileMenu?.contains(link))).toBeDefined()
 
     const menuButton = screen.getByRole('button', { name: 'Menu' })
     expect(menuButton).toHaveClass('lg:hidden')
@@ -83,7 +102,11 @@ describe('LandingNav', () => {
       .find((link) => link.classList.contains('nav-link'))
       ?.parentElement
     expect(desktopNav).toHaveClass('hidden', 'lg:flex')
-    expect(screen.getAllByText('cta').find((cta) => cta.closest('.cta-solid'))?.closest('a')).toHaveClass('hidden', 'lg:inline-flex')
+
+    // The demo CTA stays visible in the bar at every width.
+    const barCta = screen.getAllByText('cta').map((cta) => cta.closest('a')).find((a) => a?.closest('.landing-bar'))
+    expect(barCta).toHaveAttribute('href', '#contact')
+    expect(barCta).not.toHaveClass('hidden')
   })
 
   it('links the section navigation to the landing anchors', () => {

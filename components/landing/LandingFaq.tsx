@@ -15,7 +15,7 @@ export function LandingFaq() {
     <section
       ref={ref}
       id="faq"
-      className="reveal py-[120px]"
+      className="reveal landing-section"
       style={{ borderTop: '1px solid rgba(60,42,22,0.08)' }}
     >
       <div className="max-w-[1160px] mx-auto px-5 sm:px-8 lg:px-12">
@@ -23,7 +23,7 @@ export function LandingFaq() {
           <div className="stagger-item">
             <span
               className="block mb-3 text-[10px] uppercase tracking-[0.18em]"
-              style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860' }}
+              style={{ fontFamily: 'var(--font-family-mono)', color: '#6E5D45' }}
             >
               {t('eyebrow')}
             </span>
@@ -61,7 +61,7 @@ export function LandingFaq() {
                     size={16}
                     strokeWidth={1.5}
                     className="faq-icon flex-shrink-0"
-                    style={{ color: '#8A7860' }}
+                    style={{ color: '#6E5D45' }}
                     aria-hidden
                   />
                 </summary>

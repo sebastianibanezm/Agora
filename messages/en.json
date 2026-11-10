@@ -5,19 +5,20 @@
       "gettingStarted": "Getting started",
       "faq": "FAQ",
       "signIn": "Sign In",
-      "cta": "Get in Touch"
+      "cta": "Book a demo"
     },
     "hero": {
-      "eyebrow": "Export Intelligence",
+      "eyebrow": "The AI platform for smarter export operations",
       "headline": "Your exports,",
       "headlineAccent": "always under control",
-      "sub": "Automate your document workflow, eliminate all penalties from errors, and accelerate invoicing and financial reconciliation with Agora, the agentic operational platform for exporters.",
-      "ctaPrimary": "Get in Touch",
-      "ctaSecondary": "See Demo",
-      "scroll": "Scroll"
+      "sub": "Model your process once. Agora reads the documents that arrive, generates the ones you issue and sends each set to the buyer, the forwarder and the shipping line, automating the entire export process.",
+      "ctaPrimary": "Book a demo",
+      "ctaSecondary": "See how it works",
+      "productBar": "Home",
+      "productAlt": "Agora home screen with example data: 11 active shipments, the team priorities and the operation by stage, from preparation to transit."
     },
     "problem": {
-      "eyebrow": "01 — The problem",
+      "eyebrow": "The problem",
       "title": "Every shipment is still",
       "titleAccent": "put together by hand.",
       "lede": "Export teams take the data from the contract and the booking and type it again into the shipping instruction, the invoice, the packing list and the certificates. Then they email each document to the buyer, the forwarder, the shipping line and the customs agent, and chase what's missing on WhatsApp.",
@@ -30,9 +31,9 @@
       "stat3Label": "in demurrage when the documents are late"
     },
     "contact": {
-      "eyebrow": "05 — Contact",
-      "title": "Contact us to schedule",
-      "titleLine2": "a demo.",
+      "eyebrow": "Contact",
+      "title": "Book a demo",
+      "titleLine2": "with your own documents.",
       "sub": "Tell us about your operation: volume, markets, and where you lose the most time. We'll respond within 24 hours with a concrete proposal.",
       "formTitle": "Tell us about your operations",
       "formSub": "No commitment — we'll respond within one business day.",
@@ -45,7 +46,7 @@
       "placeholderLastName": "Soto",
       "placeholderCompany": "Valle Fresco S.A.",
       "placeholderEmail": "msoto@vallefresco.cl",
-      "submitBtn": "Send message",
+      "submitBtn": "Book a demo",
       "formNote": "Your information is confidential. Your data is never sold and is shared only with providers needed to operate the service."
     },
     "footer": {
@@ -74,7 +75,7 @@
       "logoAlt": "Onizzo — Southern Sweetness"
     },
     "howItWorks": {
-      "eyebrow": "04 — Getting started",
+      "eyebrow": "Getting started",
       "title": "From the first call",
       "titleLine2": "to your first shipment.",
       "step1Title": "A 30-minute call",
@@ -178,7 +179,7 @@
       }
     },
     "process": {
-      "eyebrow": "02 — How Agora works",
+      "eyebrow": "How Agora works",
       "title": "Your export process,",
       "titleAccent": "run in Agora.",
       "lede": "You model the process once. From then on every contract and shipment follows it: Agora reads the documents that arrive, generates the ones you issue and sends each set to the parties that need it.",
@@ -189,9 +190,9 @@
       "step1Alt": "Agora's process editor for a garlic export: phase 1 shipping instruction; phase 2 export invoice (generated) and packing list; phase 3 bill of lading, phytosanitary certificate and a commercial document set, joined by their dependencies.",
       "step2Title": "Every shipment follows it",
       "step2Body": "Each shipment of a contract gets the process with its own documents. Your team sees what's approved, what's pending and what each document unlocks next.",
-      "step2Bar": "Embarque 2611202-2",
-      "step2Caption": "Invoice and packing list approved; the commercial set is ready to send.",
-      "step2Alt": "The process of one shipment in Agora: shipping instruction, export invoice and packing list approved; bill of lading and phytosanitary certificate pending; the commercial set approved and ready to download or email.",
+      "step2Bar": "Contract 2611202",
+      "step2Caption": "One contract, 11 shipments, each with its vessel, its dates and its document progress.",
+      "step2Alt": "The shipments of contract 2611202 in Agora, each with ports, vessel and voyage, estimated dates, cutoff and document progress.",
       "step3Title": "Agora reads the documents that arrive",
       "step3Body": "Upload a booking confirmation, a shipping instruction or a certificate. Agora extracts its data, links the shipping line and the forwarder to your accounts, and shows it next to the original for approval. Values that don't match the contract or the booking wait for a person to decide.",
       "step3Bar": "Revisar documento",
@@ -207,10 +208,13 @@
       "step5Bar": "Set comercial",
       "step5Caption": "Invoice and packing list, to the buyer and the forwarder.",
       "step5Alt": "Sharing a document set in Agora: an email to the buyer and the forwarder for shipment 2611202-2, with the export invoice and packing list attached as PDFs.",
-      "shotNote": "Real product — example data"
+      "shotNote": "Real product — example data",
+      "ctaTitle": "See it with one of your shipments.",
+      "ctaBody": "Send us a past shipment and we will show it running in Agora within 48 hours.",
+      "cta": "Book a demo"
     },
     "compare": {
-      "eyebrow": "03 — One shipment, before and after",
+      "eyebrow": "One shipment, before and after",
       "title": "Same team.",
       "titleAccent": "Less manual work per shipment.",
       "colToday": "Today",

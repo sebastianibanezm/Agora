@@ -15,7 +15,7 @@ export function LandingProblem() {
     <section
       ref={ref}
       id="problem"
-      className="reveal py-[120px]"
+      className="reveal landing-section"
       style={{ borderTop: '1px solid rgba(60,42,22,0.08)' }}
     >
       <div className="max-w-[1160px] mx-auto px-5 sm:px-8 lg:px-12">
@@ -46,7 +46,7 @@ export function LandingProblem() {
                 {n === '3' && (
                   <span
                     className="ml-2 text-[15px]"
-                    style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860', letterSpacing: 0 }}
+                    style={{ fontFamily: 'var(--font-family-mono)', color: '#6E5D45', letterSpacing: 0 }}
                   >
                     {t('stat3Unit')}
                   </span>

@@ -21,7 +21,7 @@ export function LandingResources() {
         <div className="flex items-center gap-6 mb-12">
           <span
             className="flex-shrink-0 text-[10px] uppercase tracking-[0.18em]"
-            style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860' }}
+            style={{ fontFamily: 'var(--font-family-mono)', color: '#6E5D45' }}
           >
             {t('eyebrow')}
           </span>
@@ -77,7 +77,7 @@ export function LandingResources() {
               </span>
               <span
                 className="text-[10px] uppercase tracking-[0.10em]"
-                style={{ fontFamily: 'var(--font-family-mono)', color: '#B5A586' }}
+                style={{ fontFamily: 'var(--font-family-mono)', color: '#6E5D45' }}
               >
                 Julio 2026 · 6 min
               </span>

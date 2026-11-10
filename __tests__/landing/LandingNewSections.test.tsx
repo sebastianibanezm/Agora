@@ -75,6 +75,21 @@ describe('LandingProcess', () => {
       expect(screen.getByAltText(`step${n}Alt`)).toBeInTheDocument()
     }
   })
+
+  it('shows the first step in the fixed frame until another step scrolls in', () => {
+    render(<LandingProcess />)
+    expect(screen.getByText('step1Caption')).toBeInTheDocument()
+    expect(screen.getByText('1 / 5')).toBeInTheDocument()
+  })
+
+  it('tracks the demo CTA after the steps, which links to contact', () => {
+    render(<LandingProcess />)
+    const cta = screen.getByText('cta').closest('a')!
+    expect(cta).toHaveAttribute('href', '#contact')
+    cta.addEventListener('click', event => event.preventDefault())
+    fireEvent.click(cta)
+    expect(mockCaptureContactCta).toHaveBeenCalledWith('process')
+  })
 })
 
 describe('LandingCompare', () => {
