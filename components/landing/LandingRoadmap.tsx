@@ -12,7 +12,7 @@ export function LandingRoadmap() {
   const ref = useReveal<HTMLElement>(0.2)
 
   return (
-    <section ref={ref} id="roadmap" className="reveal py-[120px]" style={{ borderTop: '1px solid rgba(60,42,22,0.08)' }}>
+    <section ref={ref} id="roadmap" className="reveal landing-section" style={{ borderTop: '1px solid rgba(60,42,22,0.08)' }}>
       <div className="max-w-[1160px] mx-auto px-5 sm:px-8 lg:px-12">
         <SectionHeading eyebrow={t('eyebrow')} title={t('title')} accent={t('titleAccent')} lede={t('lede')} />
 
@@ -25,7 +25,7 @@ export function LandingRoadmap() {
             >
               <span
                 className="justify-self-start px-[10px] py-[4px] rounded-full text-[10px] uppercase tracking-[0.12em]"
-                style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860', background: '#F1E8D5' }}
+                style={{ fontFamily: 'var(--font-family-mono)', color: '#6E5D45', background: '#F1E8D5' }}
               >
                 {t('tag')}
               </span>

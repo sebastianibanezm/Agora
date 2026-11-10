@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { useTranslations, useLocale } from 'next-intl'
 import { useRouter, usePathname } from 'next/navigation'
 import { ArrowRight, Menu, X } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const APP_LOGIN_URL = 'https://app.agenteagora.com/login'
 
@@ -14,12 +14,34 @@ const NAV_LINKS = [
   { key: 'faq', href: '#faq' },
 ] as const
 
+/** True once the hero has scrolled out from under the bar. */
+function useSolidBar() {
+  const [solid, setSolid] = useState(false)
+
+  useEffect(() => {
+    const update = () => {
+      const hero = document.querySelector('[data-hero]')
+      setSolid(hero ? hero.getBoundingClientRect().bottom <= 90 : window.scrollY > 40)
+    }
+    update()
+    window.addEventListener('scroll', update, { passive: true })
+    window.addEventListener('resize', update)
+    return () => {
+      window.removeEventListener('scroll', update)
+      window.removeEventListener('resize', update)
+    }
+  }, [])
+
+  return solid
+}
+
 export function LandingNav() {
   const t = useTranslations('landing.nav')
   const locale = useLocale()
   const router = useRouter()
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
+  const solid = useSolidBar()
 
   function toggleLocale() {
     const next = locale === 'es' ? 'en' : 'es'
@@ -32,146 +54,113 @@ export function LandingNav() {
     router.refresh()
   }
 
+  const localeToggle = (
+    <button
+      onClick={toggleLocale}
+      className="bar-locale inline-flex items-center gap-[3px] px-2 py-2 rounded-full cursor-pointer"
+      style={{ fontFamily: 'var(--font-family-mono)', fontSize: '12px' }}
+    >
+      <span style={{ fontWeight: locale === 'es' ? 600 : 400, opacity: locale === 'es' ? 1 : 0.6 }}>ES</span>
+      <span style={{ opacity: 0.4, margin: '0 1px' }}>/</span>
+      <span style={{ fontWeight: locale === 'en' ? 600 : 400, opacity: locale === 'en' ? 1 : 0.6 }}>EN</span>
+    </button>
+  )
+
   return (
     <>
-    <nav
-      className="landing-nav-glass fixed top-6 left-1/2 -translate-x-1/2 z-50 inline-flex items-center gap-1 p-[5px] rounded-full"
-    >
-      {/* Brand */}
-      <div className="inline-flex items-center gap-[9px] pr-[14px] pl-1">
-        <div
-          className="w-[38px] h-[38px] flex items-center justify-center flex-shrink-0"
-        >
-          <Image
-            src="/landing/lambda-logo.png"
-            alt="Agora"
-            width={34}
-            height={34}
-            className="object-contain"
-            style={{ filter: 'brightness(0) invert(1)' }}
-          />
-        </div>
-        <span
-          className="text-[19px] italic"
-          style={{ fontFamily: 'var(--font-family-old-standard)', color: '#F8F2E4', letterSpacing: '0.01em' }}
-        >
-          Agora
-        </span>
-      </div>
+      <header data-solid={solid ? 'true' : 'false'} className="landing-bar fixed inset-x-0 top-0 z-50">
+        <div className="max-w-[1200px] mx-auto px-5 sm:px-8 lg:px-12 h-[68px] flex items-center gap-3 lg:gap-7">
+          <a href="#landing-main" className="inline-flex items-center gap-[9px] flex-shrink-0" style={{ color: 'inherit', textDecoration: 'none' }}>
+            <Image src="/landing/lambda-logo.png" alt="" width={30} height={30} className="bar-logo object-contain" />
+            <span className="text-[22px] italic" style={{ fontFamily: 'var(--font-family-old-standard)', letterSpacing: '0.01em' }}>
+              Agora
+            </span>
+          </a>
 
-      {/* Nav links — hidden on mobile */}
-      <div className="hidden lg:flex gap-[1px]">
+          <nav aria-label="Secciones" className="hidden lg:flex gap-[26px] ml-3">
+            {NAV_LINKS.map(({ key, href }) => (
+              <a key={key} href={href} className="nav-link text-[14.5px] cursor-pointer">
+                {t(key)}
+              </a>
+            ))}
+          </nav>
+
+          <div className="ml-auto flex items-center gap-[10px] lg:gap-[18px]">
+            <span className="hidden sm:inline-flex">{localeToggle}</span>
+            <a
+              href={APP_LOGIN_URL}
+              className="bar-sign-in hidden lg:inline-flex text-[14px] whitespace-nowrap"
+            >
+              {t('signIn')}
+            </a>
+            <a
+              href="#contact"
+              className="cta-solid btn-press inline-flex items-center gap-[6px] h-[38px] px-4 rounded-full text-[14px] font-medium whitespace-nowrap"
+            >
+              {t('cta')} <ArrowRight size={13} strokeWidth={1.8} className="hidden sm:block" />
+            </a>
+            <button
+              className="bar-menu lg:hidden inline-grid place-items-center w-[38px] h-[38px] rounded-[10px]"
+              onClick={() => setOpen((o) => !o)}
+              aria-label="Menu"
+              aria-controls="landing-mobile-menu"
+              aria-expanded={open}
+            >
+              {open ? <X size={16} strokeWidth={1.8} /> : <Menu size={16} strokeWidth={1.8} />}
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Mobile dropdown — always rendered, animated via opacity/transform */}
+      <div
+        data-mobile-menu
+        id="landing-mobile-menu"
+        aria-hidden={!open}
+        inert={!open}
+        className="fixed z-40 flex flex-col py-2 lg:hidden"
+        style={{
+          top: 'calc(env(safe-area-inset-top, 0px) + 76px)',
+          right: '16px',
+          width: 'min(320px, calc(100vw - 32px))',
+          background: 'rgba(43,31,18,0.92)',
+          backdropFilter: 'blur(24px) saturate(180%)',
+          WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+          border: '1px solid rgba(248,242,228,0.18)',
+          borderRadius: '16px',
+          boxShadow: '0 16px 48px rgba(0,0,0,0.40)',
+          transformOrigin: 'top right',
+          opacity: open ? 1 : 0,
+          transform: open ? 'scale(1) translateY(0)' : 'scale(0.97) translateY(-6px)',
+          pointerEvents: open ? 'auto' : 'none',
+          transition: open
+            ? 'opacity 150ms cubic-bezier(0.23,1,0.32,1), transform 150ms cubic-bezier(0.23,1,0.32,1)'
+            : 'opacity 100ms ease-in, transform 100ms ease-in',
+        }}
+      >
         {NAV_LINKS.map(({ key, href }) => (
           <a
             key={key}
             href={href}
-            className="nav-link px-[13px] py-2 rounded-full text-[12px] cursor-pointer"
+            onClick={() => setOpen(false)}
+            className="px-5 py-3 text-[15px] transition-colors duration-150 cursor-pointer"
+            style={{ color: 'rgba(248,242,228,0.86)', textDecoration: 'none' }}
           >
             {t(key)}
           </a>
         ))}
-      </div>
-
-      {/* Separator */}
-      <div className="w-px h-5 mx-1" style={{ background: 'rgba(248,242,228,0.14)' }} />
-
-      {/* Hamburger — compact navigation through tablet widths */}
-      <button
-        className="lg:hidden p-2 rounded-full transition-colors duration-150"
-        style={{ color: 'rgba(248,242,228,0.70)' }}
-        onClick={() => setOpen(o => !o)}
-        aria-label="Menu"
-        aria-controls="landing-mobile-menu"
-        aria-expanded={open}
-      >
-        {open ? <X size={16} strokeWidth={1.8} /> : <Menu size={16} strokeWidth={1.8} />}
-      </button>
-
-      {/* Primary CTA — desktop only */}
-      <a
-        href="#contact"
-        className="cta-solid hidden lg:inline-flex ml-1 px-[18px] py-[9px] rounded-full text-[12px] font-medium items-center gap-[6px] cursor-pointer btn-press"
-        style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.25)' }}
-      >
-        {t('cta')} <ArrowRight size={13} strokeWidth={1.8} />
-      </a>
-
-      {/* Language toggle */}
-      <button
-        onClick={toggleLocale}
-        className="inline-flex items-center gap-[3px] px-[10px] py-2 ml-[2px] rounded-full cursor-pointer transition-colors duration-150"
-        style={{ fontFamily: 'var(--font-family-mono)', fontSize: '10.5px' }}
-        onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = 'rgba(248,242,228,0.08)')}
-        onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = 'transparent')}
-      >
-        <span style={{ color: locale === 'es' ? '#F8F2E4' : 'rgba(248,242,228,0.50)', fontWeight: locale === 'es' ? 600 : 400 }}>ES</span>
-        <span style={{ color: 'rgba(248,242,228,0.25)', margin: '0 1px' }}>/</span>
-        <span style={{ color: locale === 'en' ? '#F8F2E4' : 'rgba(248,242,228,0.50)', fontWeight: locale === 'en' ? 600 : 400 }}>EN</span>
-      </button>
-    </nav>
-
-    <a
-      href={APP_LOGIN_URL}
-      className="landing-nav-glass landing-sign-in-glass fixed top-6 right-6 z-50 hidden h-[48px] items-center px-[18px] rounded-full text-[12px] font-medium whitespace-nowrap md:inline-flex"
-    >
-      {t('signIn')}
-    </a>
-
-    {/* Mobile dropdown — always rendered, animated via opacity/transform */}
-    <div
-      data-mobile-menu
-      id="landing-mobile-menu"
-      aria-hidden={!open}
-      inert={!open}
-      className="fixed left-1/2 -translate-x-1/2 z-40 flex flex-col py-2 lg:hidden"
-      style={{
-        top: '76px',
-        width: 'min(320px, calc(100vw - 32px))',
-        background: 'rgba(43,31,18,0.72)',
-        backdropFilter: 'blur(24px) saturate(180%)',
-        WebkitBackdropFilter: 'blur(24px) saturate(180%)',
-        border: '1px solid rgba(248,242,228,0.18)',
-        borderRadius: '16px',
-        boxShadow: '0 16px 48px rgba(0,0,0,0.40)',
-        transformOrigin: 'top center',
-        opacity: open ? 1 : 0,
-        transform: open ? 'scale(1) translateY(0)' : 'scale(0.97) translateY(-6px)',
-        pointerEvents: open ? 'auto' : 'none',
-        transition: open
-          ? 'opacity 150ms cubic-bezier(0.23,1,0.32,1), transform 150ms cubic-bezier(0.23,1,0.32,1)'
-          : 'opacity 100ms ease-in, transform 100ms ease-in',
-      }}
-    >
-      {NAV_LINKS.map(({ key, href }) => (
+        <div style={{ height: '1px', background: 'rgba(248,242,228,0.10)', margin: '4px 0' }} />
         <a
-          key={key}
-          href={href}
+          href={APP_LOGIN_URL}
           onClick={() => setOpen(false)}
-          className="px-5 py-3 text-[14px] transition-colors duration-150 cursor-pointer"
-          style={{ color: 'rgba(248,242,228,0.80)', textDecoration: 'none' }}
-          onMouseEnter={(e) => (e.currentTarget.style.color = '#F8F2E4')}
-          onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(248,242,228,0.80)')}
+          className="landing-mobile-sign-in mx-3 mt-2 px-4 py-[10px] rounded-[10px] text-[14px] font-medium text-center whitespace-nowrap cursor-pointer btn-press"
         >
-          {t(key)}
+          {t('signIn')}
         </a>
-      ))}
-      <div style={{ height: '1px', background: 'rgba(248,242,228,0.10)', margin: '4px 0' }} />
-      <a
-        href={APP_LOGIN_URL}
-        onClick={() => setOpen(false)}
-        className="landing-mobile-sign-in mx-3 mt-2 px-4 py-[10px] rounded-[10px] text-[14px] font-medium text-center whitespace-nowrap cursor-pointer btn-press md:hidden"
-      >
-        {t('signIn')}
-      </a>
-      <a
-        href="#contact"
-        onClick={() => setOpen(false)}
-        className="mx-3 my-2 px-4 py-[10px] rounded-[10px] text-[14px] font-medium text-center cursor-pointer btn-press"
-        style={{ background: '#F8F2E4', color: '#2B1F12', textDecoration: 'none' }}
-      >
-        {t('cta')}
-      </a>
-    </div>
+        <div className="sm:hidden self-center mt-2 mb-1" style={{ color: 'rgba(248,242,228,0.86)' }}>
+          {localeToggle}
+        </div>
+      </div>
     </>
   )
 }

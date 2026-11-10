@@ -104,7 +104,7 @@ export function LandingContact() {
           <div className="stagger-item">
             <span
               className="block mb-[18px] text-[10px] uppercase tracking-[0.18em]"
-              style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860' }}
+              style={{ fontFamily: 'var(--font-family-mono)', color: '#6E5D45' }}
             >
               {t('contact.eyebrow')}
             </span>
@@ -136,7 +136,7 @@ export function LandingContact() {
                 { Icon: ShieldCheck, text: t('contact.formNote') },
               ].map(({ Icon, text }, i) => (
                 <div key={i} className="flex items-start gap-3 pt-4" style={{ borderTop: '1px solid rgba(60,42,22,0.08)' }}>
-                  <Icon size={15} strokeWidth={1.5} style={{ color: '#8A7860', flexShrink: 0, marginTop: '2px' }} />
+                  <Icon size={15} strokeWidth={1.5} style={{ color: '#6E5D45', flexShrink: 0, marginTop: '2px' }} />
                   <p className="m-0 text-[13.5px] leading-[1.55]" style={{ color: '#5A4A38' }}>
                     {text}
                   </p>
@@ -160,7 +160,7 @@ export function LandingContact() {
             >
               {t('contact.formTitle')}
             </h3>
-            <p className="text-[13px] mb-7" style={{ color: '#8A7860' }}>
+            <p className="text-[13px] mb-7" style={{ color: '#6E5D45' }}>
               {t('contact.formSub')}
             </p>
 
@@ -190,7 +190,7 @@ export function LandingContact() {
                   <div key={field.name} className="flex flex-col gap-[6px]">
                     <label
                       className="text-[10px] uppercase tracking-[0.12em] font-medium"
-                      style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860' }}
+                      style={{ fontFamily: 'var(--font-family-mono)', color: '#6E5D45' }}
                     >
                       {t(field.labelKey)}{' '}
                       <span style={{ color: '#8B2A1F' }}>*</span>
@@ -211,7 +211,7 @@ export function LandingContact() {
                 <div key={field.name} className="flex flex-col gap-[6px] mb-4">
                   <label
                     className="text-[10px] uppercase tracking-[0.12em] font-medium"
-                    style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860' }}
+                    style={{ fontFamily: 'var(--font-family-mono)', color: '#6E5D45' }}
                   >
                     {t(field.labelKey)}{' '}
                     <span style={{ color: '#8B2A1F' }}>*</span>
@@ -230,7 +230,7 @@ export function LandingContact() {
               <div className="mb-4">
                 <span
                   className="block text-[10px] uppercase tracking-[0.12em] font-medium mb-[6px]"
-                  style={{ fontFamily: 'var(--font-family-mono)', color: '#8A7860' }}
+                  style={{ fontFamily: 'var(--font-family-mono)', color: '#6E5D45' }}
                 >
                   {t('contact.labelVolume')}{' '}
                   <span style={{ color: '#8B2A1F' }}>*</span>
@@ -272,7 +272,7 @@ export function LandingContact() {
 
               <p
                 className="text-center mt-[14px] text-[10px] tracking-[0.04em]"
-                style={{ fontFamily: 'var(--font-family-mono)', color: '#B5A586' }}
+                style={{ fontFamily: 'var(--font-family-mono)', color: '#6E5D45' }}
               >
                 {t('contact.formNote')}
               </p>

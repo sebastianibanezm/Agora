@@ -5,19 +5,20 @@
       "gettingStarted": "Cómo empezamos",
       "faq": "Preguntas",
       "signIn": "Iniciar sesión",
-      "cta": "Ponte en Contacto"
+      "cta": "Agenda una demo"
     },
     "hero": {
-      "eyebrow": "Export Intelligence",
+      "eyebrow": "La plataforma de IA para una operación de exportación más inteligente",
       "headline": "Tus exportaciones,",
       "headlineAccent": "siempre bajo control",
-      "sub": "Automatiza tu flujo documental, elimina todas las multas por errores y expedita la cobranza y la conciliación financiera con Agora, la plataforma operacional agéntica para exportaciones.",
-      "ctaPrimary": "Ponte en Contacto",
-      "ctaSecondary": "Ver Demo",
-      "scroll": "Scroll"
+      "sub": "Modelas tu proceso una vez. Agora lee los documentos que llegan, genera los que emites y envía cada set al cliente, al forwarder y a la naviera, automatizando todo el proceso de exportación.",
+      "ctaPrimary": "Agenda una demo",
+      "ctaSecondary": "Ver cómo funciona",
+      "productBar": "Inicio",
+      "productAlt": "Inicio de Agora con datos de ejemplo: 11 embarques activos, las prioridades del equipo y la operación en curso por etapa, de la preparación al tránsito."
     },
     "problem": {
-      "eyebrow": "01 — El problema",
+      "eyebrow": "El problema",
       "title": "Cada embarque todavía",
       "titleAccent": "se arma a mano.",
       "lede": "Los equipos de exportación toman los datos del contrato y la reserva y los vuelven a escribir en la instrucción de embarque, la factura, el packing list y los certificados. Después envían cada documento por correo al cliente, al forwarder, a la naviera y al agente de aduanas, y persiguen por WhatsApp lo que falta.",
@@ -30,9 +31,9 @@
       "stat3Label": "de demurrage cuando los documentos llegan tarde"
     },
     "contact": {
-      "eyebrow": "05 — Contacto",
-      "title": "Contáctanos para coordinar",
-      "titleLine2": "una demostración.",
+      "eyebrow": "Contacto",
+      "title": "Agenda una demo",
+      "titleLine2": "con tus documentos.",
       "sub": "Cuéntanos sobre tu operación: volumen, mercados y dónde pierdes más tiempo. Te respondemos en menos de 24 horas con una propuesta concreta.",
       "formTitle": "Cuéntanos sobre tus operaciones",
       "formSub": "Sin compromisos — te respondemos en menos de un día hábil.",
@@ -45,7 +46,7 @@
       "placeholderLastName": "Soto",
       "placeholderCompany": "Valle Fresco S.A.",
       "placeholderEmail": "msoto@vallefresco.cl",
-      "submitBtn": "Enviar mensaje",
+      "submitBtn": "Agenda una demo",
       "formNote": "Tu información es confidencial. Tus datos no se venden y solo se comparten con proveedores necesarios para operar el servicio."
     },
     "footer": {
@@ -74,7 +75,7 @@
       "logoAlt": "Onizzo — Southern Sweetness"
     },
     "howItWorks": {
-      "eyebrow": "04 — Cómo empezamos",
+      "eyebrow": "Cómo empezamos",
       "title": "De la primera llamada",
       "titleLine2": "a tu primer embarque.",
       "step1Title": "Una llamada de 30 minutos",
@@ -178,7 +179,7 @@
       }
     },
     "process": {
-      "eyebrow": "02 — Cómo funciona Agora",
+      "eyebrow": "Cómo funciona Agora",
       "title": "Tu proceso de exportación,",
       "titleAccent": "operado en Agora.",
       "lede": "Modelas el proceso una vez. Desde ahí, cada contrato y cada embarque lo siguen: Agora lee los documentos que llegan, genera los que emites y envía cada set a las partes que lo necesitan.",
@@ -189,9 +190,9 @@
       "step1Alt": "Editor de procesos de Agora para una exportación de ajo: fase 1 instrucción de embarque; fase 2 factura de exportación (generada) y packing list; fase 3 BL, certificado fitosanitario y un set de documentos comercial, unidos por sus dependencias.",
       "step2Title": "Cada embarque lo sigue",
       "step2Body": "Cada embarque de un contrato recibe el proceso con sus propios documentos. Tu equipo ve qué está aprobado, qué está pendiente y qué habilita cada documento.",
-      "step2Bar": "Embarque 2611202-2",
-      "step2Caption": "Factura y packing list aprobados; el set comercial está listo para enviar.",
-      "step2Alt": "El proceso de un embarque en Agora: instrucción de embarque, factura de exportación y packing list aprobados; BL y certificado fitosanitario pendientes; el set comercial aprobado y listo para descargar o enviar por correo.",
+      "step2Bar": "Contrato 2611202",
+      "step2Caption": "Un contrato, 11 embarques: cada uno con su nave, sus fechas y el avance de sus documentos.",
+      "step2Alt": "Los embarques del contrato 2611202 en Agora: cada uno con puertos, nave y viaje, fechas estimadas, cutoff y avance de documentos.",
       "step3Title": "Agora lee los documentos que llegan",
       "step3Body": "Sube una confirmación de reserva, una instrucción de embarque o un certificado. Agora extrae sus datos, vincula la naviera y el forwarder con tus cuentas y los muestra junto al original para aprobarlos. Los valores que no cuadran con el contrato o la reserva esperan que una persona decida.",
       "step3Bar": "Revisar documento",
@@ -207,10 +208,13 @@
       "step5Bar": "Set comercial",
       "step5Caption": "Factura y packing list, al cliente y al forwarder.",
       "step5Alt": "Envío de un set de documentos en Agora: un correo al cliente y al forwarder del embarque 2611202-2, con la factura de exportación y el packing list adjuntos en PDF.",
-      "shotNote": "Producto real — datos de ejemplo"
+      "shotNote": "Producto real — datos de ejemplo",
+      "ctaTitle": "Míralo con un embarque tuyo.",
+      "ctaBody": "Envía un embarque pasado y te lo mostramos funcionando en Agora en 48 horas.",
+      "cta": "Agenda una demo"
     },
     "compare": {
-      "eyebrow": "03 — Un embarque, antes y después",
+      "eyebrow": "Un embarque, antes y después",
       "title": "El mismo equipo.",
       "titleAccent": "Menos trabajo manual por embarque.",
       "colToday": "Hoy",
