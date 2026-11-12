@@ -17,6 +17,9 @@ export function LandingHero() {
 
   return (
     <>
+      {/* Outside the hero: the hero is its own stacking context (isolation), so a bar
+          inside it would paint under every later section instead of over the page. */}
+      <LandingNav />
       <section data-hero className="relative w-full overflow-hidden" style={{ background: '#221811', isolation: 'isolate' }}>
         <div className="hero-photo absolute inset-y-0 left-0 -z-20">
           <Image
@@ -39,8 +42,6 @@ export function LandingHero() {
             `,
           }}
         />
-
-        <LandingNav />
 
         <div
           className="max-w-[1200px] mx-auto px-5 sm:px-8 lg:px-12 grid gap-[26px]"
